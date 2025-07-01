@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <Style src="project://database/Assets/NDBT/Editor/Resources/Styles/VisualElement/NodeElementUss.uss" />
+    <Style src="project://database/Assets/NDBT/Editor/Resources/Styles/VisualElement/Trello/TrelloStyles.uss" />
+
+    <ui:VisualElement name="node-border" class="node-border">
+        <ui:VisualElement name="selection-border" class="selection-border">
+            <ui:VisualElement name="top-port" class="port-container top-port-container" />
+            <ui:VisualElement name="main-content-wrapper" class="main-content-wrapper">
+                <ui:VisualElement name="left-port" class="port-container left-port-container" />
+                <ui:VisualElement name="content-area" class="content-area">
+                    <ui:VisualElement name="title" class="title">
+                        <ui:Label name="title-label" text="Trello List" class="title-label" />
+                        <ui:VisualElement name="title-button-container" class="title-button-container" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="input" class="input"/>
+                    <ui:VisualElement name="collapsible-area" class="collapsible-area">
+                        <ui:VisualElement name="extension" class="extension">
+                             <!-- TrelloNode's own properties, e.g., listName, will be added here -->
+                        </ui:VisualElement>
+                        <ui:Button name="add-child-task-button" text="+ Add Task" class="add-child-button" />
+                        <ui:Label text="Tasks:" style="-unity-font-style: bold; margin-left: 5px; margin-top: 5px;"/>
+                        <ui:VisualElement name="draggable-nodes-container" class="draggable-nodes-container trello-child-items-container" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="output" class="output"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="right-port" class="port-container right-port-container" />
+            </ui:VisualElement>
+            <ui:VisualElement name="bottom-port" class="port-container bottom-port-container" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

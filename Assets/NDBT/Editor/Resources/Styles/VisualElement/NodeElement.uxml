@@ -1,0 +1,45 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/NDBT/Editor/Resources/Styles/VisualElement/NodeElementUss.uss?fileID=7433441132597879392&amp;guid=56edd9fb931184641b0c2e7fe3d72ef4&amp;type=3#NodeElementUss" />
+       <ui:VisualElement name="node-border" class="node-border">
+    <ui:VisualElement name="selection-border" class="selection-border">
+
+        <!-- Top Port Container -->
+        <ui:VisualElement name="top-port" class="port-container top-port-container" />
+
+        <ui:VisualElement name="main-content-wrapper" class="main-content-wrapper">
+            <!-- Left Port Container -->
+            <ui:VisualElement name="left-port" class="port-container left-port-container" />
+
+            <ui:VisualElement name="content-area" class="content-area">
+                <ui:VisualElement name="title" class="title">
+                    <ui:Label name="title-label" text="Node Title" class="title-label" />
+                    <ui:VisualElement name="title-button-container" class="title-button-container" />
+                    <!-- <ui:Button name="collapse-button" text="-" class="collapse-button" /> GraphView handles this -->
+                </ui:VisualElement>
+
+                <!-- GraphView's input port area (if used by base class, typically holds ports added to 'inputContainer') -->
+                <ui:VisualElement name="input" class="input"/> 
+                <ui:VisualElement name="draggable-nodes-container" class="draggable-nodes-container" />
+                <ui:VisualElement name="extension" class="extension" />
+                <ui:VisualElement name="collapsible-area" class="collapsible-area">
+                     <!-- Draggable Nodes Container -->
+                    <ui:VisualElement name="draggable-nodes-container" class="draggable-nodes-container" />
+                    <ui:VisualElement name="extension" class="extension" />
+                    <!-- Extension container for properties -->
+                    
+                </ui:VisualElement>
+                
+                <!-- GraphView's output port area (if used by base class, typically holds ports added to 'outputContainer') -->
+                <ui:VisualElement name="output" class="output"/>
+            </ui:VisualElement>
+
+            <!-- Right Port Container -->
+            <ui:VisualElement name="right-port" class="port-container right-port-container" />
+        </ui:VisualElement>
+
+        <!-- Bottom Port Container -->
+        <ui:VisualElement name="bottom-port" class="port-container bottom-port-container" />
+
+    </ui:VisualElement>
+</ui:VisualElement>
+</ui:UXML>

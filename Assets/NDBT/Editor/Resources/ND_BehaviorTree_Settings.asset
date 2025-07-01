@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bad98a047707244fb4e00061b6ffd51, type: 3}
+  m_Name: ND_BehaviorTree_Settings
+  m_EditorClassIdentifier: 
+  enableSettingPassword: SubcribeToNDDEVGAME
+  defaultNodeUXML: {fileID: 9197481963319205126, guid: 28fb3ed3c12cbbe4da0dd006c6cc7a24, type: 3}
+  graphViewStyle: {fileID: 7433441132597879392, guid: 960474170df95f842adf94741758ef3d, type: 3}
+  nodeDefaultUSS: {fileID: 0}
+  trelloNodeUXML: {fileID: 0}
+  trelloChildNodeUXML: {fileID: 0}
+  trelloNodeUSS: {fileID: 0}
