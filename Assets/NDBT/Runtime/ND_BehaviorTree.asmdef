@@ -1,0 +1,14 @@
+{
+    "name": "ND_BehaviorTree.Runtime",
+    "rootNamespace": "ND_BehaviorTree",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

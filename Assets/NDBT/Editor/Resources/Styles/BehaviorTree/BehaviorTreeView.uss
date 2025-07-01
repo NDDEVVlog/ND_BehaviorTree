@@ -1,0 +1,12 @@
+ND_BehaviorTreeView{
+    flex-grow:1;
+}
+#Grid
+{
+    --thick-Lines : 0;
+    --spacing:15;
+    --gird-background-color:rgb(35,35,35);
+    --line-color: rgb(32,32,32);
+    
+
+}

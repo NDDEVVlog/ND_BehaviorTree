@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <Style src="project://database/Assets/Script/Testing%20weaponwheel/WeaponWheel.uss?fileID=7433441132597879392&amp;guid=934ab9e06f7ec41449322dc544bd46af&amp;type=3#WeaponWheel" />
+    <ui:VisualElement name="WeaponWheelContainer" class="weapon-wheel-container">
+        <ui:VisualElement name="WheelCenterInfo" class="wheel-center-info">
+            <ui:Label name="SelectedWeaponName" class="selected-weapon-label" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

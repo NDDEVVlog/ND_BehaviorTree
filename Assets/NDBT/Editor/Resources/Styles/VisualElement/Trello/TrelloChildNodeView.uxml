@@ -1,0 +1,42 @@
+<!-- File: Assets/NDBT/Editor/Resources/UXML/TrelloChildNodeView.uxml -->
+<!-- This UXML represents the *content* to be placed inside ND_TrelloChild's mainContainer. -->
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <!-- Stylesheets are good to keep, they will apply to these elements -->
+    <Style src="project://database/Assets/NDBT/Editor/Resources/Styles/VisualElement/NodeElementUss.uss" />
+    <Style src="project://database/Assets/NDBT/Editor/Resources/Styles/VisualElement/Trello/TrelloStyles.uss" />
+
+    <!-- This is the root of WHAT GETS CLONED. Let's call it the card's visual root. -->
+    <!-- It will be added to ND_TrelloChild's 'mainContainer'. -->
+    <!-- The class 'trello-child-card' will be used for styling this specific content block. -->
+    <ui:VisualElement name="trello-child-content-root" class="trello-child-card">
+
+        <!-- Main content area of the card -->
+        <ui:VisualElement name="card-content" class="trello-child-card-content">
+            <!-- Left side: Toggle and Task Label -->
+            <ui:VisualElement name="task-info" class="trello-child-task-info">
+                <ui:Label name="taskNameLabel" text="Default Task Name" class="trello-child-task-name-label" />
+                <ui:Toggle name="isCompleteToggle" class="trello-child-iscomplete-toggle" label="" />
+                <uie:PropertyField name="taskField" binding-path="task" class="trello-child-task-field" label=""/>
+            </ui:VisualElement>
+
+            <!-- Right side: Edit Button -->
+            <ui:VisualElement name="card-actions" class="trello-child-card-actions">
+                <ui:Button name="edit-task-button" class="trello-child-edit-button">
+                    <ui:VisualElement name="edit-icon" class="trello-child-edit-icon" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Optional: Sub-task counter (if you add this to your data model later) -->
+        <!-- <ui:VisualElement name="subtask-progress" class="trello-child-subtask-progress">
+            <ui:VisualElement class="trello-child-subtask-icon" />
+            <ui:Label name="subtask-label" text="0/0" class="trello-child-subtask-label" />
+        </ui:VisualElement> -->
+
+    </ui:VisualElement>
+    <!-- 
+        NO NEED for <ui:VisualElement name="node-border" ...> as the outermost element here,
+        because ND_TrelloChild itself IS the node and has its own border from its base UXML.
+        NO NEED to hide ports etc., as this UXML is only for the content area.
+    -->
+</ui:UXML>

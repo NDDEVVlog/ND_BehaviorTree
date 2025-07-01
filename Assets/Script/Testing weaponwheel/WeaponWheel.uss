@@ -1,0 +1,50 @@
+.weapon-wheel-container {
+    position: absolute; /* Or use flex to center in parent */
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    /* transform: translate(-50%, -50%); */ /* Handled by C# for dynamic sizing */
+    width: 300px; /* Example size, will be adjusted by C# based on content */
+    height: 300px; /* Example size */
+    /* background-color: rgba(0, 0, 0, 0.1); */ /* For debugging layout */
+    opacity: 0; /* Initially hidden */
+    scale: 0.8; /* For pop-in animation */
+    transition-property: opacity, scale;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+    justify-content: center; /* Centers WheelCenterInfo */
+    align-items: center;   /* Centers WheelCenterInfo */
+}
+
+.weapon-wheel-container--visible {
+    opacity: 1;
+    scale: 1;
+}
+
+/* Individual cells don't need much USS as they are custom drawn.
+   We can use a class for commonality if needed, but hover is handled in C#
+   by changing drawing parameters and calling MarkDirtyRepaint(). */
+.weapon-cell {
+    position: absolute; /* Crucial for custom layout */
+    width: 100%; /* Cells will occupy the full container space */
+    height: 100%; /* Their drawing will be clipped or scaled */
+}
+
+.wheel-center-info {
+    width: 100px;
+    height: 100px;
+    background-color: rgba(50, 50, 50, 0.8);
+    border-radius: 50px;
+    justify-content: center;
+    align-items: center;
+    /* Prevent center from blocking mouse events to cells behind it */
+    picking-mode: ignore;
+}
+
+.selected-weapon-label {
+    color: white;
+    -unity-font-style: bold;
+    font-size: 14px;
+    -unity-text-align: middle-center;
+    white-space: normal; /* Allow wrapping */
+}

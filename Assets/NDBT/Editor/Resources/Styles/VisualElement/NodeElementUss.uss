@@ -1,0 +1,214 @@
+/* Base Node Styles */
+.nd-node {
+    opacity: 0;
+    scale: 0.5 0.5;
+    transition-property: scale, opacity;
+    transition-duration: 0.3s, 0.15s; /* Scale 0.3s, Opacity 0.15s */
+    transition-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28), ease-out; /* Bounce for scale */
+}
+
+/* State for when the node is added and should be visible */
+.nd-node.appeared {
+    opacity: 1;
+    scale: 1 1;
+}
+/* For Pop-Down (Disappear) - you might want a different feel */
+.nd-node.disappearing { /* You'd add this class in C# before removal */
+    opacity: 0;
+    scale: 0.8 0.8; /* Shrink down slightly */
+    transition-property: opacity, scale;
+    transition-duration: 0.15s; /* Faster disappear */
+    transition-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28), ease-out;
+}
+
+.node-border {
+    background-color: rgb(45, 45, 45);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgb(30, 30, 30);
+    padding: 0;
+    min-width:100px;
+}
+
+.selection-border {
+    /* This is typically controlled by GraphView for selection highlighting */
+    /* If you want a persistent inner border, style it here */
+     border-width: 0; /* remove default if not needed */
+}
+
+/* Title Bar */
+.title {
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 8px;
+    background-color: rgb(60, 60, 60); /* Title background */
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(30, 30, 30);
+    border-top-left-radius: 5px; /* Match node-border radius */
+    border-top-right-radius: 5px; /* Match node-border radius */
+}
+
+.title .title-label { /* Target Label specifically within .title */
+    color: rgb(220, 220, 220);
+    font-size: 12px;
+    -unity-font-style: bold;
+    flex-grow: 1; /* Allow label to take available space */
+}
+
+.title .title-button-container {
+    flex-direction: row;
+}
+
+/* Main Content Layout */
+.main-content-wrapper {
+    flex-direction: row; /* Horizontal layout for left-port, content-area, right-port */
+    flex-grow: 1;
+}
+
+.content-area {
+    flex-direction: column; /* Vertical layout for title, containers, extension */
+    flex-grow: 1; /* Content area takes available space between side ports */
+    min-height: 50px; /* Minimum height for the content */
+}
+
+/* Port Containers - Common and Specific */
+.port-container {
+    /* Common styles for all port containers */
+    align-items: center; /* Center ports along cross-axis */
+    justify-content: center; /* Center ports along main-axis */
+    flex-shrink: 0; /* Prevent containers from shrinking */
+}
+
+.top-port-container, .bottom-port-container {
+    min-height: 16px; /* Height for the container itself */
+    width: 100%;
+    flex-direction: row; /* Ports arranged horizontally */
+    padding: 2px 0; /* Small padding */
+}
+.top-port-container {
+    /* border-bottom-width: 1px; */ /* Optional separator */
+    /* border-bottom-color: rgb(50,50,50); */
+}
+.bottom-port-container {
+    /* border-top-width: 1px; */ /* Optional separator */
+    /* border-top-color: rgb(50,50,50); */
+     border-bottom-left-radius: 5px; /* Match node-border radius */
+    border-bottom-right-radius: 5px;
+}
+
+
+.left-port-container, .right-port-container {
+    min-width: 16px; /* Width for the container itself */
+    height: auto; /* Auto height to fill content, or stretch if parent uses align-items:stretch */
+    flex-direction: column; /* Ports arranged vertically */
+    padding: 0 2px; /* Small padding */
+}
+.left-port-container {
+    /* border-right-width: 1px; */ /* Optional separator */
+    /* border-right-color: rgb(50,50,50); */
+}
+.right-port-container {
+    /* border-left-width: 1px; */ /* Optional separator */
+    /* border-left-color: rgb(50,50,50); */
+}
+
+/* GraphView's default input/output containers (used by base Node) */
+/* We hide these if we are fully managing ports with our custom containers */
+.input, .output {
+    /* min-height: 10px; If you were to use them */
+    /* display: none; */ /* Uncomment to hide if not using for any ports */
+}
+
+
+/* Collapsible Area (contains draggable nodes and extension) */
+.collapsible-area {
+    padding: 5px;
+}
+
+/* Draggable Nodes Container */
+.draggable-nodes-container {
+    min-height: 40px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border: 1px dashed rgb(80, 80, 80);
+    border-radius: 3px;
+    margin: 5px 0;
+    padding: 5px;
+    flex-direction: column; /* Stack child items vertically */
+}
+
+.draggable-nodes-container:empty:before {
+    content: "Drop nodes here";
+    font-size: 9px;
+    color: rgb(120,120,120);
+    -unity-font-style: italic;
+    align-self: center;
+    justify-content: center;
+    display: flex;
+    flex-grow: 1;
+}
+
+
+/* Item representing a contained node */
+.draggable-child-item {
+    background-color: rgb(70, 70, 70);
+    padding: 4px 6px;
+    margin-bottom: 4px;
+    border-radius: 3px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+}
+.draggable-child-item:last-child {
+    margin-bottom: 0;
+}
+
+.draggable-child-item Label {
+    color: rgb(200, 200, 200);
+    flex-grow: 1;
+    margin-right: 5px;
+}
+
+.draggable-child-item Button {
+    min-width: 18px;
+    height: 18px;
+    padding: 0;
+    font-size: 10px;
+    line-height: 18px; /* vertically center text */
+    background-color: rgb(100, 50, 50);
+    border-color: rgb(120, 70, 70);
+    color: rgb(220,220,220);
+    border-radius: 3px;
+}
+.draggable-child-item Button:hover {
+    background-color: rgb(120, 60, 60);
+    border-color: rgb(140, 80, 80);
+}
+
+
+/* Extension container for properties */
+.extension {
+    margin-top: 8px;
+    padding: 5px;
+    /* background-color: #333333; */ /* Optional different background */
+}
+
+/* IDropTarget visual feedback */
+.drag-over-target .selection-border { /* Highlight selection border or another element */
+    outline-color: #00A0FF; /* Unity selection blue-like */
+    outline-style: solid;
+    outline-width: 2px;
+    outline-offset: 0px; /* Adjust as needed */
+}
+
+.draggable-nodes-container.drag-over-container-target {
+    background-color: rgba(0, 100, 150, 0.3); /* Highlight for container specific drop */
+    border-color: #00A0FF;
+}
+
+/* Port specific styling to ensure they appear on the edge */
+/* GraphView Ports typically handle their own visuals well.
+   Ensure their containers (.top-port-container etc.) don't have excessive padding/margin. */
+Port {
+    margin: 2px; /* Default Port elements have some margin, adjust if needed */
+}
