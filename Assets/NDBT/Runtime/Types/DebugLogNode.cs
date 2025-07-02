@@ -12,11 +12,10 @@ namespace ND_BehaviorTree
         public string Log;
 
         public int number;
-        public override string OnProcess(BehaviorTree tree)
-        {   
-            
-            Debug.Log("Debug Log Hello :" + Log);
-            return base.OnProcess(tree);
+
+        protected override Status OnProcess()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

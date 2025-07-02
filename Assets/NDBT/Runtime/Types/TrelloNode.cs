@@ -10,6 +10,12 @@ namespace ND_BehaviorTree
     {   
         [SerializeReference]
         public List<TrelloChildNode> childrenNode = new List<TrelloChildNode>();
+
+        protected override Status OnProcess()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }

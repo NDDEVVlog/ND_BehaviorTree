@@ -1,16 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
+// --- START OF FILE RootNode.cs ---
+
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    [NodeInfo("Root","Default/Root",false,true) ]
+    // The RootNode is the entry point of the tree. It can only have one child.
+    [NodeInfo("Root","Root/RootNode",false,true, iconPath:"Assets/NDBT/Icons/antivirus.png")]
     public class RootNode : Node
     {
-        public override string OnProcess(BehaviorTree tree)
+        [HideInInspector] public Node child;
+
+        protected override void OnEnter() { }
+        protected override void OnExit() { }
+
+        protected override Status OnProcess()
         {
-            Debug.Log("Hello Mao Fuck");
-            return base.OnProcess(tree);
+            return child == null ? Status.Success : child.Process();
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            child?.Reset();
         }
     }
 }
+// --- END OF FILE RootNode.cs ---

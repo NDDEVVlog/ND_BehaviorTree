@@ -30,7 +30,11 @@ namespace ND_BehaviorTree
 
         [SerializeField]
         public List<ScriptRef> scriptRefs = new List<ScriptRef>();
-        
+
+        protected override Status OnProcess()
+        {
+            throw new System.NotImplementedException();
+        }
 
     }
 }

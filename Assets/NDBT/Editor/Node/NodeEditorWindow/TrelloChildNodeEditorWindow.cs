@@ -110,7 +110,7 @@ namespace ND_BehaviorTree.Editor
             EditorGUILayout.Space(5);
             if (visualNode != null)
             {
-                visualNode.UpdateNode();
+                //visualNode.UpdateNode();
             }
 
             EditorGUILayout.BeginHorizontal();

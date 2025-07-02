@@ -203,26 +203,26 @@ namespace ND_BehaviorTree.Editor
             ND_NodeEditor nodeEditor; // Base type
 
             // --- TYPE CHECKING LOGIC ---
-            if (nodeData is TrelloNode trelloNodeData) // Check if the data is a TrelloNode
-            {
-                // If you have ND_DrawTrelloSetting.Instance.GetTrelloUXMLPath()
-                // ensure it's used by ND_TrelloNodeEditor's constructor
-                nodeEditor = new ND_TrelloNodeEditor(trelloNodeData, m_serialLizeObject, this);
-                Debug.Log($"Creating ND_TrelloNodeEditor for node: {nodeData.id}");
-            }
-            // Add more 'else if' blocks here for other specific node editor types
-            else if (nodeData is TrelloChildNode trelloChild)
-            {
+            // if (nodeData is TrelloNode trelloNodeData) // Check if the data is a TrelloNode
+            // {
+            //     // If you have ND_DrawTrelloSetting.Instance.GetTrelloUXMLPath()
+            //     // ensure it's used by ND_TrelloNodeEditor's constructor
+            //     nodeEditor = new ND_TrelloNodeEditor(trelloNodeData, m_serialLizeObject, this);
+            //     Debug.Log($"Creating ND_TrelloNodeEditor for node: {nodeData.id}");
+            // }
+            // // Add more 'else if' blocks here for other specific node editor types
+            // else if (nodeData is TrelloChildNode trelloChild)
+            // {
                 
-                nodeEditor = new ND_TrelloChild(trelloChild, m_serialLizeObject, this);
-            }
-            else // Default case: use the generic ND_NodeEditor
-            {
-                // This uses the default UXML path defined in ND_NodeEditor's constructor
-                nodeEditor = new ND_NodeEditor(nodeData, m_serialLizeObject, this);
-                Debug.Log($"Creating generic ND_NodeEditor for node: {nodeData.id} of type {nodeData.GetType()}");
-            }
-
+            //     nodeEditor = new ND_TrelloChild(trelloChild, m_serialLizeObject, this);
+            // }
+            // else // Default case: use the generic ND_NodeEditor
+            // {
+            //     // This uses the default UXML path defined in ND_NodeEditor's constructor
+            //     
+            //     Debug.Log($"Creating generic ND_NodeEditor for node: {nodeData.id} of type {nodeData.GetType()}");
+            // }
+            nodeEditor = new ND_NodeEditor(nodeData, m_serialLizeObject, this);
             AddNode(nodeData, nodeEditor);
 
             if (animate)
@@ -435,20 +435,52 @@ namespace ND_BehaviorTree.Editor
         }
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
-        {
-            base.BuildContextualMenu(evt); // Add default GraphView options (Cut, Copy, Paste, etc.)
+    {
+        base.BuildContextualMenu(evt); // Keep default options
 
-            if (m_contextualMenuCommands != null)
-            {
-                foreach (var command in m_contextualMenuCommands)
-                {
-                    if (command.CanExecute(evt, this))
-                    {
-                        command.AddToMenu(evt, this);
-                    }
-                }
-            }
+        Vector2 nodePosition = Vector2.zero;
+        if (evt.target is ND_NodeEditor clickedEditor && clickedEditor.m_Node is CompositeNode compositeNode)
+        {
+            // Right-clicked on a composite node, add child options
+            evt.menu.AppendAction("Add Decorator/Inverter", (a) => AddChildNode(compositeNode, typeof(InverterNode)));
+            // Add more decorators here...
+            
+            evt.menu.AppendSeparator();
+            evt.menu.AppendAction("Add Service/Patrol", (a) => AddChildNode(compositeNode, typeof(PatrolService)));
+            // Add more services here...
         }
+        else
+        {
+            // Right-clicked on the graph background
+            nodePosition = viewTransform.matrix.inverse.MultiplyPoint(evt.localMousePosition);
+            evt.menu.AppendAction("Create Node", (a) => OpenSearchWindow(evt.mousePosition));
+        }
+    }
+
+    private void AddChildNode(CompositeNode parentNode, Type childType)
+    {
+        Undo.RecordObject(m_BTree, "Add Child Node");
+
+        // Create the data object for the child
+        Node childNode = (Node)ScriptableObject.CreateInstance(childType);
+        childNode.name = childType.Name;
+        
+        // Add it to the asset database so it gets saved
+        AssetDatabase.AddObjectToAsset(childNode, m_BTree);
+        
+        // Add the child to the parent's list in the data model
+        parentNode.children.Add(childNode);
+
+        // Find the parent's visual editor and tell it to redraw its children
+        if (NodeDictionary.TryGetValue(parentNode.id, out ND_NodeEditor parentEditor))
+        {
+            parentEditor.DrawChildren(parentNode);
+        }
+        
+        EditorUtility.SetDirty(m_BTree);
+        AssetDatabase.SaveAssets();
+    }
+
         
         private void BindSerializedObject()
         {
