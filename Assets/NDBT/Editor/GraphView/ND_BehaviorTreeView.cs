@@ -106,16 +106,17 @@ namespace ND_BehaviorTree.Editor
         /// Opens the search window for creating new nodes at the given screen position.
         /// </summary>
         public void OpenSearchWindow(Vector2 screenPosition)
-        {   
+        {   Debug.Log("Node Create at : " + screenPosition);
             m_searchProvider.Initialize(this); 
             SearchWindow.Open(new SearchWindowContext(screenPosition, 300, 200), m_searchProvider); 
         }
         
         public void OpenChildNodeSearchWindow(Vector2 screenPosition, CompositeNode parent, Type filterType)
         {
+            Debug.Log("Node Child Create at : " + screenPosition);
             // Initialize the provider with a context (parent node and filter type)
             m_searchProvider.Initialize(this, parent, filterType);
-            SearchWindow.Open(new SearchWindowContext(screenPosition, 300, 400), m_searchProvider);
+            SearchWindow.Open(new SearchWindowContext(screenPosition, 300, 200), m_searchProvider);
         }
 
         /// <summary>
@@ -447,12 +448,13 @@ namespace ND_BehaviorTree.Editor
         {
             base.BuildContextualMenu(evt); // Keep default options
 
+            Vector2 screenPoint = GUIUtility.GUIToScreenPoint(evt.mousePosition);
             // Check if we right-clicked on a CompositeNode's editor
             if (evt.target is ND_NodeEditor clickedEditor && clickedEditor.m_Node is CompositeNode compositeNode)
             {
                 // Instead of populating the menu, add actions that open the search window in a filtered mode.
-                evt.menu.AppendAction("Add Decorator...", (a) => OpenChildNodeSearchWindow(evt.mousePosition, compositeNode, typeof(DecoratorNode)));
-                evt.menu.AppendAction("Add Service...", (a) => OpenChildNodeSearchWindow(evt.mousePosition, compositeNode, typeof(ServiceNode)));
+                evt.menu.AppendAction("Add Decorator...", (a) => OpenChildNodeSearchWindow(screenPoint, compositeNode, typeof(DecoratorNode)));
+                evt.menu.AppendAction("Add Service...", (a) => OpenChildNodeSearchWindow(screenPoint, compositeNode, typeof(ServiceNode)));
             }
             else
             {
