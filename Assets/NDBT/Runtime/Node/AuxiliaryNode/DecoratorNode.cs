@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    public abstract class DecoratorNode : Node
+    public abstract class DecoratorNode : AuxiliaryNode
     {
         [HideInInspector] public Node child;
 

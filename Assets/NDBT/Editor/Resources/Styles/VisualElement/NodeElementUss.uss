@@ -35,8 +35,13 @@
 
 /* --- Child Node Container (for Decorators/Services) --- */
 .child-node-container {
+     min-height: 40px;
+    background-color: rgba(0, 0, 0, 0.15);
+    border: 1px dashed rgb(80, 80, 80);
+    border-radius: 3px;
+    margin: 5px 0;
+    padding: 5px;
     flex-direction: column;
-    padding: 0 5px 5px 5px; /* Add padding to sides and bottom */
 }
 
 /* --- Individual Child Item Styling --- */
@@ -48,6 +53,7 @@
     margin-top: 5px;
     padding: 5px;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -97,4 +103,71 @@
     justify-content: center;
     height: 16px;
     width: 100%;
+}
+
+/*
+================================================================================
+=== STYLES FOR AUXILIARY NODES (DECORATORS/SERVICES) INSIDE OTHER NODES ===
+================================================================================
+*/
+
+/* Target any node that has our special class */
+.auxiliary-node-editor {
+    margin: 1px 0;
+    -unity-slice-scale: 0;
+    box-shadow: 0 0 0 0 rgba(0,0,0,0);
+    justify-content: space-between;
+    width: 100%; /* Make it fill the container */
+}
+
+/* Hide the main border of the auxiliary node */
+.auxiliary-node-editor > .node-border {
+    border-width: 0;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+/* Override the main container's styling to look like a list item */
+.auxiliary-node-editor > .node-border > .main-container {
+    background-color: #454545;
+    border-radius: 3px;
+    padding: 2px 4px;
+}
+
+/* Change the background color based on type */
+.auxiliary-node-editor.decorator-child > .node-border > .main-container {
+    background-color: #4a3c60; /* Purplish for Decorators */
+}
+
+.auxiliary-node-editor.service-child > .node-border > .main-container {
+    background-color: #3c604f; /* Teal/green for Services */
+}
+
+/* Hide the port containers completely */
+.auxiliary-node-editor .port-container {
+    display: none;
+}
+
+/* Adjust the title element */
+.auxiliary-node-editor .title {
+    background-color: transparent;
+    border-bottom-width: 0;
+    min-height: auto;
+    padding: 0;
+}
+
+.auxiliary-node-editor .title-label {
+    font-size: 11px;
+    padding: 0;
+}
+
+.auxiliary-node-editor .icon-image {
+    width: 16px;
+    height: 16px;
+}
+
+/* Hide the other containers we don't need */
+.auxiliary-node-editor .task-node-content, 
+.auxiliary-node-editor .child-node-container {
+    display: none;
 }

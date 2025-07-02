@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <Style src="project://database/Assets/NDBT/Editor/Resources/Styles/VisualElement/Auxiliary/AuxiliaryUSS.uss?fileID=7433441132597879392&amp;guid=cc2b116db387b57448ddc7c78a7d0413&amp;type=3#AuxiliaryUSS" />
+    <ui:VisualElement name="main-container" class="aux-item-container">
+        <ui:Image name="icon-image" class="aux-item-icon" />
+        <ui:Label name="title-label" text="Item Title" class="aux-item-label" />
+    </ui:VisualElement>
+</ui:UXML>

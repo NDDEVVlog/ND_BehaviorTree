@@ -2,7 +2,7 @@
 
 namespace ND_BehaviorTree
 {   
-    [NodeInfo("Selector", "Composite/Selector", true, true,iconPath:"Assets/NDBT/Icons/antivirus.png" ,isChildOnly: true)]
+    [NodeInfo("Selector", "Composite/Selector", true, true,iconPath:"Assets/NDBT/Icons/antivirus.png" ,isChildOnly: false)]
     public class SelectorNode : CompositeNode
     {
         protected int currentChildIndex;

@@ -3,13 +3,16 @@
 using UnityEngine;
 
 namespace ND_BehaviorTree
-{
+{   
+    
     /// <summary>
     /// A service node runs on a timer as long as its parent branch is active.
     /// It's used for checks and updates, not for direct control flow.
     /// In this implementation, it's a non-blocking node that ticks its logic and returns Success.
     /// </summary>
-    public abstract class ServiceNode : Node
+    /// 
+    /// 
+    public abstract class ServiceNode : AuxiliaryNode
     {
         public float interval = 1.0f;
         public bool runOnEnter = true;
@@ -38,7 +41,7 @@ namespace ND_BehaviorTree
         }
 
         protected override void OnExit() { }
-        
+
         /// <summary>
         /// The logic the service performs on its tick.
         /// </summary>

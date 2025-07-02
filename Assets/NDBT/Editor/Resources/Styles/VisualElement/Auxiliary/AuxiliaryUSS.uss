@@ -1,0 +1,32 @@
+/* Styling for the container of a single decorator or service */
+.aux-item-container {
+    flex-direction: row;
+    align-items: center;
+    padding: 2px 5px;
+    margin: 1px 0;
+    border-radius: 4px;
+}
+
+/* Specific background color for decorators */
+.decorator-child {
+    background-color: #4a3c60; /* A purplish color */
+}
+
+/* Specific background color for services */
+.service-child {
+    background-color: #3c604f; /* A teal/green color */
+}
+
+/* Style for the small icon */
+.aux-item-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+/* Style for the label */
+.aux-item-label {
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: #cccccc;
+}
