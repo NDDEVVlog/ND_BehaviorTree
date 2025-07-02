@@ -1,15 +1,18 @@
+// --- START OF MODIFIED FILE DoubleClickNodeManipulator.cs ---
+
 using UnityEditor;
-using UnityEditor.Experimental.GraphView; // Or your alias 'NodeElements'
 using UnityEngine;
-using UnityEngine.UIElements; // For MouseDownEvent, etc.
+using UnityEngine.UIElements;
+
 namespace ND_BehaviorTree.Editor
 {
-     public class DoubleClickNodeManipulator : Manipulator // Directly implementing Manipulator
+    public class DoubleClickNodeManipulator : Manipulator
     {
-        private ND_NodeEditor _nodeEditorVisual;
+        private ND_NodeEditor _nodeEditorVisual; // The main node this manipulator is attached to
         private double _lastClickTime = 0;
         private const double DoubleClickSpeed = 0.3; // Seconds for double click detection
 
+        // The constructor now takes the main node visual element
         public DoubleClickNodeManipulator(ND_NodeEditor nodeEditorVisual)
         {
             _nodeEditorVisual = nodeEditorVisual;
@@ -17,7 +20,7 @@ namespace ND_BehaviorTree.Editor
 
         protected override void RegisterCallbacksOnTarget()
         {
-            // We want to capture pointer down, as click might be consumed by selection
+            // The 'target' is the _nodeEditorVisual itself
             target.RegisterCallback<PointerDownEvent>(OnPointerDown);
         }
 
@@ -28,8 +31,7 @@ namespace ND_BehaviorTree.Editor
 
         private void OnPointerDown(PointerDownEvent evt)
         {
-            // Only react to left clicks (button 0)
-            if (evt.button != 0 || !target.ContainsPoint(evt.localPosition)) // Ensure click is within the target bounds
+            if (evt.button != 0)
             {
                 return;
             }
@@ -38,41 +40,61 @@ namespace ND_BehaviorTree.Editor
             if (currentTime - _lastClickTime < DoubleClickSpeed)
             {
                 // Double click detected
-                _lastClickTime = 0;    // Reset time to prevent triple click acting as double again immediately
-                evt.StopPropagation(); // Consume the event so it doesn't cause other actions (like graph selection)
-                evt.PreventDefault();  // Further prevent default actions
-                HandleDoubleClick();
+                _lastClickTime = 0;
+                evt.StopPropagation();
+                evt.PreventDefault();
+
+                // Pass the event itself to the handler so we know the click target
+                HandleDoubleClick(evt);
             }
             else
             {
-                // First click of a potential double click
+                // First click
                 _lastClickTime = currentTime;
-                // Do not stop propagation here, allow single click to select the node
             }
         }
 
-        private void HandleDoubleClick()
+        private void HandleDoubleClick(PointerDownEvent evt)
         {
-            if (_nodeEditorVisual == null || _nodeEditorVisual.node == null)
+            // Start with the most specific element that was clicked
+            var clickedElement = evt.target as VisualElement;
+            Node targetNode = null;
+
+            // Traverse up the visual tree from the clicked element
+            // Stop when we hit the main node's boundary (the 'target' of this manipulator)
+            while (clickedElement != null && clickedElement != target)
+            {
+                // Check if the current element in our traversal has a Node data object attached.
+                // This is the "tag" we set in Step 1.
+                if (clickedElement.userData is Node childNodeData)
+                {
+                    // We found a child node visual! This is our target.
+                    targetNode = childNodeData;
+                    break; // Exit the loop
+                }
+                // Move up to the parent element
+                clickedElement = clickedElement.parent;
+            }
+
+            // If the loop finished without finding a child node,
+            // it means the user clicked the main node's background.
+            // In that case, the target is the main node itself.
+            if (targetNode == null)
+            {
+                targetNode = _nodeEditorVisual.m_Node; // Use the main node's data
+            }
+
+            // Now, open the property window for the determined target node.
+            if (targetNode != null)
+            {
+                Debug.Log($"Node '{targetNode.name}' double-clicked. Opening Node Property Editor.");
+                NodePropertyEditorWindow.Open(targetNode);
+            }
+            else
             {
                 Debug.LogWarning("Double-clicked node or its underlying data is null.");
-                return;
-            }
-
-            // Get the ScriptableObject Node instance that this visual editor represents
-            Node nodeAsset = _nodeEditorVisual.node;
-
-            // --- MODIFIED PART ---
-            if (nodeAsset is TrelloChildNode trelloChildAsset)
-            {
-                Debug.Log($"TrelloChildNode '{_nodeEditorVisual.title}' double-clicked. Opening Trello Card Editor.");
-                TrelloChildNodeEditorWindow.Open(trelloChildAsset,_nodeEditorVisual); // Open specific window
-            }
-            else // Fallback for other node types
-            {
-                Debug.Log($"Node '{_nodeEditorVisual.title}' double-clicked. Opening generic Node Property Editor.");
-                NodePropertyEditorWindow.Open(nodeAsset); // Open generic window
             }
         }
     }
 }
+// --- END OF MODIFIED FILE DoubleClickNodeManipulator.cs ---

@@ -1,7 +1,8 @@
 // --- START OF FILE SequenceNode.cs ---
 
 namespace ND_BehaviorTree
-{
+{   
+    [NodeInfo("Sequence", "Composite/Sequence", true, true,iconPath:"Assets/NDBT/Icons/antivirus.png" ,isChildOnly: false)]
     public class SequenceNode : CompositeNode
     {
         protected int currentChildIndex;
@@ -30,10 +31,10 @@ namespace ND_BehaviorTree
                     return Status.Running;
                 }
             }
-            
+
             return Status.Success;
         }
-        
+
         public override void Reset()
         {
             base.Reset();

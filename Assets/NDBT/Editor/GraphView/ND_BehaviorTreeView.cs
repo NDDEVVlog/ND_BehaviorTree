@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks; // For async/await
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -105,27 +106,36 @@ namespace ND_BehaviorTree.Editor
         /// Opens the search window for creating new nodes at the given screen position.
         /// </summary>
         public void OpenSearchWindow(Vector2 screenPosition)
-        {
+        {   
+            m_searchProvider.Initialize(this); 
             SearchWindow.Open(new SearchWindowContext(screenPosition, 300, 200), m_searchProvider); 
         }
         
+        public void OpenChildNodeSearchWindow(Vector2 screenPosition, CompositeNode parent, Type filterType)
+        {
+            // Initialize the provider with a context (parent node and filter type)
+            m_searchProvider.Initialize(this, parent, filterType);
+            SearchWindow.Open(new SearchWindowContext(screenPosition, 300, 400), m_searchProvider);
+        }
+
         /// <summary>
         /// Adds a new node (both data and visual representation) to the graph, typically called by the search provider.
         /// </summary>
         public void AddNewNodeFromSearch(Node nodeData)
         {
-            if (nodeData == null) {
+            if (nodeData == null)
+            {
                 Debug.LogError("[AddNewNodeFromSearch] nodeData is null. Cannot add node.");
                 return;
             }
 
-            
+
             Undo.RecordObject(m_serialLizeObject.targetObject, "Added Node: " + nodeData.GetType().Name);
             AssetDatabase.AddObjectToAsset(nodeData, m_BTree);
             m_BTree.nodes.Add(nodeData); // Add to the underlying ScriptableObject data
 
             AddNodeVisuals(nodeData, animate: true); // Add visual representation with animation
-            
+
             BindSerializedObject(); // Re-bind to reflect new data for property fields
             EditorUtility.SetDirty(m_BTree); // Mark the ScriptableObject as changed
             AssetDatabase.SaveAssets();
@@ -202,27 +212,26 @@ namespace ND_BehaviorTree.Editor
 
             ND_NodeEditor nodeEditor; // Base type
 
-            // --- TYPE CHECKING LOGIC ---
-            // if (nodeData is TrelloNode trelloNodeData) // Check if the data is a TrelloNode
-            // {
-            //     // If you have ND_DrawTrelloSetting.Instance.GetTrelloUXMLPath()
-            //     // ensure it's used by ND_TrelloNodeEditor's constructor
-            //     nodeEditor = new ND_TrelloNodeEditor(trelloNodeData, m_serialLizeObject, this);
-            //     Debug.Log($"Creating ND_TrelloNodeEditor for node: {nodeData.id}");
-            // }
-            // // Add more 'else if' blocks here for other specific node editor types
+            if (nodeData is AuxiliaryNode auxiliaryData) // Check if the data is a TrelloNode
+            {
+                // If you have ND_DrawTrelloSetting.Instance.GetTrelloUXMLPath()
+                // ensure it's used by ND_TrelloNodeEditor's constructor
+                nodeEditor = new ND_AuxiliaryEditor(auxiliaryData, m_serialLizeObject, this);
+                Debug.Log($"Creating AuxiliaryEditor for node: {nodeData.id}");
+            }
+            // Add more 'else if' blocks here for other specific node editor types
             // else if (nodeData is TrelloChildNode trelloChild)
             // {
                 
             //     nodeEditor = new ND_TrelloChild(trelloChild, m_serialLizeObject, this);
             // }
-            // else // Default case: use the generic ND_NodeEditor
-            // {
-            //     // This uses the default UXML path defined in ND_NodeEditor's constructor
-            //     
-            //     Debug.Log($"Creating generic ND_NodeEditor for node: {nodeData.id} of type {nodeData.GetType()}");
-            // }
-            nodeEditor = new ND_NodeEditor(nodeData, m_serialLizeObject, this);
+            else // Default case: use the generic ND_NodeEditor
+            {
+                // This uses the default UXML path defined in ND_NodeEditor's constructor
+                 nodeEditor = new ND_NodeEditor(nodeData, m_serialLizeObject, this);
+                Debug.Log($"Creating generic ND_NodeEditor for node: {nodeData.id} of type {nodeData.GetType()}");
+            }
+           
             AddNode(nodeData, nodeEditor);
 
             if (animate)
@@ -434,52 +443,87 @@ namespace ND_BehaviorTree.Editor
             }
         }
 
-        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
-    {
-        base.BuildContextualMenu(evt); // Keep default options
-
-        Vector2 nodePosition = Vector2.zero;
-        if (evt.target is ND_NodeEditor clickedEditor && clickedEditor.m_Node is CompositeNode compositeNode)
+         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            // Right-clicked on a composite node, add child options
-            evt.menu.AppendAction("Add Decorator/Inverter", (a) => AddChildNode(compositeNode, typeof(InverterNode)));
-            // Add more decorators here...
+            base.BuildContextualMenu(evt); // Keep default options
+
+            // Check if we right-clicked on a CompositeNode's editor
+            if (evt.target is ND_NodeEditor clickedEditor && clickedEditor.m_Node is CompositeNode compositeNode)
+            {
+                // Instead of populating the menu, add actions that open the search window in a filtered mode.
+                evt.menu.AppendAction("Add Decorator...", (a) => OpenChildNodeSearchWindow(evt.mousePosition, compositeNode, typeof(DecoratorNode)));
+                evt.menu.AppendAction("Add Service...", (a) => OpenChildNodeSearchWindow(evt.mousePosition, compositeNode, typeof(ServiceNode)));
+            }
+            else
+            {
+                // Default behavior for right-clicking the graph background
+                evt.menu.AppendAction("Create Node", (a) => OpenSearchWindow(evt.mousePosition));
+            }
+        }
+        
+        /// <summary>
+        /// Uses reflection to find all concrete node types inheriting from a base type (e.g., DecoratorNode)
+        /// and adds them to the provided dropdown menu.
+        /// </summary>
+        /// <param name="menu">The context menu to populate.</param>
+        /// <param name="parentNode">The composite node that will be the parent.</param>
+        /// <param name="baseType">The base type to search for (e.g., typeof(DecoratorNode)).</param>
+        /// <param name="menuPathPrefix">A prefix for the menu items (e.g., "Add Decorator/").</param>
+        private void PopulateContextMenuWithChildNodes(DropdownMenu menu, CompositeNode parentNode, Type baseType, string menuPathPrefix)
+        {
+            // Get all loaded assemblies
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(t => baseType.IsAssignableFrom(t) && !t.IsAbstract);
+
+            foreach (var type in types)
+            {
+                var attribute = type.GetCustomAttribute<NodeInfoAttribute>();
+                if (attribute != null && !string.IsNullOrEmpty(attribute.menuItem))
+                {
+                    // The action to perform when the menu item is clicked
+                    Action<DropdownMenuAction> action = (a) => AddChildNode(parentNode, type);
+                    
+                    // Append the action to the menu, using the path from the attribute
+                    menu.AppendAction(menuPathPrefix + attribute.menuItem, action);
+                }
+            }
+        }
+
+        public void AddChildNode(CompositeNode parentNode, Type childType)
+        {
+            Undo.RecordObject(m_BTree, "Add Auxiliary Node");
+
+            Node childNode = (Node)ScriptableObject.CreateInstance(childType);
+            childNode.name = childType.Name;
             
-            evt.menu.AppendSeparator();
-            evt.menu.AppendAction("Add Service/Patrol", (a) => AddChildNode(compositeNode, typeof(PatrolService)));
-            // Add more services here...
-        }
-        else
-        {
-            // Right-clicked on the graph background
-            nodePosition = viewTransform.matrix.inverse.MultiplyPoint(evt.localMousePosition);
-            evt.menu.AppendAction("Create Node", (a) => OpenSearchWindow(evt.mousePosition));
-        }
-    }
+            AssetDatabase.AddObjectToAsset(childNode, m_BTree);
+            
+            if (childNode is DecoratorNode decorator)
+            {
+                parentNode.decorators.Add(decorator);
+            }
+            else if (childNode is ServiceNode service)
+            {
+                parentNode.services.Add(service);
+            }
+            else
+            {
+                 Debug.LogWarning($"Trying to add unsupported child type '{childType.Name}' to a CompositeNode.");
+                 return;
+            }
+            
+            m_serialLizeObject.Update();
 
-    private void AddChildNode(CompositeNode parentNode, Type childType)
-    {
-        Undo.RecordObject(m_BTree, "Add Child Node");
-
-        // Create the data object for the child
-        Node childNode = (Node)ScriptableObject.CreateInstance(childType);
-        childNode.name = childType.Name;
-        
-        // Add it to the asset database so it gets saved
-        AssetDatabase.AddObjectToAsset(childNode, m_BTree);
-        
-        // Add the child to the parent's list in the data model
-        parentNode.children.Add(childNode);
-
-        // Find the parent's visual editor and tell it to redraw its children
-        if (NodeDictionary.TryGetValue(parentNode.id, out ND_NodeEditor parentEditor))
-        {
-            parentEditor.DrawChildren(parentNode);
+            if (NodeDictionary.TryGetValue(parentNode.id, out ND_NodeEditor parentEditor))
+            {
+                parentEditor.DrawChildren(parentNode, this);
+            }
+            
+            EditorUtility.SetDirty(m_BTree);
+            if (m_editorWindow != null) m_editorWindow.SetUnsavedChanges(true);
+            AssetDatabase.SaveAssets();
         }
-        
-        EditorUtility.SetDirty(m_BTree);
-        AssetDatabase.SaveAssets();
-    }
 
         
         private void BindSerializedObject()
