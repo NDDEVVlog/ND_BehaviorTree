@@ -4,15 +4,10 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    [NodeInfo("Debug_Log", "Debug/DebugLog")]
-    
-    public class DebugLogNode : Node
-    {   
-        [ExposeProperty()]
-        public string Log;
-
-        public int number;
-
+    // Example Decorator
+    [NodeInfo("Inverter", "Decorators/Inverter", true, true,iconPath:"Assets/NDBT/Icons/antivirus.png", isChildOnly: true)]
+    public class InverterNode : DecoratorNode
+    { /* ... your logic ... */
         protected override Status OnProcess()
         {
             throw new System.NotImplementedException();

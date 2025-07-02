@@ -1,29 +1,30 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace ND_BehaviorTree
 {
     public class NodeInfoAttribute : Attribute
     {
-        private string m_nodeTitle;
-        private string m_menuItem;
-        private bool m_hasFlowInput;  // New private field
-        private bool m_hasFlowOutput; // New private field (corrected typo from Oupput)
+        public string title { get; }
+        public string menuItem { get; }
+        public bool hasFlowInput { get; }
+        public bool hasFlowOutput { get; }
+        public string iconPath { get; }
+        public bool isChildOnly { get; } // NEW: Flag to hide from main search
 
-
-        public string title => m_nodeTitle;
-        public string menuItem => m_menuItem;
-        public bool HasFlowInput => m_hasFlowInput;
-        public bool HasFlowOutput => m_hasFlowOutput;
-
-        public NodeInfoAttribute(string title, string menuItem = "", bool hasFlowInput = true, bool hasFlowOutput = true)
+        public NodeInfoAttribute(
+            string title, 
+            string menuItem = "", 
+            bool hasFlowInput = true, 
+            bool hasFlowOutput = true, 
+            string iconPath = null,
+            bool isChildOnly = false) // NEW: Added to constructor
         {
-            m_nodeTitle = title;
-            m_menuItem = menuItem;
-            m_hasFlowInput = hasFlowInput;
-            m_hasFlowOutput = hasFlowOutput;
+            this.title = title;
+            this.menuItem = menuItem;
+            this.hasFlowInput = hasFlowInput;
+            this.hasFlowOutput = hasFlowOutput;
+            this.iconPath = iconPath;
+            this.isChildOnly = isChildOnly; // NEW: Assign the flag
         }
     }
 }

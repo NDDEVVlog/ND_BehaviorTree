@@ -1,381 +1,271 @@
-using System.CodeDom;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor.Experimental.GraphView;
-using NodeElements = UnityEditor.Experimental.GraphView.Node; // Your alias
 using System;
-using System.Reflection;
-using UnityEditor.UIElements;
-using UnityEditor;
-using UnityEngine.UIElements;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
+using UnityEngine.UIElements;
+using NodeElements = UnityEditor.Experimental.GraphView.Node; // Alias for GraphView.Node
 
 namespace ND_BehaviorTree.Editor
 {
     public class ND_NodeEditor : NodeElements, IDropTarget
     {
+        // --- Fields ---
         internal Node m_Node;
         private Port m_OutputPort;
-
-        private List<Port> m_Ports;
-        public SerializedProperty m_serializedProperty;
+        private List<Port> m_Ports = new List<Port>();
         public SerializedObject m_SerializedObject;
 
-        public GraphView drawTrelloView;
+        // The specific container in the UXML where child nodes can be dropped.
+        public VisualElement m_DecoratorContainer;
+        private VisualElement m_ChildNodeContainer;
+
 
         public Node node => m_Node;
-
         public List<Port> Ports => m_Ports;
 
-        private VisualElement m_TopPortContainer;
-        private VisualElement m_BottomPortContainer;
-        private VisualElement m_LeftPortContainer;
-        private VisualElement m_RightPortContainer;
-        public VisualElement m_DragableNodeContainer; // This will be the target for dropped nodes
 
-        protected ND_NodeEditor(Node node, SerializedObject BTObject, GraphView graphView, string uxmlPath)
-            : base(uxmlPath) // Pass the UXML path to the base GraphView.Node constructor
+        // --- Constructor ---
+        // This is the entry point for creating a new node editor instance.
+        public ND_NodeEditor(Node node, SerializedObject BTObject, GraphView graphView)
+            // It calls the base Node constructor, providing the path to our custom UXML file.
+            : base(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUXMLPath())
         {
-            VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);
-            if (visualTree != null)
-            {
-                var root = visualTree.CloneTree();
-                this.mainContainer.Clear();
-                this.mainContainer.Add(root); // mainContainer is a standard container in GraphView.Node
-            }
-            else
-            {
-                Debug.LogError($"ND_NodeEditor: VisualTreeAsset not found at {uxmlPath}");
-            }
-            // All initialization now happens here, regardless of which constructor was initially called.
+            // All initialization logic is handled in this central method.
             InitializeNodeView(node, BTObject);
         }
 
-        // Public constructor for using the default UXML path.
-        // It now calls the protected constructor using 'this(...)'.
-        public ND_NodeEditor(Node node, SerializedObject BTObject, GraphView graphView)
-            : this(node, BTObject, graphView, ND_BehaviorTreeSetting.Instance.GetNodeDefaultUXMLPath())
-        {
-            m_Node = node;
-            Type typeInfo = node.GetType();
-            NodeInfoAttribute info = typeInfo.GetCustomAttribute<NodeInfoAttribute>();
-            title = info.title;
-        }
-
+        // --- Initialization ---
         private void InitializeNodeView(Node node, SerializedObject BTObject)
         {
+            this.m_Node = node;
+            this.m_SerializedObject = BTObject;
+            this.viewDataKey = node.id; // Crucial for saving the node's position.
 
-            Debug.Log("CreatingNode");
+            Type typeInfo = node.GetType();
+            NodeInfoAttribute info = typeInfo.GetCustomAttribute<NodeInfoAttribute>();
+
+            // Load and apply the stylesheet for the node's appearance.
             StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUSSPath());
             if (styleSheet != null)
             {
                 this.styleSheets.Add(styleSheet);
             }
-            else
+
+            // --- Query UXML Elements ---
+            // Find the specific containers we defined in the UXML file.
+            m_DecoratorContainer = this.Q<VisualElement>("decorator-container");
+            var topPortContainer = this.Q<VisualElement>("top-port");
+            var bottomPortContainer = this.Q<VisualElement>("bottom-port");
+             
+            var titleLabel = this.Q<Label>("title-label");
+            var taskNodeContent = this.Q<VisualElement>("task-node-content");
+
+            var iconContainer = this.Q<VisualElement>("icon"); // Get the icon's container
+            var iconImage = this.Q<Image>("icon-image");       // Get the new Image element 
+
+            m_ChildNodeContainer = this.Q<VisualElement>("child-node-container");
+            
+            titleLabel.text = info.title;
+
+            if (iconImage != null && !string.IsNullOrEmpty(info.iconPath))
             {
-                Debug.LogWarning("ND_NodeEditor: StyleSheet not found at Assets/NDBT/Editor/Resources/Styles/VisualElement/NodeElementUss.uss");
-            }
-
-            // Debug.Log(ND_BTSetting.Instance.GetNodeDefaultUXMLPath()); // UXML path debug
-
-            this.AddToClassList("nd-node");
-
-            m_SerializedObject = BTObject;
-            m_Node = node;
-
-            m_TopPortContainer = this.Q<VisualElement>("top-port");
-            m_BottomPortContainer = this.Q<VisualElement>("bottom-port");
-
-
-            // Query for the specific container where nodes can be dropped
-            // This targets the *first* element named "draggable-nodes-container" in your UXML.
-            m_DragableNodeContainer = this.Q<VisualElement>("draggable-nodes-container");
-
-
-            Type typeInfo = node.GetType();
-            NodeInfoAttribute info = typeInfo.GetCustomAttribute<NodeInfoAttribute>();
-            title = info.title;
-
-            m_Ports = new List<Port>();
-
-            string[] depthhs = info.menuItem.Split('/');
-            foreach (string depth in depthhs)
-            {
-                this.AddToClassList(depth.ToLower().Replace(' ', '-'));
-            }
-
-            this.name = typeInfo.Name;
-
-            if (info.HasFlowOutput && m_BottomPortContainer != null)
-            {
-                CreateOutputPort();
-            }
-
-            if (info.HasFlowInput && m_TopPortContainer != null)
-            {
-                CreateInputPort();
-            }
-
-            foreach (FieldInfo property in typeInfo.GetFields())
-            {
-                if (property.GetCustomAttribute<ExposePropertyAttribute>() is ExposePropertyAttribute exposeProperty)
+                // Load the texture from the path specified in the attribute.
+                Texture2D iconTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(info.iconPath);
+                if (iconTexture != null)
                 {
-                    PropertyField field = DrawProperty(property.Name);
-                    //field.RegisterValueChangeCallback(OnFieldChangeCallBack);
+                    // Assign the loaded texture to the Image element.
+                    iconImage.image = iconTexture;
+                }
+                else
+                {
+                    // If the icon isn't found, log a warning for easy debugging.
+                    Debug.LogWarning($"Behavior Tree: Icon not found at path '{info.iconPath}' for node '{info.title}'.");
                 }
             }
-            this.AddManipulator(new DoubleClickNodeManipulator(this));
-            this.AddManipulator(new CreateDecorator());
+            else
+            {
+                // If no icon path is provided, hide the icon container entirely.
+                iconContainer.style.display = DisplayStyle.None;
+            }
+
+
+
+            // If this is a composite node, draw its children.
+            if (m_Node is CompositeNode compositeNode)
+            {
+                this.AddToClassList("composite-node");
+                DrawChildren(compositeNode);
+            }
+            else
+            {
+                // Hide the container if it's not a composite node.
+                m_ChildNodeContainer.style.display = DisplayStyle.None;
+            }
+
+            // --- Create Ports based on NodeInfo attribute ---
+            if (info.hasFlowInput)
+            {
+                Port inputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
+                inputPort.portName = "";
+                topPortContainer.Add(inputPort);
+                m_Ports.Add(inputPort);
+            }
+
+            if (info.hasFlowOutput)
+            {
+                m_OutputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(PortType.FlowPort));
+                m_OutputPort.portName = "";
+                bottomPortContainer.Add(m_OutputPort);
+                m_Ports.Add(m_OutputPort);
+            }
+
+            // These methods from the base class must be called to finalize the node.
             RefreshExpandedState();
             RefreshPorts();
         }
 
-        private void OnFieldChangeCallBack(SerializedPropertyChangeEvent evt)
+        // Draws the visual items for the children inside the container
+        public void DrawChildren(CompositeNode composite)
         {
-            throw new NotImplementedException();
+            m_ChildNodeContainer.Clear();
+            if (composite.children == null) return;
+            
+            foreach (var childNode in composite.children)
+            {
+                var childView = CreateChildNodeView(childNode);
+                m_ChildNodeContainer.Add(childView);
+            }
         }
 
-        private void FetchSerializedProperty()
+        // Creates a single visual element for a child node (Decorator or Service)
+        private VisualElement CreateChildNodeView(Node childNode)
         {
-            SerializedProperty nodes = m_SerializedObject.FindProperty("m_nodes");
-            if (nodes != null && nodes.isArray)
+            var item = new VisualElement();
+            item.AddToClassList("child-node-item");
+            
+            NodeInfoAttribute info = childNode.GetType().GetCustomAttribute<NodeInfoAttribute>();
+            
+            // Apply specific styling based on type
+            if (childNode is DecoratorNode) item.AddToClassList("decorator-child");
+            if (childNode is ServiceNode) item.AddToClassList("service-child");
+
+            if (!string.IsNullOrEmpty(info.iconPath))
             {
-                for (int i = 0; i < nodes.arraySize; i++)
-                {
-                    var element = nodes.GetArrayElementAtIndex(i);
-                    if (element == null) continue;
-                    var elementId = element.FindPropertyRelative("m_guid");
-                    if (elementId != null && elementId.stringValue == node.id)
-                    {
-                        m_serializedProperty = element;
-                        return; // Found
-                    }
-                }
+                var icon = new Image { image = AssetDatabase.LoadAssetAtPath<Texture2D>(info.iconPath) };
+                icon.AddToClassList("icon-image");
+                item.Add(icon);
             }
-            // Debug.LogWarning($"ND_NodeEditor: Could not find serialized property for node ID {node.id} ({node.typeName})");
+
+            var label = new Label(info.title);
+            label.AddToClassList("title-label");
+            item.Add(label);
+
+            return item;
         }
 
-        private PropertyField DrawProperty(string name)
-        {
-            if (m_serializedProperty == null)
-            {
-                FetchSerializedProperty();
-            }
-
-            if (m_serializedProperty == null)
-            {
-                Debug.LogError($"ND_NodeEditor ({this.title}): m_serializedProperty is null. Cannot draw property '{name}'. Ensure FetchSerializedProperty works correctly.");
-                return null;
-            }
-
-            SerializedProperty prop = m_serializedProperty.FindPropertyRelative(name);
-            if (prop == null)
-            {
-                Debug.LogError($"ND_NodeEditor ({this.title}): Property '{name}' not found in serialized property '{m_serializedProperty.propertyPath}'.");
-                return null;
-            }
-
-            PropertyField field = new PropertyField(prop);
-            field.bindingPath = prop.propertyPath; // Not strictly necessary if prop is passed to constructor, but good for clarity.
-
-            // Ensure extensionContainer (from base Node class) is valid
-            if (extensionContainer == null)
-            {
-                Debug.LogError($"ND_NodeEditor ({this.title}): extensionContainer is null. Cannot add property field. Check UXML for an element named 'extension'.");
-                return field; // Return field even if not added, to prevent further nullrefs
-            }
-
-            extensionContainer.Add(field);
-            // Debug.Log($"ND_NodeEditor ({this.title}): Added property '{name}'. ExtensionContainer children: {extensionContainer.childCount}");
-            return field;
-        }
-
-        private void CreateOutputPort()
-        {
-            m_OutputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(PortType.FlowPort));
-            m_OutputPort.portName = "";
-            m_OutputPort.tooltip = "The flow OutPut";
-            m_Ports.Add(m_OutputPort);
-            if (m_BottomPortContainer != null)
-                m_BottomPortContainer.Add(m_OutputPort);
-            else
-                outputContainer.Add(m_OutputPort); // Fallback to default output container
-        }
-
-        private void CreateInputPort()
-        {
-            Port m_InputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
-            m_InputPort.portName = "";
-            m_InputPort.tooltip = "The flow input";
-            m_Ports.Add(m_InputPort);
-            if (m_TopPortContainer != null)
-                m_TopPortContainer.Add(m_InputPort);
-            else
-                inputContainer.Add(m_InputPort); // Fallback to default input container
-        }
-
+        // --- Data Persistence ---
         public void SavePosition()
         {
+            // Updates the node's data model with its current GUI position.
             m_Node.SetPosition(GetPosition());
         }
 
-        #region IDropTarget Implementation
-        public string GetDraggedItemTitle(IEnumerable<ISelectable> selection)
-        {
-            if (selection != null && selection.Any())
-            {
-                var firstSelectable = selection.First();
-                if (firstSelectable is ND_NodeEditor draggedNode)
-                {
-                    return $"'{draggedNode.title}' (Type: {draggedNode.GetType().Name})";
-                }
-                else if (firstSelectable is GraphElement ge)
-                {
-                    return $"'{ge.name ?? "Unnamed GE"}' (Type: {ge.GetType().Name})";
-                }
-                return $"(Type: {firstSelectable.GetType().Name})";
-            }
-            return "NOTHING";
-        }
+        #region IDropTarget Implementation (Handles Drag-and-Drop)
 
+        // Checks if a dragged item can be dropped onto this node.
         public bool CanAcceptDrop(List<ISelectable> selection)
         {
-            if (m_DragableNodeContainer == null) // Ensure the drop zone exists
+            // Condition 1: The decorator container must exist and be visible.
+            if (m_DecoratorContainer == null || m_DecoratorContainer.style.display == DisplayStyle.None)
             {
                 return false;
             }
 
-            if (selection == null || !selection.Any())
+            // Condition 2: The dragged item must be a single node.
+            if (selection.Count != 1 || !(selection.First() is ND_NodeEditor draggedNode))
+            {
+                return false;
+            }
+            
+            // Condition 3: Cannot drop a node onto itself.
+            if(draggedNode == this)
             {
                 return false;
             }
 
-            if (selection.Count == 1)
-            {
-                if (selection.First() is ND_NodeEditor draggedNodeEditor && draggedNodeEditor != this)
-                {
-                    // Prevent dropping if it's already a child of this specific container
-                    if (m_DragableNodeContainer.Children().Contains(draggedNodeEditor))
-                    {
-                        return false;
-                    }
-                    return true; // It's a different ND_NodeEditor and not already a child here
-                }
-            }
-            return false;
+            // Condition 4 (Business Logic): Only allow "Decorator" nodes to be dropped.
+            return draggedNode.m_Node.GetType().Name == "Decorator";
         }
 
-        public virtual bool DragUpdated(DragUpdatedEvent evt, IEnumerable<ISelectable> selection, IDropTarget dropTarget, ISelection dragSource)
+        // Called when a valid drag operation enters the bounds of this node.
+        public bool DragEnter(DragEnterEvent evt, IEnumerable<ISelectable> selection, IDropTarget enteredTarget, ISelection dragSource)
         {
-            string nodeTitle = (m_Node != null && !string.IsNullOrEmpty(this.title)) ? this.title : "UNKNOWN_NODE";
-            string draggedItemInfo = GetDraggedItemTitle(selection);
-
-            if (dropTarget == this)
+            if (enteredTarget != this || !CanAcceptDrop(selection.ToList()))
             {
-                Debug.Log($"<color=blue>DragUpdated</color>: Dragging <b>{draggedItemInfo}</b> over Node: <b>'{nodeTitle}'</b>. CanAcceptDrop: {CanAcceptDrop(selection.ToList())}");
+                return false;
             }
+            // Apply a visual highlight to the drop zone.
+            m_DecoratorContainer?.AddToClassList("drop-zone-highlight");
+            return true;
+        }
+
+        // Called when a drag operation leaves the bounds of this node.
+        public bool DragLeave(DragLeaveEvent evt, IEnumerable<ISelectable> selection, IDropTarget leftTarget, ISelection dragSource)
+        {
+            // Always remove the visual highlight.
+            m_DecoratorContainer?.RemoveFromClassList("drop-zone-highlight");
+            return true;
+        }
+
+        // Called continuously while an item is dragged over this node.
+        public bool DragUpdated(DragUpdatedEvent evt, IEnumerable<ISelectable> selection, IDropTarget dropTarget, ISelection dragSource)
+        {
+            // Continuously check if the drop is valid.
             return CanAcceptDrop(selection.ToList());
         }
 
-        public virtual bool DragPerform(DragPerformEvent evt, IEnumerable<ISelectable> selection, IDropTarget dropTarget, ISelection dragSource)
+        // Called when the user releases the mouse to perform the drop.
+        public bool DragPerform(DragPerformEvent evt, IEnumerable<ISelectable> selection, IDropTarget dropTarget, ISelection dragSource)
         {
-            if (m_DragableNodeContainer == null) return false;
-
-
-            if (CanAcceptDrop(selection.ToList()))
+            // Final check to ensure the drop is valid.
+            if (!CanAcceptDrop(selection.ToList()))
             {
-                ND_NodeEditor droppedNodeEditor = selection.First() as ND_NodeEditor;
-                if (droppedNodeEditor != null)
-                {
-                    Debug.Log($"Node '{droppedNodeEditor.title}' is being dropped onto Node '{this.title}' in container '{m_DragableNodeContainer.name}'.");
-
-                    // 1. Remove from its current visual parent
-                    droppedNodeEditor.RemoveFromHierarchy();
-
-                    // 2. Add to the designated container in this node
-                    m_DragableNodeContainer.Add(droppedNodeEditor);
-
-                    // 3. Adjust styling for being a child element instead of a free-floating graph node
-                    droppedNodeEditor.style.position = Position.Relative;
-                    droppedNodeEditor.style.left = StyleKeyword.Auto; // Or StyleKeyword.Null / float.NaN
-                    droppedNodeEditor.style.top = StyleKeyword.Auto;
-                    droppedNodeEditor.style.right = StyleKeyword.Auto;
-                    droppedNodeEditor.style.bottom = StyleKeyword.Auto;
-                    droppedNodeEditor.style.width = new StyleLength(new Length(80, LengthUnit.Percent));
-                    // droppedNodeEditor.style.marginBottom = 5; // Optional: Add some spacing
-
-                    // Optional: Notify the GraphView that an element's hierarchy changed if needed,
-                    // though simple visual reparenting might not require explicit GraphView notification
-                    // unless it affects GraphView's internal model of elements.
-
-                    // --- Implement your actual data model update logic here ---
-                    // For example, if m_treeNode can have children:
-                    // if (this.m_treeNode is ICompositeNode compositeParent && droppedNodeEditor.m_treeNode is IChildNode childNodeData)
-                    // {
-                    //    // You might need to remove childNodeData from its old parent in the data model first
-                    //    compositeParent.AddChild(childNodeData);
-                    //    Debug.Log($"Data: Node '{droppedNodeEditor.m_treeNode.typeName}' added as child to '{this.m_treeNode.typeName}'.");
-                    // }
-
-                    // Mark the event as handled
-                    evt.StopPropagation();
-                    return true;
-                }
+                return false;
             }
+
+            ND_NodeEditor droppedNodeEditor = selection.First() as ND_NodeEditor;
+            if (droppedNodeEditor != null)
+            {
+                // 1. Remove the dropped node from its current visual parent (the main graph view).
+                droppedNodeEditor.RemoveFromHierarchy();
+
+                // 2. Add the node to our decorator container, making it a visual child.
+                m_DecoratorContainer.Add(droppedNodeEditor);
+
+                // --- IMPORTANT: UPDATE THE ACTUAL DATA MODEL HERE ---
+                // For example:
+                // if (this.m_Node is ICompositeNode parent && droppedNodeEditor.m_Node is IChildNode child)
+                // {
+                //    parent.AddChild(child);
+                // }
+                // This ensures the parent-child relationship is saved.
+
+                evt.StopPropagation(); // Mark the event as handled.
+                return true;
+            }
+
             return false;
-        }
-
-        public virtual bool DragEnter(DragEnterEvent evt, IEnumerable<ISelectable> selection, IDropTarget enteredTarget, ISelection dragSource)
-        {
-            string nodeTitle = (m_Node != null && !string.IsNullOrEmpty(this.title)) ? this.title : "UNKNOWN_NODE";
-            if (enteredTarget == this) // Only log if this node is the one being entered
-            {
-                Debug.Log($"<color=green>DragEnter</color> Node: <b>'{nodeTitle}'</b>. CanAcceptDrop: {CanAcceptDrop(selection.ToList())}");
-                if (CanAcceptDrop(selection.ToList()))
-                {
-                    this.AddToClassList("drag-over-target");
-                    m_DragableNodeContainer?.AddToClassList("drop-zone-highlight"); // Highlight specific drop zone
-
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public virtual bool DragLeave(DragLeaveEvent evt, IEnumerable<ISelectable> selection, IDropTarget leftTarget, ISelection dragSource)
-        {
-            string nodeTitle = (m_Node != null && !string.IsNullOrEmpty(this.title)) ? this.title : "UNKNOWN_NODE";
-            Debug.Log($"<color=orange>DragLeave</color> Node: <b>'{nodeTitle}'</b>.");
-            // leftTarget is the element the drag pointer is leaving.
-            if (leftTarget == this || this.Contains(leftTarget as VisualElement)) // Check if leaving this node or one of its children
-            {
-
-                this.RemoveFromClassList("drag-over-target");
-                m_DragableNodeContainer?.RemoveFromClassList("drop-zone-highlight");
-                ND_NodeEditor droppedNodeEditor = selection.First() as ND_NodeEditor;
-                
-                m_DragableNodeContainer.Remove(droppedNodeEditor);
-                this.GetFirstAncestorOfType<ND_BehaviorTreeView>().AddElement(droppedNodeEditor);
-
-
-            }
-            return true; // Usually true to allow event to propagate if needed
         }
 
         public virtual bool DragExited()
         {
-            string nodeTitle = (m_Node != null && !string.IsNullOrEmpty(this.title)) ? this.title : "UNKNOWN_NODE";
-            Debug.Log($"<color=red>DragExited</color> (Custom) called on Node: <b>'{nodeTitle}'</b>. This is not a standard IDropTarget event for Nodes.");
-            this.RemoveFromClassList("drag-over-target");
-            // this.AddToClassList("appeared"); // Re-adding "appeared" might not be desired here, depends on your USS.
-            m_DragableNodeContainer?.RemoveFromClassList("drop-zone-highlight");
-            return true;
+             m_DecoratorContainer?.RemoveFromClassList("drop-zone-highlight");
+             return true;
         }
 
         #endregion
-        
-
-        public virtual void UpdateNode(){}
     }
 }
