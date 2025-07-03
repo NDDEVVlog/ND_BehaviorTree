@@ -38,6 +38,8 @@ namespace ND_BehaviorTree.Editor
             m_serialLizeObject = serializedObject;
             m_BTree = (BehaviorTree)serializedObject.targetObject;
 
+            
+
             // Initialize collections
             TreeNodes = new List<ND_NodeEditor>();
             NodeDictionary = new Dictionary<string, ND_NodeEditor>();
@@ -92,7 +94,8 @@ namespace ND_BehaviorTree.Editor
         }
 
         private void DrawExistingGraphElementsFromData()
-        {
+        {   // Ensure the tree asset is properly initialized with a RootNode before drawing.
+            m_BTree.EditorInit();
             DrawNodesFromData();
             DrawConnectionsFromData();
             BindSerializedObject();

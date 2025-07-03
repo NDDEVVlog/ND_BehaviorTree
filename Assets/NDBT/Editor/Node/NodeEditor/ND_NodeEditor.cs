@@ -16,13 +16,16 @@ namespace ND_BehaviorTree.Editor
     {
         // --- Fields ---
         internal Node m_Node;
-        private Port m_OutputPort;
+        internal Port m_InputPort;
+        internal Port m_OutputPort;
         private List<Port> m_Ports = new List<Port>();
         public SerializedObject m_SerializedObject;
         internal VisualElement m_ChildNodeContainer;
 
         public Node node => m_Node;
         public List<Port> Ports => m_Ports;
+
+        public ND_BehaviorTreeView m_GraphView;
 
         // We can REMOVE the m_GraphView field, it's no longer needed.
         // public ND_BehaviorTreeView m_GraphView; 
@@ -32,13 +35,14 @@ namespace ND_BehaviorTree.Editor
         public ND_NodeEditor(Node node, SerializedObject BTObject, GraphView graphView)
             : base(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUXMLPath())
         {
+            m_GraphView = (ND_BehaviorTreeView)graphView;
             InitializeNodeView(node, BTObject, graphView); // Pass graphView along
         }
 
         // --- Initialization ---
         // Accept graphView as a parameter to pass down
         private void InitializeNodeView(Node node, SerializedObject BTObject, GraphView graphView)
-        {   
+        {
             this.m_Node = node;
             this.m_SerializedObject = BTObject;
             this.viewDataKey = node.id;
@@ -59,10 +63,11 @@ namespace ND_BehaviorTree.Editor
             var taskNodeContent = this.Q<VisualElement>("task-node-content");
             var iconContainer = this.Q<VisualElement>("icon");
             var iconImage = this.Q<Image>("icon-image");
-            
+
             m_ChildNodeContainer = this.Q<VisualElement>("child-node-container");
 
-            titleLabel.text = info.title;
+            if (info.title != null)
+                titleLabel.text = info.title;
 
             if (iconImage != null && !string.IsNullOrEmpty(info.iconPath))
             {
@@ -78,7 +83,7 @@ namespace ND_BehaviorTree.Editor
             }
             else
             {
-                iconContainer.style.display = DisplayStyle.None;
+                iconImage.style.display = DisplayStyle.None;
             }
 
             if (m_Node is CompositeNode compositeNode)
@@ -97,15 +102,15 @@ namespace ND_BehaviorTree.Editor
             // --- Create Ports ---
             if (info.hasFlowInput)
             {
-                Port inputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
-                inputPort.portName = "";
-                topPortContainer.Add(inputPort);
-                m_Ports.Add(inputPort);
+                m_InputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
+                m_InputPort.portName = "";
+                topPortContainer.Add(m_InputPort);
+                m_Ports.Add(m_InputPort);
             }
 
             if (info.hasFlowOutput)
             {
-                m_OutputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(PortType.FlowPort));
+                m_OutputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Multi, typeof(PortType.FlowPort));
                 m_OutputPort.portName = "";
                 bottomPortContainer.Add(m_OutputPort);
                 m_Ports.Add(m_OutputPort);
@@ -125,7 +130,7 @@ namespace ND_BehaviorTree.Editor
             m_ChildNodeContainer.Clear();
 
             // We no longer need to check for a null graphView, because it's passed in.
-            
+
             // Draw Decorators
             if (composite.decorators != null)
             {
@@ -152,7 +157,7 @@ namespace ND_BehaviorTree.Editor
                 }
             }
         }
-        
+
         // ... THE REST OF THE FILE IS UNCHANGED ...
         private VisualElement CreateChildNodeView(Node childNode)
         {
@@ -196,22 +201,22 @@ namespace ND_BehaviorTree.Editor
             {
                 return false;
             }
-            
-            if(draggedNode == this)
+
+            if (draggedNode == this)
             {
                 return false;
             }
-            
+
             return draggedNode.m_Node is AuxiliaryNode;
         }
-        
+
         public bool DragEnter(DragEnterEvent evt, IEnumerable<ISelectable> selection, IDropTarget enteredTarget, ISelection dragSource)
         {
             if (enteredTarget != this || !CanAcceptDrop(selection.ToList()))
             {
                 return false;
             }
-            
+
             m_ChildNodeContainer?.AddToClassList("drop-zone-highlight");
             return true;
         }
@@ -238,9 +243,9 @@ namespace ND_BehaviorTree.Editor
             if (droppedNodeEditor != null)
             {
                 droppedNodeEditor.RemoveFromHierarchy();
-                
+
                 m_ChildNodeContainer.Add(droppedNodeEditor);
-                
+
                 evt.StopPropagation();
                 return true;
             }
@@ -250,9 +255,65 @@ namespace ND_BehaviorTree.Editor
 
         public virtual bool DragExited()
         {
-             m_ChildNodeContainer?.RemoveFromClassList("drop-zone-highlight");
-             return true;
+            m_ChildNodeContainer?.RemoveFromClassList("drop-zone-highlight");
+            return true;
         }
         #endregion
+        
+
+
+
+        // --- NEW METHODS FOR STATE VISUALIZATION ---
+
+        /// <summary>
+        /// Updates the visual state of the node based on its runtime status.
+        /// </summary>
+        public void UpdateState()
+        {
+            // Clear previous state classes first
+            RemoveFromClassList("running");
+            RemoveFromClassList("success");
+            RemoveFromClassList("failure");
+            
+            // This method is only called from the editor window when in play mode with a target runner
+            if (m_GraphView.EditorWindow.currentGraph == null || !Application.isPlaying) return;
+
+            var runner = (m_GraphView.EditorWindow as ND_BehaviorTreeEditorWindow)?.m_targetRunner;
+            if (runner == null || runner.RuntimeTree == null) return;
+
+            // Find the corresponding runtime node by its GUID
+            Node runtimeNode = runner.RuntimeTree.FindNode(m_Node.id);
+            if (runtimeNode != null)
+            {
+                switch (runtimeNode.status)
+                {
+                    case Node.Status.Running:
+                        AddToClassList("running");
+                        break;
+                    case Node.Status.Success:
+                        AddToClassList("success");
+                        break;
+                    case Node.Status.Failure:
+                        AddToClassList("failure");
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears any runtime visual state from the node.
+        /// </summary>
+        public void ClearState()
+        {
+            RemoveFromClassList("running");
+            RemoveFromClassList("success");
+            RemoveFromClassList("failure");
+        }
+
+
+        // ... THE REST OF THE FILE IS UNCHANGED ...
+
+
+
     }
 }

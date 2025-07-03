@@ -1,8 +1,8 @@
 // --- START OF FILE SequenceNode.cs ---
 
 namespace ND_BehaviorTree
-{   
-    [NodeInfo("Sequence", "Composite/Sequence", true, true,iconPath:"Assets/NDBT/Icons/antivirus.png" ,isChildOnly: false)]
+{
+    [NodeInfo("Sequence", "Composite/Sequence", true, true, iconPath: "Assets/NDBT/Icons/antivirus.png", isChildOnly: false)]
     public class SequenceNode : CompositeNode
     {
         protected int currentChildIndex;
@@ -14,6 +14,14 @@ namespace ND_BehaviorTree
 
         protected override Status OnProcess()
         {
+            // First, check if decorators allow execution.
+            if (!AreDecoratorsSatisfied())
+            {
+                return Status.Failure;
+            }
+            // Then, tick any attached services.
+            TickServices();
+
             if (children.Count == 0) return Status.Success;
 
             // Start from the current child and process until one is running or all have succeeded.

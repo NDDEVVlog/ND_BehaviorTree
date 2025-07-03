@@ -38,6 +38,7 @@ namespace ND_BehaviorTree.Editor
                 if (edgesRemovedByGraphView.Any() || nodesRemovedByGraphView.Any())
                 {
                     Undo.RecordObject(m_serialLizeObject.targetObject, "Graph Elements Removed by View");
+                    // These methods now modify the Node.children list directly.
                     foreach (Edge edge in edgesRemovedByGraphView) RemoveDataForEdge(edge);
                     foreach (ND_NodeEditor node in nodesRemovedByGraphView) RemoveDataForNode(node);
                     hasViewMadeChanges = true;
@@ -49,6 +50,8 @@ namespace ND_BehaviorTree.Editor
                 Undo.RecordObject(m_serialLizeObject.targetObject, "Created Graph Connections");
                 foreach (Edge edge in graphViewChange.edgesToCreate)
                 {
+                    Debug.Log("Create Connect");
+                    // This method now modifies the Node.children list directly.
                     CreateDataForEdge(edge);
                 }
                 hasViewMadeChanges = true;

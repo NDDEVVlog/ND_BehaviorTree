@@ -4,98 +4,111 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace ND_BehaviorTree.Editor
 {
-    /// <summary>
-    /// This partial class handles all connection (edge) management for the Behavior Tree View.
-    /// This includes drawing, creating, removing, and validating connections.
-    /// </summary>
     public partial class ND_BehaviorTreeView
     {
         private void DrawConnectionsFromData()
         {
-            foreach (ND_BTConnection connectionData in m_BTree.connections)
+            foreach (Node parentNode in m_BTree.nodes)
             {
-                MakeConnectionVisualsOnly(connectionData);
+                ND_NodeEditor parentEditorNode = GetEditorNode(parentNode.id);
+                if (parentEditorNode == null) continue;
+
+                // Use the new polymorphic GetChildren() method
+                List<Node> children = parentNode.GetChildren();
+                if (children == null || children.Count == 0) continue;
+
+                var outputPort = parentEditorNode.m_OutputPort;
+                if (outputPort == null) continue;
+
+                foreach(Node childNode in children)
+                {
+                    if (childNode == null) continue;
+                    
+                    ND_NodeEditor childEditorNode = GetEditorNode(childNode.id);
+                    if (childEditorNode == null) continue;
+
+                    Port inputPort = childEditorNode.m_InputPort;
+                    if (inputPort != null)
+                    {
+                        var edge = outputPort.ConnectTo(inputPort);
+                        AddElement(edge);
+                    }
+                }
             }
-        }
-
-        private void MakeConnectionVisualsOnly(ND_BTConnection connectionData)
-        {
-            ND_NodeEditor inNodeEd = GetEditorNode(connectionData.inputPort.nodeID);
-            ND_NodeEditor outNodeEd = GetEditorNode(connectionData.outputPort.nodeID);
-
-            if (inNodeEd == null || outNodeEd == null ||
-                connectionData.inputPort.portIndex >= inNodeEd.Ports.Count || connectionData.outputPort.portIndex >= outNodeEd.Ports.Count ||
-                connectionData.inputPort.portIndex < 0 || connectionData.outputPort.portIndex < 0) return;
-
-            Port localInPort = inNodeEd.Ports[connectionData.inputPort.portIndex];
-            Port localOutPort = outNodeEd.Ports[connectionData.outputPort.portIndex];
-            
-            ND_CustomEdge edge = new ND_CustomEdge { userData = connectionData };
-            
-            edge.output = localOutPort;
-            edge.input = localInPort;
-
-            if (!string.IsNullOrEmpty(connectionData.edgeText)) edge.Text = connectionData.edgeText;
-
-            edge.input.Connect(edge); 
-            edge.output.Connect(edge);
-            
-            AddElement(edge);
-            ConnectionDictionary.Add(edge, connectionData);
         }
         
         private void CreateDataForEdge(Edge edge)
         {
-            if (!(edge.input?.node is ND_NodeEditor inputNodeEditor) || !(edge.output?.node is ND_NodeEditor outputNodeEditor)) {
+            if (!(edge.input?.node is ND_NodeEditor childEditorNode) || !(edge.output?.node is ND_NodeEditor parentEditorNode)) {
                 Debug.LogError("[CreateDataForEdge] Edge has invalid input or output node editor. Cannot create data.");
                 return;
             }
-            int inputIndex = inputNodeEditor.Ports.IndexOf(edge.input);
-            int outputIndex = outputNodeEditor.Ports.IndexOf(edge.output);
 
-            if (inputIndex == -1 || outputIndex == -1) {
-                Debug.LogError("[CreateDataForEdge] Could not find port index for the new edge. Cannot create data.");
-                return;
+            Node parentNode = parentEditorNode.node;
+            Node childNode = childEditorNode.node;
+            
+            // Use the new polymorphic AddChild() method
+            parentNode.AddChild(childNode);
+            
+            // Optional sorting logic for composite nodes
+            if (parentNode is CompositeNode composite)
+            {
+                composite.children.Sort((a,b) => GetEditorNode(a.id).GetPosition().x.CompareTo(GetEditorNode(b.id).GetPosition().x));
             }
-
-            ND_BTConnection connection = new ND_BTConnection(inputNodeEditor.node.id, inputIndex, outputNodeEditor.node.id, outputIndex);
-            m_BTree.connections.Add(connection);
-            ConnectionDictionary.Add(edge, connection);
         }
 
         private void RemoveDataForEdge(Edge e)
         {
-            if (ConnectionDictionary.TryGetValue(e, out ND_BTConnection connection))
+            if (!(e.input?.node is ND_NodeEditor childEditorNode) || !(e.output?.node is ND_NodeEditor parentEditorNode))
             {
-                m_BTree.connections.Remove(connection);
-                ConnectionDictionary.Remove(e);
+                return;
             }
+        
+            Node parentNode = parentEditorNode.node;
+            Node childNode = childEditorNode.node;
+            
+            // Use the new polymorphic RemoveChild() method
+            parentNode.RemoveChild(childNode);
         }
         
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
-            List<Port> allPorts = new List<Port>();
-            List<Port> compatiblePorts = new List<Port>();
+            var compatiblePorts = new List<Port>();
+            var startNodeEditor = startPort.node as ND_NodeEditor;
 
-            if (TreeNodes == null) return compatiblePorts;
+            if (startNodeEditor == null) return compatiblePorts;
 
-            foreach (var nodeEditor in TreeNodes)
-            {
-                if (nodeEditor == null || nodeEditor.Ports == null) continue;
-                allPorts.AddRange(nodeEditor.Ports);
-            }
+            ports.ForEach(port => {
+                var portNodeEditor = port.node as ND_NodeEditor;
+                if (portNodeEditor == null) return;
 
-            foreach (Port p in allPorts)
-            {
-                if (p == startPort || p.node == startPort.node || startPort.direction == p.direction) continue;
-                if (startPort.portType == p.portType)
+                // Basic validation: Don't connect to self, different directions, same port type
+                if (startPort.node == port.node || startPort.direction == port.direction || startPort.portType != port.portType)
                 {
-                    compatiblePorts.Add(p);
+                    return;
                 }
-            }
+
+                // --- Advanced Validation based on Node Type ---
+
+                // Rule 1: An input port can only accept one connection.
+                if (port.direction == Direction.Input && port.connected)
+                {
+                    return;
+                }
+                
+                // Rule 2: Output ports on single-child nodes (like AuxiliaryNode) can only have one connection.
+                if (startPort.direction == Direction.Output && startNodeEditor.node is AuxiliaryNode && startPort.connected)
+                {
+                    return;
+                }
+
+                compatiblePorts.Add(port);
+            });
+
             return compatiblePorts;
         }
     }
