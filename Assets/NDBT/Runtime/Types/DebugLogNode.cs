@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+// --- START OF FILE DebugLogNode.cs ---
+
 using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    [NodeInfo("Debug_Log", "Debug/DebugLog")]
-    
-    public class DebugLogNode : Node
-    {   
-        [ExposeProperty()]
-        public string Log;
-
-        public int number;
+    [NodeInfo("Debug Log", "Action/DebugLog", true, false)]
+    public class DebugLogNode : ActionNode
+    {
+        public string message = "Log Message";
 
         protected override Status OnProcess()
         {
-            throw new System.NotImplementedException();
+            Debug.Log($"[{Time.frameCount}] {message}");
+            return Status.Success;
         }
     }
 }
+// --- END OF FILE DebugLogNode.cs ---

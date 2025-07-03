@@ -1,6 +1,7 @@
 // --- START OF FILE Node.cs ---
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ND_BehaviorTree
@@ -10,7 +11,8 @@ namespace ND_BehaviorTree
         public enum Status { Success, Failure, Running }
 
         // Runtime state. [NonSerialized] ensures it's not saved to the asset file.
-        [NonSerialized] protected Status _status = Status.Failure;
+        // MODIFIED: Changed from a protected field to a public property with a protected setter.
+         public Status status { get; protected set; } = Status.Failure;
         [NonSerialized] private bool _isProcessing = false;
 
         // Editor data
@@ -29,9 +31,6 @@ namespace ND_BehaviorTree
             }
         }
         
-        /// <summary>
-        /// This is the main execution function. It's a template method that handles state transitions.
-        /// </summary>
         public Status Process()
         {
             if (!_isProcessing)
@@ -40,28 +39,25 @@ namespace ND_BehaviorTree
                 _isProcessing = true;
             }
 
-            _status = OnProcess();
+            // MODIFIED: Use the 'status' property
+            status = OnProcess();
 
-            if (_status != Status.Running)
+            // MODIFIED: Use the 'status' property
+            if (status != Status.Running)
             {
                 OnExit();
                 _isProcessing = false;
             }
-            return _status;
+            return status;
         }
-
-        /// <summary>
-        /// Resets the node and its children to their initial state for a new execution run.
-        /// </summary>
+        
         public virtual void Reset()
         {
             _isProcessing = false;
-            _status = Status.Failure;
+            // MODIFIED: Use the 'status' property
+            status = Status.Failure;
         }
         
-        /// <summary>
-        /// Clones the node. Essential for creating runtime instances from ScriptableObject assets.
-        /// </summary>
         public virtual Node Clone()
         {
             Node clone = Instantiate(this);
@@ -69,10 +65,26 @@ namespace ND_BehaviorTree
             return clone;
         }
 
-        // Methods for derived classes to override with their specific logic.
         protected virtual void OnEnter() { }
         protected virtual void OnExit() { }
         protected abstract Status OnProcess();
+
+        // --- Child Management ---
+        /// <summary>
+        /// Adds a child node. Overridden by nodes that can have children.
+        /// </summary>
+        public virtual void AddChild(Node child) { }
+
+        /// <summary>
+        /// Removes a child node. Overridden by nodes that can have children.
+        /// </summary>
+        public virtual void RemoveChild(Node child) { }
+
+        /// <summary>
+        /// Gets all child nodes. Overridden by nodes that can have children.
+        /// </summary>
+        public virtual List<Node> GetChildren() => new List<Node>();
+
 
         // --- Editor-only methods ---
         public void SetPosition(Rect newPosition) => m_position = newPosition;

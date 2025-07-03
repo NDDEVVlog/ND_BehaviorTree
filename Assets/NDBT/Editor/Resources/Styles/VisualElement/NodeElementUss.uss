@@ -171,3 +171,30 @@
 .auxiliary-node-editor .child-node-container {
     display: none;
 }
+
+/* ... (all your existing styles above) ... */
+
+/*
+================================================================================
+=== STYLES FOR RUNTIME STATUS (DEBUGGING) ===
+================================================================================
+*/
+
+/* Style for a node that is currently running */
+.running > .node-border {
+    border-color: #FFD700; /* Bright Gold/Yellow */
+    border-width: 3px;
+    box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.5); /* Add a subtle glow */
+}
+
+/* Optional: Style for a node that just returned Success */
+.success > .node-border {
+    border-color: #4CAF50; /* Green */
+    border-width: 3px;
+}
+
+/* Optional: Style for a node that just returned Failure */
+.failure > .node-border {
+    border-color: #F44336; /* Red */
+    border-width: 3px;
+}

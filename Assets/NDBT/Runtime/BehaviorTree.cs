@@ -13,29 +13,20 @@ namespace ND_BehaviorTree
         // Serialized data for the editor
         [SerializeField]
         private List<Node> m_nodes = new List<Node>();
-        [HideInInspector]
-        [SerializeField]
-        public List<ND_BTConnection> m_connection = new List<ND_BTConnection>();
-
-        // Editor-facing properties
         public List<Node> nodes => m_nodes;
-        public List<ND_BTConnection> connections => m_connection;
 
-        // Runtime properties for the cloned tree instance
-        private RootNode rootNode;
+        [SerializeField]
+        public RootNode rootNode; // Made public for easier access, but set via EditorInit
+
+        // Runtime state for a cloned tree
         private Node.Status treeStatus = Node.Status.Running;
 
-        /// <summary>
-        /// Called by an agent's MonoBehaviour to execute the tree logic each frame.
-        /// </summary>
         public Node.Status Update()
         {
             if (rootNode == null) return Node.Status.Failure;
 
             if (treeStatus != Node.Status.Running)
             {
-                // Reset the tree for a new run if it's not currently running.
-                // This allows the tree to be re-evaluated after succeeding or failing.
                 rootNode.Reset();
             }
 
@@ -45,97 +36,125 @@ namespace ND_BehaviorTree
 
         /// <summary>
         /// Creates a "live" instance of the tree asset. Call this once per agent.
+        /// This is crucial for allowing multiple agents to run the same tree logic
+        /// independently, each with its own state.
         /// </summary>
         public BehaviorTree Clone()
         {
+            // Create a new BehaviorTree instance
             BehaviorTree tree = Instantiate(this);
-            tree.name = this.name + " (Runtime Clone)";
+            tree.m_nodes = new List<Node>();
 
-            // Create a dictionary to map the original node GUIDs to their new cloned instances
-            var clonedNodes = new Dictionary<string, Node>();
-            foreach (var nodeAsset in this.nodes)
+            // --- START OF FIX ---
+
+            // Step 1: Traverse the entire tree from the root to find ALL nodes.
+            // This is more robust than relying on the serialized m_nodes list, which
+            // can be incomplete if editor scripts don't add all nodes to it.
+            var allNodesInGraph = new List<Node>();
+            var nodesToVisit = new Stack<Node>();
+            if (this.rootNode != null)
             {
-                clonedNodes[nodeAsset.id] = nodeAsset.Clone();
+                nodesToVisit.Push(this.rootNode);
             }
 
-            // Use the connection data to build the runtime hierarchy between the cloned nodes
-            foreach (var connection in this.connections)
+            while (nodesToVisit.Count > 0)
             {
-                if (clonedNodes.TryGetValue(connection.outputPort.nodeID, out Node parentNode) &&
-                    clonedNodes.TryGetValue(connection.inputPort.nodeID, out Node childNode))
+                Node currentNode = nodesToVisit.Pop();
+                if (currentNode == null || allNodesInGraph.Contains(currentNode))
                 {
-                    if (parentNode is CompositeNode composite)
-                    {
-                        composite.children.Add(childNode);
-                    }
-                    else if (parentNode is DecoratorNode decorator)
-                    {
-                        decorator.child = childNode;
-                    }
-                    else if (parentNode is RootNode root)
-                    {
-                        root.child = childNode;
-                    }
+                    continue;
+                }
+
+                allNodesInGraph.Add(currentNode);
+
+                // Add standard children to the traversal stack
+                foreach (var child in currentNode.GetChildren())
+                {
+                    nodesToVisit.Push(child);
+                }
+
+                // If it's a composite node, also add its decorators and services
+                if (currentNode is CompositeNode composite)
+                {
+                    composite.decorators.ForEach(d => nodesToVisit.Push(d));
+                    composite.services.ForEach(s => nodesToVisit.Push(s));
                 }
             }
 
-            // Sort children of composite nodes to respect the visual layout from the graph editor
-            var originalNodePositions = this.nodes.ToDictionary(n => n.id, n => n.position);
-            foreach (var node in clonedNodes.Values)
+            // --- END OF FIX ---
+
+
+            // Use a dictionary to map original node GUIDs to their new cloned instances
+            var nodeMap = new Dictionary<string, Node>();
+
+            // First pass: Clone all nodes found during traversal and populate the map
+            foreach (Node originalNode in allNodesInGraph) // Use our complete list
             {
-                if (node is CompositeNode composite)
+                Node clone = originalNode.Clone();
+                tree.m_nodes.Add(clone);
+                nodeMap.Add(originalNode.id, clone);
+
+                // If this is the root node, assign it to the new tree's root
+                if (originalNode == this.rootNode)
                 {
-                    composite.children.Sort((a, b) =>
-                        originalNodePositions[a.id].x.CompareTo(originalNodePositions[b.id].x));
+                    tree.rootNode = clone as RootNode;
                 }
             }
 
-            // Find the root node of the newly created cloned tree
-            tree.rootNode = clonedNodes.Values.OfType<RootNode>().FirstOrDefault();
-            if (tree.rootNode == null)
+            // Second pass: Reconnect all the cloned nodes to each other
+            foreach (Node originalNode in allNodesInGraph) // Use our complete list again
             {
-                Debug.LogError($"RootNode not found in BehaviorTree asset '{this.name}'. A tree must have a RootNode.", this);
+                Node clonedNode = nodeMap[originalNode.id];
+
+                // Re-link children for Composite nodes (Sequence, Selector)
+                if (originalNode is CompositeNode originalComposite)
+                {
+                    var clonedComposite = clonedNode as CompositeNode;
+                    originalComposite.children.ForEach(child => clonedComposite.AddChild(nodeMap[child.id]));
+                    // This will now work because all decorators were found during traversal
+                    originalComposite.decorators.ForEach(decorator => clonedComposite.decorators.Add(nodeMap[decorator.id] as DecoratorNode));
+                    originalComposite.services.ForEach(service => clonedComposite.services.Add(nodeMap[service.id] as ServiceNode));
+                }
+                // Re-link children for Auxiliary nodes (Inverter, other decorators)
+                else if (originalNode is AuxiliaryNode originalAuxiliary && originalAuxiliary.child != null)
+                {
+                    var clonedAuxiliary = clonedNode as AuxiliaryNode;
+                    clonedAuxiliary.AddChild(nodeMap[originalAuxiliary.child.id]);
+                }
+                // Re-link child for the Root node
+                else if (originalNode is RootNode originalRoot && originalRoot.child != null)
+                {
+                    var clonedRoot = clonedNode as RootNode;
+                    clonedRoot.child = nodeMap[originalRoot.child.id];
+                }
             }
 
             return tree;
         }
-        
 
-        #if UNITY_EDITOR
-        /// <summary>
-        /// Initializes the BehaviorTree asset in the editor.
-        /// Ensures that a RootNode exists. If not, it creates and adds one.
-        /// This should be called from the EditorWindow when a tree is loaded.
-        /// </summary>
+#if UNITY_EDITOR
         public void EditorInit()
         {
-            // Check if a root node already exists.
-            if (this.nodes.OfType<RootNode>().Any())
-            {
-                return; // A root node already exists, no action needed.
-            }
+            if (this.nodes.OfType<RootNode>().Any()) return;
 
-            // If no root node exists, create one.
             Debug.Log($"BehaviorTree '{this.name}' has no RootNode. Creating one.");
-            
+
             RootNode root = ScriptableObject.CreateInstance<RootNode>();
             root.name = "Root";
-            // Give it a default position in the graph view.
             root.position = new Rect(250, 100, 150, 100);
 
-            // Add the new root node to the asset file.
-            // This is crucial for it to be saved correctly with the main BehaviorTree asset.
             AssetDatabase.AddObjectToAsset(root, this);
-            
-            // Add the new node to our internal list.
-            this.nodes.Add(root);
+            m_nodes.Add(root);
+            this.rootNode = root;
 
-            // Mark the asset as dirty and save the changes.
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
-#endif
-
+        
+        public Node FindNode(string guid)
+        {
+            return nodes.FirstOrDefault(n => n.id == guid);
+        }
+        #endif
     }
 }
-// --- END OF FILE BehaviorTree.cs ---

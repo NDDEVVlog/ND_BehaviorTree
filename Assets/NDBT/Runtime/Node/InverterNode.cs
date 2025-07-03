@@ -1,16 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+// --- START OF FILE InverterNode.cs ---
 
 namespace ND_BehaviorTree
 {
-    // Example Decorator
-    [NodeInfo("Inverter", "Decorators/Inverter", true, true,iconPath:"Assets/NDBT/Icons/antivirus.png", isChildOnly: true)]
+    [NodeInfo("Inverter", "Decorator/Inverter", true, false)]
     public class InverterNode : DecoratorNode
-    { /* ... your logic ... */
+    {
         protected override Status OnProcess()
         {
-            throw new System.NotImplementedException();
+            if (child == null)
+            {
+                return Status.Success;
+            }
+
+            var status = child.Process();
+            switch (status)
+            {
+                case Status.Success:
+                    return Status.Failure;
+                case Status.Failure:
+                    return Status.Success;
+                case Status.Running:
+                    return Status.Running;
+            }
+            return Status.Failure;
         }
     }
 }
+// --- END OF FILE InverterNode.cs ---
