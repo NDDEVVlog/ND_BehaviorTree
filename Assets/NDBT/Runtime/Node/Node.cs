@@ -1,4 +1,4 @@
-// --- START OF FILE Node.cs ---
+// --- MODIFIED FILE: Node.cs ---
 
 using System;
 using System.Collections.Generic;
@@ -8,11 +8,24 @@ namespace ND_BehaviorTree
 {
     public abstract class Node: ScriptableObject
     {   
+        // --- NEW ---
+        /// <summary>
+        /// A reference to the BehaviorTree instance that owns this node.
+        /// This is set at runtime when the tree is cloned. It is not serialized.
+        /// </summary>
+        [System.NonSerialized] public BehaviorTree ownerTree;
+        
+        /// <summary>
+        /// A convenience property to get the Blackboard associated with this node's owner tree.
+        /// Returns null if the node is not part of a tree at runtime.
+        /// </summary>
+        public Blackboard blackboard => ownerTree?.blackboard;
+        // --- END NEW ---
+
         public enum Status { Success, Failure, Running }
 
         // Runtime state. [NonSerialized] ensures it's not saved to the asset file.
-        // MODIFIED: Changed from a protected field to a public property with a protected setter.
-         public Status status { get; protected set; } = Status.Failure;
+        public Status status { get; protected set; } = Status.Failure;
         [NonSerialized] private bool _isProcessing = false;
 
         // Editor data
@@ -39,10 +52,8 @@ namespace ND_BehaviorTree
                 _isProcessing = true;
             }
 
-            // MODIFIED: Use the 'status' property
             status = OnProcess();
 
-            // MODIFIED: Use the 'status' property
             if (status != Status.Running)
             {
                 OnExit();
@@ -54,7 +65,6 @@ namespace ND_BehaviorTree
         public virtual void Reset()
         {
             _isProcessing = false;
-            // MODIFIED: Use the 'status' property
             status = Status.Failure;
         }
         
@@ -70,25 +80,12 @@ namespace ND_BehaviorTree
         protected abstract Status OnProcess();
 
         // --- Child Management ---
-        /// <summary>
-        /// Adds a child node. Overridden by nodes that can have children.
-        /// </summary>
         public virtual void AddChild(Node child) { }
-
-        /// <summary>
-        /// Removes a child node. Overridden by nodes that can have children.
-        /// </summary>
         public virtual void RemoveChild(Node child) { }
-
-        /// <summary>
-        /// Gets all child nodes. Overridden by nodes that can have children.
-        /// </summary>
         public virtual List<Node> GetChildren() => new List<Node>();
-
 
         // --- Editor-only methods ---
         public void SetPosition(Rect newPosition) => m_position = newPosition;
         public void SetNewID(string newID) => m_guid = newID;
     }
 }
-// --- END OF FILE Node.cs ---

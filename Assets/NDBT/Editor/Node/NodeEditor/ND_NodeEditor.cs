@@ -126,8 +126,16 @@ namespace ND_BehaviorTree.Editor
         public void DrawChildren(CompositeNode composite, GraphView graphView)
         {
             if (m_ChildNodeContainer == null) return;
-
             m_ChildNodeContainer.Clear();
+
+            if (composite.decorators == null && composite.services == null)
+            {
+                m_ChildNodeContainer.style.display = DisplayStyle.None;
+                
+                return;
+            }
+
+
 
             // We no longer need to check for a null graphView, because it's passed in.
 
@@ -259,7 +267,7 @@ namespace ND_BehaviorTree.Editor
             return true;
         }
         #endregion
-        
+
 
 
 
@@ -274,7 +282,7 @@ namespace ND_BehaviorTree.Editor
             RemoveFromClassList("running");
             RemoveFromClassList("success");
             RemoveFromClassList("failure");
-            
+
             // This method is only called from the editor window when in play mode with a target runner
             if (m_GraphView.EditorWindow.currentGraph == null || !Application.isPlaying) return;
 

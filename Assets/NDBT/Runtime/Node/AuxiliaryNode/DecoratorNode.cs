@@ -1,5 +1,6 @@
 // --- START OF FILE DecoratorNode.cs ---
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ND_BehaviorTree
@@ -18,6 +19,11 @@ namespace ND_BehaviorTree
         {
             base.Reset();
             child?.Reset();
+        }
+
+        public override List<Node> GetChildren()
+        {
+            return child != null ? new List<Node> { child } : new List<Node>();
         }
     }
 }
