@@ -1,8 +1,6 @@
 // --- MODIFIED FILE: KeyGeneric.cs ---
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ND_BehaviorTree
@@ -36,9 +34,23 @@ namespace ND_BehaviorTree
         // --- NEW IMPLEMENTATIONS ---
         public override void SetValueObject(object newValue)
         {
+            // Ensure the object can be cast to type T before setting
             if (newValue is T typedValue)
             {
                 SetValue(typedValue);
+            }
+            // Also handle cases where Unity's editor fields might not match exactly (e.g. IntField for a float key)
+            else
+            {
+                try
+                {
+                    T convertedValue = (T)System.Convert.ChangeType(newValue, typeof(T));
+                    SetValue(convertedValue);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Failed to set key value. Cannot convert type '{newValue.GetType().Name}' to '{typeof(T).Name}'. Error: {e.Message}");
+                }
             }
         }
 
