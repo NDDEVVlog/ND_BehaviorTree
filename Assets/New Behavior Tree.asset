@@ -65,18 +65,18 @@ MonoBehaviour:
   m_guid: b57c3c82-f39c-4c05-bbde-5ec8221998ac
   m_position:
     serializedVersion: 2
-    x: -48
-    y: 479.19998
-    width: 116
-    height: 77.600006
+    x: -32
+    y: 493.59998
+    width: 112.8
+    height: 127.20001
   typeName: ND_BehaviorTree.DebugLogNode, ND_BehaviorTree.Runtime, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
   children: []
   decorators: []
   services: []
   message: Testing One Go
-  stringKey: {fileID: 0}
-  anotherKey: {fileID: 0}
+  stringKey: {fileID: 5216021648722817169, guid: c7ef209001ff5334d984adc2a4a8dee1, type: 2}
+  anotherKey: {fileID: 5216021648722817169, guid: c7ef209001ff5334d984adc2a4a8dee1, type: 2}
 --- !u!114 &-5053310088734558554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,9 +92,9 @@ MonoBehaviour:
   m_guid: fc02bb8f-7ed6-429a-89d2-60fc4d89c492
   m_position:
     serializedVersion: 2
-    x: 255.2
-    y: 477.59998
-    width: 64.79999
+    x: 179.2
+    y: 509.59998
+    width: 64.8
     height: 127.20001
   typeName: ND_BehaviorTree.WaitNode, ND_BehaviorTree.Runtime, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null

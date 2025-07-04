@@ -1,6 +1,7 @@
 // --- START OF FILE ND_BehaviorTreeView.NodeManagement.cs ---
 
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -139,10 +140,36 @@ namespace ND_BehaviorTree.Editor
         private void RemoveDataForNode(ND_NodeEditor editorNode)
         {
             if (editorNode == null || editorNode.node == null) return;
+        
+            // Find all connected edges and remove their underlying data first.
+            // This ensures parent-child relationships in the data model are correctly updated.
+            // We must copy the connections to a new list before iterating,
+            // as the original collection will be modified when the node is removed.
+            var connectedEdges = new List<Edge>();
+            if (editorNode.m_InputPort != null)
+            {
+                connectedEdges.AddRange(editorNode.m_InputPort.connections);
+            }
+            if (editorNode.m_OutputPort != null)
+            {
+                connectedEdges.AddRange(editorNode.m_OutputPort.connections);
+            }
+        
+            // Remove the data representation for each of those connections.
+            foreach (var edge in connectedEdges)
+            {
+                RemoveDataForEdge(edge);
+            }
             
+            // Now, remove the node data from the tree's main list and our dictionaries.
             m_BTree.nodes.Remove(editorNode.node);
             NodeDictionary.Remove(editorNode.node.id);
             TreeNodes.Remove(editorNode);
+            
+            // Finally, destroy the node's ScriptableObject sub-asset.
+            // This is critical to prevent the main asset file from bloating with orphaned data.
+            // This operation is automatically registered with the Undo system.
+            Undo.DestroyObjectImmediate(editorNode.node);
         }
 
         public ND_NodeEditor GetEditorNode(string nodeID)
