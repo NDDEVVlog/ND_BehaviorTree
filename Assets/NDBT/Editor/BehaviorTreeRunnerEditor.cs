@@ -6,29 +6,34 @@ using System.Linq;
 
 namespace ND_BehaviorTree.Editor
 {
-    [CustomEditor(typeof(BehaviorTreeRunner))]
+    // The second parameter 'true' tells the editor to apply to all child classes of BehaviorTreeRunner.
+    [CustomEditor(typeof(BehaviorTreeRunner), true)]
     public class BehaviorTreeRunnerEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
-            // Draw the default fields like 'Tree Asset' and 'Blackboard Override'
+            // Draw the default fields. This is important so that any fields you add
+            // to a child class (e.g., public float moveSpeed;) will be drawn automatically.
             DrawDefaultInspector();
 
             BehaviorTreeRunner runner = (BehaviorTreeRunner)target;
 
             // --- Button to open the main editor ---
+            // The button is disabled if no tree asset is assigned.
             EditorGUI.BeginDisabledGroup(runner.treeAsset == null);
             EditorGUILayout.Space();
             if (GUILayout.Button("Open Behavior Tree Editor"))
             {
-                // This part would need a reference to your custom editor window class
-                // ND_BehaviorTreeEditorWindow.Open(runner); 
+                // This assumes your editor window class has a static 'Open' method
+                // that takes a BehaviorTree asset as a parameter.
+                // If your window class is named differently, update it here.
+                ND_BehaviorTreeEditorWindow.Open(runner.treeAsset); 
             }
             EditorGUI.EndDisabledGroup();
 
             if (runner.treeAsset == null)
             {
-                EditorGUILayout.HelpBox("Assign a BehaviorTree asset to enable editor and blackboard overrides.", MessageType.Info);
+                EditorGUILayout.HelpBox("Assign a BehaviorTree asset to enable the editor button and blackboard overrides.", MessageType.Info);
                 return;
             }
             
@@ -42,6 +47,12 @@ namespace ND_BehaviorTree.Editor
             else
             {
                 DrawInitialBlackboard(runner);
+            }
+            
+            // This ensures the inspector updates continuously during play mode to show live values.
+            if (Application.isPlaying)
+            {
+                Repaint();
             }
         }
 
@@ -73,7 +84,7 @@ namespace ND_BehaviorTree.Editor
                 EditorGUILayout.HelpBox("Displaying default values from the Tree Asset's blackboard. To override, create and assign a 'Blackboard Override' asset.", MessageType.Info);
             }
 
-            // Prevent accidental editing of the shared blackboard asset
+            // Allow editing only if an override is provided, to prevent accidental modification of the shared asset.
             EditorGUI.BeginDisabledGroup(runner.blackboardOverride == null);
 
             SerializedObject blackboardSO = new SerializedObject(targetBlackboard);
@@ -101,6 +112,7 @@ namespace ND_BehaviorTree.Editor
         {
             EditorGUILayout.LabelField("Runtime Blackboard (Live Values)", EditorStyles.boldLabel);
 
+            // Access the live, cloned blackboard from the runtime tree instance.
             Blackboard runtimeBlackboard = runner.RuntimeTree?.blackboard;
 
             if (runtimeBlackboard == null)
@@ -119,11 +131,6 @@ namespace ND_BehaviorTree.Editor
                     DrawKeyField(key);
                 }
             }
-            
-            // Make the editor update constantly in play mode to reflect changes
-            if (Application.isPlaying) {
-                EditorUtility.SetDirty(target);
-            }
         }
 
         /// <summary>
@@ -132,6 +139,7 @@ namespace ND_BehaviorTree.Editor
         /// </summary>
         private void DrawKeyField(Key key)
         {
+            // We serialize the key object itself to edit its 'value' field.
             SerializedObject keySO = new SerializedObject(key);
             SerializedProperty valueProperty = keySO.FindProperty("value");
 
@@ -140,14 +148,13 @@ namespace ND_BehaviorTree.Editor
                 EditorGUILayout.LabelField(key.name, "Error: Could not find 'value' property.");
                 return;
             }
-
-            // Draw a single row for the key: [Name Label] [Value Field]
+            
             EditorGUILayout.BeginHorizontal();
 
-            string keyTypeName = key.GetValueType().Name;
-            EditorGUILayout.LabelField(new GUIContent(key.name, $"Type: {keyTypeName}"), GUILayout.Width(150));
+            string keyTypeName = key.GetValueType()?.Name ?? "null";
+            EditorGUILayout.LabelField(new GUIContent(key.name, $"Type: {keyTypeName}"), GUILayout.Width(EditorGUIUtility.labelWidth - 5));
 
-            // EditorGUILayout.PropertyField automatically draws the correct editor GUI
+            // EditorGUILayout.PropertyField automatically draws the correct editor GUI for the property type.
             EditorGUILayout.PropertyField(valueProperty, GUIContent.none, true);
 
             EditorGUILayout.EndHorizontal();

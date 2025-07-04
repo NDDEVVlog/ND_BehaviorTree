@@ -22,16 +22,15 @@ namespace ND_BehaviorTree.Editor
         public SerializedObject m_SerializedObject;
         internal VisualElement m_ChildNodeContainer;
 
+
         public Node node => m_Node;
         public List<Port> Ports => m_Ports;
 
         public ND_BehaviorTreeView m_GraphView;
 
-        // We can REMOVE the m_GraphView field, it's no longer needed.
-        // public ND_BehaviorTreeView m_GraphView; 
 
-        // --- Constructor ---
-        // The graphView parameter is still useful for the base ND_AuxiliaryEditor constructor call.
+        private Label title;
+
         public ND_NodeEditor(Node node, SerializedObject BTObject, GraphView graphView)
             : base(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUXMLPath())
         {
@@ -59,12 +58,22 @@ namespace ND_BehaviorTree.Editor
             // --- Query UXML Elements ---
             var topPortContainer = this.Q<VisualElement>("top-port");
             var bottomPortContainer = this.Q<VisualElement>("bottom-port");
-            var titleLabel = this.Q<Label>("title-label");
+            var titleLabel = this.Q<Label>("type-label");
+            title = this.Q<Label>("title-textfield");
+            
             var taskNodeContent = this.Q<VisualElement>("task-node-content");
+            
             var iconContainer = this.Q<VisualElement>("icon");
             var iconImage = this.Q<Image>("icon-image");
 
             m_ChildNodeContainer = this.Q<VisualElement>("child-node-container");
+
+            if (string.IsNullOrEmpty(node.typeName))
+            {
+                node.typeName = info.title + "Node";
+
+            }
+            title.text = node.typeName;
 
             if (info.title != null)
                 titleLabel.text = info.title;
@@ -268,7 +277,10 @@ namespace ND_BehaviorTree.Editor
         }
         #endregion
 
-
+        public void UpdateNode()
+        {
+            title.text = node.typeName;
+        }
 
 
         // --- NEW METHODS FOR STATE VISUALIZATION ---

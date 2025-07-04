@@ -26,12 +26,46 @@
     flex-shrink: 0;
 }
 
-.title-label {
+/* Container for title text field and type label */
+.title-content-container {
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Style for the title text field to make it look like a label */
+.title-textfield {
     font-size: 16px;
     -unity-font-style: bold;
     color: #E0E0E0;
-    flex-grow: 1;
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
 }
+
+/* Remove the inner text input styling to align text properly */
+.title-textfield > #unity-text-input {
+    padding: 1px 0;
+    margin: 0;
+    background-color: transparent;
+}
+
+/* Style for when the text field is focused for editing */
+.title-textfield:focus {
+    background-color: #2F2F2F;
+    border-color: #1A73E8;
+    border-width: 1px;
+}
+
+/* Style for the node type label (e.g., "Selector") */
+.type-label {
+    font-size: 12px;
+    color: #A0A0A0; /* Lighter grey for secondary text */
+    margin-top: 2px;
+    -unity-font-style: italic;
+}
+
+
 
 /* --- Child Node Container (for Decorators/Services) --- */
 .child-node-container {

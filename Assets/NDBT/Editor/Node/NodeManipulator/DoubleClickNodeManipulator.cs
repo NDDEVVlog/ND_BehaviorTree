@@ -88,7 +88,7 @@ namespace ND_BehaviorTree.Editor
             if (targetNode != null)
             {
                 Debug.Log($"Node '{targetNode.name}' double-clicked. Opening Node Property Editor.");
-                NodePropertyEditorWindow.Open(targetNode);
+                NodePropertyEditorWindow.Open(targetNode,_nodeEditorVisual);
             }
             else
             {

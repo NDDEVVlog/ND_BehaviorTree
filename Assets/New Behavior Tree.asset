@@ -1,5 +1,30 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8536813213630469444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 406d551d-3795-42e1-808a-910dbdf273fd
+  m_position:
+    serializedVersion: 2
+    x: 280.80002
+    y: 504
+    width: 64.79999
+    height: 127.20001
+  typeName: 
+  children: []
+  decorators:
+  - {fileID: 8920281827989162788}
+  services: []
+  duration: 1
 --- !u!114 &-7763610794587752485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,41 +40,12 @@ MonoBehaviour:
   m_guid: 1dfefea0-67c3-47e8-8d15-4a353262f0c2
   m_position:
     serializedVersion: 2
-    x: 250
-    y: 100
-    width: 150
-    height: 100
-  typeName: ND_BehaviorTree.RootNode, ND_BehaviorTree.Runtime, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
-  child: {fileID: -7141430223526959988}
---- !u!114 &-7141430223526959988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 2dcfc73f-19a4-4dce-863a-396ba9ed0a33
-  m_position:
-    serializedVersion: 2
-    x: 171.2
-    y: 263.19998
-    width: 148.79999
-    height: 139.20001
-  typeName: ND_BehaviorTree.SequenceNode, ND_BehaviorTree.Runtime, Version=0.0.0.0,
-    Culture=neutral, PublicKeyToken=null
-  children:
-  - {fileID: -6539698401506606500}
-  - {fileID: -5053310088734558554}
-  - {fileID: 8927748736263858789}
-  decorators:
-  - {fileID: 2249366901889051599}
-  services: []
+    x: 628.8
+    y: 146.40001
+    width: 938.4
+    height: 95.19998
+  typeName: RootNode
+  child: {fileID: 0}
 --- !u!114 &-6539698401506606500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,8 +71,8 @@ MonoBehaviour:
   decorators: []
   services: []
   message: Testing One Go
-  stringKey: {fileID: 5216021648722817169, guid: c7ef209001ff5334d984adc2a4a8dee1, type: 2}
-  anotherKey: {fileID: 5216021648722817169, guid: c7ef209001ff5334d984adc2a4a8dee1, type: 2}
+  stringKey: {fileID: 0}
+  anotherKey: {fileID: 0}
 --- !u!114 &-5053310088734558554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,12 +112,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_nodes:
   - {fileID: -7763610794587752485}
-  - {fileID: -6539698401506606500}
-  - {fileID: -7141430223526959988}
-  - {fileID: -5053310088734558554}
-  - {fileID: 8927748736263858789}
+  - {fileID: -8536813213630469444}
+  - {fileID: 5608220019986678229}
   rootNode: {fileID: -7763610794587752485}
-  blackboard: {fileID: 11400000, guid: c7ef209001ff5334d984adc2a4a8dee1, type: 2}
+  blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
 --- !u!114 &2073797547765222488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +158,32 @@ MonoBehaviour:
     height: 0
   typeName: 
   child: {fileID: 0}
+--- !u!114 &5608220019986678229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: d0679c24-fd95-48f5-ab27-8cf1deee92f8
+  m_position:
+    serializedVersion: 2
+    x: 1041.6
+    y: 360
+    width: 151.19995
+    height: 144.79999
+  typeName: Debug LogNode
+  children: []
+  decorators: []
+  services: []
+  message: Log Message
+  stringKey: {fileID: 0}
+  anotherKey: {fileID: 0}
 --- !u!114 &7981926055889722451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,6 +209,27 @@ MonoBehaviour:
   - {fileID: -6539698401506606500}
   decorators: []
   services: []
+--- !u!114 &8920281827989162788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e54bcee95993ec545a8f25cc8919191b, type: 3}
+  m_Name: InverterNode
+  m_EditorClassIdentifier: 
+  m_guid: f747732c-31d4-4da5-94a0-2c57ac334cfa
+  m_position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  typeName: HEHE
+  child: {fileID: 0}
 --- !u!114 &8927748736263858789
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -84,29 +84,62 @@ namespace ND_BehaviorTree.Editor
         {
             if (elements == null || !elements.Any()) return;
 
-            List<ND_NodeEditor> nodesToAnimateAndRemove = elements.OfType<ND_NodeEditor>().ToList();
-            List<ND_CustomEdge> edgesToRemove = elements.OfType<ND_CustomEdge>().ToList();
+            // Use a HashSet to gather all unique elements that need to be removed.
+            var allElementsToDelete = new HashSet<GraphElement>(elements);
+            var nodesInSelection = elements.OfType<ND_NodeEditor>().ToList();
 
-            Undo.RecordObject(m_serialLizeObject.targetObject, "Delete Animated Elements");
+            // For each selected node, find its connected edges and add them to the deletion set.
+            foreach (var node in nodesInSelection)
+            {
+                if (node.m_InputPort != null)
+                {
+                    // Must ToList() because the underlying collection will be modified during removal.
+                    foreach (var edge in node.m_InputPort.connections.ToList()) 
+                    {
+                        allElementsToDelete.Add(edge);
+                    }
+                }
+                if (node.m_OutputPort != null)
+                {
+                    // Must ToList() because the underlying collection will be modified during removal.
+                    foreach (var edge in node.m_OutputPort.connections.ToList())
+                    {
+                        allElementsToDelete.Add(edge);
+                    }
+                }
+            }
             
+            // Now separate the final, complete set into nodes and edges.
+            List<ND_NodeEditor> nodesToAnimateAndRemove = allElementsToDelete.OfType<ND_NodeEditor>().ToList();
+            List<Edge> edgesToRemove = allElementsToDelete.OfType<Edge>().ToList();
+
+            Undo.RecordObject(m_serialLizeObject.targetObject, "Delete Graph Elements");
+            
+            // Animate only the nodes before they are removed.
             await GraphViewAnimationHelper.AnimateAndPrepareForRemoval(nodesToAnimateAndRemove);
             
             bool dataChanged = false;
-            foreach (var nodeEditor in nodesToAnimateAndRemove)
-            {
-                if (nodeEditor.parent != null)
-                {
-                    RemoveDataForNode(nodeEditor);
-                    RemoveElement(nodeEditor);
-                    dataChanged = true;
-                }
-            }
+            
+            // It's safer to remove edges first, as they reference nodes.
             foreach (var edge in edgesToRemove)
             {
                 if (edge.parent != null)
                 {
                     RemoveDataForEdge(edge);
                     RemoveElement(edge);
+                    dataChanged = true;
+                }
+            }
+            
+            foreach (var nodeEditor in nodesToAnimateAndRemove)
+            {
+                if (nodeEditor.parent != null)
+                {
+                    // The RemoveDataForNode method from the previous step is robust.
+                    // It will attempt to remove connection data (which is already gone, harmlessly)
+                    // and then correctly removes the node's data and ScriptableObject sub-asset.
+                    RemoveDataForNode(nodeEditor);
+                    RemoveElement(nodeEditor);
                     dataChanged = true;
                 }
             }

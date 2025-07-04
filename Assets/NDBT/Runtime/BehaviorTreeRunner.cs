@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using ND_BehaviorTree;
+using System.Linq; // Added for LINQ to easily get key names
 
 public class BehaviorTreeRunner : MonoBehaviour
 {
@@ -23,20 +24,27 @@ public class BehaviorTreeRunner : MonoBehaviour
 
         // Clone the asset to create a runtime instance for this agent
         RuntimeTree = treeAsset.Clone();
-        //RuntimeTree.Bind(this.gameObject); // Bind the agent to the tree
 
         // If there is an override blackboard, clone it and replace the one on the runtime tree
         if (blackboardOverride != null)
         {
-            // Clone the override blackboard to ensure this runner has its own instance of the state.
             RuntimeTree.blackboard = blackboardOverride.Clone();
         }
         
-        // If blackboard is still null after the above (i.e., treeAsset.blackboard was null and no override was provided),
-        // we can optionally create an empty one. For now, we assume one is provided.
+        // If blackboard is still null after the above, print a warning.
         if (RuntimeTree.blackboard == null)
         {
-            Debug.LogWarning($"Runner for '{treeAsset.name}' has no blackboard assigned (neither on the tree asset nor as an override).", this);
+            Debug.LogWarning($"Runner for '{treeAsset.name}' on GameObject '{gameObject.name}' has no blackboard assigned (neither on the tree asset nor as an override).", this);
+        }
+        else // Otherwise, log the names of the keys it was initialized with.
+        {
+            // --- THIS IS THE CORRECTED LINE ---
+            // Use key.keyName (the logical name) instead of key.name (the asset name)
+            var keyNames = RuntimeTree.blackboard.keys.Select(key => key.keyName);
+            string keysDebugString = string.Join(", ", keyNames);
+            
+            // Log a formatted message to the console. The 'this' context makes it clickable.
+            Debug.Log($"[{gameObject.name}] BehaviorTreeRunner initialized with Blackboard keys: [{keysDebugString}]", this);
         }
     }
 
