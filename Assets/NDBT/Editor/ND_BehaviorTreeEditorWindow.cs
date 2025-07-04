@@ -1,96 +1,148 @@
+// --- MODIFIED FILE: ND_BehaviorTreeEditorWindow.cs ---
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using ND_BehaviorTree;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements; // Required for Label in ClearView
 
 namespace ND_BehaviorTree.Editor
 {
     public class ND_BehaviorTreeEditorWindow : EditorWindow
     {
-        // --- NEW ---
-        // Overload to open for a specific runner (for debugging)
+        // --- NEW: Standard Menu Item to Open the Window ---
+        [MenuItem("Window/ND Behavior Tree Editor")]
+        public static void OpenWindow()
+        {
+            ND_BehaviorTreeEditorWindow window = GetWindow<ND_BehaviorTreeEditorWindow>();
+            window.titleContent = new GUIContent("Behavior Tree Editor");
+        }
+
+        // --- MODIFIED: Open Methods now use GetWindow to avoid duplicates ---
         public static void Open(BehaviorTreeRunner runner)
         {
-            ND_BehaviorTreeEditorWindow[] windows = Resources.FindObjectsOfTypeAll<ND_BehaviorTreeEditorWindow>();
-            foreach (var n in windows)
-            {
-                // Focus window if it's already debugging this runner
-                if (n.m_targetRunner == runner)
-                {
-                    n.Focus();
-                    return;
-                }
-            }
-            ND_BehaviorTreeEditorWindow window = CreateWindow<ND_BehaviorTreeEditorWindow>(typeof(ND_BehaviorTreeEditorWindow), typeof(SceneView));
-            // MODIFIED: Set a more descriptive title for debugging
-            window.titleContent = new GUIContent($"{runner.gameObject.name} ({runner.treeAsset.name})", EditorGUIUtility.ObjectContent(null, typeof(BehaviorTree)).image);
+            // GetWindow will find an existing window or create one.
+            ND_BehaviorTreeEditorWindow window = GetWindow<ND_BehaviorTreeEditorWindow>();
+            window.titleContent = new GUIContent("Behavior Tree Editor"); // Set a generic title first
             window.Load(runner);
         }
 
-        // Original method for opening an asset directly
         public static void Open(BehaviorTree target)
         {
-            ND_BehaviorTreeEditorWindow[] windows = Resources.FindObjectsOfTypeAll<ND_BehaviorTreeEditorWindow>();
-            foreach (var n in windows)
-            {
-                // Focus window if it's showing this asset AND not in debug mode
-                if (n.m_targetRunner == null && n.currentGraph == target)
-                {
-                    n.Focus();
-                    return;
-                }
-            }
-            ND_BehaviorTreeEditorWindow window = CreateWindow<ND_BehaviorTreeEditorWindow>(typeof(ND_BehaviorTreeEditorWindow), typeof(SceneView));
-            window.titleContent = new GUIContent($"{target.name}", EditorGUIUtility.ObjectContent(null, typeof(BehaviorTree)).image);
+            ND_BehaviorTreeEditorWindow window = GetWindow<ND_BehaviorTreeEditorWindow>();
+            window.titleContent = new GUIContent("Behavior Tree Editor"); // Set a generic title first
             window.Load(target);
         }
 
+        // --- Fields ---
         [SerializeField] private BehaviorTree m_currentGraph;
         [SerializeField] private SerializedObject m_serializeObject;
         [SerializeField] private ND_BehaviorTreeView m_currentView;
-        
-        // --- NEW ---
         [SerializeField] public BehaviorTreeRunner m_targetRunner;
 
         public BehaviorTree currentGraph => m_currentGraph;
 
+        // --- Unity Messages ---
+
         private void OnEnable()
         {
-            // --- NEW ---
-            // Subscribe to the editor update loop for live UI updates
             EditorApplication.update -= OnEditorUpdate;
             EditorApplication.update += OnEditorUpdate;
             
-            // Re-draw the graph if an asset is already selected
-            if (m_currentGraph != null)
-            {
-                DrawGraph();
-            }
+            Selection.selectionChanged -= OnSelectionChanged;
+            Selection.selectionChanged += OnSelectionChanged;
+
+            // When the window is enabled, immediately check the current selection
+            // to automatically load the correct graph.
+            OnSelectionChanged();
         }
         
-        // --- NEW ---
         private void OnDisable()
         {
-            // Unsubscribe to prevent memory leaks
             EditorApplication.update -= OnEditorUpdate;
+            Selection.selectionChanged -= OnSelectionChanged;
         }
+
+        // --- MODIFIED: The core auto-detection logic ---
+        private void OnSelectionChanged()
+        {
+            // If the window is closed, do nothing.
+            if (this == null) return;
+            
+            BehaviorTree treeToLoad = null;
+            BehaviorTreeRunner runnerToDebug = null;
+
+            GameObject selectedObject = Selection.activeGameObject;
+            
+            // If a GameObject is selected, check it for a runner
+            if (selectedObject != null)
+            {
+                BehaviorTreeRunner runner = selectedObject.GetComponent<BehaviorTreeRunner>();
+                if (runner != null && runner.treeAsset != null)
+                {
+                    treeToLoad = runner.treeAsset;
+                    // Only assign the runner for debugging if in Play Mode
+                    if (Application.isPlaying)
+                    {
+                        runnerToDebug = runner;
+                    }
+                }
+            }
+
+            // If no tree was found on a GameObject, check if an asset is selected
+            if (treeToLoad == null)
+            {
+                treeToLoad = Selection.activeObject as BehaviorTree;
+            }
+
+            // Now, decide what to do based on what was found
+            if (runnerToDebug != null)
+            {
+                // Highest priority: Live debugging a selected runner
+                Load(runnerToDebug);
+            }
+            else if (treeToLoad != null)
+            {
+                // Second priority: Show the asset from a runner (in Edit Mode) or a selected asset
+                if (m_currentGraph != treeToLoad || m_targetRunner != null) // Reload if tree is different or we were previously debugging
+                {
+                    Load(treeToLoad);
+                }
+            }
+            else
+            {
+                // Nothing relevant selected, clear the view
+                ClearView();
+            }
+        }
+
+        // --- Load & Draw Methods ---
         
-        // --- NEW ---
-        // Load method for debugging a runner instance
         public void Load(BehaviorTreeRunner runner)
         {
+            if (runner == null || runner.treeAsset == null) 
+            {
+                ClearView();
+                return;
+            }
             m_targetRunner = runner;
             m_currentGraph = runner.treeAsset;
+            titleContent = new GUIContent($"{runner.gameObject.name} ({runner.treeAsset.name})", EditorGUIUtility.ObjectContent(null, typeof(BehaviorTree)).image);
             DrawGraph();
         }
 
-        // Original load method for an asset
         public void Load(BehaviorTree target)
         {   
-            m_targetRunner = null; // Ensure we are not in debug mode
+            if (target == null)
+            {
+                ClearView();
+                return;
+            }
+            m_targetRunner = null;
             m_currentGraph = target;
+            titleContent = new GUIContent($"{target.name}", EditorGUIUtility.ObjectContent(null, typeof(BehaviorTree)).image);
             DrawGraph();
         }
 
@@ -102,13 +154,36 @@ namespace ND_BehaviorTree.Editor
             m_currentView = new ND_BehaviorTreeView(m_serializeObject, this);
             m_currentView.graphViewChanged += OnChange;
             
-            // Clear previous graph view before adding a new one
             rootVisualElement.Clear(); 
             rootVisualElement.Add(m_currentView);
+        }
+        
+        private void ClearView()
+        {
+            m_currentGraph = null;
+            m_serializeObject = null;
+            m_currentView = null;
+            m_targetRunner = null;
+            
+            rootVisualElement.Clear();
+
+            var prompt = new Label("Select a GameObject with a BehaviorTreeRunner or a BehaviorTree asset.");
+            prompt.style.unityTextAlign = TextAnchor.MiddleCenter;
+            prompt.style.fontSize = 14;
+            rootVisualElement.Add(prompt);
+
+            // Only reset title if it's not already the default
+            if (titleContent.text != "Behavior Tree Editor")
+            {
+                titleContent = new GUIContent("Behavior Tree Editor");
+            }
+            
+            SetUnsavedChanges(false);
         }
 
         private GraphViewChange OnChange(GraphViewChange graphViewChange)
         {
+            if (m_currentGraph == null) return graphViewChange;
             this.hasUnsavedChanges = true;
             EditorUtility.SetDirty(m_currentGraph);
             return graphViewChange;
@@ -118,36 +193,21 @@ namespace ND_BehaviorTree.Editor
         {
             this.hasUnsavedChanges = unsaved;
         }
-
-        // --- NEW ---
-        /// <summary>
-        /// Called on every editor update. Used to update node visuals during play mode.
-        /// </summary>
+        
         private void OnEditorUpdate()
         {
             if (m_currentView == null) return;
 
-            // Only update visuals if we are in play mode and debugging a specific runner
             if (Application.isPlaying && m_targetRunner != null && m_targetRunner.RuntimeTree != null)
             {
-                // Traverse all nodes in the view and update their status
                 m_currentView.nodes.ForEach(n => {
-                    var nodeView = n as ND_NodeEditor;
-                    if (nodeView != null)
-                    {
-                        nodeView.UpdateState();
-                    }
+                    if (n is ND_NodeEditor nodeView) nodeView.UpdateState();
                 });
             }
             else
             {
-                // If not playing, ensure all nodes have their default state
                  m_currentView.nodes.ForEach(n => {
-                    var nodeView = n as ND_NodeEditor;
-                    if (nodeView != null)
-                    {
-                        nodeView.ClearState();
-                    }
+                    if (n is ND_NodeEditor nodeView) nodeView.ClearState();
                 });
             }
         }

@@ -136,11 +136,11 @@
 
 /* Change the background color based on type */
 .auxiliary-node-editor.decorator-child > .node-border > .main-container {
-    background-color: #4a3c60; /* Purplish for Decorators */
+    background-color:rgb(0, 204, 255); /* Purplish for Decorators */
 }
 
 .auxiliary-node-editor.service-child > .node-border > .main-container {
-    background-color: #3c604f; /* Teal/green for Services */
+    background-color:rgb(170, 0, 255); /* Teal/green for Services */
 }
 
 /* Hide the port containers completely */

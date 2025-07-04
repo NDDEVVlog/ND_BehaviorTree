@@ -8,6 +8,7 @@ namespace ND_BehaviorTree
     public class DebugLogNode : ActionNode
     {
         public string message = "Log Message";
+        public Key stringKey;
 
         protected override Status OnProcess()
         {

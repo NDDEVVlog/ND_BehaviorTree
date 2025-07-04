@@ -1,15 +1,17 @@
-// --- START OF FILE BehaviorTreeRunner.cs ---
+// --- MODIFIED FILE: BehaviorTreeRunner.cs ---
 
 using UnityEngine;
 using ND_BehaviorTree;
 
 public class BehaviorTreeRunner : MonoBehaviour
 {
-    // Assign your BehaviorTree asset in the Unity Inspector
+    [Tooltip("The BehaviorTree asset to run.")]
     public BehaviorTree treeAsset;
+    
+    // --- NEW ---
+    [Tooltip("(Optional) A specific Blackboard instance to use for this runner. If left empty, the one from the Tree Asset will be used.")]
+    public Blackboard blackboardOverride;
 
-    // MODIFIED: Changed from private field to a public property with a private setter.
-    // This is the "live" copy of the tree that this agent will run.
     public BehaviorTree RuntimeTree { get; private set; }
 
     void Start()
@@ -21,18 +23,20 @@ public class BehaviorTreeRunner : MonoBehaviour
         }
 
         // Clone the asset to create a runtime instance for this agent
-        // MODIFIED: Use the 'RuntimeTree' property
         RuntimeTree = treeAsset.Clone();
+
+        // --- NEW: If there is an override blackboard, clone it and replace the one on the runtime tree ---
+        if (blackboardOverride != null)
+        {
+            RuntimeTree.blackboard = blackboardOverride.Clone();
+        }
     }
 
     void Update()
     {
-        // Update the tree every frame
-        // MODIFIED: Use the 'RuntimeTree' property
         if (RuntimeTree != null)
         {
             RuntimeTree.Update();
         }
     }
 }
-// --- END OF FILE BehaviorTreeRunner.cs ---

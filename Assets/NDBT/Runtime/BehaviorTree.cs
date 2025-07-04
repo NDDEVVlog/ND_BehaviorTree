@@ -18,6 +18,8 @@ namespace ND_BehaviorTree
         [SerializeField]
         public RootNode rootNode; // Made public for easier access, but set via EditorInit
 
+        public Blackboard blackboard;
+
         // Runtime state for a cloned tree
         private Node.Status treeStatus = Node.Status.Running;
 
