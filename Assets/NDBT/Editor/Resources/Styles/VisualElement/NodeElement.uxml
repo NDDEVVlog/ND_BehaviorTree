@@ -5,7 +5,11 @@
             <ui:VisualElement name="top-port" class="port-container" />
             <ui:VisualElement name="title" class="title">
                 <ui:Image name="icon-image" class="icon-image" />
-                <ui:Label name="title-label" text="Node Title" class="title-label" />
+                 <!-- Container for vertically aligned title and type -->
+                <ui:VisualElement name="title-content-container">
+                    <ui:Label name="title-textfield" class="title-textfield" />
+                    <ui:Label name="type-label" class="type-label" />
+                </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="child-node-container" class="child-node-container" />
             <ui:VisualElement name="task-node-content" class="task-node-content" />

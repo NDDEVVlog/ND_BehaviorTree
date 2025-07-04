@@ -10,13 +10,15 @@ namespace ND_BehaviorTree
     [CreateAssetMenu(fileName = "New Blackboard", menuName = "BehaviourTree/Blackboard")]
     public class Blackboard : ScriptableObject
     {
+        // Assuming you have a base Key class with a 'keyName' field
         public List<Key> keys = new List<Key>();
 
         public T GetValue<T>(string keyName)
         {
             foreach (var key in keys)
             {
-                if (key.name == keyName)
+                // --- FIX: Compare against the logical keyName, not the asset name ---
+                if (key.keyName == keyName)
                 {
                     if (key is Key<T> typedKey)
                     {
@@ -34,7 +36,8 @@ namespace ND_BehaviorTree
         {
             foreach (var key in keys)
             {
-                if (key.name == keyName)
+                // --- FIX: Compare against the logical keyName, not the asset name ---
+                if (key.keyName == keyName)
                 {
                     if (key is Key<T> typedKey)
                     {
@@ -49,7 +52,6 @@ namespace ND_BehaviorTree
             return false;
         }
 
-        // --- MODIFIED: Implement Clone() method ---
         public Blackboard Clone()
         {
             Blackboard clone = Instantiate(this);
@@ -60,7 +62,11 @@ namespace ND_BehaviorTree
             {
                 // Instantiate creates a memory-clone of the ScriptableObject sub-asset
                 Key keyClone = Instantiate(originalKey);
-                keyClone.name = originalKey.name; // Keep the original asset name for lookups
+                keyClone.name = originalKey.name; // Keep the original asset name for editor clarity
+                
+                // IMPORTANT: Ensure the logical keyName is also copied to the clone!
+                keyClone.keyName = originalKey.keyName;
+
                 clone.keys.Add(keyClone);
             }
             return clone;

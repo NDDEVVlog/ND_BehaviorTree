@@ -58,7 +58,7 @@ namespace ND_BehaviorTree.Editor
         private void AddNodeVisuals(Node nodeData, bool animate = true)
         {
             if (nodeData == null) { Debug.LogError("[AddNodeVisuals] nodeData is null."); return; }
-            if (string.IsNullOrEmpty(nodeData.typeName)) nodeData.typeName = nodeData.GetType().AssemblyQualifiedName;
+            //if (string.IsNullOrEmpty(nodeData.typeName)) nodeData.typeName = nodeData.GetType().AssemblyQualifiedName;
 
             if (NodeDictionary.ContainsKey(nodeData.id))
             {
