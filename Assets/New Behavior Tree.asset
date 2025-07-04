@@ -75,6 +75,8 @@ MonoBehaviour:
   decorators: []
   services: []
   message: Testing One Go
+  stringKey: {fileID: 0}
+  anotherKey: {fileID: 0}
 --- !u!114 &-5053310088734558554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +121,7 @@ MonoBehaviour:
   - {fileID: -5053310088734558554}
   - {fileID: 8927748736263858789}
   rootNode: {fileID: -7763610794587752485}
+  blackboard: {fileID: 11400000, guid: c7ef209001ff5334d984adc2a4a8dee1, type: 2}
 --- !u!114 &2073797547765222488
 MonoBehaviour:
   m_ObjectHideFlags: 0

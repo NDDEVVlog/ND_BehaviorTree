@@ -1,4 +1,4 @@
-// --- START OF FILE BehaviorTree.cs ---
+// --- MODIFIED FILE: BehaviorTree.cs ---
 
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +16,8 @@ namespace ND_BehaviorTree
         public List<Node> nodes => m_nodes;
 
         [SerializeField]
-        public RootNode rootNode; // Made public for easier access, but set via EditorInit
-
+        public RootNode rootNode;
+        [SerializeField]
         public Blackboard blackboard;
 
         // Runtime state for a cloned tree
@@ -36,22 +36,11 @@ namespace ND_BehaviorTree
             return treeStatus;
         }
 
-        /// <summary>
-        /// Creates a "live" instance of the tree asset. Call this once per agent.
-        /// This is crucial for allowing multiple agents to run the same tree logic
-        /// independently, each with its own state.
-        /// </summary>
         public BehaviorTree Clone()
         {
-            // Create a new BehaviorTree instance
             BehaviorTree tree = Instantiate(this);
             tree.m_nodes = new List<Node>();
 
-            // --- START OF FIX ---
-
-            // Step 1: Traverse the entire tree from the root to find ALL nodes.
-            // This is more robust than relying on the serialized m_nodes list, which
-            // can be incomplete if editor scripts don't add all nodes to it.
             var allNodesInGraph = new List<Node>();
             var nodesToVisit = new Stack<Node>();
             if (this.rootNode != null)
@@ -66,16 +55,11 @@ namespace ND_BehaviorTree
                 {
                     continue;
                 }
-
                 allNodesInGraph.Add(currentNode);
-
-                // Add standard children to the traversal stack
                 foreach (var child in currentNode.GetChildren())
                 {
                     nodesToVisit.Push(child);
                 }
-
-                // If it's a composite node, also add its decorators and services
                 if (currentNode is CompositeNode composite)
                 {
                     composite.decorators.ForEach(d => nodesToVisit.Push(d));
@@ -83,53 +67,59 @@ namespace ND_BehaviorTree
                 }
             }
 
-            // --- END OF FIX ---
-
-
-            // Use a dictionary to map original node GUIDs to their new cloned instances
             var nodeMap = new Dictionary<string, Node>();
 
-            // First pass: Clone all nodes found during traversal and populate the map
-            foreach (Node originalNode in allNodesInGraph) // Use our complete list
+            foreach (Node originalNode in allNodesInGraph)
             {
                 Node clone = originalNode.Clone();
                 tree.m_nodes.Add(clone);
                 nodeMap.Add(originalNode.id, clone);
-
-                // If this is the root node, assign it to the new tree's root
                 if (originalNode == this.rootNode)
                 {
                     tree.rootNode = clone as RootNode;
                 }
             }
 
-            // Second pass: Reconnect all the cloned nodes to each other
-            foreach (Node originalNode in allNodesInGraph) // Use our complete list again
+            foreach (Node originalNode in allNodesInGraph)
             {
                 Node clonedNode = nodeMap[originalNode.id];
-
-                // Re-link children for Composite nodes (Sequence, Selector)
                 if (originalNode is CompositeNode originalComposite)
                 {
                     var clonedComposite = clonedNode as CompositeNode;
                     originalComposite.children.ForEach(child => clonedComposite.AddChild(nodeMap[child.id]));
-                    // This will now work because all decorators were found during traversal
                     originalComposite.decorators.ForEach(decorator => clonedComposite.decorators.Add(nodeMap[decorator.id] as DecoratorNode));
                     originalComposite.services.ForEach(service => clonedComposite.services.Add(nodeMap[service.id] as ServiceNode));
                 }
-                // Re-link children for Auxiliary nodes (Inverter, other decorators)
                 else if (originalNode is AuxiliaryNode originalAuxiliary && originalAuxiliary.child != null)
                 {
                     var clonedAuxiliary = clonedNode as AuxiliaryNode;
                     clonedAuxiliary.AddChild(nodeMap[originalAuxiliary.child.id]);
                 }
-                // Re-link child for the Root node
                 else if (originalNode is RootNode originalRoot && originalRoot.child != null)
                 {
                     var clonedRoot = clonedNode as RootNode;
                     clonedRoot.child = nodeMap[originalRoot.child.id];
                 }
             }
+            
+            // --- MODIFICATION START ---
+
+            // Now that the graph structure is cloned, clone the blackboard instance.
+            // This ensures that the runtime tree has its own blackboard state. This will be the
+            // default blackboard, which can be replaced by the BehaviorTreeRunner.
+            if (this.blackboard != null)
+            {
+                tree.blackboard = this.blackboard.Clone();
+            }
+
+            // Finally, assign the owner tree to all cloned nodes. This allows each node
+            // to access the runtime tree's properties, most importantly, its blackboard.
+            foreach (var clonedNode in tree.nodes)
+            {
+                clonedNode.ownerTree = tree;
+            }
+            
+            // --- MODIFICATION END ---
 
             return tree;
         }
@@ -138,17 +128,13 @@ namespace ND_BehaviorTree
         public void EditorInit()
         {
             if (this.nodes.OfType<RootNode>().Any()) return;
-
             Debug.Log($"BehaviorTree '{this.name}' has no RootNode. Creating one.");
-
             RootNode root = ScriptableObject.CreateInstance<RootNode>();
             root.name = "Root";
             root.position = new Rect(250, 100, 150, 100);
-
             AssetDatabase.AddObjectToAsset(root, this);
             m_nodes.Add(root);
             this.rootNode = root;
-
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
@@ -157,6 +143,6 @@ namespace ND_BehaviorTree
         {
             return nodes.FirstOrDefault(n => n.id == guid);
         }
-        #endif
+#endif
     }
 }

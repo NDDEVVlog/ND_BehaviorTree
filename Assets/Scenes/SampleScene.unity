@@ -123,6 +123,83 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &389471165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08fb034fe2c07504ea5249566ce4797d, type: 3}
+  m_Name: New Blackboard (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime
+    Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone) (Runtime Clone)
+  m_EditorClassIdentifier: 
+  keys:
+  - {fileID: 524664732}
+  - {fileID: 1041195219}
+  - {fileID: 1320973554}
+  - {fileID: 2014048515}
+--- !u!114 &524664732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: YEsSir (FloatKey)
+  m_EditorClassIdentifier: 
+  keyName: YEsSir
+  category: 
+  description: 
+  value: 0
 --- !u!1 &786814728
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,6 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 4268ad1c72d74264fb2aafd7c39f1e41, type: 2}
+  blackboardOverride: {fileID: 389471165}
 --- !u!81 &786814730
 AudioListener:
   m_ObjectHideFlags: 0
@@ -229,6 +307,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1041195219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: Huh (IntKey)
+  m_EditorClassIdentifier: 
+  keyName: Huh
+  category: 
+  description: 
+  value: 0
 --- !u!1 &1087321515
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,6 +417,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &1320973554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: UWU (FloatKey)
+  m_EditorClassIdentifier: 
+  keyName: UWU
+  category: 
+  description: 
+  value: 562152
+--- !u!114 &2014048515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 296528b6bcd056f4e9a730bd0a4fbcc0, type: 3}
+  m_Name: OhMyGod (StringKey)
+  m_EditorClassIdentifier: 
+  keyName: OhMyGod
+  category: 
+  description: 
+  value: This is from Inspector
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
