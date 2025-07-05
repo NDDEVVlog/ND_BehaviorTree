@@ -1,4 +1,4 @@
-// --- START OF FILE CompositeNode.cs ---
+// --- MODIFIED FILE: CompositeNode.cs ---
 
 using System.Collections;
 using System.Collections.Generic;
@@ -9,19 +9,18 @@ namespace ND_BehaviorTree
 {
     public abstract class CompositeNode : Node
     {
-        // This is the correct and only place for the 'children' list.
+        // A composite node has a list of children which can include other composites, actions, or decorators.
         public List<Node> children = new List<Node>();
 
-        // Lists to hold the new auxiliary nodes
-        public List<DecoratorNode> decorators = new List<DecoratorNode>();
+        // Services are auxiliary nodes that run on a timer as long as the composite node is active.
+        // They are handled separately from the main execution flow of children.
         public List<ServiceNode> services = new List<ServiceNode>();
 
         public override Node Clone()
         {
             CompositeNode node = base.Clone() as CompositeNode;
-            // Children, Decorators, and Services are cloned and assigned by the BehaviorTree's Clone method
+            // Children and Services are cloned and assigned by the BehaviorTree's Clone method
             node.children = new List<Node>();
-            node.decorators = new List<DecoratorNode>();
             node.services = new List<ServiceNode>();
             return node;
         }
@@ -30,7 +29,6 @@ namespace ND_BehaviorTree
         {
             base.Reset();
             children.ForEach(c => c.Reset());
-            decorators.ForEach(d => d.Reset());
             services.ForEach(s => s.Reset());
         }
 
@@ -56,24 +54,8 @@ namespace ND_BehaviorTree
         // --- Auxiliary Node Handling ---
 
         /// <summary>
-        /// Checks if all attached decorators are satisfied.
-        /// Decorators on a composite node act as gatekeepers for the entire branch.
-        /// </summary>
-        protected bool AreDecoratorsSatisfied()
-        {
-            foreach (var decorator in decorators)
-            {
-                // Note: This assumes decorators on a composite are purely conditional.
-                if (decorator.Process() == Status.Failure)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Ticks all attached services.
+        /// Ticks all attached services. This is called each time the composite node's
+        /// OnProcess method is executed.
         /// </summary>
         protected void TickServices()
         {
@@ -84,4 +66,3 @@ namespace ND_BehaviorTree
         }
     }
 }
-// --- END OF FILE CompositeNode.cs ---

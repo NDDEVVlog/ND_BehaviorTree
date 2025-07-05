@@ -27,20 +27,32 @@ namespace ND_BehaviorTree
         {
             if (rootNode == null) return Node.Status.Failure;
 
+            // If the tree was not running, it means it finished on the last frame (Success/Failure).
+            // We should reset all nodes to their initial state before processing again.
             if (treeStatus != Node.Status.Running)
             {
-                rootNode.Reset();
+                // Note: Resetting the root should cascade to all children.
+                // However, a full reset ensures a clean state if the tree was modified.
+                nodes.ForEach(n => n.Reset());
             }
 
             treeStatus = rootNode.Process();
             return treeStatus;
         }
 
+        /// <summary>
+        /// Creates a deep, runtime-safe clone of the behavior tree asset.
+        /// This is crucial so that each agent running this tree has its own instance
+        /// with its own state (e.g., which node is 'Running').
+        /// </summary>
+        /// <returns>A new BehaviorTree instance ready for execution.</returns>
         public BehaviorTree Clone()
         {
             BehaviorTree tree = Instantiate(this);
             tree.m_nodes = new List<Node>();
 
+            // --- 1. Traverse the original tree to find all unique nodes ---
+            // This includes the main execution graph (via GetChildren) and attached services.
             var allNodesInGraph = new List<Node>();
             var nodesToVisit = new Stack<Node>();
             if (this.rootNode != null)
@@ -55,20 +67,24 @@ namespace ND_BehaviorTree
                 {
                     continue;
                 }
+                
                 allNodesInGraph.Add(currentNode);
+                
+                // Add all children from the main execution path (this now includes decorators)
                 foreach (var child in currentNode.GetChildren())
                 {
                     nodesToVisit.Push(child);
                 }
+                
+                // Separately add attached services, as they are not in the main GetChildren() path.
                 if (currentNode is CompositeNode composite)
                 {
-                    composite.decorators.ForEach(d => nodesToVisit.Push(d));
                     composite.services.ForEach(s => nodesToVisit.Push(s));
                 }
             }
-
+            
+            // --- 2. Clone each unique node and map originals to clones ---
             var nodeMap = new Dictionary<string, Node>();
-
             foreach (Node originalNode in allNodesInGraph)
             {
                 Node clone = originalNode.Clone();
@@ -80,21 +96,27 @@ namespace ND_BehaviorTree
                 }
             }
 
+            // --- 3. Reconnect the cloned nodes to form the correct graph structure ---
             foreach (Node originalNode in allNodesInGraph)
             {
                 Node clonedNode = nodeMap[originalNode.id];
+
+                // Reconnect children for Composite Nodes
                 if (originalNode is CompositeNode originalComposite)
                 {
                     var clonedComposite = clonedNode as CompositeNode;
+                    // Reconnect main children (Actions, other Composites, and now Decorators)
                     originalComposite.children.ForEach(child => clonedComposite.AddChild(nodeMap[child.id]));
-                    originalComposite.decorators.ForEach(decorator => clonedComposite.decorators.Add(nodeMap[decorator.id] as DecoratorNode));
+                    // Reconnect attached services
                     originalComposite.services.ForEach(service => clonedComposite.services.Add(nodeMap[service.id] as ServiceNode));
                 }
+                // Reconnect the single child for Auxiliary Nodes (which is the base for Decorator)
                 else if (originalNode is AuxiliaryNode originalAuxiliary && originalAuxiliary.child != null)
                 {
                     var clonedAuxiliary = clonedNode as AuxiliaryNode;
                     clonedAuxiliary.AddChild(nodeMap[originalAuxiliary.child.id]);
                 }
+                // Reconnect the child for the Root Node
                 else if (originalNode is RootNode originalRoot && originalRoot.child != null)
                 {
                     var clonedRoot = clonedNode as RootNode;
@@ -102,24 +124,20 @@ namespace ND_BehaviorTree
                 }
             }
             
-            // --- MODIFICATION START ---
+            // --- 4. Clone the blackboard and assign the owner tree reference ---
 
-            // Now that the graph structure is cloned, clone the blackboard instance.
-            // This ensures that the runtime tree has its own blackboard state. This will be the
-            // default blackboard, which can be replaced by the BehaviorTreeRunner.
+            // Clone the blackboard instance so the runtime tree has its own state.
             if (this.blackboard != null)
             {
                 tree.blackboard = this.blackboard.Clone();
             }
 
-            // Finally, assign the owner tree to all cloned nodes. This allows each node
+            // Assign the owner tree to all cloned nodes. This allows each node
             // to access the runtime tree's properties, most importantly, its blackboard.
             foreach (var clonedNode in tree.nodes)
             {
                 clonedNode.ownerTree = tree;
             }
-            
-            // --- MODIFICATION END ---
 
             return tree;
         }

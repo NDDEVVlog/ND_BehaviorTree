@@ -128,10 +128,19 @@ namespace ND_BehaviorTree.Editor
             Type nodeDataType = searchElement.target.GetType();
 
             // --- CONTEXT-AWARE NODE CREATION ---
-            if (m_parentCompositeNode != null)
+             if (m_parentCompositeNode != null && typeof(ServiceNode).IsAssignableFrom(nodeDataType))
             {
-                // We are in "Add Child" mode. Call the appropriate method on the view.
-                view.AddChildNode(m_parentCompositeNode, nodeDataType);
+                Undo.RecordObject(view.BTree, "Add Service");
+                
+                ServiceNode service = (ServiceNode)ScriptableObject.CreateInstance(nodeDataType);
+                service.name = nodeDataType.Name;
+                AssetDatabase.AddObjectToAsset(service, view.BTree);
+                view.BTree.nodes.Add(service);
+                
+                view.AddServiceToNode(m_parentCompositeNode, service);
+                
+                EditorUtility.SetDirty(view.BTree);
+                AssetDatabase.SaveAssets();
             }
             else
             {

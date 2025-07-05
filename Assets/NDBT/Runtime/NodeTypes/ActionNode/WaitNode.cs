@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    [NodeInfo("Wait", "Action/Wait", true, false)]
+    [NodeInfo("Wait", "Action/Wait", true, false,iconPath:"Assets/NDBT/Icons/Wait.png")]
     public class WaitNode : ActionNode
     {
         public float duration = 1.0f;

@@ -22,15 +22,19 @@ public class BehaviorTreeRunner : MonoBehaviour
             return;
         }
 
-        // Clone the asset to create a runtime instance for this agent
+        // 1. Clone the asset to create a runtime instance for this agent
         RuntimeTree = treeAsset.Clone();
 
-        // If there is an override blackboard, clone it and replace the one on the runtime tree
+        // 2. If there is an override blackboard, clone it and replace the default one
+        //    This must happen BEFORE Init() so we populate the correct blackboard.
         if (blackboardOverride != null)
         {
             RuntimeTree.blackboard = blackboardOverride.Clone();
         }
-        
+
+        // 3. Now that the final blackboard is in place, initialize it with runtime values.
+        Init();
+
         // If blackboard is still null after the above, print a warning.
         if (RuntimeTree.blackboard == null)
         {
@@ -38,14 +42,17 @@ public class BehaviorTreeRunner : MonoBehaviour
         }
         else // Otherwise, log the names of the keys it was initialized with.
         {
-            // --- THIS IS THE CORRECTED LINE ---
-            // Use key.keyName (the logical name) instead of key.name (the asset name)
             var keyNames = RuntimeTree.blackboard.keys.Select(key => key.keyName);
             string keysDebugString = string.Join(", ", keyNames);
-            
+
             // Log a formatted message to the console. The 'this' context makes it clickable.
             Debug.Log($"[{gameObject.name}] BehaviorTreeRunner initialized with Blackboard keys: [{keysDebugString}]", this);
         }
+    }
+
+    public virtual void Init()
+    {
+        
     }
 
     void Update()

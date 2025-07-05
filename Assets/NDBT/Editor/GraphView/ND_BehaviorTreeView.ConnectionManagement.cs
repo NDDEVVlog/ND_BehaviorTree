@@ -1,4 +1,4 @@
-// --- START OF FILE ND_BehaviorTreeView.ConnectionManagement.cs ---
+// --- MODIFIED FILE: ND_BehaviorTreeView.ConnectionManagement.cs ---
 
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,6 @@ namespace ND_BehaviorTree.Editor
                 ND_NodeEditor parentEditorNode = GetEditorNode(parentNode.id);
                 if (parentEditorNode == null) continue;
 
-                // Use the new polymorphic GetChildren() method
                 List<Node> children = parentNode.GetChildren();
                 if (children == null || children.Count == 0) continue;
 
@@ -41,6 +40,9 @@ namespace ND_BehaviorTree.Editor
             }
         }
         
+        /// <summary>
+        /// Creates the data model connection based on a visual Edge element.
+        /// </summary>
         private void CreateDataForEdge(Edge edge)
         {
             if (!(edge.input?.node is ND_NodeEditor childEditorNode) || !(edge.output?.node is ND_NodeEditor parentEditorNode)) {
@@ -51,7 +53,6 @@ namespace ND_BehaviorTree.Editor
             Node parentNode = parentEditorNode.node;
             Node childNode = childEditorNode.node;
             
-            // Use the new polymorphic AddChild() method
             parentNode.AddChild(childNode);
             
             // Optional sorting logic for composite nodes
@@ -59,6 +60,31 @@ namespace ND_BehaviorTree.Editor
             {
                 composite.children.Sort((a,b) => GetEditorNode(a.id).GetPosition().x.CompareTo(GetEditorNode(b.id).GetPosition().x));
             }
+        }
+
+        // --- NEW METHOD TO FIX THE ERROR ---
+        /// <summary>
+        /// Programmatically creates a visual edge and its corresponding data connection.
+        /// This is used to "heal" the graph when a decorator is deleted.
+        /// </summary>
+        public void AddEdgeToData(Port outputPort, Port inputPort)
+        {
+            if (outputPort == null || inputPort == null) return;
+            
+            // 1. Create the visual representation of the connection.
+            var edge = new Edge
+            {
+                output = outputPort,
+                input = inputPort
+            };
+
+            // 2. Connect the ports visually and add the edge to the graph.
+            edge.input.Connect(edge);
+            edge.output.Connect(edge);
+            AddElement(edge);
+
+            // 3. Create the underlying data relationship using our existing method.
+            CreateDataForEdge(edge);
         }
 
         private void RemoveDataForEdge(Edge e)
@@ -71,7 +97,6 @@ namespace ND_BehaviorTree.Editor
             Node parentNode = parentEditorNode.node;
             Node childNode = childEditorNode.node;
             
-            // Use the new polymorphic RemoveChild() method
             parentNode.RemoveChild(childNode);
         }
         
@@ -86,22 +111,17 @@ namespace ND_BehaviorTree.Editor
                 var portNodeEditor = port.node as ND_NodeEditor;
                 if (portNodeEditor == null) return;
 
-                // Basic validation: Don't connect to self, different directions, same port type
                 if (startPort.node == port.node || startPort.direction == port.direction || startPort.portType != port.portType)
                 {
                     return;
                 }
-
-                // --- Advanced Validation based on Node Type ---
-
-                // Rule 1: An input port can only accept one connection.
+                
                 if (port.direction == Direction.Input && port.connected)
                 {
                     return;
                 }
                 
-                // Rule 2: Output ports on single-child nodes (like AuxiliaryNode) can only have one connection.
-                if (startPort.direction == Direction.Output && startNodeEditor.node is AuxiliaryNode && startPort.connected)
+                if (startPort.direction == Direction.Output && (startNodeEditor.node is AuxiliaryNode || startNodeEditor.node is RootNode) && startPort.connected)
                 {
                     return;
                 }
@@ -113,4 +133,3 @@ namespace ND_BehaviorTree.Editor
         }
     }
 }
-// --- END OF FILE ND_BehaviorTreeView.ConnectionManagement.cs ---

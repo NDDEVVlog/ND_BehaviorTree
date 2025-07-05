@@ -1,4 +1,4 @@
-// --- START OF FILE ND_BehaviorTreeView.cs ---
+// --- MODIFIED FILE: ND_BehaviorTreeView.cs ---
 
 using System;
 using System.Collections.Generic;
@@ -24,9 +24,14 @@ namespace ND_BehaviorTree.Editor
         public ND_BehaviorTreeEditorWindow EditorWindow => m_editorWindow; // Public getter
 
         // Collections for managing graph elements
+        public BehaviorTree BTree => m_BTree; 
         public List<ND_NodeEditor> TreeNodes { get; private set; }
         public Dictionary<Edge, ND_BTConnection> ConnectionDictionary { get; private set; }
         public Dictionary<string, ND_NodeEditor> NodeDictionary { get; private set; }
+        
+        // --- NEW FIELD ---
+        // Flag to prevent OnGraphViewInternalChange from interfering with programmatic deletions.
+        private bool m_isDeletingProgrammatically = false;
 
         private ND_BTSearchProvider m_searchProvider;
         private List<IContextualMenuCommand> m_contextualMenuCommands;
@@ -112,4 +117,3 @@ namespace ND_BehaviorTree.Editor
         }
     }
 }
-// --- END OF FILE ND_BehaviorTreeView.cs ---

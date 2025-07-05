@@ -1,7 +1,8 @@
-// File: NodePropertyEditorWindow.cs (in an Editor folder)
+// --- MODIFIED FILE: NodePropertyEditorWindow.cs ---
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic; // For Dictionary
+using System.Linq; // For LINQ operations
 
 namespace ND_BehaviorTree.Editor
 {
@@ -10,56 +11,52 @@ namespace ND_BehaviorTree.Editor
         private Node _targetNode;
         private ND_NodeEditor _nodeEditorVisual;
         private SerializedObject _serializedNodeObject;
-        private Vector2 _scrollPosition; // For scrollbar if content is too long
+        private Vector2 _scrollPosition;
 
-        // Static dictionary to keep track of open windows per node ID
         private static Dictionary<string, NodePropertyEditorWindow> _openWindows = new Dictionary<string, NodePropertyEditorWindow>();
 
-        public static void Open(Node nodeToEdit, ND_NodeEditor nD_NodeEditor)
+        public static void Open(Node nodeToEdit, ND_NodeEditor nodeEditorVisual)
         {
-            
             if (nodeToEdit == null)
             {
                 Debug.LogError("NodePropertyEditorWindow.Open: nodeToEdit is null.");
                 return;
             }
 
-            // Try to focus existing window for this node
             if (_openWindows.TryGetValue(nodeToEdit.id, out NodePropertyEditorWindow existingWindow) && existingWindow != null)
             {
                 existingWindow.Focus();
                 return;
             }
 
-            // Create new window
-            NodePropertyEditorWindow window = GetWindow<NodePropertyEditorWindow>(false, "Node Properties", true); // false = not utility, true = focus on open
-            window.titleContent = new GUIContent($"{nodeToEdit.name} ({nodeToEdit.GetType().Name})");
-            window.SetNode(nodeToEdit,nD_NodeEditor);
-            window.minSize = new Vector2(300, 250); // Set a minimum size
-            window.Show(); // Or ShowUtility() if you prefer
+            NodePropertyEditorWindow window = GetWindow<NodePropertyEditorWindow>(false, "Node Properties", true);
+            // Use the more specific node type for a better window title
+            window.titleContent = new GUIContent($"{nodeToEdit.GetType().Name}");
+            window.SetNode(nodeToEdit, nodeEditorVisual);
+            window.minSize = new Vector2(300, 250);
+            window.Show();
 
-            _openWindows[nodeToEdit.id] = window; // Track it
+            _openWindows[nodeToEdit.id] = window;
         }
 
-        private void SetNode(Node node,ND_NodeEditor nD_NodeEditor )
+        private void SetNode(Node node, ND_NodeEditor nodeEditorVisual)
         {
             _targetNode = node;
+            _nodeEditorVisual = nodeEditorVisual;
             if (_targetNode != null)
             {
+                // Create the SerializedObject from the target node instance.
+                // This correctly captures the entire object, including derived class fields.
                 _serializedNodeObject = new SerializedObject(_targetNode);
             }
             else
             {
                 _serializedNodeObject = null;
-                Debug.LogError("NodePropertyEditorWindow.SetNode: Node is null.");
             }
-            _nodeEditorVisual = nD_NodeEditor;
         }
 
         private void OnEnable()
         {
-            // This is called when the window is enabled/reloaded
-            // Ensure serialized object is valid if target node exists
             if (_targetNode != null && (_serializedNodeObject == null || _serializedNodeObject.targetObject == null))
             {
                 _serializedNodeObject = new SerializedObject(_targetNode);
@@ -68,10 +65,9 @@ namespace ND_BehaviorTree.Editor
 
         private void OnDestroy()
         {
-            // Remove from tracking when window is closed
             if (_targetNode != null && _openWindows.ContainsKey(_targetNode.id))
             {
-                if (_openWindows[_targetNode.id] == this) // Make sure we are removing the correct instance
+                if (_openWindows[_targetNode.id] == this)
                 {
                     _openWindows.Remove(_targetNode.id);
                 }
@@ -87,60 +83,60 @@ namespace ND_BehaviorTree.Editor
                 return;
             }
 
-            _serializedNodeObject.Update(); // Read latest data from the target Node
+            // Always update from the source object at the beginning of OnGUI
+            _serializedNodeObject.Update();
 
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+
+            // A field for the custom name/title of the node
+            EditorGUILayout.LabelField("Node Settings", EditorStyles.boldLabel);
             SerializedProperty typeNameProp = _serializedNodeObject.FindProperty("typeName");
-            EditorGUILayout.PropertyField(typeNameProp);
-
-            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition); // Start scroll view
-
-            // --- Read-only Metadata Section ---
-            // EditorGUILayout.LabelField("Node Info", EditorStyles.boldLabel);
-            // EditorGUI.BeginDisabledGroup(true); // Read-only group
-            // {
-            //     EditorGUILayout.TextField("Node Name", _targetNode.name); // 'name' is from ScriptableObject
-            //     EditorGUILayout.TextField("Script Type", _targetNode.GetType().Name);
-            //     EditorGUILayout.TextField("GUID", _targetNode.id);
-            //     EditorGUILayout.RectField("Graph Position", _targetNode.position);
-            //     if (!string.IsNullOrEmpty(_targetNode.typeName)) // Only show if populated
-            //     {
-            //         EditorGUILayout.TextField("Serialized TypeName", _targetNode.typeName);
-            //     }
-            // }
-            // EditorGUI.EndDisabledGroup();
+            if(typeNameProp != null)
+            {
+                EditorGUILayout.PropertyField(typeNameProp, new GUIContent("Display Name"));
+            }
             EditorGUILayout.Space(10);
 
-            // --- Editable Properties Section ---
-            EditorGUILayout.LabelField("Editable Properties", EditorStyles.boldLabel);
 
-            SerializedProperty iterator = _serializedNodeObject.GetIterator();
-            bool enterChildren = true;
-            while (iterator.NextVisible(enterChildren))
+            // --- THE CORE FIX: Iterate and draw all visible properties ---
+            EditorGUILayout.LabelField("Node-Specific Properties", EditorStyles.boldLabel);
+
+            // Get an iterator for the serialized object
+            SerializedProperty property = _serializedNodeObject.GetIterator();
+            // The first call to NextVisible moves to the first property (usually "m_Script")
+            property.NextVisible(true); 
+
+            // Loop through all visible properties
+            do
             {
-                enterChildren = false;
-                string propName = iterator.name;
-
-                // Skip system fields and fields already shown as metadata
-                if (propName == "m_Script" ||
-                    propName == "m_guid" ||    // Backing field for id
-                    propName == "m_position" || // Backing field for position
-                    propName == "typeName")     // Already shown if populated
+                // These are the built-in fields from the base Node class that we don't want to show here.
+                if (property.name == "m_Script" || 
+                    property.name == "m_guid" || 
+                    property.name == "m_position" || 
+                    property.name == "typeName")
                 {
-                    continue;
+                    continue; // Skip these fields
                 }
-                EditorGUILayout.PropertyField(iterator, true); // Draw the property field
-            }
 
-            
-            _nodeEditorVisual.UpdateNode();
-            EditorGUILayout.EndScrollView(); // End scroll view
+                // Draw the property field for all other properties.
+                // This will automatically find 'interval', 'rotationSpeed', 'agentKey', etc.
+                EditorGUILayout.PropertyField(property, true);
 
-            if (_serializedNodeObject.ApplyModifiedProperties()) // If any value changed
+            } while (property.NextVisible(false)); // Move to the next property
+
+            EditorGUILayout.EndScrollView();
+
+            // Apply any changes made in the GUI back to the serialized object
+            if (_serializedNodeObject.ApplyModifiedProperties())
             {
+                // If anything changed, update the visual node in the graph
+                if (_nodeEditorVisual != null)
+                {
+                    _nodeEditorVisual.UpdateNode();
+                }
                 
-                EditorUtility.SetDirty(_targetNode); // Mark the Node SO as dirty to ensure it's saved
-                // Optionally, if changes in this window should repaint the graph view node:
-                // FindObjectOfType<ND_DrawTrelloView>()?.GetEditorNode(_targetNode.id)?.MarkDirtyRepaint();
+                // Mark the node asset as dirty so Unity saves the changes
+                EditorUtility.SetDirty(_targetNode);
             }
         }
     }
