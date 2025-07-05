@@ -1,4 +1,4 @@
-// --- START OF FILE SequenceNode.cs ---
+// --- MODIFIED FILE: SequenceNode.cs ---
 
 namespace ND_BehaviorTree
 {
@@ -14,12 +14,7 @@ namespace ND_BehaviorTree
 
         protected override Status OnProcess()
         {
-            // First, check if decorators allow execution.
-            if (!AreDecoratorsSatisfied())
-            {
-                return Status.Failure;
-            }
-            // Then, tick any attached services.
+            // Tick any attached services.
             TickServices();
 
             if (children.Count == 0) return Status.Success;
@@ -50,4 +45,3 @@ namespace ND_BehaviorTree
         }
     }
 }
-// --- END OF FILE SequenceNode.cs ---

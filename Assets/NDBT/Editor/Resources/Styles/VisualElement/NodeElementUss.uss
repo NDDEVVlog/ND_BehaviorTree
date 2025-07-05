@@ -53,7 +53,7 @@
 /* Style for when the text field is focused for editing */
 .title-textfield:focus {
     background-color: #2F2F2F;
-    border-color: #1A73E8;
+    border-color:rgb(26, 115, 232);
     border-width: 1px;
 }
 
@@ -170,7 +170,7 @@
 
 /* Change the background color based on type */
 .auxiliary-node-editor.decorator-child > .node-border > .main-container {
-    background-color:rgb(0, 204, 255); /* Purplish for Decorators */
+    background-color:rgba(0, 144, 181, 0.58); /* Purplish for Decorators */
 }
 
 .auxiliary-node-editor.service-child > .node-border > .main-container {

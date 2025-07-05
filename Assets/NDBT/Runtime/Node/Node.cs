@@ -6,15 +6,15 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    public abstract class Node: ScriptableObject
-    {   
+    public abstract class Node : ScriptableObject
+    {
         // --- NEW ---
         /// <summary>
         /// A reference to the BehaviorTree instance that owns this node.
         /// This is set at runtime when the tree is cloned. It is not serialized.
         /// </summary>
         [System.NonSerialized] public BehaviorTree ownerTree;
-        
+
         /// <summary>
         /// A convenience property to get the Blackboard associated with this node's owner tree.
         /// Returns null if the node is not part of a tree at runtime.
@@ -43,7 +43,7 @@ namespace ND_BehaviorTree
                 m_guid = Guid.NewGuid().ToString();
             }
         }
-        
+
         public Status Process()
         {
             if (!_isProcessing)
@@ -61,13 +61,13 @@ namespace ND_BehaviorTree
             }
             return status;
         }
-        
+
         public virtual void Reset()
         {
             _isProcessing = false;
             status = Status.Failure;
         }
-        
+
         public virtual Node Clone()
         {
             Node clone = Instantiate(this);
@@ -87,5 +87,6 @@ namespace ND_BehaviorTree
         // --- Editor-only methods ---
         public void SetPosition(Rect newPosition) => m_position = newPosition;
         public void SetNewID(string newID) => m_guid = newID;
+        public Action InteruptAction;
     }
 }

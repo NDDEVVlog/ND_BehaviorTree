@@ -1,10 +1,13 @@
 // --- START OF FILE InverterNode.cs ---
 
+using UnityEngine;
+
 namespace ND_BehaviorTree
 {
-    [NodeInfo("Inverter", "Decorator/Inverter", true, false)]
+    [NodeInfo("Inverter", "Decorator/Inverter", true, true,iconPath:"Assets/NDBT/Icons/Inverter.png")]
     public class InverterNode : DecoratorNode
     {
+        
         protected override Status OnProcess()
         {
             if (child == null)

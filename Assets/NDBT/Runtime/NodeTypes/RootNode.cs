@@ -10,7 +10,7 @@ namespace ND_BehaviorTree
     [NodeInfo("Root",null,false,true, iconPath:"Assets/NDBT/Icons/antivirus.png")]
     public class RootNode : Node
     {
-        [HideInInspector] public Node child;
+         public Node child;
 
         protected override void OnEnter() { }
         protected override void OnExit() { }

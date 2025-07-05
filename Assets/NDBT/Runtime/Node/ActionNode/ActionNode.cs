@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    public abstract class ActionNode : CompositeNode
+    public abstract class ActionNode : Node
     {
         public override void AddChild(Node child) { }
         public override void RemoveChild(Node child) { }

@@ -1,4 +1,4 @@
-// --- START OF FILE AuxiliaryNode.cs ---
+// --- MODIFIED FILE: AuxiliaryNode.cs ---
 
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace ND_BehaviorTree
 {
     public abstract class AuxiliaryNode : Node
     {
-        [HideInInspector] public Node child;
+         public Node child;
 
         // Note: The original SetChild parameter was too specific. 
         // An AuxiliaryNode can decorate any kind of Node.
