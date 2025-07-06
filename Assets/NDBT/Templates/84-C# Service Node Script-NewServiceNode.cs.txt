@@ -1,0 +1,53 @@
+////////////////////////////////////////////////////////////////////////////
+//
+// FB: https://www.facebook.com/profile.php?id=100090693452227
+// Github: https://github.com/NDDEVVlog/ND_BehaviorTree
+//
+////////////////////////////////////////////////////////////////////////////
+
+using UnityEngine;
+using ND_BehaviorTree;
+
+/// <summary>
+/// Service nodes run on a timer in the background as long as their parent 
+/// Composite node is active. They are not part of the main execution flow and are 
+/// used for periodic checks or updates, such as updating a value on the Blackboard.
+/// </summary>
+// Services are attached to Composite nodes and do not appear in the graph directly.
+// The NodeInfo is used for the "Add Service" menu in the Inspector.
+[NodeInfo("#SCRIPTNAME#", "Service/#SCRIPTNAME#", true, false,iconPath:null,isChildOnly:true)]
+public class #SCRIPTNAME# : ServiceNode
+{
+    // --- Public Parameters ---
+    // The 'interval' and 'runOnEnter' variables are inherited from ServiceNode.
+    // You can add your own parameters here.
+    [Tooltip("Example Blackboard key to read data from.")]
+    public Key sourceKey;
+
+    [Tooltip("Example Blackboard key to write data to.")]
+    public Key destinationKey;
+
+
+    // --- Service Logic ---
+
+    // OnTick is the core method of a Service. It is called periodically based on 'interval'
+    // as long as the parent composite node is active. Use it for background checks or updates.
+    protected override void OnTick()
+    {
+        // This is where you'd put your logic, for example:
+        // - Checking if an enemy is in sight.
+        // - Updating a target position on the blackboard.
+        // - Recalculating a value.
+
+        // Debug.Log($"Service '{this.GetType().Name}' ticked at time {Time.time}");
+
+        /*
+        if (sourceKey != null && destinationKey != null && blackboard != null)
+        {
+            var value = blackboard.GetValue<object>(sourceKey.name);
+            // ... process the value ...
+            blackboard.SetValue(destinationKey.name, value);
+        }
+        */
+    }
+}

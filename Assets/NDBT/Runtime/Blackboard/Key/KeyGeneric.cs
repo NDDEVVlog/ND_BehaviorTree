@@ -1,4 +1,4 @@
-// --- MODIFIED FILE: KeyGeneric.cs ---
+// FILE: KeyGeneric.cs
 
 using System;
 using UnityEngine;
@@ -31,25 +31,36 @@ namespace ND_BehaviorTree
             }
         }
 
-        // --- NEW IMPLEMENTATIONS ---
+        // --- THIS IMPLEMENTATION MUST EXIST ---
         public override void SetValueObject(object newValue)
         {
-            // Ensure the object can be cast to type T before setting
+            if (newValue == null)
+            {
+                if (!typeof(T).IsValueType || Nullable.GetUnderlyingType(typeof(T)) != null)
+                {
+                    SetValue((T)newValue);
+                }
+                else
+                {
+                    Debug.LogWarning($"Cannot set value of key '{keyName}' to null because its type '{typeof(T).Name}' is a non-nullable value type.");
+                }
+                return;
+            }
+
             if (newValue is T typedValue)
             {
                 SetValue(typedValue);
             }
-            // Also handle cases where Unity's editor fields might not match exactly (e.g. IntField for a float key)
             else
             {
                 try
                 {
-                    T convertedValue = (T)System.Convert.ChangeType(newValue, typeof(T));
+                    T convertedValue = (T)Convert.ChangeType(newValue, typeof(T));
                     SetValue(convertedValue);
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Failed to set key value. Cannot convert type '{newValue.GetType().Name}' to '{typeof(T).Name}'. Error: {e.Message}");
+                    Debug.LogError($"Failed to set key '{keyName}'. Cannot convert type '{newValue.GetType().Name}' to '{typeof(T).Name}'. Error: {e.Message}", this);
                 }
             }
         }

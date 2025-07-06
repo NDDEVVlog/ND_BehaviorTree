@@ -1,0 +1,68 @@
+////////////////////////////////////////////////////////////////////////////
+//
+// FB: https://www.facebook.com/profile.php?id=100090693452227
+// Github: https://github.com/NDDEVVlog/ND_BehaviorTree
+//
+////////////////////////////////////////////////////////////////////////////
+
+using UnityEngine;
+using ND_BehaviorTree;
+
+/// <summary>
+/// Composite nodes are the branches of the tree. They define the flow of execution 
+/// for their children. Examples include Sequence (executes children in order) 
+/// and Selector (executes children until one succeeds).
+/// </summary>
+
+[NodeInfo("#SCRIPTNAME#", "Composite/#SCRIPTNAME#", true, true,iconPath:null)]
+public class #SCRIPTNAME# : CompositeNode
+{
+    // --- Runtime Variables ---
+    // Composites typically need to track the currently executing child.
+    private int _currentChildIndex = 0;
+
+
+    // --- Lifecycle Methods ---
+
+    // OnEnter is called once when the node is first processed.
+    // A good place to reset the state of the composite.
+    protected override void OnEnter()
+    {
+        _currentChildIndex = 0;
+    }
+
+    // OnProcess is called every frame while the node is in a 'Running' state.
+    // This is where you implement the logic for processing child nodes.
+    protected override Status OnProcess()
+    {
+        // It's good practice to tick any attached services at the start of the process.
+        TickServices();
+        
+        // This is a basic example of Sequence logic.
+        // Modify this loop for your specific composite type (e.g., Selector, Parallel).
+        for (int i = _currentChildIndex; i < children.Count; ++i)
+        {
+            _currentChildIndex = i;
+            var child = children[_currentChildIndex];
+            
+            switch (child.Process())
+            {
+                case Status.Running:
+                    return Status.Running; // If a child is running, the composite is also running.
+                case Status.Success:
+                    continue; // Child succeeded, so move to the next one in the sequence.
+                case Status.Failure:
+                    return Status.Failure; // If any child fails, the entire sequence fails.
+            }
+        }
+
+        // If the loop completes, all children have succeeded.
+        return Status.Success;
+    }
+
+    // OnExit is called once when the node's status is no longer 'Running'.
+    protected override void OnExit()
+    {
+
+    }
+}

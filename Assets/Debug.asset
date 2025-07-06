@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e30e10dae0a048499a4cc3b0964bcbf, type: 3}
+  m_Name: Debug
+  m_EditorClassIdentifier: 
+  m_nodes:
+  - {fileID: 6832501881096210373}
+  - {fileID: 6050191173662216117}
+  - {fileID: 3962311363872186427}
+  rootNode: {fileID: 6832501881096210373}
+  blackboard: {fileID: 0}
+--- !u!114 &3962311363872186427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 2faab530-96b3-4c6e-b4aa-3759d24503f5
+  m_position:
+    serializedVersion: 2
+    x: 532.8
+    y: 220.80002
+    width: 145.60004
+    height: 95.19998
+  typeName: Sequence
+  children:
+  - {fileID: 6050191173662216117}
+  services: []
+--- !u!114 &6050191173662216117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 8c9809ea-80df-4a74-8460-bb0ff920a110
+  m_position:
+    serializedVersion: 2
+    x: 161.6
+    y: 336.80002
+    width: 152
+    height: 95.19998
+  typeName: Debug Log
+  message: Log Message
+  logColor: {r: 0, g: 1, b: 0, a: 1}
+  keyToLog: {fileID: -7088729774540916159, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
+--- !u!114 &6832501881096210373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e11269abd4d414b96e89e1a2ef6079, type: 3}
+  m_Name: Root
+  m_EditorClassIdentifier: 
+  m_guid: 60b0204b-7db0-4ec7-b233-d2b953220523
+  m_position:
+    serializedVersion: 2
+    x: 574.4
+    y: 70.4
+    width: 104
+    height: 95.2
+  typeName: Root
+  child: {fileID: 3962311363872186427}

@@ -28,14 +28,9 @@ namespace ND_BehaviorTree.Editor
         public ND_BehaviorTreeView view;
         public static List<SearchContextElement> elements;
 
-        // --- NEW CONTEXT FIELDS ---
-        // These fields will be set by the GraphView before the search window is opened.
-        private Type m_filterType; // e.g., typeof(DecoratorNode) or typeof(ServiceNode)
-        private CompositeNode m_parentCompositeNode; // The node to which a child will be added.
+        private Type m_filterType;
+        private CompositeNode m_parentCompositeNode;
 
-        /// <summary>
-        /// Initializes the provider with a specific context for adding child nodes.
-        /// </summary>
         public void Initialize(ND_BehaviorTreeView graphView, CompositeNode parent, Type filterType)
         {
             this.view = graphView;
@@ -43,20 +38,20 @@ namespace ND_BehaviorTree.Editor
             this.m_filterType = filterType;
         }
 
-        /// <summary>
-        /// Initializes the provider for general node creation.
-        /// </summary>
         public void Initialize(ND_BehaviorTreeView graphView)
         {
             this.view = graphView;
-            this.m_parentCompositeNode = null; // Ensure context is cleared
-            this.m_filterType = null;      // Ensure context is cleared
+            // --- CRITICAL FIX ---
+            // Reset the context to null. This prevents the filter from the 
+            // "Add Service" action from leaking into the general "Create Node" action.
+            this.m_parentCompositeNode = null;
+            this.m_filterType = null;
         }
 
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
             List<SearchTreeEntry> tree = new List<SearchTreeEntry>();
-            string title = m_filterType == null ? "Nodes" : m_filterType.Name.Replace("Node", "s");
+            string title = m_filterType == null ? "Create Node" : $"Add {m_filterType.Name.Replace("Node", "")}";
             tree.Add(new SearchTreeGroupEntry(new GUIContent(title), 0));
 
             elements = new List<SearchContextElement>();
@@ -70,15 +65,12 @@ namespace ND_BehaviorTree.Editor
                         if (!typeof(ND_BehaviorTree.Node).IsAssignableFrom(type) || type.IsAbstract)
                             continue;
                         
-                        // --- FILTERING LOGIC ---
-                        // If a filter is active, only include types that match the filter.
                         if (m_filterType != null && !m_filterType.IsAssignableFrom(type))
                             continue;
                         
                         var attribute = type.GetCustomAttribute<NodeInfoAttribute>();
                         if (attribute != null)
                         {
-                            // If NOT in filter mode, skip child-only nodes. In filter mode, we WANT them.
                             if (m_filterType == null && attribute.isChildOnly) 
                                 continue;
 
@@ -93,10 +85,27 @@ namespace ND_BehaviorTree.Editor
                 catch { /* Ignore assemblies that cause errors */ }
             }
 
-            // Sorting logic remains the same
-            //elements.Sort((entry1, entry2) => { /* ... your sorting logic ... */ });
+            // Sorting logic from original
+            elements.Sort((a, b) =>
+            {
+                var aSplits = a.title.Split('/');
+                var bSplits = b.title.Split('/');
+                for (var i = 0; i < aSplits.Length; i++)
+                {
+                    if (i >= bSplits.Length)
+                        return 1;
+                    var result = string.Compare(aSplits[i], bSplits[i], StringComparison.Ordinal);
+                    if (result != 0)
+                    {
+                        if (aSplits.Length != bSplits.Length && (i == aSplits.Length - 1 || i == bSplits.Length - 1))
+                            return bSplits.Length.CompareTo(aSplits.Length);
+                        return result;
+                    }
+                }
+                return 0;
+            });
 
-            // Tree building logic remains mostly the same
+            // Tree building logic
             List<string> groups = new List<string>();
             foreach (SearchContextElement element in elements)
             {
@@ -127,7 +136,6 @@ namespace ND_BehaviorTree.Editor
             SearchContextElement searchElement = (SearchContextElement)searchTreeEntry.userData;
             Type nodeDataType = searchElement.target.GetType();
 
-            // --- CONTEXT-AWARE NODE CREATION ---
              if (m_parentCompositeNode != null && typeof(ServiceNode).IsAssignableFrom(nodeDataType))
             {
                 Undo.RecordObject(view.BTree, "Add Service");
@@ -144,7 +152,6 @@ namespace ND_BehaviorTree.Editor
             }
             else
             {
-                // We are in "Normal" mode. Create a node at the mouse position.
                 Vector2 windowLocalMousePosition = context.screenMousePosition - view.EditorWindow.position.position;
                 Vector2 graphMousePosition = view.contentViewContainer.WorldToLocal(windowLocalMousePosition);
                 

@@ -1,0 +1,55 @@
+////////////////////////////////////////////////////////////////////////////
+//
+// FB: https://www.facebook.com/profile.php?id=100090693452227
+// Github: https://github.com/NDDEVVlog/ND_BehaviorTree
+//
+////////////////////////////////////////////////////////////////////////////
+
+using UnityEngine;
+using ND_BehaviorTree;
+
+/// <summary>
+/// Action nodes are the leaves of the tree. They perform the actual work, 
+/// such as moving, attacking, or playing an animation. They do not have 
+/// children and return a status of Success, Failure, or Running.
+/// </summary>
+[NodeInfo("#SCRIPTNAME#", "Action/#SCRIPTNAME#", true, false,iconPath:null)]
+public class #SCRIPTNAME# : ActionNode
+{
+    // --- Public Parameters ---
+    // These variables will be exposed in the Inspector.
+    // Use [Tooltip] for clear instructions.
+    [Tooltip("An example float parameter.")]
+    public float myParameter = 1.0f;
+
+
+    // --- Lifecycle Methods ---
+
+    // OnEnter is called once when the node is first processed.
+    // Use it for initialization and setup.
+    protected override void OnEnter()
+    {
+
+    }
+
+    // OnProcess is called every frame while the node is in a 'Running' state.
+    // This is where the core logic of the action resides.
+    protected override Status OnProcess()
+    {
+        // Return Running while the action is in progress.
+        return Status.Running;
+
+        // Return Success when the action has completed successfully.
+        // return Status.Success;
+
+        // Return Failure if the action cannot be completed.
+        // return Status.Failure;
+    }
+
+    // OnExit is called once when the node's status is no longer 'Running'.
+    // Use it for cleanup, regardless of whether the node succeeded, failed, or was aborted.
+    protected override void OnExit()
+    {
+
+    }
+}

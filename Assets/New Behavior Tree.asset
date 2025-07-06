@@ -83,10 +83,10 @@ MonoBehaviour:
   m_guid: f5c2437a-8578-459f-a8c1-dc6f72a7a14c
   m_position:
     serializedVersion: 2
-    x: -191.36003
-    y: 462.76004
-    width: 150
-    height: 100
+    x: 130.4
+    y: 871.2
+    width: 104
+    height: 95.20001
   typeName: Wait
   duration: 1
 --- !u!114 &-7763610794587752485
@@ -194,8 +194,8 @@ MonoBehaviour:
   m_guid: c5d428e5-befb-4a33-9175-d2b42a61326f
   m_position:
     serializedVersion: 2
-    x: 694.4
-    y: 445.6
+    x: 708
+    y: 458.4
     width: 156
     height: 95.19998
   typeName: 'Debug Log '
@@ -321,6 +321,7 @@ MonoBehaviour:
   children:
   - {fileID: -8507657268125193687}
   - {fileID: 4431982504864138000}
+  - {fileID: -8004918067813455359}
   services: []
 --- !u!114 &1756551281706341290
 MonoBehaviour:
@@ -400,10 +401,10 @@ MonoBehaviour:
   m_guid: e8fcc53a-7f3e-4b09-a150-2e9709029a75
   m_position:
     serializedVersion: 2
-    x: 448
-    y: 624.8
-    width: 196.79999
-    height: 95.20001
+    x: 348.80002
+    y: 458.4
+    width: 196.80002
+    height: 95.19998
   typeName: Debug Log Node
   message: Patrol While not see Player
   logColor: {r: 1, g: 0.31988478, b: 0, a: 1}
@@ -618,6 +619,7 @@ MonoBehaviour:
   typeName: Sequence
   children:
   - {fileID: 151498456585129743}
+  - {fileID: 3663933074772702008}
   - {fileID: -1989877659467410051}
   services: []
 --- !u!114 &8296736583185632715

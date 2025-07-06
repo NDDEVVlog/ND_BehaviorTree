@@ -80,4 +80,4 @@ MonoBehaviour:
   keyName: IsSawPlayer
   category: 
   description: 
-  value: 0
+  value: 1
