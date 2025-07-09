@@ -1,0 +1,68 @@
+/* --- InventoryStyles.uss (Complete Code) --- */
+
+/* Main container styling */
+.inventory-container {
+    position: absolute;
+    background-color: rgba(20, 25, 30, 0.8);
+    border-color: rgb(150, 150, 150);
+    border-width: 2px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.inventory-title {
+    -unity-font-style: bold;
+    font-size: 20px;
+    color: white;
+    -unity-text-align: upper-center;
+    margin: 5px;
+    flex-shrink: 0;
+}
+
+#InventoryScrollView {
+    flex-grow: 1;
+}
+
+#InventoryScrollView > .unity-scroll-view__content-container {
+    display: flex;
+    flex-grow: 1;
+}
+
+.inventory-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+    align-content: flex-start;
+}
+
+/* A single slot in the grid */
+.inventory-slot {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.1);
+    border-width: 1px;
+
+    /* --- THESE LINES CENTER THE ITEMS --- */
+    align-items: center;
+    justify-content: center;
+}
+
+.inventory-slot:hover { background-color: rgba(0, 0, 0, 0.6); }
+.slot-highlight-can-drop { background-color: rgba(0, 255, 0, 0.3); }
+.slot-highlight-cannot-drop { background-color: rgba(255, 0, 0, 0.3); }
+
+.inventory-item { 
+    position: absolute; 
+    background-color: rgba(100, 150, 255, 0.7); 
+    border-width: 2px; 
+    border-color: rgb(200, 220, 255); 
+    picking-mode: Position; 
+}
+
+.inventory-item-icon { width: 100%; height: 100%; picking-mode: Ignore; }
+.inventory-item:hover { border-color: yellow; }
+.inventory-item--dragging { opacity: 0.7; border-color: white; scale: 1.05 1.05; }
+
+.context-menu { position: absolute; background-color: rgb(40, 45, 50); border-color: rgb(180, 180, 180); border-width: 1px; border-radius: 5px; padding: 5px; }
+.context-menu-button { background-color: transparent; color: white; border-width: 0; -unity-text-align: middle-left; padding-left: 10px; margin: 2px 0; }
+.context-menu-button:hover { background-color: rgb(80, 120, 200); }
