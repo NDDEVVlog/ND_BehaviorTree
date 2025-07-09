@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7e3863bb8662c488555043ae13760d, type: 3}
+  m_Name: New Inventory Item Scriptable Object
+  m_EditorClassIdentifier: 
+  itemMappers:
+  - Name: Time
+    ID: 0
+    Description: 
+    itemType: 0
+    useActionType: 0
+    itemSprite: {fileID: 21300000, guid: ae7a137fe273461498b2ac48b6afb50b, type: 3}
+    rows: 1
+    columns: 2
+    bool1DData: 0101
+    boolArray2D:
+      rows: 1
+      columns: 2
+      dataArray: 0101
+    DropObject:
+      GUID: 
+      Object: {fileID: 0}
+    PackDropObject:
+      GUID: 
+      Object: {fileID: 0}
+    itemToggles:
+      isStackable: 0
+      isUsable: 0
+      isCombinable: 0
+      isDroppable: 0
+      isRemovable: 0
+      restoreStamina: 0
+      canExamine: 0
+      canBindShortcut: 0
+      combineAddItem: 0
+      combineKeepItem: 0
+      combineShowItem: 0
+      showItemOnUse: 0
+      bagDescription: 0
+      doActionUse: 0
+      doActionCombine: 0
+    itemSounds:
+      useSound: {fileID: 0}
+      useVolume: 1
+      combineSound: {fileID: 0}
+      combineVolume: 1
+    itemSettings:
+      maxStackAmount: 0
+      useSwitcherID: -1
+      healAmount: 0
+      staminaAmount: 0
+      examineRotation: {x: 0, y: 0, z: 0}
+    useActionSettings:
+      triggerValue: 0
+      triggerItemID: 0
+      triggerCustomValue: 
+      actionRemove: 0
+      actionAddItem: 0
+      actionRestrictUse: 0
+      actionRestrictCombine: 0
+    combineSettings: []
+    localizationSettings:
+      titleKey: 
+      descriptionKey: 
+  - Name: HAHA
+    ID: 1
+    Description: 
+    itemType: 0
+    useActionType: 0
+    itemSprite: {fileID: 21300000, guid: 3feee3cadaea79f4a9d1a15b42083ec2, type: 3}
+    rows: 1
+    columns: 1
+    bool1DData: 01
+    boolArray2D:
+      rows: 1
+      columns: 1
+      dataArray: 01
+    DropObject:
+      GUID: 
+      Object: {fileID: 0}
+    PackDropObject:
+      GUID: 
+      Object: {fileID: 0}
+    itemToggles:
+      isStackable: 0
+      isUsable: 0
+      isCombinable: 0
+      isDroppable: 0
+      isRemovable: 0
+      restoreStamina: 0
+      canExamine: 0
+      canBindShortcut: 0
+      combineAddItem: 0
+      combineKeepItem: 0
+      combineShowItem: 0
+      showItemOnUse: 0
+      bagDescription: 0
+      doActionUse: 0
+      doActionCombine: 0
+    itemSounds:
+      useSound: {fileID: 0}
+      useVolume: 1
+      combineSound: {fileID: 0}
+      combineVolume: 1
+    itemSettings:
+      maxStackAmount: 0
+      useSwitcherID: -1
+      healAmount: 0
+      staminaAmount: 0
+      examineRotation: {x: 0, y: 0, z: 0}
+    useActionSettings:
+      triggerValue: 0
+      triggerItemID: 0
+      triggerCustomValue: 
+      actionRemove: 0
+      actionAddItem: 0
+      actionRestrictUse: 0
+      actionRestrictCombine: 0
+    combineSettings: []
+    localizationSettings:
+      titleKey: 
+      descriptionKey: 
