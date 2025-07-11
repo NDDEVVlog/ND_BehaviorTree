@@ -23,6 +23,8 @@ namespace ND_BehaviorTree
         // Runtime state for a cloned tree
         private Node.Status treeStatus = Node.Status.Running;
 
+        public GameObject self;
+
         public Node.Status Update()
         {
             if (rootNode == null) return Node.Status.Failure;

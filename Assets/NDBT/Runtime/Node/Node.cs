@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ND_BehaviorTree
 {
     public abstract class Node : ScriptableObject
-    {
+    {   
         // --- NEW ---
         /// <summary>
         /// A reference to the BehaviorTree instance that owns this node.

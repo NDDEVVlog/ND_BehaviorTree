@@ -202,6 +202,28 @@ MonoBehaviour:
   message: InvertFalse
   logColor: {r: 0, g: 1, b: 0, a: 1}
   keyToLog: {fileID: 0}
+--- !u!114 &-1976629899421783870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d67cd865d22a64da57a11976202473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 0ceaff0a-e0c6-49c4-9cef-58d32b1dff7f
+  m_position:
+    serializedVersion: 2
+    x: 152.34782
+    y: 582.95654
+    width: 150
+    height: 100
+  typeName: AnimationEventAction
+  animationID: 
+  animationEventHub: {fileID: 0}
 --- !u!114 &-401080771899902491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,8 +294,10 @@ MonoBehaviour:
   - {fileID: 508742229169387133}
   - {fileID: 4431982504864138000}
   - {fileID: -8004918067813455359}
+  - {fileID: -1976629899421783870}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
+  self: {fileID: 0}
 --- !u!114 &151498456585129743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,9 +313,9 @@ MonoBehaviour:
   m_guid: 9658a66f-4b4f-498f-ba0c-5b1cd7cf0d2f
   m_position:
     serializedVersion: 2
-    x: 84.799995
+    x: 56
     y: 442.4
-    width: 133.6
+    width: 133.59999
     height: 95.19998
   typeName: Selector
   children:
@@ -338,8 +362,8 @@ MonoBehaviour:
   m_guid: 14cca445-6cc2-4085-815b-2690b9ca19ba
   m_position:
     serializedVersion: 2
-    x: 292.80002
-    y: -16
+    x: 357.6
+    y: -13.6
     width: 145.6
     height: 95.2
   typeName: RootNode
@@ -407,7 +431,7 @@ MonoBehaviour:
     height: 95.19998
   typeName: Debug Log Node
   message: Patrol While not see Player
-  logColor: {r: 1, g: 0.31988478, b: 0, a: 1}
+  logColor: {r: 1, g: 0.9802058, b: 0, a: 1}
   keyToLog: {fileID: 0}
 --- !u!114 &4431982504864138000
 MonoBehaviour:
