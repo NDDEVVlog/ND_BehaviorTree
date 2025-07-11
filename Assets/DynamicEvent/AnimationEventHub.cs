@@ -1,12 +1,10 @@
-// --- START OF FILE AnimationEventHub.cs (Corrected) ---
-
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
-// Your MonoBehaviour MUST inherit from SerializedMonoBehaviour for Odin to take full control.
+
 public class AnimationEventHub : SerializedMonoBehaviour
 {
     public string eventToAction;

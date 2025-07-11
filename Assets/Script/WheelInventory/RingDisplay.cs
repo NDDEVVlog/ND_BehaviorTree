@@ -1,0 +1,153 @@
+// --- START OF FILE RingDisplay.cs ---
+
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+[ExecuteAlways]
+[RequireComponent(typeof(UIDocument))]
+public class RingDisplay : MonoBehaviour
+{
+    // --- Layout Settings ---
+    [Header("Layout")]
+    [Range(0, 360)] public float wheelRotation = 0f;
+
+    [Header("Wheel Shape")]
+    [Min(0)] public float innerRadius = 50f;
+    [Min(1)] public float outerRadius = 150f;
+    [Range(3, 128)] public int segmentsPerSlice = 32;
+    public Color defaultColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
+    public Color hoverColor = Color.white;
+
+    [Header("Gaps")]
+    [Tooltip("Create gaps by leaving an angular space between slices.")]
+    [Range(0, 0.1f)] public float percentageOfGapPerPie = 0.01f;
+    [Tooltip("Create gaps by shaving off the sides of each slice, creating a straight edge.")]
+    public bool rectangularGaps = false;
+    [Tooltip("The width of the rectangular gap in pixels.")]
+    [Min(0)] public float gapWidth = 5f;
+
+    [Header("Edge Settings")]
+    [Tooltip("Show a border around each slice.")]
+    public bool showEdge = true;
+    [Tooltip("The width of the border around each slice.")]
+    [Min(0)] public float edgeWidth = 2f;
+    [Tooltip("The color of the border around each slice.")]
+    public Color edgeColor = Color.black;
+
+    [Header("Interaction")]
+    [Tooltip("Adds extra padding (in degrees) to the hit detection area of each slice, making them easier to select.")]
+    [Range(0, 10)] public float hitAnglePadding = 2.0f;
+
+    [Header("Icon & Text Settings")]
+    public bool scaleIconWithSliceSize = true;
+    [Min(1)] public float iconBaseSize = 40f;
+    [Min(0)] public float iconSizeMultiplier = 1.0f;
+
+    [Header("Inventory Items")]
+    public List<WheelItem> items;
+
+    private UIDocument uiDoc;
+    private VisualElement root;
+    private List<RingElement> ringElements = new List<RingElement>();
+
+    void OnEnable()
+    {
+        uiDoc = GetComponent<UIDocument>();
+        if (uiDoc?.rootVisualElement == null) return;
+        
+        root = uiDoc.rootVisualElement;
+        root.style.flexGrow = 1;
+        root.style.justifyContent = Justify.Center;
+        root.style.alignItems = Align.Center;
+
+        RebuildWheel();
+    }
+    
+    void OnValidate()
+    {
+        if (Application.isPlaying) return;
+        if (root != null && items != null)
+        {
+            #if UNITY_EDITOR
+            UnityEditor.EditorApplication.delayCall += RebuildWheel;
+            #endif
+        }
+    }
+
+    public void RebuildWheel()
+    {
+        if (root == null || items == null) return;
+
+        root.Clear();
+        ringElements.Clear();
+
+        if (items.Count == 0) return;
+
+        float totalPercentage = items.Sum(item => item.percentageOccupied);
+        if (totalPercentage <= 0) totalPercentage = 1;
+        
+        // If using rectangular gaps, we don't leave an angular space between slices.
+        float gapAngle = rectangularGaps ? 0f : percentageOfGapPerPie * 360f;
+        float totalGapPercentage = items.Count * (gapAngle / 360f);
+
+        float availablePiePercentage = 1.0f - totalGapPercentage;
+        if (availablePiePercentage < 0) availablePiePercentage = 0;
+        
+        float currentAngle = this.wheelRotation;
+
+        foreach (var item in items)
+        {
+            float normalizedPercentage = item.percentageOccupied / totalPercentage;
+            float sliceAngle = normalizedPercentage * availablePiePercentage * 360f;
+
+            float finalIconSize = this.iconBaseSize;
+            if (scaleIconWithSliceSize)
+            {
+                float scaleFactor = sliceAngle / 36.0f; // Base scale on a 36-degree slice
+                finalIconSize = this.iconBaseSize * scaleFactor * this.iconSizeMultiplier;
+            }
+
+            // Create the element first, then set properties.
+            // This avoids potential race conditions with object initializers in the editor that caused the NullReferenceException.
+            var ringElement = new RingElement();
+            
+            // Shape
+            ringElement.startAngle = currentAngle;
+            ringElement.endAngle = currentAngle + sliceAngle;
+            ringElement.innerRadius = this.innerRadius;
+            ringElement.outerRadius = this.outerRadius;
+            ringElement.segments = this.segmentsPerSlice;
+            
+            // Content
+            ringElement.itemName = item.itemName;
+            ringElement.itemIcon = item.itemIcon;
+            ringElement.iconSize = finalIconSize;
+            
+            // Style & Interaction
+            ringElement.defaultColor = this.defaultColor;
+            ringElement.hoverColor = this.hoverColor;
+            ringElement.hitAnglePadding = this.hitAnglePadding;
+
+            // Edge properties
+            ringElement.showEdge = this.showEdge;
+            ringElement.edgeWidth = this.edgeWidth;
+            ringElement.edgeColor = this.edgeColor;
+            
+            // Pass gap info to the element for rectangular gap drawing
+            if (this.rectangularGaps)
+            {
+                // We pass half the gap width, as each slice will handle its own side.
+                (ringElement as IRectangularGap).halfGapWidth = this.gapWidth / 2f;
+            }
+            
+            root.Add(ringElement);
+            ringElements.Add(ringElement);
+            
+            currentAngle += sliceAngle + gapAngle;
+        }
+    }
+}
+
+// --- END OF FILE RingDisplay.cs ---

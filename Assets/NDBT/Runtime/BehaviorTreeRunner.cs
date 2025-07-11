@@ -24,7 +24,7 @@ public class BehaviorTreeRunner : MonoBehaviour
 
         // 1. Clone the asset to create a runtime instance for this agent
         RuntimeTree = treeAsset.Clone();
-
+        RuntimeTree.self = this.gameObject;
         // 2. If there is an override blackboard, clone it and replace the default one
         //    This must happen BEFORE Init() so we populate the correct blackboard.
         if (blackboardOverride != null)
