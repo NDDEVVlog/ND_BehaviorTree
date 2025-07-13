@@ -96,8 +96,11 @@ namespace ND_BehaviorTree.Editor
                 EditorGUILayout.PropertyField(typeNameProp, new GUIContent("Display Name"));
             }
             EditorGUILayout.Space(10);
-
-
+            //SerializedProperty priorityProp = _serializedNodeObject.FindProperty("priority");
+            // if (priorityProp != null)
+            // {
+            //     EditorGUILayout.PropertyField(priorityProp, new GUIContent("Priority"));
+            // }
             // --- THE CORE FIX: Iterate and draw all visible properties ---
             EditorGUILayout.LabelField("Node-Specific Properties", EditorStyles.boldLabel);
 

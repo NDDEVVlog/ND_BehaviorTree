@@ -20,6 +20,7 @@ MonoBehaviour:
     width: 174.4
     height: 144.79999
   typeName: SelectorNode
+  priority: 0
   children:
   - {fileID: 0}
   - {fileID: 0}
@@ -44,6 +45,7 @@ MonoBehaviour:
     width: 92.79999
     height: 169.59998
   typeName: YEY
+  priority: 0
   duration: 1
 --- !u!114 &-8507657268125193687
 MonoBehaviour:
@@ -65,6 +67,7 @@ MonoBehaviour:
     width: 178.40001
     height: 95.20007
   typeName: Move To Transform
+  priority: 0
   agentKey: {fileID: -5823742072851934633, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   targetTransformKey: {fileID: 2840027302853802495, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   updateInterval: 0.25
@@ -88,6 +91,7 @@ MonoBehaviour:
     width: 104
     height: 95.20007
   typeName: Wait
+  priority: 0
   duration: 3
 --- !u!114 &-7763610794587752485
 MonoBehaviour:
@@ -109,7 +113,33 @@ MonoBehaviour:
     width: 938.4
     height: 95.19998
   typeName: RootNode
+  priority: 0
   child: {fileID: 0}
+--- !u!114 &-6651424988616651699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 4b399e8e-f67e-45a8-a585-926686c11ce7
+  m_position:
+    serializedVersion: 2
+    x: 804
+    y: 621.6
+    width: 145.60004
+    height: 95.20001
+  typeName: Sequence
+  priority: 50
+  children:
+  - {fileID: 6656066396069085764}
+  - {fileID: 2524751930976590589}
+  services: []
 --- !u!114 &-6539698401506606500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +161,7 @@ MonoBehaviour:
     height: 127.20001
   typeName: ND_BehaviorTree.DebugLogNode, ND_BehaviorTree.Runtime, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
+  priority: 0
   message: Testing One Go
   logColor: {r: 0, g: 1, b: 0, a: 1}
   keyToLog: {fileID: 0}
@@ -154,6 +185,7 @@ MonoBehaviour:
     width: 152
     height: 95.20007
   typeName: Debug Log
+  priority: 0
   message: Waiting Complete
   logColor: {r: 0, g: 1, b: 0, a: 1}
   keyToLog: {fileID: 0}
@@ -178,6 +210,7 @@ MonoBehaviour:
     height: 127.20001
   typeName: ND_BehaviorTree.WaitNode, ND_BehaviorTree.Runtime, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
+  priority: 0
   duration: 3
 --- !u!114 &-4954077461064157185
 MonoBehaviour:
@@ -199,6 +232,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Check If See Player Or Not
+  priority: 0
   child: {fileID: 0}
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   shouldInvert: 0
@@ -222,6 +256,7 @@ MonoBehaviour:
     width: 242.40001
     height: 95.20007
   typeName: SetBooleanValueNode
+  priority: 0
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   ValueToSet: 0
 --- !u!114 &-401080771899902491
@@ -239,11 +274,12 @@ MonoBehaviour:
   m_guid: cfce0746-5c34-411f-85a3-9cf6d5be0171
   m_position:
     serializedVersion: 2
-    x: 206.4
-    y: 715.2
-    width: 139.2
-    height: 95.20001
+    x: 271.2
+    y: 706.4
+    width: 139.20001
+    height: 95.19995
   typeName: Random Patrol
+  priority: 0
   patrolRadius: 50
   agentKey: {fileID: -5823742072851934633, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
 --- !u!114 &-327562354993633928
@@ -266,6 +302,7 @@ MonoBehaviour:
     width: 150
     height: 100
   typeName: InverterNode
+  priority: 0
   child: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -293,7 +330,13 @@ MonoBehaviour:
   - {fileID: -8004918067813455359}
   - {fileID: -2349795449894800531}
   - {fileID: -5319130462426747241}
-  - {fileID: 5340269804307229621}
+  - {fileID: 2090826141494235995}
+  - {fileID: -6651424988616651699}
+  - {fileID: 8649712526444436019}
+  - {fileID: 6656066396069085764}
+  - {fileID: 2615224446453704244}
+  - {fileID: 2524751930976590589}
+  - {fileID: 1788777279908683041}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   Self: {fileID: 0}
@@ -316,7 +359,8 @@ MonoBehaviour:
     y: 442.4
     width: 133.6
     height: 95.19998
-  typeName: Selector
+  typeName: Selector go to Player or Random
+  priority: 0
   children:
   - {fileID: 6696274325822658715}
   - {fileID: 5095769259417961374}
@@ -341,6 +385,7 @@ MonoBehaviour:
     width: 264
     height: 95.20001
   typeName: Move to TargetSequence
+  priority: 0
   children:
   - {fileID: -8507657268125193687}
   - {fileID: -8004918067813455359}
@@ -362,12 +407,37 @@ MonoBehaviour:
   m_guid: 14cca445-6cc2-4085-815b-2690b9ca19ba
   m_position:
     serializedVersion: 2
-    x: 322.40002
-    y: -44.8
-    width: 145.59998
+    x: 521.6
+    y: 6.4000015
+    width: 145.60004
     height: 95.200005
   typeName: RootNode
+  priority: 0
   child: {fileID: 6722135165623225885}
+--- !u!114 &1788777279908683041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: dba3b2e6-cebb-41c9-88b2-05c8dced18d5
+  m_position:
+    serializedVersion: 2
+    x: 1375.2
+    y: 745.6
+    width: 152
+    height: 95.20001
+  typeName: Debug Log
+  priority: 0
+  message: Rate 10
+  logColor: {r: 1, g: 1, b: 1, a: 1}
+  keyToLog: {fileID: 0}
 --- !u!114 &2073797547765222488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,7 +458,34 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
+  priority: 0
   child: {fileID: 0}
+--- !u!114 &2090826141494235995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e973a3690214846aa7732866bfc6d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: f78cfddd-9e49-4a54-8bcd-bc2a859bf8ec
+  m_position:
+    serializedVersion: 2
+    x: 905.60004
+    y: 458.4
+    width: 240
+    height: 95.19998
+  typeName: GachaSelector xD
+  priority: 0
+  children:
+  - {fileID: -6651424988616651699}
+  - {fileID: 8649712526444436019}
+  services: []
+  weightingMode: 1
 --- !u!114 &2249366901889051599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,7 +506,54 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
+  priority: 0
   child: {fileID: 0}
+--- !u!114 &2524751930976590589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: eb3dc14c-41d5-4ab2-96ab-842b20a96975
+  m_position:
+    serializedVersion: 2
+    x: 941.60004
+    y: 769.6
+    width: 152
+    height: 95.20001
+  typeName: Debug Log
+  priority: 0
+  message: 'Rate 50 '
+  logColor: {r: 0.2618456, g: 0, b: 1, a: 1}
+  keyToLog: {fileID: 0}
+--- !u!114 &2615224446453704244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: e9cef4d5-4ea5-4bbc-9679-f8e1423908a1
+  m_position:
+    serializedVersion: 2
+    x: 1125.6
+    y: 745.6
+    width: 104
+    height: 95.20001
+  typeName: Wait
+  priority: 0
+  duration: 1
 --- !u!114 &5095769259417961374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,35 +569,15 @@ MonoBehaviour:
   m_guid: 04b7c718-a7af-428f-9bc5-d2aa30cf69a7
   m_position:
     serializedVersion: 2
-    x: 136.8
-    y: 589.6
+    x: 201.59999
+    y: 580.8
     width: 265.6
     height: 95.20001
   typeName: Check Condition Variable
+  priority: 0
   child: {fileID: -401080771899902491}
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   shouldInvert: 1
---- !u!114 &5340269804307229621
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 0f702836-28a2-47f7-baa7-736a1711d0f0
-  m_position:
-    serializedVersion: 2
-    x: 652.8
-    y: 458.4
-    width: 104
-    height: 95.19998
-  typeName: Wait
-  duration: 3
 --- !u!114 &5608220019986678229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,6 +598,7 @@ MonoBehaviour:
     width: 151.19995
     height: 144.79999
   typeName: Debug LogNode
+  priority: 0
   message: Log Message
   logColor: {r: 0, g: 1, b: 0, a: 1}
   keyToLog: {fileID: 0}
@@ -497,9 +622,32 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: CheckConditionVariableNode
+  priority: 0
   child: {fileID: 0}
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   shouldInvert: 0
+--- !u!114 &6656066396069085764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: cb064ea3-e30a-4d3a-8e20-1d6ff275db3b
+  m_position:
+    serializedVersion: 2
+    x: 676
+    y: 761.6
+    width: 104
+    height: 95.20001
+  typeName: Wait
+  priority: 0
+  duration: 1
 --- !u!114 &6696274325822658715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,7 +667,8 @@ MonoBehaviour:
     y: 573.6
     width: 257.6
     height: 95.20001
-  typeName: CheckConditionVariable
+  typeName: Check if See Player
+  priority: 0
   child: {fileID: 508742229169387133}
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   shouldInvert: 0
@@ -538,11 +687,12 @@ MonoBehaviour:
   m_guid: bc26a3b7-851d-438c-835d-34a1bf8202ec
   m_position:
     serializedVersion: 2
-    x: 301.6
-    y: 92
-    width: 233.6
+    x: 484
+    y: 129.6
+    width: 233.59998
     height: 169.6
   typeName: Selector
+  priority: 0
   children:
   - {fileID: 8050742415459131951}
   services:
@@ -567,6 +717,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: LookTo Target Direction
+  priority: 0
   child: {fileID: 0}
   interval: 1
   runOnEnter: 1
@@ -593,6 +744,7 @@ MonoBehaviour:
     height: 139.20001
   typeName: ND_BehaviorTree.SelectorNode, ND_BehaviorTree.Runtime, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
+  priority: 0
   children:
   - {fileID: -6539698401506606500}
   services: []
@@ -611,14 +763,15 @@ MonoBehaviour:
   m_guid: dba88620-754d-4b3e-ad17-fb6c816956da
   m_position:
     serializedVersion: 2
-    x: 341.6
-    y: 272
-    width: 145.6
-    height: 95.20001
+    x: 537.6
+    y: 327.2
+    width: 145.60004
+    height: 95.19998
   typeName: Sequence
+  priority: 0
   children:
   - {fileID: 151498456585129743}
-  - {fileID: 5340269804307229621}
+  - {fileID: 2090826141494235995}
   services: []
 --- !u!114 &8296736583185632715
 MonoBehaviour:
@@ -640,7 +793,33 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: InverterNode
+  priority: 0
   child: {fileID: 0}
+--- !u!114 &8649712526444436019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: eaccafe2-81e0-4b21-a5dd-5230d494f430
+  m_position:
+    serializedVersion: 2
+    x: 1221.6
+    y: 605.6
+    width: 145.59998
+    height: 95.20001
+  typeName: Sequence
+  priority: 10
+  children:
+  - {fileID: 2615224446453704244}
+  - {fileID: 1788777279908683041}
+  services: []
 --- !u!114 &8920281827989162788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -661,6 +840,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: HEHE
+  priority: 0
   child: {fileID: 0}
 --- !u!114 &8927748736263858789
 MonoBehaviour:
@@ -683,4 +863,5 @@ MonoBehaviour:
     height: 100
   typeName: ND_BehaviorTree.WaitNode, ND_BehaviorTree.Runtime, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
+  priority: 0
   duration: 5
