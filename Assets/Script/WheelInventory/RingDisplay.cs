@@ -1,5 +1,3 @@
-// --- START OF FILE RingDisplay.cs ---
-
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,8 +8,11 @@ using UnityEngine.UIElements;
 public class RingDisplay : MonoBehaviour
 {
     // --- Layout Settings ---
-    [Header("Layout")]
+    [Header("Layout")]  
     [Range(0, 360)] public float wheelRotation = 0f;
+    
+    [Header("Inventory Items")]
+    public List<WheelItem> items;
 
     [Header("Wheel Shape")]
     [Min(0)] public float innerRadius = 50f;
@@ -39,14 +40,26 @@ public class RingDisplay : MonoBehaviour
     [Header("Interaction")]
     [Tooltip("Adds extra padding (in degrees) to the hit detection area of each slice, making them easier to select.")]
     [Range(0, 10)] public float hitAnglePadding = 2.0f;
+    [Range(0, 1)] public float hoverRangeMin = 0.5f;
 
     [Header("Icon & Text Settings")]
     public bool scaleIconWithSliceSize = true;
     [Min(1)] public float iconBaseSize = 40f;
     [Min(0)] public float iconSizeMultiplier = 1.0f;
+    [Tooltip("Font size for the item name text.")]
+    [Min(1)] public float textSize = 14f;
 
-    [Header("Inventory Items")]
-    public List<WheelItem> items;
+    [Header("Hover Line Settings")]
+    [Tooltip("Enable or disable the hover line feature.")]
+    public bool enableHoverLine = false;
+    [Tooltip("Width of the hover line.")]
+    [Min(1)] public float hoverLineWidth = 2f;
+    [Tooltip("Color of the hover line.")]
+    public Color hoverLineColor = Color.white;
+    [Tooltip("Width of the hover line outline.")]
+    [Min(1)] public float hoverLineOutlineWidth = 3f;
+    [Tooltip("Color of the hover line outline.")]
+    public Color hoverLineOutlineColor = Color.black;
 
     private UIDocument uiDoc;
     private VisualElement root;
@@ -88,7 +101,6 @@ public class RingDisplay : MonoBehaviour
         float totalPercentage = items.Sum(item => item.percentageOccupied);
         if (totalPercentage <= 0) totalPercentage = 1;
         
-        // If using rectangular gaps, we don't leave an angular space between slices.
         float gapAngle = rectangularGaps ? 0f : percentageOfGapPerPie * 360f;
         float totalGapPercentage = items.Count * (gapAngle / 360f);
 
@@ -105,42 +117,45 @@ public class RingDisplay : MonoBehaviour
             float finalIconSize = this.iconBaseSize;
             if (scaleIconWithSliceSize)
             {
-                float scaleFactor = sliceAngle / 36.0f; // Base scale on a 36-degree slice
+                float scaleFactor = sliceAngle / 36.0f;
                 finalIconSize = this.iconBaseSize * scaleFactor * this.iconSizeMultiplier;
             }
 
-            // Create the element first, then set properties.
-            // This avoids potential race conditions with object initializers in the editor that caused the NullReferenceException.
             var ringElement = new RingElement();
             
-            // Shape
             ringElement.startAngle = currentAngle;
             ringElement.endAngle = currentAngle + sliceAngle;
             ringElement.innerRadius = this.innerRadius;
             ringElement.outerRadius = this.outerRadius;
             ringElement.segments = this.segmentsPerSlice;
             
-            // Content
             ringElement.itemName = item.itemName;
             ringElement.itemIcon = item.itemIcon;
             ringElement.iconSize = finalIconSize;
             
-            // Style & Interaction
             ringElement.defaultColor = this.defaultColor;
             ringElement.hoverColor = this.hoverColor;
             ringElement.hitAnglePadding = this.hitAnglePadding;
+            ringElement.hoverRangeMin = this.hoverRangeMin;
 
-            // Edge properties
             ringElement.showEdge = this.showEdge;
             ringElement.edgeWidth = this.edgeWidth;
             ringElement.edgeColor = this.edgeColor;
             
-            // Pass gap info to the element for rectangular gap drawing
             if (this.rectangularGaps)
             {
-                // We pass half the gap width, as each slice will handle its own side.
                 (ringElement as IRectangularGap).halfGapWidth = this.gapWidth / 2f;
             }
+            
+            // Set the text size for the label
+            ringElement.nameLabel.style.fontSize = this.textSize;
+
+            // Set hover line properties
+            ringElement.showHoverLine = this.enableHoverLine;
+            ringElement.hoverLineWidth = this.hoverLineWidth;
+            ringElement.hoverLineColor = this.hoverLineColor;
+            ringElement.hoverLineOutlineWidth = this.hoverLineOutlineWidth;
+            ringElement.hoverLineOutlineColor = this.hoverLineOutlineColor;
             
             root.Add(ringElement);
             ringElements.Add(ringElement);
@@ -149,5 +164,3 @@ public class RingDisplay : MonoBehaviour
         }
     }
 }
-
-// --- END OF FILE RingDisplay.cs ---

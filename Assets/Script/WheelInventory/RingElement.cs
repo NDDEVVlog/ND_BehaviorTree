@@ -1,5 +1,3 @@
-// --- START OF FILE RingElement.cs ---
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,6 +13,7 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
     // --- Shape Properties ---
     public float startAngle { get; set; }
     public float endAngle { get; set; }
+    public float middleAngle { get; set; }
     public float outerRadius { get; set; }
     public float innerRadius { get; set; }
     public int segments { get; set; }
@@ -60,19 +59,29 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
     public Color defaultColor { get; set; }
     public Color hoverColor { get; set; }
     public float hitAnglePadding { get; set; } = 0f;
+    public float hoverRangeMin { get; set; } = 0.5f; // New property for minimum hover range
 
     // --- Edge Properties ---
     public bool showEdge { get; set; } = false;
     public float edgeWidth { get; set; } = 1f;
     public Color edgeColor { get; set; } = Color.black;
 
+    // --- Hover Line Properties ---
+    public bool showHoverLine { get; set; } = false;
+    public float hoverLineWidth { get; set; } = 1f;
+    public Color hoverLineColor { get; set; } = Color.white;
+    public float hoverLineOutlineWidth { get; set; } = 2f;
+    public Color hoverLineOutlineColor { get; set; } = Color.black;
+
     // --- Property for Rectangular Gaps (from IRectangularGap interface) ---
     public float halfGapWidth { get; set; } = 0f;
 
     // --- Child Elements ---
-    private Label nameLabel;
+    public Label nameLabel;
     private VisualElement iconElement;
     private VisualElement _contentContainer;
+
+    private bool isHovered = false;
 
     public RingElement()
     {
@@ -115,13 +124,13 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
     {
         if (_contentContainer == null) return;
         
-        float midAngleRad = Mathf.Deg2Rad * (startAngle + endAngle) / 2f;
+        middleAngle = Mathf.Deg2Rad * (startAngle + endAngle) / 2f;
         float midRadius = (innerRadius + outerRadius) / 2f;
 
         Vector2 center = new Vector2(layout.width / 2, layout.height / 2);
         Vector2 position = new Vector2(
-            Mathf.Cos(midAngleRad) * midRadius,
-            Mathf.Sin(midAngleRad) * midRadius
+            Mathf.Cos(middleAngle) * midRadius,
+            Mathf.Sin(middleAngle) * midRadius
         );
 
         _contentContainer.style.left = center.x + position.x - _contentContainer.layout.width / 2;
@@ -193,9 +202,36 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
             meshWriteData.SetNextIndex(i1);
         }
         
+        var painter = ctx.painter2D;
+
+        // Draw hover line and its outline if enabled and hovered (below the piece)
+        if (showHoverLine && isHovered)
+        {
+            Vector2 lineEnd = center + new Vector2(Mathf.Cos(middleAngle), Mathf.Sin(middleAngle)) * innerRadius;
+
+            // Draw outline first (below the line)
+            if (hoverLineOutlineWidth > hoverLineWidth)
+            {
+                painter.lineWidth = hoverLineOutlineWidth;
+                painter.strokeColor = hoverLineOutlineColor;
+                painter.BeginPath();
+                painter.MoveTo(center);
+                painter.LineTo(lineEnd);
+                painter.Stroke();
+            }
+
+            // Draw the main line on top of the outline
+            painter.lineWidth = hoverLineWidth;
+            painter.strokeColor = hoverLineColor;
+            painter.BeginPath();
+            painter.MoveTo(center);
+            painter.LineTo(lineEnd);
+            painter.Stroke();
+        }
+
+        // Draw the edge of the ring slice (if enabled)
         if (showEdge && edgeWidth > 0 && outerPoints.Count > 1)
         {
-            var painter = ctx.painter2D;
             painter.lineWidth = edgeWidth;
             painter.strokeColor = edgeColor;
             
@@ -212,6 +248,16 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
     private void OnPointerEnter(PointerEnterEvent evt)
     {
         _color = hoverColor;
+        Vector2 localPoint = evt.localPosition;
+        Vector2 center = new Vector2(layout.width / 2, layout.height / 2);
+        Vector2 delta = localPoint - center;
+        float pointerAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
+
+        // Check if the pointer angle is within the slice's angular range and distance is beyond innerRadius + hoverRangeMin
+        if (IsAngleBetween(pointerAngle, startAngle, endAngle) && delta.magnitude > (innerRadius * hoverRangeMin))
+        {
+            isHovered = true;
+        }
         MarkDirtyRepaint();
         Debug.Log($"Hovering over: {itemName}");
     }
@@ -219,6 +265,7 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
     private void OnPointerLeave(PointerLeaveEvent evt)
     {
         _color = defaultColor;
+        isHovered = false;
         MarkDirtyRepaint();
     }
 
@@ -231,28 +278,10 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
     {
         Vector2 center = new Vector2(layout.width / 2, layout.height / 2);
         Vector2 delta = localPoint - center;
-
-        float sqrDistance = delta.sqrMagnitude;
-        float distance = Mathf.Sqrt(sqrDistance);
-
-        if (distance < innerRadius || distance > outerRadius)
-        {
-            return false;
-        }
-
         float pointerAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
         
-        // Adjust hit detection for rectangular gaps by calculating the gap angle at the pointer's distance from the center.
-        float gapAngleAtDistance = 0f;
-        if (halfGapWidth > 0 && distance > 0)
-        {
-            gapAngleAtDistance = Mathf.Rad2Deg * Mathf.Asin(Mathf.Clamp(halfGapWidth / distance, -1f, 1f));
-        }
-
-        float detectionStartAngle = startAngle + gapAngleAtDistance - hitAnglePadding;
-        float detectionEndAngle = endAngle - gapAngleAtDistance + hitAnglePadding;
-        
-        return IsAngleBetween(pointerAngle, detectionStartAngle, detectionEndAngle);
+        Debug.Log($"Pointer distance: {delta.magnitude} | {innerRadius * hoverRangeMin}");
+        return (IsAngleBetween(pointerAngle, startAngle, endAngle) && delta.magnitude > (innerRadius * hoverRangeMin));
     }
 
     private bool IsAngleBetween(float angle, float start, float end)
@@ -272,5 +301,3 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
         }
     }
 }
-
-// --- END OF FILE RingElement.cs ---

@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="ContextMenu" class="context-menu">
+        <ui:Button name="UseButton" text="Use" class="context-menu-button" />
+        <ui:Button name="DropButton" text="Drop" class="context-menu-button" />
+        <ui:Button name="RemoveButton" text="Remove" class="context-menu-button" />
+        <ui:Button name="RotateButton" text="Rotate" class="context-menu-button" />
+    </ui:VisualElement>
+</ui:UXML>

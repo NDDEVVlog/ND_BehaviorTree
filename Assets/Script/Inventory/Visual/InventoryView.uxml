@@ -1,16 +1,10 @@
+
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/Script/Inventory/Visual/InventoryStyles.uss?fileID=7433441132597879392&amp;guid=6b059f21511a473498bd10fe6794c910&amp;type=3#InventoryStyles" />
+    <ui:Style src="InventoryStyles.uss" />
     <ui:VisualElement name="InventoryContainer" class="inventory-container">
         <ui:Label text="INVENTORY" name="Title" class="inventory-title" />
         <ui:ScrollView name="InventoryScrollView" mode="VerticalAndHorizontal">
             <ui:VisualElement name="InventoryGrid" class="inventory-grid" />
         </ui:ScrollView>
-        <ui:VisualElement name="DragContainer" picking-mode="Ignore" class="drag-container" />
-    </ui:VisualElement>
-    <ui:VisualElement name="ContextMenu" class="context-menu" style="display: none;">
-        <ui:Button name="UseButton" text="Use" class="context-menu-button" />
-        <ui:Button name="RotateButton" text="Rotate" class="context-menu-button" />
-        <ui:Button name="DropButton" text="Drop" class="context-menu-button" />
-        <ui:Button name="RemoveButton" text="Remove" class="context-menu-button" />
     </ui:VisualElement>
 </ui:UXML>
