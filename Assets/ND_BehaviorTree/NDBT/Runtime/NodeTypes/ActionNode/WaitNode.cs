@@ -12,14 +12,13 @@ namespace ND_BehaviorTree
         protected override void OnEnter()
         {
             _startTime = Time.time;
-            Debug.Log("Enter WaitNode at :" + _startTime);
+            
         }
 
         protected override Status OnProcess()
         {
             if (Time.time - _startTime > duration)
             {   
-                Debug.Log("Complete WaitNode at :" + _startTime);
                 return Status.Success;
             }
             return Status.Running;

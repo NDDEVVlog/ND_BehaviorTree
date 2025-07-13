@@ -33,6 +33,8 @@ namespace ND_BehaviorTree
         [SerializeField] private Rect m_position;
         public string typeName;
 
+        public  int priority = 0;
+
         public string id => m_guid;
         public Rect position { get => m_position; set => m_position = value; }
 
