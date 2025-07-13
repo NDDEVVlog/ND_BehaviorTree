@@ -1,4 +1,4 @@
-/* --- InventoryStyles.uss (Complete Code) --- */
+/* --- START OF FILE InventoryStyles.uss --- */
 
 /* Main container styling */
 .inventory-container {
@@ -24,6 +24,7 @@
     flex-grow: 1;
 }
 
+/* MODIFIED: The content container's alignment is now set via C# in InventoryController */
 #InventoryScrollView > .unity-scroll-view__content-container {
     display: flex;
     flex-grow: 1;
@@ -33,7 +34,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     padding: 5px;
-    align-content: flex-start;
+    /* MODIFIED: 'align-content' was removed. It is now controlled by the GridSettings in InventoryController.cs */
 }
 
 /* A single slot in the grid */
@@ -41,8 +42,6 @@
     background-color: rgba(0, 0, 0, 0.4);
     border-color: rgba(255, 255, 255, 0.1);
     border-width: 1px;
-
-    /* --- THESE LINES CENTER THE ITEMS --- */
     align-items: center;
     justify-content: center;
 }
@@ -63,6 +62,6 @@
 .inventory-item:hover { border-color: yellow; }
 .inventory-item--dragging { opacity: 0.7; border-color: white; scale: 1.05 1.05; }
 
-.context-menu { position: absolute; background-color: rgb(40, 45, 50); border-color: rgb(180, 180, 180); border-width: 1px; border-radius: 5px; padding: 5px; }
+.context-menu { position: absolute; background-color: rgb(40, 45, 50); border-color: rgb(180, 180, 180); border-width: 1px; border-radius: 5px; padding: 5px; display: none; }
 .context-menu-button { background-color: transparent; color: white; border-width: 0; -unity-text-align: middle-left; padding-left: 10px; margin: 2px 0; }
 .context-menu-button:hover { background-color: rgb(80, 120, 200); }

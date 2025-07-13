@@ -1,0 +1,21 @@
+.context-menu {
+    position: absolute;
+    background-color: rgb(40, 45, 50);
+    border-color: rgb(180, 180, 180);
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 5px;
+    display: none;
+    z-index: 1000;
+    min-width: 100px;
+    min-height: 100px;
+}
+.context-menu-button {
+    background-color: transparent;
+    color: white;
+    border-width: 0;
+    -unity-text-align: middle-left;
+    padding-left: 10px;
+    margin: 2px 0;
+    width: 100px;
+}
