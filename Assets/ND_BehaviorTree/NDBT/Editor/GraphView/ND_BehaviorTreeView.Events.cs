@@ -81,10 +81,11 @@ namespace ND_BehaviorTree.Editor
                 ClearSelection();
             }
         }
-        
-        private void OnNodeCreationRequest(NodeCreationContext context) 
+
+        private void OnNodeCreationRequest(NodeCreationContext context)
         {
             OpenSearchWindow(context.screenMousePosition);
+            
         }
         
         public async void InitiateAnimatedRemoveElements(List<GraphElement> elements)

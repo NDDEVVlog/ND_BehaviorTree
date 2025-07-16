@@ -157,6 +157,7 @@ namespace ND_BehaviorTree.Editor
                 
                 Node nodeData = (ND_BehaviorTree.Node)ScriptableObject.CreateInstance(nodeDataType); 
                 nodeData.SetPosition(new Rect(graphMousePosition, Vector2.zero));
+                Debug.Log("AddNode as Position:" + graphMousePosition);
                 view.AddNewNodeFromSearch(nodeData);
             }
 

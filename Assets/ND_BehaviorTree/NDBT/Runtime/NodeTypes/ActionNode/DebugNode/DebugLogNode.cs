@@ -14,6 +14,8 @@ namespace ND_BehaviorTree
         [Tooltip("(Optional) A Blackboard key to log the value of.")]
         public Key keyToLog;
 
+        public Status returningStatus = Status.Success;
+
         protected override Status OnProcess()
         {
             // Start building the log string with the basic message.
@@ -26,7 +28,7 @@ namespace ND_BehaviorTree
                 // The 'blackboard' property comes from the base Node class we set up.
                 // We use GetValue<object> to handle any type of data.
                 object value = blackboard.GetValue<object>(keyToLog.keyName);
-                
+
                 // Append the key's name and its value to the string.
                 // The '?? "null"' part gracefully handles a null value.
                 logString += $" | Key '{keyToLog.name}': {value ?? "null"}";
@@ -35,12 +37,12 @@ namespace ND_BehaviorTree
             // Wrap the entire constructed string in the chosen color using rich text.
             // ColorUtility.ToHtmlStringRGB is the perfect Unity helper for this.
             string finalColoredLog = $"<color=#{ColorUtility.ToHtmlStringRGB(logColor)}>{logString}</color>";
-            
+
             // Log the final, colored string.
             Debug.Log(finalColoredLog);
-            
+
             // This action is instantaneous, so it always succeeds.
-            return Status.Success;
+            return returningStatus;
         }
     }
 }
