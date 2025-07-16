@@ -17,28 +17,31 @@ namespace ND_BehaviorTree.Editor
     public partial class ND_BehaviorTreeView
     {
         public void OpenSearchWindow(Vector2 screenPosition)
-        {   
+        {
+            Debug.Log("Open Search");
             m_searchProvider.Initialize(this); 
             SearchWindow.Open(new SearchWindowContext(screenPosition, 300, 200), m_searchProvider); 
         }
         
         public void OpenChildNodeSearchWindow(Vector2 screenPosition, CompositeNode parent, Type filterType)
-        {
+        {   
+            Debug.Log("Open Search Child");
             m_searchProvider.Initialize(this, parent, filterType);
             SearchWindow.Open(new SearchWindowContext(screenPosition, 300, 200), m_searchProvider);
         }
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
-        {
+        {   
+            base.BuildContextualMenu(evt);
             // Add our custom "Create Node" which uses the advanced search window.
-            evt.menu.AppendAction("Create Node...", (a) => OpenSearchWindow(GUIUtility.GUIToScreenPoint(evt.mousePosition)));
+            // evt.menu.AppendAction("Create Node...", (a) => OpenSearchWindow(GUIUtility.GUIToScreenPoint(evt.mousePosition)));
 
             // Add a separator before the actions that require a selection.
             if (selection.Any())
             {
                 evt.menu.AppendSeparator();
-            
-                evt.menu.AppendAction("Delete", (a) => OnDeleteSelectionKeyPressed("Delete", AskUser.DontAskUser), 
+
+                evt.menu.AppendAction("Delete", (a) => OnDeleteSelectionKeyPressed("Delete", AskUser.DontAskUser),
                     (e) => selection.Any() ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
             }
             
@@ -46,7 +49,7 @@ namespace ND_BehaviorTree.Editor
             if (evt.target is ND_NodeEditor clickedEditor && clickedEditor.node is CompositeNode compositeNode)
             {
                 evt.menu.AppendSeparator();
-                evt.menu.AppendAction("Add Service...", (a) => OpenChildNodeSearchWindow(GUIUtility.GUIToScreenPoint(evt.mousePosition), compositeNode, typeof(ServiceNode)));
+                evt.menu.AppendAction("Add Service...", (a) => OpenChildNodeSearchWindow(evt.mousePosition, compositeNode, typeof(ServiceNode)));
             }
         }
     }
