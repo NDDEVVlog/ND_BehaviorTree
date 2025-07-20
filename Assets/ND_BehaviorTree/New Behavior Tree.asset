@@ -62,9 +62,9 @@ MonoBehaviour:
   m_guid: f36a70a5-5539-477a-a3c4-e40bd6e5d5c5
   m_position:
     serializedVersion: 2
-    x: -332
-    y: 913.6
-    width: 178.40001
+    x: -348.8
+    y: 953.6
+    width: 178.4
     height: 95.20007
   typeName: Move To Transform
   priority: 0
@@ -86,10 +86,10 @@ MonoBehaviour:
   m_guid: f5c2437a-8578-459f-a8c1-dc6f72a7a14c
   m_position:
     serializedVersion: 2
-    x: -105.600006
-    y: 929.6
-    width: 104
-    height: 95.20007
+    x: -293.59998
+    y: 1190.4
+    width: 103.999985
+    height: 95.19995
   typeName: Wait
   priority: 0
   duration: 3
@@ -166,6 +166,28 @@ MonoBehaviour:
   logColor: {r: 0, g: 1, b: 0, a: 1}
   keyToLog: {fileID: 0}
   returningStatus: 0
+--- !u!114 &-5844898184024730655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 16f00f60-cc4d-4708-81e8-71b58e09b56c
+  m_position:
+    serializedVersion: 2
+    x: 217.59999
+    y: 969.6
+    width: 104
+    height: 95.20007
+  typeName: Wait
+  priority: 0
+  duration: 5
 --- !u!114 &-5319130462426747241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,10 +203,10 @@ MonoBehaviour:
   m_guid: c40e753e-6581-4245-b1a2-1df5d10d04e3
   m_position:
     serializedVersion: 2
-    x: 0.8
-    y: 921.6
+    x: 32.8
+    y: 1198.4
     width: 152
-    height: 95.20007
+    height: 95.19995
   typeName: Debug Log
   priority: 0
   message: Waiting Complete
@@ -238,6 +260,54 @@ MonoBehaviour:
   child: {fileID: 0}
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   shouldInvert: 0
+--- !u!114 &-4846318629507221944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6075e4aa7424d364c90a6009b72a5660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 6c164167-5ed6-4416-96e9-6585850ad127
+  m_position:
+    serializedVersion: 2
+    x: -122.4
+    y: 945.6
+    width: 139.2
+    height: 95.20007
+  typeName: Repeater
+  priority: 0
+  child: {fileID: -4567360907726627381}
+  repeatCount: 3
+--- !u!114 &-4567360907726627381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: fca2c760-ac96-4852-9c46-2576b4500176
+  m_position:
+    serializedVersion: 2
+    x: -120.8
+    y: 1069.6
+    width: 145.6
+    height: 95.20007
+  typeName: Sequence
+  priority: 0
+  children:
+  - {fileID: -8004918067813455359}
+  - {fileID: -5319130462426747241}
+  services: []
 --- !u!114 &-2349795449894800531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,9 +323,9 @@ MonoBehaviour:
   m_guid: 2f2d12a5-a0d6-4e21-a03c-bcea76d05a59
   m_position:
     serializedVersion: 2
-    x: 194.4
-    y: 929.6
-    width: 242.40001
+    x: 426.40002
+    y: 969.6
+    width: 242.39996
     height: 95.20007
   typeName: SetBooleanValueNode
   priority: 0
@@ -339,6 +409,9 @@ MonoBehaviour:
   - {fileID: 2615224446453704244}
   - {fileID: 2524751930976590589}
   - {fileID: 1788777279908683041}
+  - {fileID: -4846318629507221944}
+  - {fileID: -4567360907726627381}
+  - {fileID: -5844898184024730655}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   Self: {fileID: 0}
@@ -390,8 +463,8 @@ MonoBehaviour:
   priority: 0
   children:
   - {fileID: -8507657268125193687}
-  - {fileID: -8004918067813455359}
-  - {fileID: -5319130462426747241}
+  - {fileID: -4846318629507221944}
+  - {fileID: -5844898184024730655}
   - {fileID: -2349795449894800531}
   services: []
 --- !u!114 &1756551281706341290
