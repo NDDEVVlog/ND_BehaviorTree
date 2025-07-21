@@ -66,6 +66,53 @@
 }
 
 
+/*
+================================================================================
+=== NEW: STYLES FOR DETAILS CONTAINER (EXPOSED VARS & PROGRESS BARS) ===
+================================================================================
+*/
+.details-container {
+    padding: 4px 8px;
+    flex-direction: column;
+    display: none; /* Hidden by default, enabled via script if content exists */
+    background-color: rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+/* Styles for exposed variables (Key-Value Pair) */
+.exposed-property {
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-top: 2px;
+}
+.exposed-property-label {
+    color: #B0B0B0;
+    margin-right: 5px;
+}
+.exposed-property-value {
+    color: #E0E0E0;
+    -unity-font-style: bold;
+}
+
+/* Styles for progress bars */
+.progress-bar {
+    margin-top: 4px;
+    margin-bottom: 2px;
+    height: 8px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    overflow: hidden; /* This clips the fill element */
+}
+.progress-bar-fill {
+    background-color: #4CAF50; /* A nice green color for progress */
+    height: 100%;
+    width: 0%; /* Initial width, updated by script */
+    transition: width 0.1s linear; /* Smooth transition for updates */
+}
+
 
 /* --- Child Node Container (for Decorators/Services) --- */
 .child-node-container {
@@ -205,8 +252,6 @@
 .auxiliary-node-editor .child-node-container {
     display: none;
 }
-
-/* ... (all your existing styles above) ... */
 
 /*
 ================================================================================

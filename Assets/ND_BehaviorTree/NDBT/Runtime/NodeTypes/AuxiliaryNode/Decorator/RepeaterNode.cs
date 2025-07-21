@@ -8,9 +8,10 @@ namespace ND_BehaviorTree
     public class RepeaterNode : DecoratorNode
     {
         [Tooltip("The number of times to repeat the child. Set to 0 to repeat forever.")]
+        
         public int repeatCount = 3;
-
-        private int currentCount = 0;
+        [ExposeProperty]
+        public int currentCount = 0;
 
         protected override void OnEnter()
         {

@@ -5,9 +5,11 @@ namespace ND_BehaviorTree
 {
     [NodeInfo("Wait", "Action/Wait", true, false,iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/Wait.png")]
     public class WaitNode : ActionNode
-    {
+    {   
+        
         public float duration = 1.0f;
-        private float _startTime;
+        [HideInInspector]
+        protected float _startTime;
 
         protected override void OnEnter()
         {
