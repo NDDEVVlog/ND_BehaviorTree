@@ -182,9 +182,9 @@ MonoBehaviour:
   m_position:
     serializedVersion: 2
     x: 217.59999
-    y: 969.6
+    y: 1080.8
     width: 104
-    height: 95.20007
+    height: 95.19995
   typeName: Wait
   priority: 0
   duration: 5
@@ -260,6 +260,29 @@ MonoBehaviour:
   child: {fileID: 0}
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   shouldInvert: 0
+--- !u!114 &-4912801335699234050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd4493e868ea87e4290ecd571487789c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 618be2ac-c7e3-4ae3-8a2b-d48f17cb6865
+  m_position:
+    serializedVersion: 2
+    x: 184
+    y: 919.2
+    width: 129.59999
+    height: 133.60004
+  typeName: Time Limit
+  priority: 0
+  child: {fileID: -5844898184024730655}
+  timeLimit: 2.5
 --- !u!114 &-4846318629507221944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,6 +306,7 @@ MonoBehaviour:
   priority: 0
   child: {fileID: -4567360907726627381}
   repeatCount: 3
+  currentCount: 0
 --- !u!114 &-4567360907726627381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,6 +436,7 @@ MonoBehaviour:
   - {fileID: -4846318629507221944}
   - {fileID: -4567360907726627381}
   - {fileID: -5844898184024730655}
+  - {fileID: -4912801335699234050}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   Self: {fileID: 0}
@@ -464,7 +489,7 @@ MonoBehaviour:
   children:
   - {fileID: -8507657268125193687}
   - {fileID: -4846318629507221944}
-  - {fileID: -5844898184024730655}
+  - {fileID: -4912801335699234050}
   - {fileID: -2349795449894800531}
   services: []
 --- !u!114 &1756551281706341290

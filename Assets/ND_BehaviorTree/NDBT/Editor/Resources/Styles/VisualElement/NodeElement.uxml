@@ -11,6 +11,7 @@
                     <ui:Label name="type-label" class="type-label" />
                 </ui:VisualElement>
             </ui:VisualElement>
+            <ui:VisualElement name="details-container" class="details-container" />
             <ui:VisualElement name="child-node-container" class="child-node-container" />
             <ui:VisualElement name="task-node-content" class="task-node-content" />
             <ui:VisualElement name="bottom-port" class="port-container" />
