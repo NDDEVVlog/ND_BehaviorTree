@@ -1,4 +1,4 @@
-
+// --- MODIFIED FILE: ND_BehaviorTreeView.cs ---
 
 using System;
 using System.Collections.Generic;
@@ -11,69 +11,78 @@ using UnityEngine.UIElements;
 
 namespace ND_BehaviorTree.Editor
 {
-    /// <summary>
-    /// The core file for the ND_BehaviorTreeView class.
-    /// It contains the main fields, constructor, and setup methods for the graph view.
-    /// </summary>
     public partial class ND_BehaviorTreeView : GraphView
     {
         // --- Fields ---
-        private BehaviorTree m_BTree; // The actual ScriptableObject data
-        private SerializedObject m_serialLizeObject; // SerializedObject wrapper for m_BTree
-        private ND_BehaviorTreeEditorWindow m_editorWindow; // Reference to the hosting editor window
-        public ND_BehaviorTreeEditorWindow EditorWindow => m_editorWindow; // Public getter
+        private BehaviorTree m_BTree;
+        private SerializedObject m_serialLizeObject;
+        private ND_BehaviorTreeEditorWindow m_editorWindow;
+        public ND_BehaviorTreeEditorWindow EditorWindow => m_editorWindow;
 
-        // Collections for managing graph elements
         public BehaviorTree BTree => m_BTree; 
         public List<ND_NodeEditor> TreeNodes { get; private set; }
         public Dictionary<string, ND_NodeEditor> NodeDictionary { get; private set; }
         
-        // --- NEW FIELD ---
-        // Flag to prevent OnGraphViewInternalChange from interfering with programmatic deletions.
         private bool m_isDeletingProgrammatically = false;
 
         private ND_BTSearchProvider m_searchProvider;
         private List<IContextualMenuCommand> m_contextualMenuCommands;
 
-        // --- Constructor ---
+        // --- NEW: Field to hold the BlackboardView instance ---
+        private BlackboardView m_blackboardView;
+
+        // --- Constructor (is modified) ---
         public ND_BehaviorTreeView(SerializedObject serializedObject, ND_BehaviorTreeEditorWindow editorWindow)
         {
             m_editorWindow = editorWindow;
             m_serialLizeObject = serializedObject;
             m_BTree = (BehaviorTree)serializedObject.targetObject;
 
-            
-
-            // Initialize collections
             TreeNodes = new List<ND_NodeEditor>();
             NodeDictionary = new Dictionary<string, ND_NodeEditor>();
 
-            // Initialize search provider
             m_searchProvider = ScriptableObject.CreateInstance<ND_BTSearchProvider>();
             if (m_searchProvider == null) Debug.LogError("[ND_DrawTrelloView.ctor] SearchProvider is NULL after CreateInstance!");
-            else m_searchProvider.view = this; // Provide reference to this view
+            else m_searchProvider.view = this;
 
-            // Assign node creation request callback
             this.nodeCreationRequest = OnNodeCreationRequest;
 
-            // Initialize Contextual Menu Commands
             m_contextualMenuCommands = new List<IContextualMenuCommand>
             {
                 new CreateNodeContextualCommand(),
-               // new DeleteAnimatedContextualCommand()
             };
 
             SetupStylingAndBackground();
             SetupManipulators();
             
-            DrawExistingGraphElementsFromData(); // Populate view from m_BTree
+            // --- NEW: Create and add the blackboard ---
+            CreateBlackboard();
+            
+            DrawExistingGraphElementsFromData();
 
-            SetupZoom(0.1f, 3.0f); // Min and Max zoom levels
-            graphViewChanged += OnGraphViewInternalChange; // Callback for internal GraphView changes
-            this.deleteSelection = OnDeleteSelectionKeyPressed; // Callback for Delete key press
+            SetupZoom(0.1f, 3.0f);
+            graphViewChanged += OnGraphViewInternalChange;
+            this.deleteSelection = OnDeleteSelectionKeyPressed;
         }
 
-        // --- Setup Methods ---
+        // --- NEW: Method to create the Blackboard View ---
+        private void CreateBlackboard()
+        {
+            m_blackboardView = new BlackboardView(m_serialLizeObject);
+            Add(m_blackboardView);
+            m_blackboardView.style.display = DisplayStyle.None; // Initially hidden
+        }
+
+        // --- NEW: Public method to control visibility from the window ---
+        public void ToggleBlackboard(bool isVisible)
+        {
+            if (m_blackboardView != null)
+            {
+                m_blackboardView.style.display = isVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+        }
+        
+        // --- Setup Methods (no changes) ---
         private void SetupStylingAndBackground()
         {
             StyleSheet styleSheetAsset = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetGraphViewStyleSheetPath());
@@ -97,7 +106,7 @@ namespace ND_BehaviorTree.Editor
         }
 
         private void DrawExistingGraphElementsFromData()
-        {   // Ensure the tree asset is properly initialized with a RootNode before drawing.
+        {
             m_BTree.EditorInit();
             DrawNodesFromData();
             DrawConnectionsFromData();

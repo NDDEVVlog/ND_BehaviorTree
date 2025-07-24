@@ -1,0 +1,75 @@
+/* FILE: Assets/ND_BehaviorTree/Editor/BlackboardView.uss */
+
+/* The main floating panel */
+#blackboard-panel {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    width: 280px;
+    max-height: 400px; /* Prevent it from getting too tall */
+    background-color: rgb(50, 50, 50);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgb(30, 30, 30);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* The header bar for the title and add button */
+#header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: rgb(65, 65, 65);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    cursor: move; /* Indicates this area is draggable */
+}
+
+#title-label {
+    -unity-font-style: bold;
+    font-size: 14px;
+}
+
+#add-key-button {
+    width: 22px;
+    height: 22px;
+    font-size: 16px;
+    -unity-font-style: bold;
+    padding: 0;
+}
+
+/* Style for each row containing a key */
+.key-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 2px 5px 2px 15px; /* Indent under the foldout */
+}
+
+/* The colored circle indicator */
+.key-color-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-right: 8px;
+    flex-shrink: 0;
+    border-width: 1px;
+    border-color: rgba(0,0,0,0.5);
+}
+
+.key-row-field-name {
+    width: 100px;
+    margin-right: 5px;
+}
+
+.key-row-field-value {
+    flex-grow: 1;
+}
+
+.key-row-delete-button {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    padding: 0;
+    flex-shrink: 0;
+}

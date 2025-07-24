@@ -1,0 +1,25 @@
+<!-- FILE: Assets/ND_BehaviorTree/Editor/BlackboardView.uxml -->
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="BlackboardView.uss" />
+    <!-- This is now the main floating panel -->
+    <ui:VisualElement name="blackboard-panel">
+        <!-- The header acts as the drag handle -->
+        <ui:VisualElement name="header">
+            <ui:Label text="Blackboard" name="title-label" />
+            <ui:Button text="+" name="add-key-button" />
+        </ui:VisualElement>
+
+        <!-- The main content area with scroll view -->
+        <ui:ScrollView>
+            <!-- A Foldout for the keys -->
+            <ui:Foldout text="Blackboard" name="blackboard-foldout" value="true">
+                <ui:VisualElement name="keys-container" />
+            </ui:Foldout>
+
+            <!-- A placeholder Foldout for future use -->
+            <ui:Foldout text="Exposed Parameters" name="exposed-params-foldout" value="true">
+                <ui:Label text=" (Not Implemented)" style="-unity-font-style: italic; color: grey; margin-left: 15px;" />
+            </ui:Foldout>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

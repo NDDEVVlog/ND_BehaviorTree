@@ -62,10 +62,10 @@ MonoBehaviour:
   m_guid: f36a70a5-5539-477a-a3c4-e40bd6e5d5c5
   m_position:
     serializedVersion: 2
-    x: -348.8
-    y: 953.6
+    x: -532.8
+    y: 872
     width: 178.4
-    height: 95.20007
+    height: 95.20001
   typeName: Move To Transform
   priority: 0
   agentKey: {fileID: -5823742072851934633, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
@@ -86,9 +86,9 @@ MonoBehaviour:
   m_guid: f5c2437a-8578-459f-a8c1-dc6f72a7a14c
   m_position:
     serializedVersion: 2
-    x: -293.59998
-    y: 1190.4
-    width: 103.999985
+    x: -376
+    y: 1132.8
+    width: 104
     height: 95.19995
   typeName: Wait
   priority: 0
@@ -181,10 +181,10 @@ MonoBehaviour:
   m_guid: 16f00f60-cc4d-4708-81e8-71b58e09b56c
   m_position:
     serializedVersion: 2
-    x: 217.59999
-    y: 1080.8
+    x: 14.4
+    y: 1009.6
     width: 104
-    height: 95.19995
+    height: 95.20007
   typeName: Wait
   priority: 0
   duration: 5
@@ -203,8 +203,8 @@ MonoBehaviour:
   m_guid: c40e753e-6581-4245-b1a2-1df5d10d04e3
   m_position:
     serializedVersion: 2
-    x: 32.8
-    y: 1198.4
+    x: -227.2
+    y: 1124.8
     width: 152
     height: 95.19995
   typeName: Debug Log
@@ -275,10 +275,10 @@ MonoBehaviour:
   m_guid: 618be2ac-c7e3-4ae3-8a2b-d48f17cb6865
   m_position:
     serializedVersion: 2
-    x: 184
-    y: 919.2
+    x: -19.199999
+    y: 848
     width: 129.59999
-    height: 133.60004
+    height: 133.59998
   typeName: Time Limit
   priority: 0
   child: {fileID: -5844898184024730655}
@@ -298,10 +298,10 @@ MonoBehaviour:
   m_guid: 6c164167-5ed6-4416-96e9-6585850ad127
   m_position:
     serializedVersion: 2
-    x: -122.4
-    y: 945.6
-    width: 139.2
-    height: 95.20007
+    x: -306.4
+    y: 864
+    width: 139.20001
+    height: 119.20001
   typeName: Repeater
   priority: 0
   child: {fileID: -4567360907726627381}
@@ -322,10 +322,10 @@ MonoBehaviour:
   m_guid: fca2c760-ac96-4852-9c46-2576b4500176
   m_position:
     serializedVersion: 2
-    x: -120.8
-    y: 1069.6
+    x: -304.8
+    y: 988
     width: 145.6
-    height: 95.20007
+    height: 95.19995
   typeName: Sequence
   priority: 0
   children:
@@ -347,10 +347,10 @@ MonoBehaviour:
   m_guid: 2f2d12a5-a0d6-4e21-a03c-bcea76d05a59
   m_position:
     serializedVersion: 2
-    x: 426.40002
-    y: 969.6
-    width: 242.39996
-    height: 95.20007
+    x: 151.2
+    y: 880
+    width: 242.4
+    height: 95.20001
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
@@ -480,8 +480,8 @@ MonoBehaviour:
   m_guid: 067bc0f8-adbd-47f6-af77-f93782e7ca25
   m_position:
     serializedVersion: 2
-    x: -153.6
-    y: 700.8
+    x: -175.2
+    y: 709.6
     width: 264
     height: 95.20001
   typeName: Move to TargetSequence
