@@ -1,4 +1,4 @@
-
+// --- MODIFIED FILE: ND_BehaviorTreeEditorWindow.cs ---
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,27 +13,25 @@ namespace ND_BehaviorTree.Editor
 {
     public class ND_BehaviorTreeEditorWindow : EditorWindow
     {
-        // --- NEW: Standard Menu Item to Open the Window ---
+        // --- Menu Items & Open Methods (no changes) ---
         [MenuItem("Window/ND Behavior Tree Editor")]
         public static void OpenWindow()
         {
             ND_BehaviorTreeEditorWindow window = GetWindow<ND_BehaviorTreeEditorWindow>();
             window.titleContent = new GUIContent("Behavior Tree Editor");
         }
-
-        // --- MODIFIED: Open Methods now use GetWindow to avoid duplicates ---
+        
         public static void Open(BehaviorTreeRunner runner)
         {
-            // GetWindow will find an existing window or create one.
             ND_BehaviorTreeEditorWindow window = GetWindow<ND_BehaviorTreeEditorWindow>();
-            window.titleContent = new GUIContent("Behavior Tree Editor"); // Set a generic title first
+            window.titleContent = new GUIContent("Behavior Tree Editor");
             window.Load(runner);
         }
 
         public static void Open(BehaviorTree target)
         {
             ND_BehaviorTreeEditorWindow window = GetWindow<ND_BehaviorTreeEditorWindow>();
-            window.titleContent = new GUIContent("Behavior Tree Editor"); // Set a generic title first
+            window.titleContent = new GUIContent("Behavior Tree Editor");
             window.Load(target);
         }
 
@@ -43,16 +41,17 @@ namespace ND_BehaviorTree.Editor
         [SerializeField] private ND_BehaviorTreeView m_currentView;
         [SerializeField] public BehaviorTreeRunner m_targetRunner;
         
-        // --- NEW: Fields for Lock functionality and UI structure ---
         [SerializeField] private bool m_isLocked;
         private VisualElement m_contentContainer;
         private ToolbarToggle m_lockToggle;
 
+        // --- NEW: Fields for Blackboard Toggle ---
+        [SerializeField] private bool m_isBlackboardVisible = true; // Remember state
+        private ToolbarToggle m_blackboardToggle;
+
         public BehaviorTree currentGraph => m_currentGraph;
-
-        // --- Unity Messages ---
-
-        // --- MODIFIED: OnEnable now creates the toolbar and UI structure ---
+        
+        // --- Unity Messages (OnEnable is modified) ---
         private void OnEnable()
         {
             EditorApplication.update -= OnEditorUpdate;
@@ -61,11 +60,7 @@ namespace ND_BehaviorTree.Editor
             Selection.selectionChanged -= OnSelectionChanged;
             Selection.selectionChanged += OnSelectionChanged;
 
-            // Create the static UI structure (Toolbar + Content Container)
             CreateUIStructure();
-
-            // When the window is enabled, immediately check the current selection
-            // to automatically load the correct graph (if not locked).
             OnSelectionChanged();
         }
         
@@ -75,7 +70,7 @@ namespace ND_BehaviorTree.Editor
             Selection.selectionChanged -= OnSelectionChanged;
         }
 
-        // --- MODIFIED: The core auto-detection logic now respects the lock state ---
+        // --- OnSelectionChanged (no changes) ---
         private void OnSelectionChanged()
         {
             // If locked, do nothing.
@@ -89,14 +84,12 @@ namespace ND_BehaviorTree.Editor
 
             GameObject selectedObject = Selection.activeGameObject;
             
-            // If a GameObject is selected, check it for a runner
             if (selectedObject != null)
             {
                 BehaviorTreeRunner runner = selectedObject.GetComponent<BehaviorTreeRunner>();
                 if (runner != null && runner.treeAsset != null)
                 {
                     treeToLoad = runner.treeAsset;
-                    // Only assign the runner for debugging if in Play Mode
                     if (Application.isPlaying)
                     {
                         runnerToDebug = runner;
@@ -104,44 +97,35 @@ namespace ND_BehaviorTree.Editor
                 }
             }
 
-            // If no tree was found on a GameObject, check if an asset is selected
             if (treeToLoad == null)
             {
                 treeToLoad = Selection.activeObject as BehaviorTree;
             }
 
-            // Now, decide what to do based on what was found
             if (runnerToDebug != null)
             {
-                // Highest priority: Live debugging a selected runner
                 Load(runnerToDebug);
             }
             else if (treeToLoad != null)
             {
-                // Second priority: Show the asset from a runner (in Edit Mode) or a selected asset
-                if (m_currentGraph != treeToLoad || m_targetRunner != null) // Reload if tree is different or we were previously debugging
+                if (m_currentGraph != treeToLoad || m_targetRunner != null) 
                 {
                     Load(treeToLoad);
                 }
             }
             else
             {
-                // Nothing relevant selected, clear the view
                 ClearView();
             }
         }
         
-        // --- NEW: Methods to create the window's UI structure ---
+        // --- UI Creation (CreateToolbar is modified) ---
         private void CreateUIStructure()
         {
             rootVisualElement.Clear();
-
-            // Create the toolbar at the top
             CreateToolbar();
-
-            // Create a container for the graph view or prompt message
             m_contentContainer = new VisualElement { name = "ContentContainer" };
-            m_contentContainer.style.flexGrow = 1; // Make it fill remaining space
+            m_contentContainer.style.flexGrow = 1;
             rootVisualElement.Add(m_contentContainer);
         }
 
@@ -149,13 +133,29 @@ namespace ND_BehaviorTree.Editor
         {
             var toolbar = new Toolbar();
 
-            // Add the lock toggle
+            // --- NEW: Blackboard Toggle ---
+            m_blackboardToggle = new ToolbarToggle { text = "Blackboard" };
+            m_blackboardToggle.tooltip = "Show or hide the Blackboard panel.";
+            m_blackboardToggle.value = m_isBlackboardVisible; // Restore saved state
+            m_blackboardToggle.RegisterValueChangedCallback(evt => {
+                m_isBlackboardVisible = evt.newValue;
+                if (m_currentView != null)
+                {
+                    m_currentView.ToggleBlackboard(m_isBlackboardVisible);
+                }
+            });
+            toolbar.Add(m_blackboardToggle);
+            // --- END NEW ---
+
+            // Add a separator
+            toolbar.Add(new ToolbarSpacer());
+
+            // Lock toggle
             m_lockToggle = new ToolbarToggle { text = "Lock" };
             m_lockToggle.tooltip = "Prevents the editor from changing the tree when you select a different object.";
-            m_lockToggle.value = m_isLocked; // Restore saved lock state
+            m_lockToggle.value = m_isLocked;
             m_lockToggle.RegisterValueChangedCallback(evt => {
                 m_isLocked = evt.newValue;
-                // If we just unlocked, immediately sync with the current selection
                 if (!m_isLocked)
                 {
                     OnSelectionChanged();
@@ -166,7 +166,7 @@ namespace ND_BehaviorTree.Editor
             rootVisualElement.Add(toolbar);
         }
 
-        // --- Load & Draw Methods ---
+        // --- Load & Draw Methods (DrawGraph is modified) ---
         
         public void Load(BehaviorTreeRunner runner)
         {
@@ -181,6 +181,8 @@ namespace ND_BehaviorTree.Editor
             DrawGraph();
         }
 
+
+
         public void Load(BehaviorTree target)
         {   
             if (target == null)
@@ -194,7 +196,6 @@ namespace ND_BehaviorTree.Editor
             DrawGraph();
         }
 
-        // --- MODIFIED: Draws the graph inside the content container ---
         private void DrawGraph()
         {
             if (m_currentGraph == null || m_contentContainer == null) return;
@@ -203,11 +204,13 @@ namespace ND_BehaviorTree.Editor
             m_currentView = new ND_BehaviorTreeView(m_serializeObject, this);
             m_currentView.graphViewChanged += OnChange;
             
+            // --- NEW: Ensure blackboard visibility is set correctly on load ---
+            m_currentView.ToggleBlackboard(m_isBlackboardVisible);
+            
             m_contentContainer.Clear(); 
             m_contentContainer.Add(m_currentView);
         }
         
-        // --- MODIFIED: Clears the content container, leaving the toolbar ---
         private void ClearView()
         {
             m_currentGraph = null;
@@ -222,8 +225,7 @@ namespace ND_BehaviorTree.Editor
             prompt.style.unityTextAlign = TextAnchor.MiddleCenter;
             prompt.style.fontSize = 14;
             m_contentContainer.Add(prompt);
-
-            // Only reset title if it's not already the default
+            
             if (titleContent.text != "Behavior Tree Editor")
             {
                 titleContent = new GUIContent("Behavior Tree Editor");
@@ -232,6 +234,7 @@ namespace ND_BehaviorTree.Editor
             SetUnsavedChanges(false);
         }
 
+        // --- Other Methods (no changes) ---
         private GraphViewChange OnChange(GraphViewChange graphViewChange)
         {
             if (m_currentGraph == null) return graphViewChange;
