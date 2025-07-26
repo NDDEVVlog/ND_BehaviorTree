@@ -62,37 +62,15 @@ MonoBehaviour:
   m_guid: f36a70a5-5539-477a-a3c4-e40bd6e5d5c5
   m_position:
     serializedVersion: 2
-    x: -532.8
-    y: 872
-    width: 178.4
+    x: -242.40001
+    y: 864
+    width: 178.40001
     height: 95.20001
   typeName: Move To Transform
   priority: 0
   agentKey: {fileID: -5823742072851934633, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   targetTransformKey: {fileID: 2840027302853802495, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
-  updateInterval: 0.25
---- !u!114 &-8004918067813455359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: f5c2437a-8578-459f-a8c1-dc6f72a7a14c
-  m_position:
-    serializedVersion: 2
-    x: -376
-    y: 1132.8
-    width: 104
-    height: 95.19995
-  typeName: Wait
-  priority: 0
-  duration: 3
+  updateInterval: 0.1
 --- !u!114 &-7763610794587752485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +118,31 @@ MonoBehaviour:
   - {fileID: 6656066396069085764}
   - {fileID: 2524751930976590589}
   services: []
+--- !u!114 &-6586067264266576301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 486d39f5-f86c-4236-bac5-b160c0a45bea
+  m_position:
+    serializedVersion: 2
+    x: 433.6
+    y: 1207.2
+    width: 152.00003
+    height: 95.20007
+  typeName: Debug Log
+  priority: 0
+  message: Log Message
+  logColor: {r: 0, g: 1, b: 0, a: 1}
+  keyToLog: {fileID: 0}
+  returningStatus: 0
 --- !u!114 &-6539698401506606500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,38 +184,13 @@ MonoBehaviour:
   m_guid: 16f00f60-cc4d-4708-81e8-71b58e09b56c
   m_position:
     serializedVersion: 2
-    x: 14.4
-    y: 1009.6
+    x: -18.4
+    y: 1013.6
     width: 104
     height: 95.20007
   typeName: Wait
   priority: 0
-  duration: 5
---- !u!114 &-5319130462426747241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: c40e753e-6581-4245-b1a2-1df5d10d04e3
-  m_position:
-    serializedVersion: 2
-    x: -227.2
-    y: 1124.8
-    width: 152
-    height: 95.19995
-  typeName: Debug Log
-  priority: 0
-  message: Waiting Complete
-  logColor: {r: 0, g: 1, b: 0, a: 1}
-  keyToLog: {fileID: 0}
-  returningStatus: 0
+  duration: 1
 --- !u!114 &-5053310088734558554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,63 +253,14 @@ MonoBehaviour:
   m_guid: 618be2ac-c7e3-4ae3-8a2b-d48f17cb6865
   m_position:
     serializedVersion: 2
-    x: -19.199999
-    y: 848
-    width: 129.59999
+    x: -52
+    y: 872
+    width: 129.6
     height: 133.59998
   typeName: Time Limit
   priority: 0
   child: {fileID: -5844898184024730655}
   timeLimit: 2.5
---- !u!114 &-4846318629507221944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6075e4aa7424d364c90a6009b72a5660, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 6c164167-5ed6-4416-96e9-6585850ad127
-  m_position:
-    serializedVersion: 2
-    x: -306.4
-    y: 864
-    width: 139.20001
-    height: 119.20001
-  typeName: Repeater
-  priority: 0
-  child: {fileID: -4567360907726627381}
-  repeatCount: 3
-  currentCount: 0
---- !u!114 &-4567360907726627381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: fca2c760-ac96-4852-9c46-2576b4500176
-  m_position:
-    serializedVersion: 2
-    x: -304.8
-    y: 988
-    width: 145.6
-    height: 95.19995
-  typeName: Sequence
-  priority: 0
-  children:
-  - {fileID: -8004918067813455359}
-  - {fileID: -5319130462426747241}
-  services: []
 --- !u!114 &-2349795449894800531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,8 +276,8 @@ MonoBehaviour:
   m_guid: 2f2d12a5-a0d6-4e21-a03c-bcea76d05a59
   m_position:
     serializedVersion: 2
-    x: 151.2
-    y: 880
+    x: 85.6
+    y: 872
     width: 242.4
     height: 95.20001
   typeName: SetBooleanValueNode
@@ -370,10 +299,10 @@ MonoBehaviour:
   m_guid: cfce0746-5c34-411f-85a3-9cf6d5be0171
   m_position:
     serializedVersion: 2
-    x: 271.2
-    y: 706.4
-    width: 139.20001
-    height: 95.19995
+    x: 278.40002
+    y: 560.8
+    width: 139.19998
+    height: 95.20001
   typeName: Random Patrol
   priority: 0
   patrolRadius: 50
@@ -421,11 +350,8 @@ MonoBehaviour:
   - {fileID: -8507657268125193687}
   - {fileID: 151498456585129743}
   - {fileID: 8050742415459131951}
-  - {fileID: 5095769259417961374}
   - {fileID: 508742229169387133}
-  - {fileID: -8004918067813455359}
   - {fileID: -2349795449894800531}
-  - {fileID: -5319130462426747241}
   - {fileID: 2090826141494235995}
   - {fileID: -6651424988616651699}
   - {fileID: 8649712526444436019}
@@ -433,10 +359,9 @@ MonoBehaviour:
   - {fileID: 2615224446453704244}
   - {fileID: 2524751930976590589}
   - {fileID: 1788777279908683041}
-  - {fileID: -4846318629507221944}
-  - {fileID: -4567360907726627381}
   - {fileID: -5844898184024730655}
   - {fileID: -4912801335699234050}
+  - {fileID: -6586067264266576301}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   Self: {fileID: 0}
@@ -455,15 +380,15 @@ MonoBehaviour:
   m_guid: 9658a66f-4b4f-498f-ba0c-5b1cd7cf0d2f
   m_position:
     serializedVersion: 2
-    x: 84.799995
-    y: 442.4
-    width: 133.6
+    x: 92.799995
+    y: 457.6
+    width: 316.8
     height: 95.19998
   typeName: Selector go to Player or Random
   priority: 0
   children:
   - {fileID: 6696274325822658715}
-  - {fileID: 5095769259417961374}
+  - {fileID: -401080771899902491}
   services: []
 --- !u!114 &508742229169387133
 MonoBehaviour:
@@ -488,7 +413,6 @@ MonoBehaviour:
   priority: 0
   children:
   - {fileID: -8507657268125193687}
-  - {fileID: -4846318629507221944}
   - {fileID: -4912801335699234050}
   - {fileID: -2349795449894800531}
   services: []
@@ -656,30 +580,6 @@ MonoBehaviour:
   typeName: Wait
   priority: 0
   duration: 1
---- !u!114 &5095769259417961374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f3df45f75215714faef95beffe01a06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 04b7c718-a7af-428f-9bc5-d2aa30cf69a7
-  m_position:
-    serializedVersion: 2
-    x: 201.59999
-    y: 580.8
-    width: 265.6
-    height: 95.20001
-  typeName: Check Condition Variable
-  priority: 0
-  child: {fileID: -401080771899902491}
-  conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
-  shouldInvert: 1
 --- !u!114 &5608220019986678229
 MonoBehaviour:
   m_ObjectHideFlags: 0

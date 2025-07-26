@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08fb034fe2c07504ea5249566ce4797d, type: 3}
+  m_Name: New Blackboard
+  m_EditorClassIdentifier: 
+  keys:
+  - {fileID: 523754757032127270}
+  - {fileID: 3483685667856975779}
+--- !u!114 &523754757032127270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: New Bool (BoolKey)
+  m_EditorClassIdentifier: 
+  keyName: New Bool
+  category: 
+  description: 
+  value: 0
+--- !u!114 &3483685667856975779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 296528b6bcd056f4e9a730bd0a4fbcc0, type: 3}
+  m_Name: Name (StringKey)
+  m_EditorClassIdentifier: 
+  keyName: Name
+  category: 
+  description: 
+  value: 

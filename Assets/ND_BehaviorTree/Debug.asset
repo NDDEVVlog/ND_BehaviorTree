@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 3962311363872186427}
   rootNode: {fileID: 6832501881096210373}
   blackboard: {fileID: 0}
+  Self: {fileID: 0}
 --- !u!114 &3962311363872186427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38,6 +39,7 @@ MonoBehaviour:
     width: 145.60004
     height: 95.19998
   typeName: Sequence
+  priority: 0
   children:
   - {fileID: 6050191173662216117}
   services: []
@@ -61,9 +63,11 @@ MonoBehaviour:
     width: 152
     height: 95.19998
   typeName: Debug Log
+  priority: 0
   message: Log Message
   logColor: {r: 0, g: 1, b: 0, a: 1}
   keyToLog: {fileID: -7088729774540916159, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
+  returningStatus: 0
 --- !u!114 &6832501881096210373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,4 +88,5 @@ MonoBehaviour:
     width: 104
     height: 95.2
   typeName: Root
+  priority: 0
   child: {fileID: 3962311363872186427}

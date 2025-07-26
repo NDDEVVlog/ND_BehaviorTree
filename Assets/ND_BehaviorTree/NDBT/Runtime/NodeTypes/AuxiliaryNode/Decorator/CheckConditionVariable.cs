@@ -46,7 +46,7 @@ namespace ND_BehaviorTree
             }
             else
             {
-                child.InteruptAction?.Invoke();
+                //child.InteruptAction?.Invoke();
                 // The condition failed. Do not run the child. The decorator fails.
                 return Status.Failure;
             }
