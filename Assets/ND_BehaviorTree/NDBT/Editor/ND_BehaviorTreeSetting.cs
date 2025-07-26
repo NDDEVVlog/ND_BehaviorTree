@@ -15,8 +15,9 @@ namespace ND_BehaviorTree.Editor
         private SerializedProperty _graphViewStyleProp;
         // Add SerializedProperty fields for any other settings you want to control
 
+#if UNITY_EDITOR
         private bool _isCurrentlyInDeveloperMode = false; // For the developer mode bypass
-
+#endif
         private void OnEnable()
         {
 

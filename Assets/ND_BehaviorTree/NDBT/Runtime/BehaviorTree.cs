@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    [CreateAssetMenu(menuName = "BehaviourTree/Trees")]
+    [CreateAssetMenu(menuName = "ND_BehaviorTree/Trees")]
     public class BehaviorTree : ScriptableObject
     {
         // Serialized data for the editor

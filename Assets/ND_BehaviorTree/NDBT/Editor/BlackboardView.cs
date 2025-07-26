@@ -24,13 +24,13 @@ namespace ND_BehaviorTree.Editor
 
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/ND_BehaviorTree/NDBT/Editor/Resources/Styles/BlackBoard/BlackboardView.uxml");
             visualTree.CloneTree(this);
-            
+
             // Make the panel draggable by its header
             this.Q("header").AddManipulator(new Dragger { clampToParentEdges = true });
 
             var addKeyButton = this.Q<Button>("add-key-button");
             addKeyButton.clicked += OnAddKeyClicked;
-            
+
             this.Q<Label>("title-label").text = m_BTree.name;
 
             PopulateView();
@@ -56,10 +56,10 @@ namespace ND_BehaviorTree.Editor
                 string menuName = type.Name.Replace("Key_", "");
                 menu.AddItem(new GUIContent(menuName), false, () => AddKey(type));
             }
-            
+
             menu.ShowAsContext();
         }
-        
+
         // ... (CreateAndAssignBlackboard and AddKey methods remain the same as before) ...
         private void CreateAndAssignBlackboard()
         {
@@ -100,6 +100,15 @@ namespace ND_BehaviorTree.Editor
             if (m_BTree.blackboard == null)
             {
                 foldout.style.display = DisplayStyle.None; // Hide the foldout if no blackboard
+
+                // --- NEW: Add a message to guide the user ---
+                var helpLabel = new Label("No Blackboard found. Please assign a Blackboard asset to the BehaviorTree.");
+                helpLabel.style.unityTextAlign = TextAnchor.MiddleCenter; // Center the text
+                helpLabel.style.paddingTop = 5;
+                helpLabel.style.paddingBottom = 5;
+                keysContainer.Add(helpLabel);
+                // -------------------------------------------
+
                 return;
             }
 
@@ -126,12 +135,13 @@ namespace ND_BehaviorTree.Editor
 
                 var keyNameField = new TextField { value = key.keyName };
                 keyNameField.AddToClassList("key-row-field-name");
-                keyNameField.RegisterValueChangedCallback(evt => {
+                keyNameField.RegisterValueChangedCallback(evt =>
+                {
                     Undo.RecordObject(key, "Rename Blackboard Key");
                     key.keyName = evt.newValue;
                     EditorUtility.SetDirty(key);
                 });
-                
+
                 var valueProperty = keyProperty.FindPropertyRelative("value");
                 var propertyField = new PropertyField(valueProperty, "");
                 propertyField.AddToClassList("key-row-field-value");
@@ -139,14 +149,14 @@ namespace ND_BehaviorTree.Editor
 
                 var deleteButton = new Button(() => DeleteKey(key)) { text = "X" };
                 deleteButton.AddToClassList("key-row-delete-button");
-                
+
                 keyRow.Add(keyNameField);
                 keyRow.Add(propertyField);
                 keyRow.Add(deleteButton);
                 keysContainer.Add(keyRow);
             }
         }
-        
+
         // ... (DeleteKey method remains the same) ...
         private void DeleteKey(Key keyToDelete)
         {

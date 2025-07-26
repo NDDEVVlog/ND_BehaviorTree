@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    [CreateAssetMenu(fileName = "New Blackboard", menuName = "BehaviourTree/Blackboard")]
+    [CreateAssetMenu(fileName = "New Blackboard", menuName = "ND_BehaviorTree/Blackboard")]
     public class Blackboard : ScriptableObject
     {
         public List<Key> keys = new List<Key>();

@@ -87,8 +87,11 @@ namespace ND_BehaviorTree
         public virtual List<Node> GetChildren() => new List<Node>();
 
         // --- Editor-only methods ---
+
         public void SetPosition(Rect newPosition) => m_position = newPosition;
         public void SetNewID(string newID) => m_guid = newID;
+
+        
         public Action InteruptAction;
     }
 }
