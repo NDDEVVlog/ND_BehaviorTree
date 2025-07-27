@@ -1,4 +1,4 @@
-
+// --- MODIFIED FILE: ND_BehaviorTreeView.ConnectionManagement.cs ---
 
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +58,7 @@ namespace ND_BehaviorTree.Editor
             // Optional sorting logic for composite nodes
             if (parentNode is CompositeNode composite)
             {
-                composite.children.Sort((a,b) => GetEditorNode(a.id).GetPosition().x.CompareTo(GetEditorNode(b.id).GetPosition().x));
+                SortChildrenByPosition(composite);
             }
         }
 

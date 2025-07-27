@@ -62,8 +62,8 @@ MonoBehaviour:
   m_guid: f36a70a5-5539-477a-a3c4-e40bd6e5d5c5
   m_position:
     serializedVersion: 2
-    x: -242.40001
-    y: 864
+    x: -312
+    y: 872.8
     width: 178.40001
     height: 95.20001
   typeName: Move To Transform
@@ -118,31 +118,6 @@ MonoBehaviour:
   - {fileID: 6656066396069085764}
   - {fileID: 2524751930976590589}
   services: []
---- !u!114 &-6586067264266576301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 486d39f5-f86c-4236-bac5-b160c0a45bea
-  m_position:
-    serializedVersion: 2
-    x: 433.6
-    y: 1207.2
-    width: 152.00003
-    height: 95.20007
-  typeName: Debug Log
-  priority: 0
-  message: Log Message
-  logColor: {r: 0, g: 1, b: 0, a: 1}
-  keyToLog: {fileID: 0}
-  returningStatus: 0
 --- !u!114 &-6539698401506606500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,8 +159,8 @@ MonoBehaviour:
   m_guid: 16f00f60-cc4d-4708-81e8-71b58e09b56c
   m_position:
     serializedVersion: 2
-    x: -18.4
-    y: 1013.6
+    x: -56.8
+    y: 1035.2
     width: 104
     height: 95.20007
   typeName: Wait
@@ -253,10 +228,10 @@ MonoBehaviour:
   m_guid: 618be2ac-c7e3-4ae3-8a2b-d48f17cb6865
   m_position:
     serializedVersion: 2
-    x: -52
-    y: 872
+    x: -64.8
+    y: 872.8
     width: 129.6
-    height: 133.59998
+    height: 133.60004
   typeName: Time Limit
   priority: 0
   child: {fileID: -5844898184024730655}
@@ -276,10 +251,10 @@ MonoBehaviour:
   m_guid: 2f2d12a5-a0d6-4e21-a03c-bcea76d05a59
   m_position:
     serializedVersion: 2
-    x: 85.6
-    y: 872
+    x: 124.799995
+    y: 984
     width: 242.4
-    height: 95.20001
+    height: 95.19995
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
@@ -356,12 +331,11 @@ MonoBehaviour:
   - {fileID: -6651424988616651699}
   - {fileID: 8649712526444436019}
   - {fileID: 6656066396069085764}
-  - {fileID: 2615224446453704244}
   - {fileID: 2524751930976590589}
   - {fileID: 1788777279908683041}
   - {fileID: -5844898184024730655}
   - {fileID: -4912801335699234050}
-  - {fileID: -6586067264266576301}
+  - {fileID: 7012430020752034260}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   Self: {fileID: 0}
@@ -405,10 +379,10 @@ MonoBehaviour:
   m_guid: 067bc0f8-adbd-47f6-af77-f93782e7ca25
   m_position:
     serializedVersion: 2
-    x: -175.2
-    y: 709.6
+    x: -155.2
+    y: 730.4
     width: 264
-    height: 95.20001
+    height: 95.19995
   typeName: Move to TargetSequence
   priority: 0
   children:
@@ -558,28 +532,6 @@ MonoBehaviour:
   logColor: {r: 0.2618456, g: 0, b: 1, a: 1}
   keyToLog: {fileID: 0}
   returningStatus: 0
---- !u!114 &2615224446453704244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: e9cef4d5-4ea5-4bbc-9679-f8e1423908a1
-  m_position:
-    serializedVersion: 2
-    x: 1125.6
-    y: 745.6
-    width: 104
-    height: 95.20001
-  typeName: Wait
-  priority: 0
-  duration: 1
 --- !u!114 &5608220019986678229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700,6 +652,28 @@ MonoBehaviour:
   - {fileID: 8050742415459131951}
   services:
   - {fileID: 7023616156623417754}
+--- !u!114 &7012430020752034260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846a55a2431de6049b94dc4c049818d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 362d0bc8-e9d8-4220-a940-fb338ab9f746
+  m_position:
+    serializedVersion: 2
+    x: 1176.8
+    y: 777.6
+    width: 171.19995
+    height: 95.20001
+  typeName: Invoke Unity Event
+  priority: 0
+  unityEventKey: {fileID: 0}
 --- !u!114 &7023616156623417754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -820,7 +794,7 @@ MonoBehaviour:
   typeName: Sequence
   priority: 10
   children:
-  - {fileID: 2615224446453704244}
+  - {fileID: 7012430020752034260}
   - {fileID: 1788777279908683041}
   services: []
 --- !u!114 &8920281827989162788

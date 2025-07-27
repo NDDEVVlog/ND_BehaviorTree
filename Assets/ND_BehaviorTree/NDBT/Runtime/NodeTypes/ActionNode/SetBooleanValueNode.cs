@@ -19,6 +19,7 @@ using Key = ND_BehaviorTree.Key;
 public class SetBooleanValueNode : ActionNode
 {
 
+    [BlackboardKeyType(typeof(bool))]
     [Tooltip("The Blackboard key (of type bool) to set value.")]
     public Key conditionKey;
 
