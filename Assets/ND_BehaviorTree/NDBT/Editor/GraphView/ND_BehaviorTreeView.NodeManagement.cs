@@ -1,4 +1,4 @@
-
+// --- MODIFIED FILE: ND_BehaviorTreeView.NodeManagement.cs ---
 
 using System;
 using System.Collections.Generic;
@@ -165,6 +165,26 @@ namespace ND_BehaviorTree.Editor
                 EditorUtility.SetDirty(m_BTree);
                 if (m_editorWindow != null) m_editorWindow.SetUnsavedChanges(true);
             }
+        }
+
+        /// <summary>
+        /// Sorts the children of a CompositeNode based on their horizontal position in the graph.
+        /// </summary>
+        /// <param name="composite">The composite node whose children need sorting.</param>
+        public void SortChildrenByPosition(CompositeNode composite)
+        {
+            if (composite == null || composite.children == null) return;
+    
+            // Sort the children list based on the horizontal position of their corresponding editor nodes.
+            composite.children.Sort((a, b) => {
+                var editorA = GetEditorNode(a.id);
+                var editorB = GetEditorNode(b.id);
+        
+                // If for some reason an editor node isn't found, don't change their order.
+                if (editorA == null || editorB == null) return 0;
+        
+                return editorA.GetPosition().x.CompareTo(editorB.GetPosition().x);
+            });
         }
     }
 }

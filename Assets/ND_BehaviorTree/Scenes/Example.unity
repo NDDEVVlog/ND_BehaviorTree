@@ -678,6 +678,7 @@ GameObject:
   - component: {fileID: 810807865}
   - component: {fileID: 810807864}
   - component: {fileID: 810807870}
+  - component: {fileID: 810807871}
   m_Layer: 3
   m_Name: AI (1)
   m_TagString: Untagged
@@ -832,6 +833,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 4268ad1c72d74264fb2aafd7c39f1e41, type: 2}
   blackboardOverride: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
+--- !u!114 &810807871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810807862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81fe9f93017348d4bb68702cf8de57bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPowerLevel: 75.5
 --- !u!1 &899733263
 GameObject:
   m_ObjectHideFlags: 0

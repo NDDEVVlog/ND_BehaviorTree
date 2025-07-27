@@ -1,8 +1,10 @@
+// --- MODIFIED FILE: NodePropertyEditorWindow.cs ---
 
 using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic; 
-using System.Linq; 
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace ND_BehaviorTree.Editor
 {
@@ -30,7 +32,6 @@ namespace ND_BehaviorTree.Editor
             }
 
             NodePropertyEditorWindow window = GetWindow<NodePropertyEditorWindow>(false, "Node Properties", true);
-            // Use the more specific node type for a better window title
             window.titleContent = new GUIContent($"{nodeToEdit.GetType().Name}");
             window.SetNode(nodeToEdit, nodeEditorVisual);
             window.minSize = new Vector2(300, 250);
@@ -45,8 +46,6 @@ namespace ND_BehaviorTree.Editor
             _nodeEditorVisual = nodeEditorVisual;
             if (_targetNode != null)
             {
-                // Create the SerializedObject from the target node instance.
-                // This correctly captures the entire object, including derived class fields.
                 _serializedNodeObject = new SerializedObject(_targetNode);
             }
             else
@@ -83,63 +82,131 @@ namespace ND_BehaviorTree.Editor
                 return;
             }
 
-            // Always update from the source object at the beginning of OnGUI
             _serializedNodeObject.Update();
 
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
-            // A field for the custom name/title of the node
             EditorGUILayout.LabelField("Node Settings", EditorStyles.boldLabel);
             SerializedProperty typeNameProp = _serializedNodeObject.FindProperty("typeName");
-            if(typeNameProp != null)
+            if (typeNameProp != null)
             {
                 EditorGUILayout.PropertyField(typeNameProp, new GUIContent("Display Name"));
             }
             EditorGUILayout.Space(10);
-            //SerializedProperty priorityProp = _serializedNodeObject.FindProperty("priority");
-            // if (priorityProp != null)
-            // {
-            //     EditorGUILayout.PropertyField(priorityProp, new GUIContent("Priority"));
-            // }
-            // --- THE CORE FIX: Iterate and draw all visible properties ---
+
             EditorGUILayout.LabelField("Node-Specific Properties", EditorStyles.boldLabel);
 
-            // Get an iterator for the serialized object
             SerializedProperty property = _serializedNodeObject.GetIterator();
-            // The first call to NextVisible moves to the first property (usually "m_Script")
-            property.NextVisible(true); 
+            property.NextVisible(true);
 
-            // Loop through all visible properties
             do
             {
-                // These are the built-in fields from the base Node class that we don't want to show here.
-                if (property.name == "m_Script" || 
-                    property.name == "m_guid" || 
-                    property.name == "m_position" || 
+                if (property.name == "m_Script" ||
+                    property.name == "m_guid" ||
+                    property.name == "m_position" ||
                     property.name == "typeName")
                 {
-                    continue; // Skip these fields
+                    continue;
+                }
+                
+                var fieldInfo = _targetNode.GetType().GetField(property.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (fieldInfo != null && typeof(Key).IsAssignableFrom(fieldInfo.FieldType))
+                {
+                    DrawKeySelector(property, fieldInfo); // Pass fieldInfo to the drawing method
+                }
+                else
+                {
+                    EditorGUILayout.PropertyField(property, true);
                 }
 
-                // Draw the property field for all other properties.
-                // This will automatically find 'interval', 'rotationSpeed', 'agentKey', etc.
-                EditorGUILayout.PropertyField(property, true);
-
-            } while (property.NextVisible(false)); // Move to the next property
+            } while (property.NextVisible(false));
 
             EditorGUILayout.EndScrollView();
 
-            // Apply any changes made in the GUI back to the serialized object
             if (_serializedNodeObject.ApplyModifiedProperties())
             {
-                // If anything changed, update the visual node in the graph
                 if (_nodeEditorVisual != null)
                 {
                     _nodeEditorVisual.UpdateNode();
                 }
-                
-                // Mark the node asset as dirty so Unity saves the changes
                 EditorUtility.SetDirty(_targetNode);
+            }
+        }
+        
+        /// <summary>
+        /// Draws a custom dropdown for a 'Key' field, filtering by type if a BlackboardKeyTypeAttribute is present.
+        /// </summary>
+        private void DrawKeySelector(SerializedProperty property, FieldInfo fieldInfo)
+        {
+            // 1. Find the BehaviorTree and Blackboard.
+            BehaviorTree tree = null;
+            if (_targetNode != null)
+            {
+                string assetPath = AssetDatabase.GetAssetPath(_targetNode);
+                if (!string.IsNullOrEmpty(assetPath))
+                {
+                    tree = AssetDatabase.LoadMainAssetAtPath(assetPath) as BehaviorTree;
+                }
+            }
+
+            if (tree == null || tree.blackboard == null)
+            {
+                EditorGUILayout.PropertyField(property, new GUIContent(property.displayName));
+                EditorGUILayout.HelpBox("No Blackboard found on the parent Behavior Tree asset.", MessageType.Warning);
+                return;
+            }
+
+            // 2. Check for the attribute and filter the keys.
+            var keyTypeAttribute = fieldInfo.GetCustomAttribute<BlackboardKeyTypeAttribute>();
+            System.Type requiredType = keyTypeAttribute?.RequiredType;
+
+            var allKeys = tree.blackboard.keys.Where(k => k != null).ToList();
+            List<Key> validKeys;
+
+            if (requiredType != null)
+            {
+                // Filter keys where the key's value type matches the required type.
+                validKeys = allKeys.Where(k => k.GetValueType() == requiredType).ToList();
+            }
+            else
+            {
+                // No attribute, so show all keys.
+                validKeys = allKeys;
+            }
+
+            // Show a warning if no suitable keys are found.
+            if (validKeys.Count == 0)
+            {
+                EditorGUILayout.PropertyField(property, new GUIContent(property.displayName));
+                string typeName = requiredType != null ? requiredType.Name : "any";
+                EditorGUILayout.HelpBox($"No keys of type '{typeName}' found in the Blackboard.", MessageType.Warning);
+                return;
+            }
+
+            // 3. Prepare data for the popup.
+            List<string> keyNames = validKeys.Select(k => k.keyName).ToList();
+            keyNames.Insert(0, "[None]");
+
+            // 4. Find the index of the currently selected key.
+            Key currentKey = property.objectReferenceValue as Key;
+            int currentIndex = 0;
+            if (currentKey != null)
+            {
+                int foundIndex = validKeys.FindIndex(k => k == currentKey);
+                if (foundIndex != -1)
+                {
+                    currentIndex = foundIndex + 1;
+                }
+            }
+
+            // 5. Draw the popup field.
+            GUIContent label = new GUIContent(property.displayName, property.tooltip);
+            int newIndex = EditorGUILayout.Popup(label, currentIndex, keyNames.ToArray());
+
+            // 6. Update the property if the selection changed.
+            if (newIndex != currentIndex)
+            {
+                property.objectReferenceValue = (newIndex == 0) ? null : validKeys[newIndex - 1];
             }
         }
     }

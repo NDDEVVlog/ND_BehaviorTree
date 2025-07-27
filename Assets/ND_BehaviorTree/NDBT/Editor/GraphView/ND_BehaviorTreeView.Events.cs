@@ -1,4 +1,4 @@
-
+// --- MODIFIED FILE: ND_BehaviorTreeView.Events.cs ---
 
 using System.Collections.Generic;
 using System.Linq;
@@ -29,11 +29,34 @@ namespace ND_BehaviorTree.Editor
 
             if (graphViewChange.movedElements != null && graphViewChange.movedElements.Any())
             {
+                var parentsToReorder = new HashSet<CompositeNode>();
                 Undo.RecordObject(m_serialLizeObject.targetObject, "Moved Graph Elements");
+                
                 foreach (ND_NodeEditor editorNode in graphViewChange.movedElements.OfType<ND_NodeEditor>())
                 {
                     editorNode.SavePosition();
+
+                    // Find the parent of the moved node to trigger a sort
+                    if (editorNode.m_InputPort != null && editorNode.m_InputPort.connected)
+                    {
+                        // A node can only have one parent
+                        var parentEdge = editorNode.m_InputPort.connections.FirstOrDefault();
+                        if (parentEdge?.output?.node is ND_NodeEditor parentEditorNode)
+                        {
+                            if (parentEditorNode.node is CompositeNode compositeParent)
+                            {
+                                parentsToReorder.Add(compositeParent);
+                            }
+                        }
+                    }
                 }
+                
+                // Re-sort the children list for each affected parent
+                foreach (var parentNode in parentsToReorder)
+                {
+                    SortChildrenByPosition(parentNode);
+                }
+
                 hasViewMadeChanges = true;
             }
 

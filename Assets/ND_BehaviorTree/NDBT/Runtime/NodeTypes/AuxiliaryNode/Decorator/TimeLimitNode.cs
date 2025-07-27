@@ -1,4 +1,4 @@
-// --- START OF FILE TimeLimitNode.cs ---
+
 using UnityEngine;
 
 namespace ND_BehaviorTree
@@ -47,4 +47,3 @@ namespace ND_BehaviorTree
         }
     }
 }
-// --- END OF FILE TimeLimitNode.cs ---
