@@ -2,13 +2,14 @@
 
 using UnityEngine;
 using ND_BehaviorTree;
-using System.Linq; // Added for LINQ to easily get key names
+using System.Linq;
+using UnityEngine.Events; // Added for LINQ to easily get key names
 
 public class BehaviorTreeRunner : MonoBehaviour
 {
     [Tooltip("The BehaviorTree asset to run.")]
     public BehaviorTree treeAsset;
-    
+
     [Tooltip("(Optional) A specific Blackboard asset to use for this runner. If left empty, a clone of the one from the Tree Asset will be used. Values can be set below.")]
     public Blackboard blackboardOverride;
 
@@ -53,7 +54,7 @@ public class BehaviorTreeRunner : MonoBehaviour
 
     public virtual void Init()
     {
-        
+        RuntimeTree.blackboard.SetValue<UnityEvent>("RandomUnityEvent", randomShit);
     }
 
     void Update()
@@ -62,5 +63,13 @@ public class BehaviorTreeRunner : MonoBehaviour
         {
             RuntimeTree.Update();
         }
+    }
+
+
+    public UnityEvent randomShit;
+
+    public void DebugCMM()
+    {
+        Debug.Log("UNITAOI{HDAO{FIHG}}");
     }
 }

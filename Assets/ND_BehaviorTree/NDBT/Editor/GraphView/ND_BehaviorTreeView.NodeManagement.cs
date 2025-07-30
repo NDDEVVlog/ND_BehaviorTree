@@ -1,5 +1,3 @@
-// --- MODIFIED FILE: ND_BehaviorTreeView.NodeManagement.cs ---
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +40,25 @@ namespace ND_BehaviorTree.Editor
             AssetDatabase.SaveAssets();
             if (m_editorWindow != null) m_editorWindow.SetUnsavedChanges(true);
         }
+        
+        // --- NEW: Factory method to create the correct editor view ---
+        /// <summary>
+        /// A factory method that creates the appropriate editor view for a given node data.
+        /// This allows for specialized editors like ND_GOAPNodeEditor.
+        /// </summary>
+        private ND_NodeEditor CreateNodeEditorView(Node nodeData)
+        {
+            // If the node is part of the GOAP system, use the specialized editor.
+            if (nodeData is GOAP.GOAPActionNode || nodeData is GOAP.GOAPPlannerNode)
+            {
+                return new ND_GOAPNodeEditor(nodeData, m_serialLizeObject, this);
+            }
+            
+            // You can add more 'else if' statements here for other custom node editors in the future.
+            
+            // For all other nodes, use the default editor.
+            return new ND_NodeEditor(nodeData, m_serialLizeObject, this);
+        }
 
         private void AddNodeVisuals(Node nodeData, bool animate = true)
         {
@@ -53,7 +70,8 @@ namespace ND_BehaviorTree.Editor
                 return;
             }
 
-            var nodeEditor = new ND_NodeEditor(nodeData, m_serialLizeObject, this);
+            // --- MODIFIED: Use the factory method to create the node editor ---
+            var nodeEditor = CreateNodeEditorView(nodeData);
            
             AddNode(nodeData, nodeEditor);
 

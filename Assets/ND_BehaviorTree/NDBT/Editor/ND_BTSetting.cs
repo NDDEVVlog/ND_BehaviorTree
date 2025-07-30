@@ -23,16 +23,16 @@ namespace ND_BehaviorTree.Editor
         [Tooltip("The USS file for the main GraphView's appearance.")]
         [SerializeField]
         private StyleSheet graphViewStyle;
-
+ 
+        [Header("USS_ZONE")]
         [SerializeField]
         private StyleSheet nodeDefaultUSS;
-
         [SerializeField]
-        private VisualTreeAsset trelloNodeUXML;
+        private StyleSheet auxiliaryUSS;
         [SerializeField]
-        private VisualTreeAsset trelloChildNodeUXML;
+        private StyleSheet goapUSS;
         [SerializeField]
-        private StyleSheet trelloNodeUSS;
+        private StyleSheet edgeUSS;
 
 
 
@@ -63,32 +63,25 @@ namespace ND_BehaviorTree.Editor
             }
         }
 
-
-
-        public VisualTreeAsset TrelloChildUXML => trelloChildNodeUXML; // Public getter
-
-        public string GetTrelloChildPath()
+        public StyleSheet AuxiliaryUSSStyle => auxiliaryUSS; // Public getter
+        public string GetAuxiliaryUSSPath()
         {
-            if (trelloChildNodeUXML == null) return null;
-            return AssetDatabase.GetAssetPath(trelloChildNodeUXML);
+            if (auxiliaryUSS == null) return null;
+            return AssetDatabase.GetAssetPath(auxiliaryUSS);
         }
 
-
-        public VisualTreeAsset TrelloUXML => trelloNodeUXML; // Public getter
-
-        public string GetTrelloUXMLPath()
+        public StyleSheet GOAPUSSStyle => goapUSS; // Public getter
+        public string GetGOAPUSSPath()
         {
-            if (trelloNodeUXML == null) return null;
-            return AssetDatabase.GetAssetPath(trelloNodeUXML);
+            if (goapUSS == null) return null;
+            return AssetDatabase.GetAssetPath(goapUSS);
         }
 
-
-        public StyleSheet TrelloNodeUSSStyle => trelloNodeUSS; // Public getter
-
-        public string GetTrelloUSSPath()
+        public StyleSheet edgeUSSStyle => edgeUSS;
+        public string GetEdgeUSSPath()
         {
-            if (trelloNodeUSS == null) return null;
-            return AssetDatabase.GetAssetPath(trelloNodeUSS);
+            if (edgeUSS == null) return null;
+            return AssetDatabase.GetAssetPath(edgeUSS);
         }
 
 

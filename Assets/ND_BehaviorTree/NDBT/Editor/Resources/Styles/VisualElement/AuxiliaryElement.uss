@@ -1,0 +1,67 @@
+/*
+================================================================================
+=== STYLES FOR AUXILIARY NODES (DECORATORS/SERVICES) INSIDE OTHER NODES ===
+================================================================================
+*/
+
+
+/* Target any node that has our special class */
+.auxiliary-node-editor {
+    margin: 1px 0;
+    -unity-slice-scale: 0;
+    box-shadow: 0 0 0 0 rgba(0,0,0,0);
+    justify-content: space-between;
+    width: 100%; /* Make it fill the container */
+}
+
+/* Hide the main border of the auxiliary node */
+.auxiliary-node-editor > .node-border {
+    border-width: 0;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+/* Override the main container's styling to look like a list item */
+.auxiliary-node-editor > .node-border > .main-container {
+    background-color: rgba(57, 88, 57, 1);
+    border-radius: 3px;
+    padding: 2px 4px;
+}
+
+/* Change the background color based on type */
+.auxiliary-node-editor.decorator-child > .node-border > .main-container {
+    background-color:rgba(0, 144, 181, 0.58); /* Purplish for Decorators */
+}
+
+.auxiliary-node-editor.service-child > .node-border > .main-container {
+    background-color:rgb(170, 0, 255); /* Teal/green for Services */
+}
+
+/* Hide the port containers completely */
+.auxiliary-node-editor .port-container {
+    display: none;
+}
+
+/* Adjust the title element */
+.auxiliary-node-editor .title {
+    background-color: transparent;
+    border-bottom-width: 0;
+    min-height: auto;
+    padding: 0;
+}
+
+.auxiliary-node-editor .title-label {
+    font-size: 11px;
+    padding: 0;
+}
+
+.auxiliary-node-editor .icon-image {
+    width: 16px;
+    height: 16px;
+}
+
+/* Hide the other containers we don't need */
+.auxiliary-node-editor .task-node-content, 
+.auxiliary-node-editor .child-node-container {
+    display: none;
+}

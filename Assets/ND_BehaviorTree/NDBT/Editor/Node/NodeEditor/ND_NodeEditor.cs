@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Codice.CM.Common;
+using ND_BehaviorTree.GOAP;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -29,7 +31,7 @@ namespace ND_BehaviorTree.Editor
         internal Node m_Node;
         internal Port m_InputPort;
         internal Port m_OutputPort;
-        private List<Port> m_Ports = new List<Port>();
+        internal List<Port> m_Ports = new List<Port>();
         public SerializedObject m_SerializedObject;
 
         internal VisualElement m_ServiceContainer;
@@ -39,7 +41,7 @@ namespace ND_BehaviorTree.Editor
         public List<Port> Ports => m_Ports;
         public ND_BehaviorTreeView m_GraphView;
 
-        private Label titleLabel;
+        public  Label titleLabel;
 
         // --- Caches for runtime updates ---
         private readonly List<ExposedPropertyUpdater> m_ExposedPropertyUpdaters = new List<ExposedPropertyUpdater>();
@@ -53,7 +55,7 @@ namespace ND_BehaviorTree.Editor
         }
 
         // --- Initialization ---
-        private void InitializeNodeView(Node node, SerializedObject BTObject, GraphView graphView)
+        protected void InitializeNodeView(Node node, SerializedObject BTObject, GraphView graphView)
         {
             this.m_Node = node;
             this.m_SerializedObject = BTObject;
@@ -119,6 +121,15 @@ namespace ND_BehaviorTree.Editor
             }
 
             // --- Create Ports ---
+            DrawPort(info, topPortContainer, bottomPortContainer);
+
+            this.AddManipulator(new DoubleClickNodeManipulator(this));
+            RefreshExpandedState();
+            RefreshPorts();
+        }
+
+        public virtual void DrawPort(NodeInfoAttribute info, VisualElement topPortContainer, VisualElement bottomPortContainer)
+        {
             if (info.hasFlowInput)
             {
                 m_InputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
@@ -129,19 +140,16 @@ namespace ND_BehaviorTree.Editor
 
             if (info.hasFlowOutput)
             {
-                var capacity = m_Node is DecoratorNode ? Port.Capacity.Single : Port.Capacity.Multi;
+
+                var capacity = (m_Node is DecoratorNode or GOAPActionNode) ? Port.Capacity.Single : Port.Capacity.Multi;
                 m_OutputPort = InstantiatePort(Orientation.Vertical, Direction.Output, capacity, typeof(PortType.FlowPort));
                 m_OutputPort.portName = "";
                 bottomPortContainer.Add(m_OutputPort);
                 m_Ports.Add(m_OutputPort);
             }
-
-            this.AddManipulator(new DoubleClickNodeManipulator(this));
-            RefreshExpandedState();
-            RefreshPorts();
         }
 
-        private void DrawExposedProperties()
+        protected void DrawExposedProperties()
         {
             if (m_DetailsContainer == null) return;
 
@@ -168,7 +176,7 @@ namespace ND_BehaviorTree.Editor
             }
         }
 
-        private void DrawProgressBars()
+        protected void DrawProgressBars()
         {
             if (m_DetailsContainer == null) return;
 

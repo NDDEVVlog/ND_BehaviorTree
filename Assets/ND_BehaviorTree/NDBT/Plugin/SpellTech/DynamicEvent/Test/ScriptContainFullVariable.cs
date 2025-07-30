@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ND_BehaviorTree;
 using UnityEngine;
 
 public class ScriptContainFullVariable : MonoBehaviour
@@ -52,5 +53,11 @@ public class ScriptContainFullVariable : MonoBehaviour
 
 
     [SerializeReference]
-     public GenericParameter parameter = new FloatParameter();
+    public IDynamicBranchSelector dynamicBranchSelector;
+
+    [SerializeReference]
+    public GenericParameter parameter = new FloatParameter();
+
+
+    
 }
