@@ -1,0 +1,179 @@
+/*
+================================================================================
+=== ND_BEHAVIORTREE: SCI-FI STYLES FOR GOAP NODES ===
+================================================================================
+This stylesheet provides a distinct, modern, "ion-glow" theme for GOAP
+nodes, separating them visually from standard behavior tree nodes.
+*/
+
+/*
+=================================
+=== GENERAL GOAP NODE STYLING ===
+=================================
+This section applies to ALL nodes with the .goap-node class.
+It defines the basic shape, dark background, and typography.
+*/
+
+/* --- Outer Shape & Slicing for Angular Corners --- */
+/* We target the outermost element of the node view. */
+.goap-node > .node-border {
+    /* We don't use border-width; the "border" is created by the glow and background. */
+    border-width: 0;
+    /* This is the key to creating sharp, chamfered corners instead of rounded ones. */
+    /* It defines how much of the corner to "cut off". */
+    -unity-slice-left: 10;
+    -unity-slice-top: 10;
+    -unity-slice-right: 10;
+    -unity-slice-bottom: 10;
+    /* Make sure standard rounding is off. */
+    border-radius: 0;
+    /* Padding between the glow/border and the inner content. */
+    padding: 2px;
+}
+
+/* --- Inner Content Container --- */
+/* This is the main dark background of the node. */
+.goap-node > .node-border > .main-container {
+    background-color: rgb(15, 22, 33); /* Dark, slightly blue-tinted charcoal */
+    border-radius: 0; /* Match the sharp corners of the parent. */
+    border-width: 1px;
+}
+.goap-node> .title-content-container {
+    flex-grow: 1; /* This is the magic property. It makes the container expand. */
+    flex-shrink: 0;
+    justify-content: center; /* Vertically center the text labels within this container. */
+}
+
+/* --- Header & Typography --- */
+/* The container for the icon and text labels. */
+.goap-node > .title {
+    padding: 6px 10px;
+    min-height: 30px; /* Ensure a minimum height for the title area. */
+}
+
+/* Hide the default icon for a cleaner, text-focused look. */
+.goap-node >.icon-image {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+/* Apply a monospace font for a "terminal" or "HUD" feel. */
+.goap-node >.title-textfield,
+.goap-node >.type-label {
+    /* This is the GUID for Unity's built-in "Consolas" / Monospace font. */
+    -unity-font-definition: "GUID:d9d73d65b74744a4ab966847a9ac32a8";
+}
+
+/* Style the main title text. */
+.goap-node >.title-textfield {
+    font-size: 16px;
+    -unity-font-style: bold;
+}
+
+/* Style the smaller subtitle text. */
+.goap-node> .type-label {
+    font-size: 11px;
+    margin-top: 1px;
+    -unity-font-style: normal;
+}
+
+
+/*
+===================================
+=== GOAP PLANNER (MAGENTA THEME) ===
+===================================
+*/
+
+/* --- Outer Glow --- */
+.goap-planner-node > .node-border {
+    background-color: rgb(255, 0, 150); /* The solid color for the border slice. */
+    box-shadow: 0 0 12px 2px rgba(255, 0, 150, 0.6); /* The soft "ion glow". */
+}
+
+/* --- Inner Border & Text --- */
+.goap-planner-node > .node-border > .main-container {
+    border-color: rgba(255, 100, 200, 0.5);
+}
+.goap-planner-node .title-textfield,
+.goap-planner-node .type-label {
+    color: rgb(255, 220, 245); /* Light pink text color. */
+    text-shadow: 0 0 6px rgba(255, 0, 150, 0.7); /* Matching text glow. */
+}
+
+/*
+=================================
+=== GOAP ACTION (CYAN THEME) ===
+=================================
+*/
+
+/* --- Outer Glow --- */
+.goap-action-node > .node-border {
+    background-color: rgb(0, 200, 255); /* Solid cyan for the border slice. */
+    box-shadow: 0 0 12px 2px rgba(0, 200, 255, 0.6); /* Cyan "ion glow". */
+}
+
+/* --- Inner Border & Text --- */
+.goap-action-node > .node-border > .main-container {
+    border-color: rgba(100, 220, 255, 0.5);
+}
+.goap-action-node .title-textfield,
+.goap-action-node .type-label {
+    color: rgb(220, 250, 255); /* Light cyan text color. */
+    text-shadow: 0 0 6px rgba(0, 200, 255, 0.7); /* Matching text glow. */
+}
+
+/* --- Styling for the 'Details' section (e.g., Cost) --- */
+.goap-action-node .details-container {
+    background-color: rgba(0, 50, 80, 0.3);
+    border-top-color: rgba(100, 220, 255, 0.2);
+    border-bottom-color: rgba(100, 220, 255, 0.2);
+}
+.goap-action-node .exposed-property-label {
+    color: #88ddff;
+    -unity-font-definition: "GUID:d9d73d65b74744a4ab966847a9ac32a8";
+}
+.goap-action-node .exposed-property-value {
+    color: #ffffff;
+    -unity-font-definition: "GUID:d9d73d65b74744a4ab966847a9ac32a8";
+}
+
+
+/*
+================================
+=== PORT STYLING ===
+================================
+This ensures the connection ports match the sci-fi theme.
+*/
+
+.goap-node .port {
+    /* The small circle of the port itself. */
+
+    border-width: 1px;
+
+}
+
+.goap-node .port:hover {
+    background-color: rgb(0, 200, 255);
+    border-color: rgb(220, 250, 255);
+}
+
+
+.goap-node > .running > .node-border {
+    border-color: #FFD700; /* Bright Gold/Yellow */
+    border-width: 3px;
+    box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.5); /* Add a subtle glow */
+}
+
+/* Optional: Style for a node that just returned Success */
+.goap-node > .success > .node-border {
+    border-color: #4CAF50; /* Green */
+    border-width: 3px;
+}
+
+/* Optional: Style for a node that just returned Failure */
+.goap-node > .failure > .node-border {
+    border-color: #F44336; /* Red */
+    border-width: 3px;
+}

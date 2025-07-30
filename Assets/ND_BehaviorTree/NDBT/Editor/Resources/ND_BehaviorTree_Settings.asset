@@ -15,7 +15,7 @@ MonoBehaviour:
   enableSettingPassword: SubcribeToNDDEVGAME
   defaultNodeUXML: {fileID: 9197481963319205126, guid: 28fb3ed3c12cbbe4da0dd006c6cc7a24, type: 3}
   graphViewStyle: {fileID: 7433441132597879392, guid: 960474170df95f842adf94741758ef3d, type: 3}
-  nodeDefaultUSS: {fileID: 0}
-  trelloNodeUXML: {fileID: 0}
-  trelloChildNodeUXML: {fileID: 0}
-  trelloNodeUSS: {fileID: 0}
+  nodeDefaultUSS: {fileID: 7433441132597879392, guid: 56edd9fb931184641b0c2e7fe3d72ef4, type: 3}
+  auxiliaryUSS: {fileID: 7433441132597879392, guid: 918a7e2f7bf693545919e4662786577b, type: 3}
+  goapUSS: {fileID: 7433441132597879392, guid: 15f213f83a32cba4eaf1cae235b903d2, type: 3}
+  edgeUSS: {fileID: 7433441132597879392, guid: efcaf5a99f91ed5449f77501c102e307, type: 3}

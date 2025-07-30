@@ -1,0 +1,416 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5348843045529535200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7ab04194f05314da799101c288f09c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 85ebc1ec-9cb9-4687-b62f-30bca1489b26
+  m_position:
+    serializedVersion: 2
+    x: 395.2
+    y: 734.4
+    width: 268.8
+    height: 95.19995
+  typeName: AnimationHubComponentNode
+  priority: 0
+  eventID: 
+  eventIDKey: {fileID: 0}
+--- !u!114 &-4734503684602027960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6075e4aa7424d364c90a6009b72a5660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 163a3748-5da9-486d-9348-88a167764ed9
+  m_position:
+    serializedVersion: 2
+    x: -82.4
+    y: 718.4
+    width: 139.2
+    height: 119.19995
+  typeName: Repeater
+  priority: 0
+  child: {fileID: 5258702330272107779}
+  repeatCount: 3
+  currentCount: 0
+--- !u!114 &-4091013331984308573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2de36b0f5fdee4ab2cafd3c11232da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 5ef8fb06-3221-42ad-94d1-49d7c81322dc
+  m_position:
+    serializedVersion: 2
+    x: 196.8
+    y: 466.4
+    width: 168.79999
+    height: 92.00003
+  typeName: ChopTree
+  priority: 0
+  preconditions:
+  - key: HasWeapon
+    valueType: 0
+    comparison: 0
+    boolValue: 1
+    intValue: 0
+    floatValue: 0
+    gameObjectValue: {fileID: 0}
+    stringValue: 
+  - key: IsThereAnyTreeAround
+    valueType: 0
+    comparison: 0
+    boolValue: 1
+    intValue: 0
+    floatValue: 0
+    gameObjectValue: {fileID: 0}
+    stringValue: 
+  effects:
+  - key: IsThereAnyTreeAround
+    valueType: 0
+    comparison: 0
+    boolValue: 0
+    intValue: 0
+    floatValue: 0
+    gameObjectValue: {fileID: 0}
+    stringValue: 
+  cost: 1
+  child: {fileID: 6779057175041700634}
+--- !u!114 &-3734822471647403207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: bb907872-3fb1-43a9-afd1-0339e191e540
+  m_position:
+    serializedVersion: 2
+    x: 84
+    y: 734.4
+    width: 242.40001
+    height: 95.19995
+  typeName: SetBooleanValueNode
+  priority: 0
+  conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+  ValueToSet: 0
+--- !u!114 &-1165108541859606460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0cfde30bd2a9494ab399998b7f18388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: d0a39782-171d-4711-8066-b1a845b19551
+  m_position:
+    serializedVersion: 2
+    x: 513.60004
+    y: 304.8
+    width: 172.79999
+    height: 95.20001
+  typeName: GOAPPlannerNode
+  priority: 0
+  children:
+  - {fileID: -4091013331984308573}
+  - {fileID: 7249488118851278663}
+  services: []
+  goal:
+  - key: NumberOfLog
+    valueType: 1
+    comparison: 2
+    boolValue: 0
+    intValue: 5
+    floatValue: 0
+    gameObjectValue: {fileID: 0}
+    stringValue: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e30e10dae0a048499a4cc3b0964bcbf, type: 3}
+  m_Name: TestGoap
+  m_EditorClassIdentifier: 
+  m_nodes:
+  - {fileID: 4009271883461909621}
+  - {fileID: -1165108541859606460}
+  - {fileID: -4091013331984308573}
+  - {fileID: 7249488118851278663}
+  - {fileID: -4734503684602027960}
+  - {fileID: 7527309124941446503}
+  - {fileID: 5258702330272107779}
+  - {fileID: 413836543818922411}
+  - {fileID: -3734822471647403207}
+  - {fileID: 6779057175041700634}
+  - {fileID: 1788124896194734960}
+  - {fileID: 1399468310895655337}
+  - {fileID: 4302018771259354275}
+  - {fileID: -5348843045529535200}
+  rootNode: {fileID: 4009271883461909621}
+  blackboard: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+  Self: {fileID: 0}
+--- !u!114 &413836543818922411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: dda8d746-9714-42ad-9d0d-cc798e9614b8
+  m_position:
+    serializedVersion: 2
+    x: 43.2
+    y: 1019.19995
+    width: 152
+    height: 95.20007
+  typeName: Debug Log
+  priority: 0
+  message: FindingAxe
+  logColor: {r: 1, g: 0, b: 0.81254673, a: 1}
+  keyToLog: {fileID: 0}
+  returningStatus: 0
+--- !u!114 &1399468310895655337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 8ba9f309-6ebf-4f3d-a700-9bb798f3c841
+  m_position:
+    serializedVersion: 2
+    x: 780
+    y: 713.6
+    width: 104
+    height: 95.20001
+  typeName: Wait
+  priority: 0
+  duration: 1
+--- !u!114 &1788124896194734960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 550bd029-5542-4aec-86b2-598050d4d420
+  m_position:
+    serializedVersion: 2
+    x: 772
+    y: 575.2
+    width: 260.8
+    height: 95.20001
+  typeName: Scout for Tree Sequence
+  priority: 0
+  children:
+  - {fileID: 1399468310895655337}
+  - {fileID: 4302018771259354275}
+  services: []
+--- !u!114 &4009271883461909621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e11269abd4d414b96e89e1a2ef6079, type: 3}
+  m_Name: Root
+  m_EditorClassIdentifier: 
+  m_guid: 674bd0f5-ae36-4b5f-9643-9b4e9089bf10
+  m_position:
+    serializedVersion: 2
+    x: 552
+    y: 151.2
+    width: 104
+    height: 95.2
+  typeName: Root
+  priority: 0
+  child: {fileID: -1165108541859606460}
+--- !u!114 &4302018771259354275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 8af5dcdd-d6fb-4de6-a246-1feb012d4e0b
+  m_position:
+    serializedVersion: 2
+    x: 932.8
+    y: 720
+    width: 242.40002
+    height: 95.20001
+  typeName: SetBooleanValueNode
+  priority: 0
+  conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+  ValueToSet: 1
+--- !u!114 &5258702330272107779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 0dcc8466-a63d-41fc-bc86-54efc1ef66ff
+  m_position:
+    serializedVersion: 2
+    x: -66.4
+    y: 887.2
+    width: 145.6
+    height: 95.20001
+  typeName: Sequence
+  priority: 0
+  children:
+  - {fileID: 7527309124941446503}
+  - {fileID: 413836543818922411}
+  services: []
+--- !u!114 &6779057175041700634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 795e95d4-1f18-43ba-8b43-8e3814928982
+  m_position:
+    serializedVersion: 2
+    x: 204
+    y: 551.2
+    width: 145.59999
+    height: 95.20001
+  typeName: Sequence
+  priority: 0
+  children:
+  - {fileID: -4734503684602027960}
+  - {fileID: -3734822471647403207}
+  - {fileID: -5348843045529535200}
+  services: []
+--- !u!114 &7249488118851278663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2de36b0f5fdee4ab2cafd3c11232da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: f3e7c3fc-ca40-439c-a772-5a97780dca3f
+  m_position:
+    serializedVersion: 2
+    x: 799.2
+    y: 474.40002
+    width: 201.59998
+    height: 92
+  typeName: ScoutForTheTree
+  priority: 0
+  preconditions:
+  - key: IsThereAnyTreeAround
+    valueType: 0
+    comparison: 0
+    boolValue: 0
+    intValue: 0
+    floatValue: 0
+    gameObjectValue: {fileID: 0}
+    stringValue: 
+  effects:
+  - key: NumberOfLog
+    valueType: 1
+    comparison: 2
+    boolValue: 0
+    intValue: 50
+    floatValue: 0
+    gameObjectValue: {fileID: 0}
+    stringValue: 
+  cost: 1
+  child: {fileID: 1788124896194734960}
+--- !u!114 &7527309124941446503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: d859157a-523a-4799-a54c-437f759839b0
+  m_position:
+    serializedVersion: 2
+    x: -161.6
+    y: 1003.19995
+    width: 104
+    height: 95.20007
+  typeName: Wait
+  priority: 0
+  duration: 1

@@ -53,8 +53,8 @@ namespace ND_BehaviorTree
             BehaviorTree tree = Instantiate(this);
             tree.m_nodes = new List<Node>();
 
-            // --- 1. Traverse the original tree to find all unique nodes ---
-            // This includes the main execution graph (via GetChildren) and attached services.
+            // --- 1. Gom tất cả các node từ cây gốc ---
+            // (Phần này giữ nguyên, không cần thay đổi)
             var allNodesInGraph = new List<Node>();
             var nodesToVisit = new Stack<Node>();
             if (this.rootNode != null)
@@ -72,20 +72,19 @@ namespace ND_BehaviorTree
                 
                 allNodesInGraph.Add(currentNode);
                 
-                // Add all children from the main execution path (this now includes decorators)
                 foreach (var child in currentNode.GetChildren())
                 {
                     nodesToVisit.Push(child);
                 }
                 
-                // Separately add attached services, as they are not in the main GetChildren() path.
                 if (currentNode is CompositeNode composite)
                 {
                     composite.services.ForEach(s => nodesToVisit.Push(s));
                 }
             }
             
-            // --- 2. Clone each unique node and map originals to clones ---
+            // --- 2. Clone từng node và tạo map ---
+            // (Phần này giữ nguyên, không cần thay đổi)
             var nodeMap = new Dictionary<string, Node>();
             foreach (Node originalNode in allNodesInGraph)
             {
@@ -98,7 +97,8 @@ namespace ND_BehaviorTree
                 }
             }
 
-            // --- 3. Reconnect the cloned nodes to form the correct graph structure ---
+            // --- 3. Kết nối lại các node đã clone ---
+            // (*** PHẦN QUAN TRỌNG CẦN SỬA ĐỔI NẰM Ở ĐÂY ***)
             foreach (Node originalNode in allNodesInGraph)
             {
                 Node clonedNode = nodeMap[originalNode.id];
@@ -107,9 +107,7 @@ namespace ND_BehaviorTree
                 if (originalNode is CompositeNode originalComposite)
                 {
                     var clonedComposite = clonedNode as CompositeNode;
-                    // Reconnect main children (Actions, other Composites, and now Decorators)
                     originalComposite.children.ForEach(child => clonedComposite.AddChild(nodeMap[child.id]));
-                    // Reconnect attached services
                     originalComposite.services.ForEach(service => clonedComposite.services.Add(nodeMap[service.id] as ServiceNode));
                 }
                 // Reconnect the single child for Auxiliary Nodes (which is the base for Decorator)
@@ -124,18 +122,25 @@ namespace ND_BehaviorTree
                     var clonedRoot = clonedNode as RootNode;
                     clonedRoot.child = nodeMap[originalRoot.child.id];
                 }
+                // **********************************************************
+                // *** THÊM KHỐI LỆNH NÀY VÀO ĐỂ SỬA LỖI ***
+                // Reconnect the child for GOAPActionNode
+                else if (originalNode is GOAP.GOAPActionNode originalGoapAction && originalGoapAction.child != null)
+                {
+                    var clonedGoapAction = clonedNode as GOAP.GOAPActionNode;
+                    // Tìm bản sao của node con trong map và gán lại
+                    clonedGoapAction.child = nodeMap[originalGoapAction.child.id];
+                }
+                // **********************************************************
             }
             
-            // --- 4. Clone the blackboard and assign the owner tree reference ---
-
-            // Clone the blackboard instance so the runtime tree has its own state.
+            // --- 4. Clone blackboard và gán owner tree ---
+            // (Phần này giữ nguyên, không cần thay đổi)
             if (this.blackboard != null)
             {
                 tree.blackboard = this.blackboard.Clone();
             }
-
-            // Assign the owner tree to all cloned nodes. This allows each node
-            // to access the runtime tree's properties, most importantly, its blackboard.
+            
             foreach (var clonedNode in tree.nodes)
             {
                 clonedNode.ownerTree = tree;

@@ -1,34 +1,35 @@
-// File: ND_DTSettingEditor.cs
+// File: ND_BehaviorTreeSettingEditor.cs
 using UnityEditor;
 using UnityEngine;
 
 namespace ND_BehaviorTree.Editor
 {
     [CustomEditor(typeof(ND_BehaviorTreeSetting))]
-    public class ND_DTSettingEditor : UnityEditor.Editor
+    public class ND_BehaviorTreeSettingEditor : UnityEditor.Editor
     {
         private string _enteredPassword = "";
         private bool _isUnlocked = false;
-        private const string UnlockSessionStateKey = "ND_DrawTrelloSetting_IsUnlocked";
+        private const string UnlockSessionStateKey = "ND_BehaviorTreeSetting_IsUnlocked";
 
+        // --- SerializedProperty fields for ALL settings ---
         private SerializedProperty _defaultNodeUXMLProp;
         private SerializedProperty _graphViewStyleProp;
-        // Add SerializedProperty fields for any other settings you want to control
+        private SerializedProperty _nodeDefaultUSSProp;
+        private SerializedProperty _auxiliaryUSSProp;
+        private SerializedProperty _goapUSSProp;
+        private SerializedProperty _edgeUSSProp;
 
-#if UNITY_EDITOR
-        private bool _isCurrentlyInDeveloperMode = false; // For the developer mode bypass
-#endif
         private void OnEnable()
         {
+            _isUnlocked = SessionState.GetBool(UnlockSessionStateKey, false);
 
-                _isUnlocked = SessionState.GetBool(UnlockSessionStateKey, false);
-
-
-
-            // Cache SerializedProperty references
+            // --- Cache ALL SerializedProperty references ---
             _defaultNodeUXMLProp = serializedObject.FindProperty("defaultNodeUXML");
             _graphViewStyleProp = serializedObject.FindProperty("graphViewStyle");
-            // Find other properties...
+            _nodeDefaultUSSProp = serializedObject.FindProperty("nodeDefaultUSS");
+            _auxiliaryUSSProp = serializedObject.FindProperty("auxiliaryUSS");
+            _goapUSSProp = serializedObject.FindProperty("goapUSS");
+            _edgeUSSProp = serializedObject.FindProperty("edgeUSS");
         }
 
         public override void OnInspectorGUI()
@@ -36,8 +37,8 @@ namespace ND_BehaviorTree.Editor
             ND_BehaviorTreeSetting settings = (ND_BehaviorTreeSetting)target;
             serializedObject.Update(); // Always call this at the beginning
 
-
-            if (!_isUnlocked) // SIMPLIFIED: remove !_isCurrentlyInDeveloperMode if not using dev mode
+            // --- Password Lock Section (No changes needed here) ---
+            if (!_isUnlocked)
             {
                 EditorGUILayout.HelpBox("Enter the password to enable editing.", MessageType.Info);
                 
@@ -53,32 +54,27 @@ namespace ND_BehaviorTree.Editor
                         _isUnlocked = true;
                         SessionState.SetBool(UnlockSessionStateKey, true);
                         _enteredPassword = ""; 
-                        Debug.Log("ND_DrawTrello Settings Unlocked for editing.");
+                        Debug.Log("ND_BehaviorTree Settings Unlocked for editing.");
                         GUI.FocusControl(null); // Remove focus from password field
                     }
                     else
                     {
                         EditorUtility.DisplayDialog("Incorrect Password", "The password you entered is incorrect.", "OK");
-                        Debug.LogWarning("Incorrect password attempt for ND_DrawTrello Settings.");
+                        Debug.LogWarning("Incorrect password attempt for ND_BehaviorTree Settings.");
                     }
                 }
                 EditorGUILayout.Space();
             }
 
-           
-            bool enableGUI = _isUnlocked; // SIMPLIFIED: remove _isCurrentlyInDeveloperMode if not using dev mode
-
-
-            EditorGUI.BeginDisabledGroup(!enableGUI); // If enableGUI is false, fields will be disabled (readonly)
+            // --- Main Settings Section ---
+            EditorGUI.BeginDisabledGroup(!_isUnlocked);
             {
                 DrawSettingsFields();
             }
             EditorGUI.EndDisabledGroup();
 
-
-            // --- Lock Button (Only if unlocked and not in dev mode) ---
-            // if (_isUnlocked && !_isCurrentlyInDeveloperMode) // UNCOMMENT IF USING DEV MODE
-            if (_isUnlocked) // SIMPLIFIED: remove !_isCurrentlyInDeveloperMode if not using dev mode
+            // --- Lock Button (No changes needed here) ---
+            if (_isUnlocked)
             {
                 EditorGUILayout.Space();
                 if (GUILayout.Button("Lock Settings"))
@@ -95,10 +91,20 @@ namespace ND_BehaviorTree.Editor
 
         private void DrawSettingsFields()
         {
+            // --- Draw ALL settings fields ---
+            EditorGUILayout.LabelField("UXML Templates", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_defaultNodeUXMLProp, new GUIContent("Default Node UXML"));
-            EditorGUILayout.PropertyField(_graphViewStyleProp, new GUIContent("GraphView StyleSheet"));
 
-            if (_isUnlocked) // SIMPLIFIED
+            EditorGUILayout.Space();
+            
+            EditorGUILayout.LabelField("USS Stylesheets", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(_graphViewStyleProp, new GUIContent("GraphView Style"));
+            EditorGUILayout.PropertyField(_nodeDefaultUSSProp, new GUIContent("Node Default Style"));
+            EditorGUILayout.PropertyField(_auxiliaryUSSProp, new GUIContent("Auxiliary Node Style"));
+            EditorGUILayout.PropertyField(_goapUSSProp, new GUIContent("GOAP Node Style"));
+            EditorGUILayout.PropertyField(_edgeUSSProp, new GUIContent("Edge Style"));
+
+            if (_isUnlocked)
             {
                 EditorGUILayout.Space();
                 EditorGUILayout.HelpBox("Settings are currently editable. Remember to lock them if needed.", MessageType.None);

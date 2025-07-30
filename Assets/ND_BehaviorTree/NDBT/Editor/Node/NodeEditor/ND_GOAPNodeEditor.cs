@@ -1,0 +1,43 @@
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
+
+namespace ND_BehaviorTree.Editor
+{
+    /// <summary>
+    /// A specialized editor view for all GOAP-related nodes.
+    /// It inherits all functionality from ND_NodeEditor and only adds custom styling.
+    /// </summary>
+    public class ND_GOAPNodeEditor : ND_NodeEditor
+    {
+        public ND_GOAPNodeEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView)
+            : base(node, BTObject, graphView) // The base constructor does all the heavy lifting.
+        {
+            // The only job of this child class is to add specific styles.
+            
+            // 1. Load the stylesheet for GOAP nodes.
+            // Note: The path should come from your settings singleton.
+            string goapStylePath = ND_BehaviorTreeSetting.Instance.GetGOAPUSSPath();
+            if (!string.IsNullOrEmpty(goapStylePath))
+            {
+                StyleSheet goapStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(goapStylePath);
+                if (goapStyleSheet != null)
+                {
+                    this.styleSheets.Add(goapStyleSheet);
+                }
+            }
+
+            // 2. Add USS classes to this specific node instance for styling.
+            this.AddToClassList("goap-node");
+
+            if (m_Node is GOAP.GOAPPlannerNode)
+            {
+                this.AddToClassList("goap-planner-node");
+            }
+            else if (m_Node is GOAP.GOAPActionNode)
+            {
+                this.AddToClassList("goap-action-node");
+            }
+        }
+    }
+}

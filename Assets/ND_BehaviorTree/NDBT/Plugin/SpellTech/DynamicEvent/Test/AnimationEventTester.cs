@@ -1,3 +1,4 @@
+using ND_BehaviorTree;
 using UnityEngine;
 
 // Define the struct. [System.Serializable] is good practice.
@@ -12,6 +13,9 @@ public struct DamageInfo
 // This is the main testing script.
 public class AnimationEventTester : MonoBehaviour
 {
+    [SerializeReference]
+    public IDynamicBranchSelector randomShit;
+
     [Header("Dynamic Value Source")]
     [Tooltip("This value can be read by an event using a dynamic parameter.")]
     public float currentPowerLevel = 75.5f;

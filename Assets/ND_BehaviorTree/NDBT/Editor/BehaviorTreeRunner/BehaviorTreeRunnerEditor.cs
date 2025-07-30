@@ -1,5 +1,3 @@
-
-
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
@@ -12,10 +10,12 @@ namespace ND_BehaviorTree.Editor
     {
         public override void OnInspectorGUI()
         {
-            
+            // This will now use our custom PropertyDrawer automatically for the 'treeAsset' field!
             DrawDefaultInspector();
 
             BehaviorTreeRunner runner = (BehaviorTreeRunner)target;
+            
+            // The dependency check is no longer needed here.
 
             // --- Button to open the main editor ---
             // The button is disabled if no tree asset is assigned.
@@ -23,7 +23,6 @@ namespace ND_BehaviorTree.Editor
             EditorGUILayout.Space();
             if (GUILayout.Button("Open Behavior Tree Editor"))
             {
-
                 ND_BehaviorTreeEditorWindow.Open(runner.treeAsset); 
             }
             EditorGUI.EndDisabledGroup();
@@ -53,6 +52,10 @@ namespace ND_BehaviorTree.Editor
             }
         }
 
+        // The rest of this file (DrawInitialBlackboard, DrawRuntimeBlackboard, DrawKeyField)
+        // remains exactly the same as before. I'm omitting it for brevity.
+        // ... (code from the original file) ...
+        
         /// <summary>
         /// Draws the blackboard values for setting up initial state in Edit Mode.
         /// </summary>

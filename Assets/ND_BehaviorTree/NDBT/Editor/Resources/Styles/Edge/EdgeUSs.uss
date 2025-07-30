@@ -1,0 +1,11 @@
+.edge-arrow {
+    width: 12px;
+    height: 12px;
+    background-color: white;
+
+    /* Create a triangle pointing up */
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+
+    /* Optional styling */
+    opacity: 0.9;
+}
