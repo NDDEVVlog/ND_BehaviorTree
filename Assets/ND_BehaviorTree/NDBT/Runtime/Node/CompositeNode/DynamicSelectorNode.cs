@@ -8,7 +8,7 @@ using ND_BehaviorTree;
 /// to decide which single child to execute. This is useful for creating data-driven
 /// or state-machine-like behaviors within the tree.
 /// </summary>
-[NodeInfo("Dynamic Selector", "Composite/DynamicSelector", true, true, iconPath: null)]
+[NodeInfo("Dynamic Selector", "Composite/DynamicSelector", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/adaptation.png")]
 public class DynamicSelectorNode : CompositeNode
 {
     [Tooltip("The custom logic used to select a child branch. This must be a class that implements IDynamicBranchSelector.")]

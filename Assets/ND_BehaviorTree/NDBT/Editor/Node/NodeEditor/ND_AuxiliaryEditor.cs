@@ -1,4 +1,3 @@
-// --- MODIFIED FILE: ND_AuxiliaryEditor.cs ---
 using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;

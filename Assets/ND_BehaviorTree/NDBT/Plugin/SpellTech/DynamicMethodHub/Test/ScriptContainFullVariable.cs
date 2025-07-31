@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using ND_BehaviorTree;
 using UnityEngine;
+using SpellTech.DynamicMethodEvent;
 
 public class ScriptContainFullVariable : MonoBehaviour
 {
@@ -59,5 +60,5 @@ public class ScriptContainFullVariable : MonoBehaviour
     public GenericParameter parameter = new FloatParameter();
 
 
-    
+
 }
