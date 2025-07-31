@@ -10,11 +10,6 @@ using ND_BehaviorTree;
 using UnityEditor.UI;
 using SpellTech.DynamicMethodEvent;
 
-/// <summary>
-/// Action nodes are the leaves of the tree. They perform the actual work, 
-/// such as moving, attacking, or playing an animation. They do not have 
-/// children and return a status of Success, Failure, or Running.
-/// </summary>
 [RequireComponentInRunner(typeof(MethodHub))]
 [NodeInfo("Dynamic Method Hub Component Node", "Action/DynamicMethodHubComponentNode", true, false,iconPath:null)]
 public class DynamicMethodHubComponentNode : ActionNode

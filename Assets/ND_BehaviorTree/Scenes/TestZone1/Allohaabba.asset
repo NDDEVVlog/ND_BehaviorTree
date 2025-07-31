@@ -1,30 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6332919035628891806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb2de36b0f5fdee4ab2cafd3c11232da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 20e1c2d2-c609-4adb-9152-07c77eb3923e
-  m_position:
-    serializedVersion: 2
-    x: -181.60004
-    y: 264.39996
-    width: 0
-    height: 0
-  typeName: GOAPActionNode
-  priority: 0
-  preconditions: []
-  effects: []
-  cost: 1
-  child: {fileID: 0}
 --- !u!114 &-3152856235777954277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,7 +88,6 @@ MonoBehaviour:
   - {fileID: -2175976617811294466}
   - {fileID: -3152856235777954277}
   - {fileID: 7991792920401051370}
-  - {fileID: -6332919035628891806}
   rootNode: {fileID: 3521872988483305003}
   blackboard: {fileID: 11400000, guid: fcaaf83798355b64eb1abf71aea15f93, type: 2}
   Self: {fileID: 0}

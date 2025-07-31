@@ -59,6 +59,8 @@ public class ScriptContainFullVariable : MonoBehaviour
     [SerializeReference]
     public GenericParameter parameter = new FloatParameter();
 
+    
+
 
 
 }

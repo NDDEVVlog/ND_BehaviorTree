@@ -1,3 +1,5 @@
+// --- FILE: ND_BehaviorTreeView.NodeManagement.cs ---
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,22 +43,13 @@ namespace ND_BehaviorTree.Editor
             if (m_editorWindow != null) m_editorWindow.SetUnsavedChanges(true);
         }
         
-        // --- NEW: Factory method to create the correct editor view ---
-        /// <summary>
-        /// A factory method that creates the appropriate editor view for a given node data.
-        /// This allows for specialized editors like ND_GOAPNodeEditor.
-        /// </summary>
         private ND_NodeEditor CreateNodeEditorView(Node nodeData)
         {
-            // If the node is part of the GOAP system, use the specialized editor.
             if (nodeData is GOAP.GOAPActionNode || nodeData is GOAP.GOAPPlannerNode)
             {
                 return new ND_GOAPNodeEditor(nodeData, m_serialLizeObject, this);
             }
             
-            // You can add more 'else if' statements here for other custom node editors in the future.
-            
-            // For all other nodes, use the default editor.
             return new ND_NodeEditor(nodeData, m_serialLizeObject, this);
         }
 
@@ -70,7 +63,6 @@ namespace ND_BehaviorTree.Editor
                 return;
             }
 
-            // --- MODIFIED: Use the factory method to create the node editor ---
             var nodeEditor = CreateNodeEditorView(nodeData);
            
             AddNode(nodeData, nodeEditor);
@@ -141,7 +133,6 @@ namespace ND_BehaviorTree.Editor
                         RemoveDataForEdge(editorNode.m_InputPort.connections.First());
                         RemoveDataForEdge(editorNode.m_OutputPort.connections.First());
                         
-                        // This call now works because we implemented the method.
                         AddEdgeToData(parentEditorNode.m_OutputPort, childEditorNode.m_InputPort);
                     }
                 }
@@ -184,21 +175,15 @@ namespace ND_BehaviorTree.Editor
                 if (m_editorWindow != null) m_editorWindow.SetUnsavedChanges(true);
             }
         }
-
-        /// <summary>
-        /// Sorts the children of a CompositeNode based on their horizontal position in the graph.
-        /// </summary>
-        /// <param name="composite">The composite node whose children need sorting.</param>
+        
         public void SortChildrenByPosition(CompositeNode composite)
         {
             if (composite == null || composite.children == null) return;
     
-            // Sort the children list based on the horizontal position of their corresponding editor nodes.
             composite.children.Sort((a, b) => {
                 var editorA = GetEditorNode(a.id);
                 var editorB = GetEditorNode(b.id);
         
-                // If for some reason an editor node isn't found, don't change their order.
                 if (editorA == null || editorB == null) return 0;
         
                 return editorA.GetPosition().x.CompareTo(editorB.GetPosition().x);

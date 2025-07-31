@@ -1,3 +1,5 @@
+// --- FILE: ND_BehaviorTreeView.ConnectionManagement.cs ---
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
@@ -38,9 +40,6 @@ namespace ND_BehaviorTree.Editor
             }
         }
         
-        /// <summary>
-        /// Creates the data model connection based on a visual Edge element.
-        /// </summary>
         private void CreateDataForEdge(Edge edge)
         {
             if (!(edge.input?.node is ND_NodeEditor childEditorNode) || !(edge.output?.node is ND_NodeEditor parentEditorNode)) {
@@ -53,35 +52,26 @@ namespace ND_BehaviorTree.Editor
             
             parentNode.AddChild(childNode);
             
-            // Optional sorting logic for composite nodes
             if (parentNode is CompositeNode composite)
             {
                 SortChildrenByPosition(composite);
             }
         }
 
-        // --- NEW METHOD TO FIX THE ERROR ---
-        /// <summary>
-        /// Programmatically creates a visual edge and its corresponding data connection.
-        /// This is used to "heal" the graph when a decorator is deleted.
-        /// </summary>
         public void AddEdgeToData(Port outputPort, Port inputPort)
         {
             if (outputPort == null || inputPort == null) return;
             
-            // 1. Create the visual representation of the connection.
             var edge = new Edge
             {
                 output = outputPort,
                 input = inputPort
             };
 
-            // 2. Connect the ports visually and add the edge to the graph.
             edge.input.Connect(edge);
             edge.output.Connect(edge);
             AddElement(edge);
 
-            // 3. Create the underlying data relationship using our existing method.
             CreateDataForEdge(edge);
         }
 
