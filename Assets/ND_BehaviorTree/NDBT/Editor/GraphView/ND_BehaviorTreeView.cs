@@ -1,3 +1,5 @@
+// --- FINAL CORRECTED FILE: ND_BehaviorTreeView.cs ---
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,16 +27,18 @@ namespace ND_BehaviorTree.Editor
 
         private ND_BTSearchProvider m_searchProvider;
         private List<IContextualMenuCommand> m_contextualMenuCommands;
-
-        // --- NEW: Field to hold the BlackboardView instance ---
+        
         private BlackboardView m_blackboardView;
 
-        // --- Constructor (is modified) ---
+        // --- Constructor ---
         public ND_BehaviorTreeView(SerializedObject serializedObject, ND_BehaviorTreeEditorWindow editorWindow)
         {
             m_editorWindow = editorWindow;
             m_serialLizeObject = serializedObject;
             m_BTree = (BehaviorTree)serializedObject.targetObject;
+
+            // This is required to receive keyboard events like Ctrl+C and Ctrl+V.
+            this.focusable = true;
 
             TreeNodes = new List<ND_NodeEditor>();
             NodeDictionary = new Dictionary<string, ND_NodeEditor>();
@@ -50,28 +54,30 @@ namespace ND_BehaviorTree.Editor
                 new CreateNodeContextualCommand(),
             };
 
+            
+
             SetupStylingAndBackground();
             SetupManipulators();
-            
-            // --- NEW: Create and add the blackboard ---
+
+            // This call activates the event listeners for Copy, Paste, etc.
+            RegisterCopyPasteCallbacks();
+
             CreateBlackboard();
-            
+
             DrawExistingGraphElementsFromData();
 
             SetupZoom(0.1f, 3.0f);
             graphViewChanged += OnGraphViewInternalChange;
             this.deleteSelection = OnDeleteSelectionKeyPressed;
         }
-
-        // --- NEW: Method to create the Blackboard View ---
+        
         private void CreateBlackboard()
         {
             m_blackboardView = new BlackboardView(m_serialLizeObject);
             Add(m_blackboardView);
-            m_blackboardView.style.display = DisplayStyle.None; // Initially hidden
+            m_blackboardView.style.display = DisplayStyle.None;
         }
-
-        // --- NEW: Public method to control visibility from the window ---
+        
         public void ToggleBlackboard(bool isVisible)
         {
             if (m_blackboardView != null)
@@ -80,7 +86,6 @@ namespace ND_BehaviorTree.Editor
             }
         }
         
-        // --- Setup Methods (no changes) ---
         private void SetupStylingAndBackground()
         {
             StyleSheet styleSheetAsset = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetGraphViewStyleSheetPath());

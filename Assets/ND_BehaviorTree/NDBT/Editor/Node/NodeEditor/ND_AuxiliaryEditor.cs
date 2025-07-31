@@ -13,7 +13,6 @@ namespace ND_BehaviorTree.Editor
             this.styleSheets.Add(styleSheet);
             this.AddToClassList("auxiliary-node-editor");
 
-            Debug.Log("Create AuxiliaryEditorNode : " + node.typeName);
 
             style.position = Position.Relative;
 
