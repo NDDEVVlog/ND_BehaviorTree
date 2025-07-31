@@ -1,5 +1,3 @@
-// --- MODIFIED FILE: ND_BehaviorTreeView.ConnectionManagement.cs ---
-
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;

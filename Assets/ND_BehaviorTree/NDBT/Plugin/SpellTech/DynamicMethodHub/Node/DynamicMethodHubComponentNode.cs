@@ -8,15 +8,16 @@
 using UnityEngine;
 using ND_BehaviorTree;
 using UnityEditor.UI;
+using SpellTech.DynamicMethodEvent;
 
 /// <summary>
 /// Action nodes are the leaves of the tree. They perform the actual work, 
 /// such as moving, attacking, or playing an animation. They do not have 
 /// children and return a status of Success, Failure, or Running.
 /// </summary>
-[RequireComponentInRunner(typeof(AnimationEventHub))]
-[NodeInfo("AnimationHubComponentNode", "Action/AnimationHubComponentNode", true, false,iconPath:null)]
-public class AnimationHubComponentNode : ActionNode
+[RequireComponentInRunner(typeof(MethodHub))]
+[NodeInfo("Dynamic Method Hub Component Node", "Action/DynamicMethodHubComponentNode", true, false,iconPath:null)]
+public class DynamicMethodHubComponentNode : ActionNode
 {
     [Tooltip("An example float parameter.")]
     public string eventID;
@@ -24,14 +25,13 @@ public class AnimationHubComponentNode : ActionNode
     [BlackboardKeyType(typeof(string))]
     public Key eventIDKey;
 
-    AnimationEventHub animationEventHub;
+    MethodHub animationEventHub;
     protected override void OnEnter()
-    {
-        animationEventHub = ownerTree.Self.GetComponent<AnimationEventHub>();
+    {   
+        //Simple and quick. Yes sirrrr
+        animationEventHub = SpellTech.SoraExtensions.CustomHelper.GetComp<MethodHub>(ownerTree.Self);
     }
 
-    // OnProcess is called every frame while the node is in a 'Running' state.
-    // This is where the core logic of the action resides.
     protected override Status OnProcess()
     {
 
@@ -48,10 +48,4 @@ public class AnimationHubComponentNode : ActionNode
 
     }
 
-    // OnExit is called once when the node's status is no longer 'Running'.
-    // Use it for cleanup, regardless of whether the node succeeded, failed, or was aborted.
-    protected override void OnExit()
-    {
-
-    }
 }

@@ -668,10 +668,10 @@ MonoBehaviour:
   m_guid: bc26a3b7-851d-438c-835d-34a1bf8202ec
   m_position:
     serializedVersion: 2
-    x: 549.60004
-    y: 175.2
-    width: 133.59998
-    height: 95.2
+    x: 512.8
+    y: 137.6
+    width: 198.40002
+    height: 225.6
   typeName: Selector
   priority: 0
   children:
