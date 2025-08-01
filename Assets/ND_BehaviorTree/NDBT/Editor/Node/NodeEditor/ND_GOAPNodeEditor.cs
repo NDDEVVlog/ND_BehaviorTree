@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
+using UnityEngine;
 
 namespace ND_BehaviorTree.Editor
 {
@@ -11,10 +12,8 @@ namespace ND_BehaviorTree.Editor
     public class ND_GOAPNodeEditor : ND_NodeEditor
     {
         public ND_GOAPNodeEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView)
-            : base(node, BTObject, graphView) // The base constructor does all the heavy lifting.
+            : base(node, BTObject, graphView)
         {
-            // The only job of this child class is to add specific styles.
-            
             // 1. Load the stylesheet for GOAP nodes.
             // Note: The path should come from your settings singleton.
             goapStylePath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("GOAP");
@@ -39,5 +38,7 @@ namespace ND_BehaviorTree.Editor
                 this.AddToClassList("goap-action-node");
             }
         }
+
+
     }
 }

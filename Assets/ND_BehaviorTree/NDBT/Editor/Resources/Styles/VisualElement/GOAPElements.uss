@@ -6,15 +6,6 @@ This stylesheet provides a distinct, modern, "ion-glow" theme for GOAP
 nodes, separating them visually from standard behavior tree nodes.
 */
 
-/*
-=================================
-=== GENERAL GOAP NODE STYLING ===
-=================================
-This section applies to ALL nodes with the .goap-node class.
-It defines the basic shape, dark background, and typography.
-*/
-
-/* --- Outer Shape & Slicing for Angular Corners --- */
 /* We target the outermost element of the node view. */
 .goap-node > .node-border {
     /* We don't use border-width; the "border" is created by the glow and background. */
@@ -29,9 +20,20 @@ It defines the basic shape, dark background, and typography.
     border-radius: 0;
     /* Padding between the glow/border and the inner content. */
     padding: 2px;
+    background-color: rgba(255, 115, 0, 1); /* The solid color for the border slice. */
+    box-shadow: 0 0 12px 2px rgba(255, 157, 0, 0.6); /* The soft "ion glow". */
 }
 
-.selected > .goap-node >  .node-border {
+
+/* --- Inner Content Container --- */
+/* This is the main dark background of the node. */
+.goap-node > .node-border > .main-container {
+    background-color: rgb(15, 22, 33); /* Dark, slightly blue-tinted charcoal */
+    border-radius: 0; /* Match the sharp corners of the parent. */
+    border-width: 1px;
+}
+
+ .goap-node > .selected > .node-border {
     /* A bright, easily noticeable blue for selection */
     border-color: rgba(67, 182, 10, 1);
         
@@ -43,13 +45,6 @@ It defines the basic shape, dark background, and typography.
 }
 
 
-/* --- Inner Content Container --- */
-/* This is the main dark background of the node. */
-.goap-node > .node-border > .main-container {
-    background-color: rgb(15, 22, 33); /* Dark, slightly blue-tinted charcoal */
-    border-radius: 0; /* Match the sharp corners of the parent. */
-    border-width: 1px;
-}
 .goap-node> .title-content-container {
     flex-grow: 1; /* This is the magic property. It makes the container expand. */
     flex-shrink: 0;
@@ -58,9 +53,10 @@ It defines the basic shape, dark background, and typography.
 
 /* --- Header & Typography --- */
 /* The container for the icon and text labels. */
-.goap-node > .title {
+.goap-node >.title {
+    -unity-background-image-tint-color: white;
     padding: 6px 10px;
-    min-height: 30px; /* Ensure a minimum height for the title area. */
+    min-height: 30px;
 }
 
 /* Hide the default icon for a cleaner, text-focused look. */
@@ -76,16 +72,19 @@ It defines the basic shape, dark background, and typography.
 .goap-node >.type-label {
     /* This is the GUID for Unity's built-in "Consolas" / Monospace font. */
     -unity-font-definition: "GUID:d9d73d65b74744a4ab966847a9ac32a8";
+    color: rgba(255, 226, 108, 1);
+    text-shadow: 0 0 5px rgba(255, 157, 0, 0.5);
 }
 
 /* Style the main title text. */
-.goap-node >.title-textfield {
+.goap-node #title-textfield {
     font-size: 16px;
     -unity-font-style: bold;
+    
 }
 
 /* Style the smaller subtitle text. */
-.goap-node> .type-label {
+.goap-node #type-label {
     font-size: 11px;
     margin-top: 1px;
     -unity-font-style: normal;
@@ -97,6 +96,8 @@ It defines the basic shape, dark background, and typography.
 === GOAP PLANNER (MAGENTA THEME) ===
 ===================================
 */
+
+
 
 /* --- Outer Glow --- */
 .goap-planner-node > .node-border {
@@ -166,26 +167,30 @@ This ensures the connection ports match the sci-fi theme.
 
 }
 
-.goap-node .port:hover {
-    background-color: rgb(0, 200, 255);
-    border-color: rgb(220, 250, 255);
+.goap-node.selected > #node-border {
+    /* Override the theme-specific colors with a bright, universal selection color. */
+    background-color: rgb(0, 255, 150); /* Bright "Success Green" */
+    box-shadow: 0 0 15px 4px rgba(80, 255, 170, 0.7); /* Make the glow more intense. */
 }
 
-
-.running > .goap-node > .node-border {
-    border-color: #FFD700; /* Bright Gold/Yellow */
-    border-width: 3px;
-    box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.5); /* Add a subtle glow */
+/* --- RUNNING --- */
+/* Targets any GOAP node that also has the .running class. */
+.goap-node.running > #node-border {
+    /* This overrides the selection color if a node is both running and selected. */
+    background-color: rgb(255, 215, 0); /* Bright Gold/Yellow */
+    box-shadow: 0 0 15px 4px rgba(255, 215, 0, 0.8); /* Intense yellow glow */
 }
 
-/* Optional: Style for a node that just returned Success */
-.success >.goap-node >  .node-border {
-    border-color: #4CAF50; /* Green */
-    border-width: 3px;
+/* --- SUCCESS --- */
+/* Targets any GOAP node that also has the .success class. */
+.goap-node.success > #node-border {
+    background-color: rgb(76, 175, 80); /* Muted Green */
+    box-shadow: 0 0 15px 4px rgba(76, 175, 80, 0.7);
 }
 
-/* Optional: Style for a node that just returned Failure */
-.failure > .goap-node >  .node-border {
-    border-color: #F44336; /* Red */
-    border-width: 3px;
+/* --- FAILURE --- */
+/* Targets any GOAP node that also has the .failure class. */
+.goap-node.failure > #node-border {
+    background-color: rgb(244, 67, 54); /* Muted Red */
+    box-shadow: 0 0 15px 4px rgba(244, 67, 54, 0.7);
 }
