@@ -1,5 +1,3 @@
-// --- UPDATED FILE: ND_BehaviorTreeView.CopyPaste.cs ---
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

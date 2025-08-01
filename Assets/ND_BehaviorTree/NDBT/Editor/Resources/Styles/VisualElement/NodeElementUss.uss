@@ -7,6 +7,17 @@
     padding: 2px;
 }
 
+.selected>.node-border {
+    /* A bright, easily noticeable blue for selection */
+    border-color: #008cff;
+    
+    /* Make the border slightly thicker to stand out more */
+    border-width: 3px;
+    
+    /* Optional: Add a subtle glow to make it pop */
+    box-shadow: 0 0 10px 2px rgba(0, 140, 255, 0.4);
+}
+
 .main-container {
     background-color: #4D4D4D;
     border-radius: 10px;

@@ -53,6 +53,24 @@ namespace ND_BehaviorTree.Editor
             m_GraphView = (ND_BehaviorTreeView)graphView;
             InitializeNodeView(node, BTObject, graphView);
         }
+        
+        // --- Selection Handling ---
+        public override void OnSelected()
+        {
+            base.OnSelected();
+            this.AddToClassList("selected");
+            // For debugging, you can also log to the console:
+            Debug.Log($"Node '{node.typeName}' was selected.");
+        }
+
+        public override void OnUnselected()
+        {
+            base.OnUnselected();
+            this.RemoveFromClassList("selected");
+            // For debugging:
+            // Debug.Log($"Node '{node.typeName}' was unselected.");
+        }
+
 
         // --- Initialization ---
         protected void InitializeNodeView(Node node, SerializedObject BTObject, GraphView graphView)

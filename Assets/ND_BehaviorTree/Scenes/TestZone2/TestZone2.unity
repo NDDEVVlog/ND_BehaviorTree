@@ -448,167 +448,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &511362634
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: dynamicEvents.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: dynamicEvents.Array.data[1].target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: dynamicEvents.Array.data[1].eventName
-      value: HellNo
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: dynamicEvents.Array.data[1].methodName
-      value: SpawnEffectAtPosition
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700480]
-      value: Assembly-CSharp Vector3Parameter
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700481]
-      value: Assembly-CSharp StringParameter
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700480].useConstant
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700481].useConstant
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700480].parameterName
-      value: position
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700481].constantValue
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700481].parameterName
-      value: effectType
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700480].constantValue.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700480].constantValue.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700480].constantValue.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700480].sourceComponent
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700480].sourceFieldName
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700481].sourceComponent
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910028807700481].sourceFieldName
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: dynamicEvents.Array.data[1].genericParameters.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: dynamicEvents.Array.data[0].genericParameters.Array.data[0]
-      value: 1809910028807700480
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: dynamicEvents.Array.data[0].genericParameters.Array.data[1]
-      value: 1809910028807700481
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: dynamicEvents.Array.data[1].genericParameters.Array.data[0]
-      value: 1809910028807700480
-      objectReference: {fileID: 0}
-    - target: {fileID: 671624841834205547, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: dynamicEvents.Array.data[1].genericParameters.Array.data[1]
-      value: 1809910028807700481
-      objectReference: {fileID: 0}
-    - target: {fileID: 1996653176017081430, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: randomShit
-      value: 1809910078448599043
-      objectReference: {fileID: 0}
-    - target: {fileID: 1996653176017081430, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910078448599043]
-      value: ND_BehaviorTree.Runtime TestDynamicSelector
-      objectReference: {fileID: 0}
-    - target: {fileID: 1996653176017081430, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: managedReferences[1809910078448599043].hoh
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 19.744703
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -20.639498
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 50.05723
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344649223864886235, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9162585260382138895, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
-      propertyPath: m_Name
-      value: SomeThingHappendHere
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
 --- !u!1 &702931141
 GameObject:
   m_ObjectHideFlags: 0
@@ -1544,6 +1383,139 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -34.781, z: 0}
+--- !u!114 &1652606409952032631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4232913060562548709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7d4e06b62e6e9a4a93767d15d293d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  executeEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6055901187622518180}
+        m_TargetAssemblyTypeName: SpellTech.DynamicMethodEvent.MethodHub, Assembly-CSharp
+        m_MethodName: TriggerEvent
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Yep
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3362767704704820966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4232913060562548709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81fe9f93017348d4bb68702cf8de57bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  randomShit:
+    rid: -2
+  currentPowerLevel: 75.5
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!1 &4232913060562548709
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6019111970228386575}
+  - component: {fileID: 1652606409952032631}
+  - component: {fileID: 3362767704704820966}
+  - component: {fileID: 6055901187622518180}
+  m_Layer: 0
+  m_Name: SomeThingHappendHere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6019111970228386575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4232913060562548709}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.744703, y: -20.639498, z: 50.05723}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6055901187622518180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4232913060562548709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a4108c0463aba498b03f5875d6b450, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventToAction: 
+  dynamicEvents:
+  - eventName: Yep
+    target: {fileID: 3362767704704820966}
+    methodName: PlaySound
+    genericParameters:
+    - rid: 1809910107478949888
+  - eventName: HellNo
+    target: {fileID: 3362767704704820966}
+    methodName: FlashColor
+    genericParameters:
+    - rid: 1809910093078331396
+    - rid: 1809910093078331397
+  references:
+    version: 2
+    RefIds:
+    - rid: 1809910093078331396
+      type: {class: ColorParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
+      data:
+        parameterName: flashColor
+        useConstant: 1
+        sourceComponent: {fileID: 0}
+        sourceFieldName: 
+        constantValue: {r: 1, g: 0, b: 0, a: 0}
+    - rid: 1809910093078331397
+      type: {class: FloatParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
+      data:
+        parameterName: duration
+        useConstant: 1
+        sourceComponent: {fileID: 0}
+        sourceFieldName: 
+        constantValue: 50
+    - rid: 1809910107478949888
+      type: {class: StringParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
+      data:
+        parameterName: soundName
+        useConstant: 1
+        sourceComponent: {fileID: 0}
+        sourceFieldName: 
+        constantValue: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1557,4 +1529,4 @@ SceneRoots:
   - {fileID: 2066292378}
   - {fileID: 899733265}
   - {fileID: 112866852}
-  - {fileID: 511362634}
+  - {fileID: 6019111970228386575}

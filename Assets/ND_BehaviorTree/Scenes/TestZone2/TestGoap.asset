@@ -1,5 +1,51 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7122894682298274168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: df204a52-3a27-43db-b48d-e7fcc5ba22de
+  m_position:
+    serializedVersion: 2
+    x: 790.4
+    y: 1060.8
+    width: 147.20001
+    height: 96.79993
+  typeName: Sequence
+  priority: 0
+  children: []
+  services: []
+--- !u!114 &-6882293086574338019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 1ff7c5ac-8c3d-4e3c-951e-313999b5badd
+  m_position:
+    serializedVersion: 2
+    x: 1112.4572
+    y: 180.2286
+    width: 147.19998
+    height: 96.79999
+  typeName: Sequence
+  priority: 0
+  children: []
+  services: []
 --- !u!114 &-5348843045529535200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,14 +61,38 @@ MonoBehaviour:
   m_guid: 85ebc1ec-9cb9-4687-b62f-30bca1489b26
   m_position:
     serializedVersion: 2
-    x: 395.2
-    y: 734.4
-    width: 268.8
-    height: 95.19995
+    x: 456.8
+    y: 750.39996
+    width: 270.40002
+    height: 96.79999
   typeName: AnimationHubComponentNode
   priority: 0
   eventID: 
   eventIDKey: {fileID: 0}
+--- !u!114 &-4790394052333198514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6075e4aa7424d364c90a6009b72a5660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: af5fd5da-8284-4bbf-b909-157c995ee696
+  m_position:
+    serializedVersion: 2
+    x: 774.4
+    y: 892
+    width: 140.79999
+    height: 120.80005
+  typeName: Repeater
+  priority: 0
+  child: {fileID: 0}
+  repeatCount: 3
+  currentCount: 0
 --- !u!114 &-4734503684602027960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38,10 +108,10 @@ MonoBehaviour:
   m_guid: 163a3748-5da9-486d-9348-88a167764ed9
   m_position:
     serializedVersion: 2
-    x: -82.4
-    y: 718.4
-    width: 139.2
-    height: 119.19995
+    x: -64.8
+    y: 734.39996
+    width: 140.8
+    height: 120.79999
   typeName: Repeater
   priority: 0
   child: {fileID: 5258702330272107779}
@@ -62,10 +132,10 @@ MonoBehaviour:
   m_guid: 5ef8fb06-3221-42ad-94d1-49d7c81322dc
   m_position:
     serializedVersion: 2
-    x: 196.8
-    y: 466.4
-    width: 168.79999
-    height: 92.00003
+    x: 246.4
+    y: 460.80002
+    width: 168.80002
+    height: 92
   typeName: ChopTree
   priority: 0
   preconditions:
@@ -111,10 +181,57 @@ MonoBehaviour:
   m_guid: bb907872-3fb1-43a9-afd1-0339e191e540
   m_position:
     serializedVersion: 2
-    x: 84
-    y: 734.4
-    width: 242.40001
-    height: 95.19995
+    x: 157.6
+    y: 793.6
+    width: 244
+    height: 96.79999
+  typeName: SetBooleanValueNode
+  priority: 0
+  conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+  ValueToSet: 0
+--- !u!114 &-3331704656253456287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6075e4aa7424d364c90a6009b72a5660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 42656e54-b057-4da8-83f8-17ee8a22e5ab
+  m_position:
+    serializedVersion: 2
+    x: 785.2571
+    y: 273.82864
+    width: 139.2
+    height: 119.19995
+  typeName: Repeater
+  priority: 0
+  child: {fileID: 0}
+  repeatCount: 3
+  currentCount: 0
+--- !u!114 &-2972828095666861792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: cb872e82-23b3-4eef-b6d2-f9704e7ce4e7
+  m_position:
+    serializedVersion: 2
+    x: 980
+    y: 908
+    width: 244.00006
+    height: 96.80005
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
@@ -153,6 +270,52 @@ MonoBehaviour:
     floatValue: 0
     gameObjectValue: {fileID: 0}
     stringValue: 
+--- !u!114 &-790202078301489241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: e8746f59-0c69-43be-ae17-81e8066c23c4
+  m_position:
+    serializedVersion: 2
+    x: 473.99994
+    y: 0
+    width: 244
+    height: 96.79999
+  typeName: SetBooleanValueNode
+  priority: 0
+  conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+  ValueToSet: 0
+--- !u!114 &-646679374521909183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7ab04194f05314da799101c288f09c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: decd8805-758b-4c34-83e9-391817bd7685
+  m_position:
+    serializedVersion: 2
+    x: 1306.8572
+    y: 289.82864
+    width: 270.40002
+    height: 96.79999
+  typeName: AnimationHubComponentNode
+  priority: 0
+  eventID: 
+  eventIDKey: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,6 +346,31 @@ MonoBehaviour:
   rootNode: {fileID: 4009271883461909621}
   blackboard: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   Self: {fileID: 0}
+--- !u!114 &9184147381813849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: ddaa57bf-3141-4954-8e3b-7dff3030380e
+  m_position:
+    serializedVersion: 2
+    x: 900
+    y: 1192.8
+    width: 153.60004
+    height: 96.79993
+  typeName: Debug Log
+  priority: 0
+  message: FindingAxe
+  logColor: {r: 1, g: 0, b: 0.81254673, a: 1}
+  keyToLog: {fileID: 0}
+  returningStatus: 0
 --- !u!114 &413836543818922411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,16 +386,39 @@ MonoBehaviour:
   m_guid: dda8d746-9714-42ad-9d0d-cc798e9614b8
   m_position:
     serializedVersion: 2
-    x: 43.2
-    y: 1019.19995
-    width: 152
-    height: 95.20007
+    x: 60.8
+    y: 1035.2
+    width: 153.59999
+    height: 96.80005
   typeName: Debug Log
   priority: 0
   message: FindingAxe
   logColor: {r: 1, g: 0, b: 0.81254673, a: 1}
   keyToLog: {fileID: 0}
   returningStatus: 0
+--- !u!114 &554947130373161574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 18a5b58b-e671-410f-bcb6-5250f0c9408c
+  m_position:
+    serializedVersion: 2
+    x: 801.2571
+    y: 442.62863
+    width: 145.6
+    height: 95.20001
+  typeName: Sequence
+  priority: 0
+  children: []
+  services: []
 --- !u!114 &1399468310895655337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,10 +434,32 @@ MonoBehaviour:
   m_guid: 8ba9f309-6ebf-4f3d-a700-9bb798f3c841
   m_position:
     serializedVersion: 2
-    x: 780
-    y: 713.6
-    width: 104
-    height: 95.20001
+    x: 952.8
+    y: 742.39996
+    width: 105.60004
+    height: 96.79999
+  typeName: Wait
+  priority: 0
+  duration: 1
+--- !u!114 &1535035698787807667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: c93b28e9-c9b2-458c-92fb-fa15d77df1df
+  m_position:
+    serializedVersion: 2
+    x: 695.2
+    y: 1176.8
+    width: 105.599976
+    height: 96.79993
   typeName: Wait
   priority: 0
   duration: 1
@@ -245,16 +478,63 @@ MonoBehaviour:
   m_guid: 550bd029-5542-4aec-86b2-598050d4d420
   m_position:
     serializedVersion: 2
-    x: 772
-    y: 575.2
-    width: 260.8
-    height: 95.20001
+    x: 996.8
+    y: 600.8
+    width: 262.39996
+    height: 96.79999
   typeName: Scout for Tree Sequence
   priority: 0
   children:
   - {fileID: 1399468310895655337}
   - {fileID: 4302018771259354275}
   services: []
+--- !u!114 &2035194374559882698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: d6062354-418d-4971-94f0-15fb66674f5e
+  m_position:
+    serializedVersion: 2
+    x: 910.8571
+    y: 574.62854
+    width: 152
+    height: 95.20007
+  typeName: Debug Log
+  priority: 0
+  message: FindingAxe
+  logColor: {r: 1, g: 0, b: 0.81254673, a: 1}
+  keyToLog: {fileID: 0}
+  returningStatus: 0
+--- !u!114 &3148039954221648243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 27a77054-687f-4adb-8237-73cd65a69872
+  m_position:
+    serializedVersion: 2
+    x: 706.0571
+    y: 558.62854
+    width: 104
+    height: 95.20007
+  typeName: Wait
+  priority: 0
+  duration: 1
 --- !u!114 &4009271883461909621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,10 +550,10 @@ MonoBehaviour:
   m_guid: 674bd0f5-ae36-4b5f-9643-9b4e9089bf10
   m_position:
     serializedVersion: 2
-    x: 552
-    y: 151.2
-    width: 104
-    height: 95.2
+    x: 560.8
+    y: 204
+    width: 105.60004
+    height: 96.80002
   typeName: Root
   priority: 0
   child: {fileID: -1165108541859606460}
@@ -292,14 +572,37 @@ MonoBehaviour:
   m_guid: 8af5dcdd-d6fb-4de6-a246-1feb012d4e0b
   m_position:
     serializedVersion: 2
-    x: 932.8
-    y: 720
-    width: 242.40002
-    height: 95.20001
+    x: 1168
+    y: 737.6
+    width: 244
+    height: 96.79999
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   ValueToSet: 1
+--- !u!114 &4328961766828845738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: bad8ed9d-194a-496c-9d04-2bd6fab73545
+  m_position:
+    serializedVersion: 2
+    x: 990.8571
+    y: 289.82864
+    width: 242.4
+    height: 95.19995
+  typeName: SetBooleanValueNode
+  priority: 0
+  conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+  ValueToSet: 0
 --- !u!114 &5258702330272107779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,16 +618,39 @@ MonoBehaviour:
   m_guid: 0dcc8466-a63d-41fc-bc86-54efc1ef66ff
   m_position:
     serializedVersion: 2
-    x: -66.4
-    y: 887.2
-    width: 145.6
-    height: 95.20001
+    x: -48.8
+    y: 903.19995
+    width: 147.2
+    height: 96.80005
   typeName: Sequence
   priority: 0
   children:
   - {fileID: 7527309124941446503}
   - {fileID: 413836543818922411}
   services: []
+--- !u!114 &6057366699934119093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 3f3ce12a-29c5-4c3e-a6e7-e393f74fa833
+  m_position:
+    serializedVersion: 2
+    x: 474
+    y: 0
+    width: 244
+    height: 96.79999
+  typeName: SetBooleanValueNode
+  priority: 0
+  conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+  ValueToSet: 0
 --- !u!114 &6779057175041700634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,10 +666,10 @@ MonoBehaviour:
   m_guid: 795e95d4-1f18-43ba-8b43-8e3814928982
   m_position:
     serializedVersion: 2
-    x: 204
-    y: 551.2
-    width: 145.59999
-    height: 95.20001
+    x: 262.4
+    y: 640.8
+    width: 147.20001
+    height: 96.79999
   typeName: Sequence
   priority: 0
   children:
@@ -366,8 +692,8 @@ MonoBehaviour:
   m_guid: f3e7c3fc-ca40-439c-a772-5a97780dca3f
   m_position:
     serializedVersion: 2
-    x: 799.2
-    y: 474.40002
+    x: 958.4
+    y: 468.80002
     width: 201.59998
     height: 92
   typeName: ScoutForTheTree
@@ -407,10 +733,10 @@ MonoBehaviour:
   m_guid: d859157a-523a-4799-a54c-437f759839b0
   m_position:
     serializedVersion: 2
-    x: -161.6
-    y: 1003.19995
-    width: 104
-    height: 95.20007
+    x: -144
+    y: 1019.19995
+    width: 105.6
+    height: 96.80005
   typeName: Wait
   priority: 0
   duration: 1

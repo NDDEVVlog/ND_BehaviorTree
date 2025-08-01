@@ -1,11 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/NDBT/Editor/Resources/Styles/VisualElement/NodeElementUss.uss?fileID=7433441132597879392&amp;guid=56edd9fb931184641b0c2e7fe3d72ef4&amp;type=3#NodeElementUss" />
+    <Style src="project://database/Assets/ND_BehaviorTree/NDBT/Editor/Resources/Styles/VisualElement/LightClearUSSTheme.uss?fileID=7433441132597879392&amp;guid=e9dff16fe88688f49b3fa4ff2ccbf433&amp;type=3#LightClearUSSTheme" />
     <ui:VisualElement name="node-border" class="node-border">
         <ui:VisualElement name="main-container" class="main-container">
             <ui:VisualElement name="top-port" class="port-container" />
             <ui:VisualElement name="title" class="title">
                 <ui:Image name="icon-image" class="icon-image" />
-                 <!-- Container for vertically aligned title and type -->
                 <ui:VisualElement name="title-content-container">
                     <ui:Label name="title-textfield" class="title-textfield" />
                     <ui:Label name="type-label" class="type-label" />
