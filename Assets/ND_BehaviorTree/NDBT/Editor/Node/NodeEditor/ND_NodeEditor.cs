@@ -42,6 +42,7 @@ namespace ND_BehaviorTree.Editor
         public ND_BehaviorTreeView m_GraphView;
 
         public  Label titleLabel;
+        public string goapStylePath;
 
         // --- Caches for runtime updates ---
         private readonly List<ExposedPropertyUpdater> m_ExposedPropertyUpdaters = new List<ExposedPropertyUpdater>();
@@ -82,7 +83,7 @@ namespace ND_BehaviorTree.Editor
             Type typeInfo = node.GetType();
             NodeInfoAttribute info = typeInfo.GetCustomAttribute<NodeInfoAttribute>();
 
-            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUSSPath());
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Default"));
             if (styleSheet != null)
             {
                 this.styleSheets.Add(styleSheet);
