@@ -61,10 +61,10 @@ MonoBehaviour:
   m_guid: 85ebc1ec-9cb9-4687-b62f-30bca1489b26
   m_position:
     serializedVersion: 2
-    x: 456.8
-    y: 750.39996
-    width: 270.40002
-    height: 96.79999
+    x: 508.80002
+    y: 780
+    width: 289.6
+    height: 109.599976
   typeName: AnimationHubComponentNode
   priority: 0
   eventID: 
@@ -108,10 +108,10 @@ MonoBehaviour:
   m_guid: 163a3748-5da9-486d-9348-88a167764ed9
   m_position:
     serializedVersion: 2
-    x: -64.8
-    y: 734.39996
-    width: 140.8
-    height: 120.79999
+    x: -40
+    y: 775.2
+    width: 156
+    height: 138.39996
   typeName: Repeater
   priority: 0
   child: {fileID: 5258702330272107779}
@@ -132,10 +132,10 @@ MonoBehaviour:
   m_guid: 5ef8fb06-3221-42ad-94d1-49d7c81322dc
   m_position:
     serializedVersion: 2
-    x: 220
-    y: 450.4
-    width: 168.8
-    height: 80.80002
+    x: 307.2
+    y: 471.2
+    width: 167.20001
+    height: 95.20001
   typeName: ChopTree
   priority: 0
   preconditions:
@@ -181,10 +181,10 @@ MonoBehaviour:
   m_guid: bb907872-3fb1-43a9-afd1-0339e191e540
   m_position:
     serializedVersion: 2
-    x: 188.8
-    y: 774.4
-    width: 244
-    height: 96.79999
+    x: 194.4
+    y: 783.2
+    width: 259.2
+    height: 109.599976
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
@@ -251,10 +251,10 @@ MonoBehaviour:
   m_guid: d0a39782-171d-4711-8066-b1a845b19551
   m_position:
     serializedVersion: 2
-    x: 499.2
-    y: 329.6
-    width: 212
-    height: 80.79999
+    x: 550.4
+    y: 361.6
+    width: 218.39996
+    height: 95.19998
   typeName: GOAPPlannerNode
   priority: 0
   children:
@@ -316,29 +316,6 @@ MonoBehaviour:
   priority: 0
   eventID: 
   eventIDKey: {fileID: 0}
---- !u!114 &-409866445953930847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd4493e868ea87e4290ecd571487789c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: f6651df9-208a-443d-bee9-f85182e35fd4
-  m_position:
-    serializedVersion: 2
-    x: 439.65222
-    y: 890.087
-    width: 0
-    height: 0
-  typeName: Time Limit
-  priority: 0
-  child: {fileID: 0}
-  timeLimit: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,7 +343,6 @@ MonoBehaviour:
   - {fileID: 1399468310895655337}
   - {fileID: 4302018771259354275}
   - {fileID: -5348843045529535200}
-  - {fileID: -409866445953930847}
   rootNode: {fileID: 4009271883461909621}
   blackboard: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   Self: {fileID: 0}
@@ -410,10 +386,10 @@ MonoBehaviour:
   m_guid: dda8d746-9714-42ad-9d0d-cc798e9614b8
   m_position:
     serializedVersion: 2
-    x: 60.8
-    y: 1035.2
-    width: 153.59999
-    height: 96.80005
+    x: 130.4
+    y: 1148.8
+    width: 157.59999
+    height: 90.3999
   typeName: Debug Log
   priority: 0
   message: FindingAxe
@@ -642,10 +618,10 @@ MonoBehaviour:
   m_guid: 0dcc8466-a63d-41fc-bc86-54efc1ef66ff
   m_position:
     serializedVersion: 2
-    x: -48.8
-    y: 903.19995
-    width: 147.2
-    height: 96.80005
+    x: -32
+    y: 957.6
+    width: 160.8
+    height: 106.400024
   typeName: Sequence
   priority: 0
   children:
@@ -690,10 +666,10 @@ MonoBehaviour:
   m_guid: 795e95d4-1f18-43ba-8b43-8e3814928982
   m_position:
     serializedVersion: 2
-    x: 246.4
-    y: 630.4
-    width: 142.40001
-    height: 120
+    x: 309.6
+    y: 616.8
+    width: 142.4
+    height: 88.79999
   typeName: Sequence
   priority: 0
   children:
@@ -716,10 +692,10 @@ MonoBehaviour:
   m_guid: f3e7c3fc-ca40-439c-a772-5a97780dca3f
   m_position:
     serializedVersion: 2
-    x: 958.4
-    y: 468.80002
-    width: 201.59998
-    height: 92
+    x: 887.2
+    y: 471.2
+    width: 208
+    height: 98.39996
   typeName: ScoutForTheTree
   priority: 0
   preconditions:
@@ -757,10 +733,10 @@ MonoBehaviour:
   m_guid: d859157a-523a-4799-a54c-437f759839b0
   m_position:
     serializedVersion: 2
-    x: -144
-    y: 1019.19995
-    width: 105.6
-    height: 96.80005
+    x: -133.6
+    y: 1140.8
+    width: 109.600006
+    height: 90.3999
   typeName: Wait
   priority: 0
   duration: 1

@@ -1,0 +1,228 @@
+/*
+================================================================================
+=== ND_BEHAVIORTREE CYBERPUNK THEME ===
+================================================================================
+*/
+
+/* === Base Node Border === */
+.node-border {
+    background-color: #0d0d17; /* Deep dark blue-black */
+    border-color: #ff00cc; /* Neon pink border */
+    border-width: 2px;
+    border-radius: 6px;
+    padding: 3px;
+    box-shadow: 0 0 16px 3px rgba(255, 0, 204, 0.5);
+    transition: box-shadow 0.2s ease;
+}
+
+/* === Main Container === */
+.main-container {
+    background-color: #151820;
+    border-radius: 4px;
+    padding: 6px;
+    border-width: 1px;
+    border-color: rgba(0, 255, 255, 0.2);
+    transition: background-color 0.2s ease;
+}
+
+/* === Title === */
+.title {
+    flex-direction: row;
+    align-items: center;
+    padding: 4px 6px;
+    background-color: #1e1e2e;
+    border-radius: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* === Icon === */
+.icon-image {
+    width: 28px;
+    height: 28px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
+}
+
+/* === Title Container === */
+.title-content-container {
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* === Title Label === */
+.title-textfield {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: #00ffe7;
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+    text-shadow: 0 0 6px rgba(0, 255, 231, 0.6);
+}
+.title-textfield > #unity-text-input {
+    padding: 1px 0;
+    margin: 0;
+    background-color: transparent;
+}
+.title-textfield:focus {
+    background-color: #1b1f2a;
+    border-color: #00ffe7;
+    border-width: 1px;
+}
+
+/* === Type Label === */
+.type-label {
+    font-size: 11px;
+    color: #fffb96;
+    margin-top: 2px;
+    -unity-font-style: italic;
+    text-shadow: 0 0 4px rgba(255, 255, 150, 0.5);
+}
+
+/* === Details Container === */
+.details-container {
+    padding: 6px 10px;
+    flex-direction: column;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+/* === Exposed Variable Display === */
+.exposed-property {
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-top: 2px;
+}
+.exposed-property-label {
+    color: #ffa7ff;
+}
+.exposed-property-value {
+    color: #ffffff;
+    -unity-font-style: bold;
+}
+
+/* === Progress Bar === */
+.progress-bar {
+    margin-top: 4px;
+    margin-bottom: 2px;
+    height: 8px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.progress-bar-fill {
+    background-color: #00ff99;
+    height: 100%;
+    width: 0%;
+    transition: width 0.15s linear;
+}
+
+/* === Child Node Containers === */
+.child-node-container {
+    min-height: 40px;
+    background-color: rgba(0, 255, 255, 0.05);
+    border: 1px dashed rgba(0, 255, 255, 0.3);
+    border-radius: 3px;
+    margin: 5px 0;
+    padding: 5px;
+    flex-direction: column;
+}
+
+/* === Child Node Items === */
+.child-node-item {
+    background-color: #292b36;
+    border-radius: 6px;
+    border-width: 2px;
+    border-color: #383838;
+    margin-top: 5px;
+    padding: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.decorator-child {
+    background-color: #194d3a;
+    border-color: #2a8c5a;
+}
+.service-child {
+    background-color: #1e3b52;
+    border-color: #2890c0;
+}
+.child-node-item .icon-image {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+.child-node-item .title-label {
+    font-size: 14px;
+    color: #E0E0E0;
+}
+
+/* === Task Node === */
+.task-node .title,
+.task-node .child-node-container {
+    display: none;
+}
+.task-node .main-container {
+    padding: 15px;
+    min-height: 50px;
+    justify-content: center;
+    align-items: center;
+}
+.task-node-label {
+    font-size: 18px;
+    color: #00ffe7;
+}
+
+/* === Port Styling === */
+.port-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 16px;
+    width: 100%;
+    background-color: transparent;
+}
+
+
+/*
+================================================================================
+=== RUNTIME STATES (GLOW + COLOR SHIFTS) ===
+================================================================================
+*/
+
+.selected > .node-border {
+    border-color: #00ffff;
+    border-width: 3px;
+    box-shadow: 0 0 12px 3px rgba(0, 255, 255, 0.5);
+}
+
+.running > .node-border {
+    border-color: #ffe600;
+    border-width: 3px;
+    box-shadow: 0 0 12px 3px rgba(255, 230, 0, 0.5);
+}
+
+.success > .node-border {
+    border-color: #00ff99;
+    border-width: 3px;
+    box-shadow: 0 0 10px 2px rgba(0, 255, 153, 0.5);
+}
+
+.failure > .node-border {
+    border-color: #ff3366;
+    border-width: 3px;
+    box-shadow: 0 0 10px 2px rgba(255, 51, 102, 0.5);
+}
+
+/* Input/Output ports - hidden */
+#input, #output {
+    display: none;
+}

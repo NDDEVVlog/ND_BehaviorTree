@@ -12,5 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c9e5bf2e4f79246b5eecf50c0467d9, type: 3}
   m_Name: NodeEditorConfig
   m_EditorClassIdentifier: 
-  defaultUxml: {fileID: 9197481963319205126, guid: 28fb3ed3c12cbbe4da0dd006c6cc7a24, type: 3}
-  mappings: []
+  editorScript: {fileID: 11500000, guid: 91ed72cff31d297468a10a560318f226, type: 3}
+  mappings:
+  - nodeScript: {fileID: 11500000, guid: fb2de36b0f5fdee4ab2cafd3c11232da, type: 3}
+    styleSheetStringEntry: Default
+    nodeTypeFullName: ND_BehaviorTree.GOAP.GOAPActionNode, ND_BehaviorTree.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - nodeScript: {fileID: 11500000, guid: f0cfde30bd2a9494ab399998b7f18388, type: 3}
+    styleSheetStringEntry: Cyberpunk
+    nodeTypeFullName: ND_BehaviorTree.GOAP.GOAPPlannerNode, ND_BehaviorTree.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  _styleSheets:
+  - nodeType: Default
+    styleSheet: {fileID: 7433441132597879392, guid: 15f213f83a32cba4eaf1cae235b903d2, type: 3}
+  - nodeType: Cyberpunk
+    styleSheet: {fileID: 7433441132597879392, guid: 01ee1d327896d4c4cb9cb782361e8428, type: 3}

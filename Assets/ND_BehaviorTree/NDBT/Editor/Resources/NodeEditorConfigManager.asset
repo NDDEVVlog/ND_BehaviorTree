@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: NodeEditorConfigManager
   m_EditorClassIdentifier: 
   activeConfig: {fileID: 0}
-  allConfigs: []
+  allConfigs:
+  - {fileID: 11400000, guid: 7e9507e1ae79fa9459fbd8dd87f6603d, type: 2}

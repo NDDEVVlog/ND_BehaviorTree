@@ -34,15 +34,6 @@ namespace ND_BehaviorTree.Editor
         {   
             
 
-            string edgeStylePath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Edge");
-            if (!string.IsNullOrEmpty(edgeStylePath))
-            {
-                StyleSheet goapStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(edgeStylePath);
-                if (goapStyleSheet != null)
-                {
-                    this.styleSheets.Add(goapStyleSheet);
-                }
-            }
             edgeControl.AddToClassList("nd-custom-edge");
             this.AddToClassList("nd-custom-edge-container");
 

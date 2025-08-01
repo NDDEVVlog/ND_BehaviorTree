@@ -11,12 +11,13 @@ namespace ND_BehaviorTree.Editor
     /// </summary>
     public class ND_GOAPNodeEditor : ND_NodeEditor
     {
-        public ND_GOAPNodeEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView)
-            : base(node, BTObject, graphView)
+        public ND_GOAPNodeEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView,string styleSheetPath, string styleDefaultPath ) 
+        : base(node, BTObject, graphView,styleSheetPath,styleDefaultPath)
         {
             // 1. Load the stylesheet for GOAP nodes.
             // Note: The path should come from your settings singleton.
-            goapStylePath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("GOAP");
+
+            string goapStylePath = styleSheetPath;
             if (!string.IsNullOrEmpty(goapStylePath))
             {
                 StyleSheet goapStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(goapStylePath);

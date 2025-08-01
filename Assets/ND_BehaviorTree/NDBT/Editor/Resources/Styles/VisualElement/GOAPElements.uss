@@ -46,6 +46,7 @@ nodes, separating them visually from standard behavior tree nodes.
 
 
 .goap-node> .title-content-container {
+
     flex-grow: 1; /* This is the magic property. It makes the container expand. */
     flex-shrink: 0;
     justify-content: center; /* Vertically center the text labels within this container. */
