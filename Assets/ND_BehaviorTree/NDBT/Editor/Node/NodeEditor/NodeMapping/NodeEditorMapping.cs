@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UIElements;
+using System;
+using System.Collections.Generic;
 
 namespace ND_BehaviorTree.Editor
 {
@@ -8,13 +11,18 @@ namespace ND_BehaviorTree.Editor
     {
         [Tooltip("Drag the Node data script file here (e.g., GOAPActionNode.cs).")]
         public MonoScript nodeScript;
+
+        public string styleSheetStringEntry;
         
-        [Tooltip("Drag the custom Editor script file here (e.g., ND_GOAPNodeEditor.cs). Can be null to use the default.")]
-        public MonoScript editorScript;
-
         // The UXML Asset field has been removed as requested.
-
         [HideInInspector] public string nodeTypeFullName;
-        [HideInInspector] public string editorTypeFullName;
+
     }
+    
+        [Serializable]
+        class StyleSheetEntry
+        {
+            public string nodeType;
+            public StyleSheet styleSheet;
+        }
 }

@@ -7,6 +7,7 @@ using ND_BehaviorTree.GOAP;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using NodeElements = UnityEditor.Experimental.GraphView.Node; // Alias for GraphView.Node
 
@@ -42,19 +43,37 @@ namespace ND_BehaviorTree.Editor
         public ND_BehaviorTreeView m_GraphView;
 
         public  Label titleLabel;
-        public string goapStylePath;
+        public string StylePath = "Default";
 
         // --- Caches for runtime updates ---
         private readonly List<ExposedPropertyUpdater> m_ExposedPropertyUpdaters = new List<ExposedPropertyUpdater>();
         private readonly List<ProgressBarUpdater> m_ProgressBarUpdaters = new List<ProgressBarUpdater>();
 
-        public ND_NodeEditor(Node node, SerializedObject BTObject, GraphView graphView)
-            : base(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUXMLPath())
+        string styleSheetPath;
+        string styleDefaultPath;
+
+        public ND_NodeEditor(Node node, SerializedObject btObject, GraphView graphView, string styleSheetPath, string styleDefaultPath)
+           : base(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUXMLPath())
         {
+            this.styleSheetPath = styleSheetPath;
+            this.styleDefaultPath = styleDefaultPath;
+
+            if (!string.IsNullOrEmpty(styleSheetPath))
+            {
+                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
+                if (styleSheet != null)
+                {
+                    this.styleSheets.Add(styleSheet);
+                }
+                else
+                {
+                    Debug.LogWarning($"[ND_NodeEditor] Không thể tải stylesheet tại đường dẫn: {styleSheetPath}");
+                }
+            }
             m_GraphView = (ND_BehaviorTreeView)graphView;
-            InitializeNodeView(node, BTObject, graphView);
+            InitializeNodeView(node, btObject, graphView);
         }
-        
+
         // --- Selection Handling ---
         public override void OnSelected()
         {
@@ -83,12 +102,7 @@ namespace ND_BehaviorTree.Editor
             Type typeInfo = node.GetType();
             NodeInfoAttribute info = typeInfo.GetCustomAttribute<NodeInfoAttribute>();
 
-            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Default"));
-            if (styleSheet != null)
-            {
-                this.styleSheets.Add(styleSheet);
-            }
-
+            
             // --- Query UXML Elements ---
             var topPortContainer = this.Q<VisualElement>("top-port");
             var bottomPortContainer = this.Q<VisualElement>("bottom-port");
@@ -237,7 +251,7 @@ namespace ND_BehaviorTree.Editor
             {
                 if (serviceNode != null)
                 {
-                    var serviceEditor = new ND_AuxiliaryEditor(serviceNode, m_SerializedObject, graphView);
+                    var serviceEditor = new ND_AuxiliaryEditor(serviceNode, m_SerializedObject, graphView,styleSheetPath, styleDefaultPath);
                     m_ServiceContainer.Add(serviceEditor);
                 }
             }

@@ -6,21 +6,17 @@ using UnityEngine;
 using UnityEngine.UIElements; 
 
 namespace ND_BehaviorTree.Editor
-{
+{   
+
     
     public sealed class ND_BehaviorTreeSetting : ScriptableObject
     {
-        
-        [Serializable]
-        class StyleSheetEntry
-        {
-            public string nodeType;
-            public StyleSheet styleSheet;
-        }
-        
-        
-        [HideInInspector] 
-        public string enableSettingPassword = "SubcribeToNDDEVGAME"; 
+
+
+
+
+        [HideInInspector]
+        public string enableSettingPassword = "SubcribeToNDDEVGAME";
 
         private const string SettingsAssetPath = "Assets/ND_BehaviorTree/NDBT/Editor/Resources/ND_BehaviorTree_Settings.asset";
 
@@ -63,7 +59,7 @@ namespace ND_BehaviorTree.Editor
                 return _instance;
             }
         }
-        
+
 
         #region USS
 
@@ -77,9 +73,9 @@ namespace ND_BehaviorTree.Editor
         }
 
         #endregion
-        
+
         #region Graph
-        
+
         public string GetGraphViewStyleSheetPath()
         {
             if (graphViewStyle == null) return null;
@@ -102,11 +98,11 @@ namespace ND_BehaviorTree.Editor
             Selection.activeObject = Instance;
             if (Instance != null) EditorGUIUtility.PingObject(Instance);
         }
-        
+
         #endregion
-        
+
         #region Ults
-        
+
         public bool TryGetStyleSheet(string nodeType, out StyleSheet styleSheet)
         {
             styleSheet = null;

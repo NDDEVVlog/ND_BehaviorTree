@@ -1,0 +1,228 @@
+/*
+================================================================================
+=== ND_BEHAVIORTREE MAGIC THEME ===
+================================================================================
+*/
+
+/* === Base Node Border === */
+.node-border {
+    background-color: #1a1423; /* Dark purple-black */
+    border-color: #8a2be2; /* Blue violet neon */
+    border-width: 2px;
+    border-radius: 6px;
+    padding: 3px;
+    box-shadow: 0 0 16px 3px rgba(138, 43, 226, 0.6); /* Glow purple */
+    transition: box-shadow 0.2s ease;
+}
+
+/* === Main Container === */
+.main-container {
+    background-color: #2c2340; /* Dark muted purple */
+    border-radius: 4px;
+    padding: 6px;
+    border-width: 1px;
+    border-color: rgba(138, 43, 226, 0.2); /* Soft purple border */
+    transition: background-color 0.2s ease;
+}
+
+/* === Title === */
+.title {
+    flex-direction: row;
+    align-items: center;
+    padding: 4px 6px;
+    background-color: #392a5a; /* Deep purple */
+    border-radius: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* === Icon === */
+.icon-image {
+    width: 28px;
+    height: 28px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    background-color: rgba(138, 43, 226, 0.1);
+    border-radius: 50%;
+}
+
+/* === Title Container === */
+.title-content-container {
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* === Title Label === */
+.title-textfield {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: #cda4de; /* Light violet */
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+    text-shadow: 0 0 6px rgba(205, 164, 222, 0.8);
+}
+.title-textfield > #unity-text-input {
+    padding: 1px 0;
+    margin: 0;
+    background-color: transparent;
+}
+.title-textfield:focus {
+    background-color: #4b3d75; /* Slightly lighter purple */
+    border-color: #cda4de;
+    border-width: 1px;
+}
+
+/* === Type Label === */
+.type-label {
+    font-size: 11px;
+    color: #b5a2ff; /* Soft lavender */
+    margin-top: 2px;
+    -unity-font-style: italic;
+    text-shadow: 0 0 4px rgba(181, 162, 255, 0.7);
+}
+
+/* === Details Container === */
+.details-container {
+    padding: 6px 10px;
+    flex-direction: column;
+    display: none;
+    background-color: rgba(40, 32, 60, 0.3); /* Semi-transparent purple */
+    border-top: 1px solid #3f2e73;
+    border-bottom: 1px solid #3f2e73;
+}
+
+/* === Exposed Variable Display === */
+.exposed-property {
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-top: 2px;
+}
+.exposed-property-label {
+    color: #b9a1ff; /* Light purple */
+}
+.exposed-property-value {
+    color: #e6e0ff; /* Off-white lavender */
+    -unity-font-style: bold;
+}
+
+/* === Progress Bar === */
+.progress-bar {
+    margin-top: 4px;
+    margin-bottom: 2px;
+    height: 8px;
+    width: 100%;
+    background-color: rgba(50, 42, 85, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.progress-bar-fill {
+    background-color: #9f7fff; /* Bright violet */
+    height: 100%;
+    width: 0%;
+    transition: width 0.15s linear;
+}
+
+/* === Child Node Containers === */
+.child-node-container {
+    min-height: 40px;
+    background-color: rgba(138, 43, 226, 0.08);
+    border: 1px dashed rgba(138, 43, 226, 0.3);
+    border-radius: 3px;
+    margin: 5px 0;
+    padding: 5px;
+    flex-direction: column;
+}
+
+/* === Child Node Items === */
+.child-node-item {
+    background-color: #3c335b;
+    border-radius: 6px;
+    border-width: 2px;
+    border-color: #5a4984;
+    margin-top: 5px;
+    padding: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.decorator-child {
+    background-color: #2a3748;
+    border-color: #4a6c9b;
+}
+.service-child {
+    background-color: #233041;
+    border-color: #5a8cd8;
+}
+.child-node-item .icon-image {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+.child-node-item .title-label {
+    font-size: 14px;
+    color: #d4caff;
+}
+
+/* === Task Node === */
+.task-node .title,
+.task-node .child-node-container {
+    display: none;
+}
+.task-node .main-container {
+    padding: 15px;
+    min-height: 50px;
+    justify-content: center;
+    align-items: center;
+}
+.task-node-label {
+    font-size: 18px;
+    color: #b794ff;
+}
+
+/* === Port Styling === */
+.port-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 16px;
+    width: 100%;
+    background-color: transparent;
+}
+
+
+/*
+================================================================================
+=== RUNTIME STATES (GLOW + COLOR SHIFTS) ===
+================================================================================
+*/
+
+.selected > .node-border {
+    border-color: #b9a1ff;
+    border-width: 3px;
+    box-shadow: 0 0 12px 3px rgba(185, 161, 255, 0.6);
+}
+
+.running > .node-border {
+    border-color: #ffcc66;
+    border-width: 3px;
+    box-shadow: 0 0 12px 3px rgba(255, 204, 102, 0.7);
+}
+
+.success > .node-border {
+    border-color: #7fffdb;
+    border-width: 3px;
+    box-shadow: 0 0 10px 2px rgba(127, 255, 219, 0.6);
+}
+
+.failure > .node-border {
+    border-color: #ff6f91;
+    border-width: 3px;
+    box-shadow: 0 0 10px 2px rgba(255, 111, 145, 0.6);
+}
+
+/* Input/Output ports - hidden */
+#input, #output {
+    display: none;
+}

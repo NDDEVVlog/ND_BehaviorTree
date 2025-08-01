@@ -7,9 +7,10 @@ namespace ND_BehaviorTree.Editor
 {
     public class ND_AuxiliaryEditor : ND_NodeEditor
     {
-        public ND_AuxiliaryEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView) : base(node, BTObject, graphView)
+        public ND_AuxiliaryEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView,string styleSheetPath, string styleDefaultPath ) 
+        : base(node, BTObject, graphView,styleSheetPath,styleDefaultPath)
         {
-            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Auxiliary"));
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
             this.styleSheets.Add(styleSheet);
             this.AddToClassList("auxiliary-node-editor");
 
