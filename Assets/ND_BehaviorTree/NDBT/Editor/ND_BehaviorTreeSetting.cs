@@ -1,4 +1,3 @@
-// File: ND_BehaviorTreeSettingEditor.cs
 using UnityEditor;
 using UnityEngine;
 
@@ -11,33 +10,28 @@ namespace ND_BehaviorTree.Editor
         private bool _isUnlocked = false;
         private const string UnlockSessionStateKey = "ND_BehaviorTreeSetting_IsUnlocked";
 
-        // --- SerializedProperty fields for ALL settings ---
         private SerializedProperty _defaultNodeUXMLProp;
         private SerializedProperty _graphViewStyleProp;
-        private SerializedProperty _nodeDefaultUSSProp;
-        private SerializedProperty _auxiliaryUSSProp;
-        private SerializedProperty _goapUSSProp;
-        private SerializedProperty _edgeUSSProp;
+        private SerializedProperty _styleSheetsProp;
 
         private void OnEnable()
         {
             _isUnlocked = SessionState.GetBool(UnlockSessionStateKey, false);
+            Debug.Log($"OnEnable: IsUnlocked={_isUnlocked}");
 
-            // --- Cache ALL SerializedProperty references ---
             _defaultNodeUXMLProp = serializedObject.FindProperty("defaultNodeUXML");
             _graphViewStyleProp = serializedObject.FindProperty("graphViewStyle");
-            _nodeDefaultUSSProp = serializedObject.FindProperty("nodeDefaultUSS");
-            _auxiliaryUSSProp = serializedObject.FindProperty("auxiliaryUSS");
-            _goapUSSProp = serializedObject.FindProperty("goapUSS");
-            _edgeUSSProp = serializedObject.FindProperty("edgeUSS");
+            _styleSheetsProp = serializedObject.FindProperty("_styleSheets");
+
+            Debug.Log($"Properties bound: defaultNodeUXML={(_defaultNodeUXMLProp != null)}, graphViewStyle={(_graphViewStyleProp != null)}, styleSheets={(_styleSheetsProp != null)}");
         }
 
         public override void OnInspectorGUI()
         {
             ND_BehaviorTreeSetting settings = (ND_BehaviorTreeSetting)target;
-            serializedObject.Update(); // Always call this at the beginning
+            serializedObject.Update();
+            //Debug.Log($"Inspector GUI: IsUnlocked={_isUnlocked}");
 
-            // --- Password Lock Section (No changes needed here) ---
             if (!_isUnlocked)
             {
                 EditorGUILayout.HelpBox("Enter the password to enable editing.", MessageType.Info);
@@ -53,9 +47,10 @@ namespace ND_BehaviorTree.Editor
                     {
                         _isUnlocked = true;
                         SessionState.SetBool(UnlockSessionStateKey, true);
-                        _enteredPassword = ""; 
+                        _enteredPassword = "";
                         Debug.Log("ND_BehaviorTree Settings Unlocked for editing.");
-                        GUI.FocusControl(null); // Remove focus from password field
+                        GUI.FocusControl(null);
+                        Repaint(); // Force Inspector refresh
                     }
                     else
                     {
@@ -66,32 +61,30 @@ namespace ND_BehaviorTree.Editor
                 EditorGUILayout.Space();
             }
 
-            // --- Main Settings Section ---
             EditorGUI.BeginDisabledGroup(!_isUnlocked);
             {
                 DrawSettingsFields();
             }
             EditorGUI.EndDisabledGroup();
 
-            // --- Lock Button (No changes needed here) ---
             if (_isUnlocked)
             {
                 EditorGUILayout.Space();
                 if (GUILayout.Button("Lock Settings"))
                 {
                     _isUnlocked = false;
-                    _enteredPassword = ""; 
+                    _enteredPassword = "";
                     SessionState.SetBool(UnlockSessionStateKey, false);
-                    GUI.FocusControl(null); 
+                    GUI.FocusControl(null);
+                    Repaint();
                 }
             }
             
-            serializedObject.ApplyModifiedProperties(); // Always call this at the end
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawSettingsFields()
         {
-            // --- Draw ALL settings fields ---
             EditorGUILayout.LabelField("UXML Templates", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_defaultNodeUXMLProp, new GUIContent("Default Node UXML"));
 
@@ -99,10 +92,17 @@ namespace ND_BehaviorTree.Editor
             
             EditorGUILayout.LabelField("USS Stylesheets", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_graphViewStyleProp, new GUIContent("GraphView Style"));
-            EditorGUILayout.PropertyField(_nodeDefaultUSSProp, new GUIContent("Node Default Style"));
-            EditorGUILayout.PropertyField(_auxiliaryUSSProp, new GUIContent("Auxiliary Node Style"));
-            EditorGUILayout.PropertyField(_goapUSSProp, new GUIContent("GOAP Node Style"));
-            EditorGUILayout.PropertyField(_edgeUSSProp, new GUIContent("Edge Style"));
+
+            EditorGUILayout.Space();
+            if (_styleSheetsProp != null)
+            {
+                EditorGUILayout.PropertyField(_styleSheetsProp, new GUIContent("Node Styles"), true);
+                //Debug.Log($"StyleSheets array size: {_styleSheetsProp.arraySize}");
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("StyleSheets property is null!", MessageType.Error);
+            }
 
             if (_isUnlocked)
             {

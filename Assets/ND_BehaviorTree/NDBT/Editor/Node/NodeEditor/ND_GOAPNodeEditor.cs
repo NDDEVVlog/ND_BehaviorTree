@@ -17,7 +17,7 @@ namespace ND_BehaviorTree.Editor
             
             // 1. Load the stylesheet for GOAP nodes.
             // Note: The path should come from your settings singleton.
-            goapStylePath = ND_BehaviorTreeSetting.Instance.GetGOAPUSSPath();
+            goapStylePath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("GOAP");
             if (!string.IsNullOrEmpty(goapStylePath))
             {
                 StyleSheet goapStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(goapStylePath);

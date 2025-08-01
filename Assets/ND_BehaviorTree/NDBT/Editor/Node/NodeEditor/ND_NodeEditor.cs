@@ -65,7 +65,7 @@ namespace ND_BehaviorTree.Editor
             Type typeInfo = node.GetType();
             NodeInfoAttribute info = typeInfo.GetCustomAttribute<NodeInfoAttribute>();
 
-            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUSSPath());
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Default"));
             if (styleSheet != null)
             {
                 this.styleSheets.Add(styleSheet);
