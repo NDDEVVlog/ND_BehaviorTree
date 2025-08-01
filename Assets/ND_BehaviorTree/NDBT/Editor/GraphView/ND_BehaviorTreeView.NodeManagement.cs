@@ -46,12 +46,7 @@ namespace ND_BehaviorTree.Editor
         //start adjust from here
         private ND_NodeEditor CreateNodeEditorView(Node nodeData)
         {
-            if (nodeData is GOAP.GOAPActionNode || nodeData is GOAP.GOAPPlannerNode)
-            {
-                return new ND_GOAPNodeEditor(nodeData, m_serialLizeObject, this);
-            }
-            
-            return new ND_NodeEditor(nodeData, m_serialLizeObject, this);
+            return NodeEditorFactory.CreateEditor(nodeData, m_serialLizeObject, this);
         }
 
         private void AddNodeVisuals(Node nodeData, bool animate = true)

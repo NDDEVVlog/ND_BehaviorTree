@@ -74,7 +74,7 @@ namespace ND_BehaviorTree.Editor
 
 
         // --- Initialization ---
-        protected void InitializeNodeView(Node node, SerializedObject BTObject, GraphView graphView)
+        public void InitializeNodeView(Node node, SerializedObject BTObject, GraphView graphView)
         {
             this.m_Node = node;
             this.m_SerializedObject = BTObject;

@@ -132,10 +132,10 @@ MonoBehaviour:
   m_guid: 5ef8fb06-3221-42ad-94d1-49d7c81322dc
   m_position:
     serializedVersion: 2
-    x: 246.4
-    y: 460.80002
-    width: 168.80002
-    height: 92
+    x: 220
+    y: 450.4
+    width: 168.8
+    height: 80.80002
   typeName: ChopTree
   priority: 0
   preconditions:
@@ -181,8 +181,8 @@ MonoBehaviour:
   m_guid: bb907872-3fb1-43a9-afd1-0339e191e540
   m_position:
     serializedVersion: 2
-    x: 157.6
-    y: 793.6
+    x: 188.8
+    y: 774.4
     width: 244
     height: 96.79999
   typeName: SetBooleanValueNode
@@ -251,10 +251,10 @@ MonoBehaviour:
   m_guid: d0a39782-171d-4711-8066-b1a845b19551
   m_position:
     serializedVersion: 2
-    x: 513.60004
-    y: 304.8
-    width: 172.79999
-    height: 95.20001
+    x: 499.2
+    y: 329.6
+    width: 212
+    height: 80.79999
   typeName: GOAPPlannerNode
   priority: 0
   children:
@@ -316,6 +316,29 @@ MonoBehaviour:
   priority: 0
   eventID: 
   eventIDKey: {fileID: 0}
+--- !u!114 &-409866445953930847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd4493e868ea87e4290ecd571487789c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: f6651df9-208a-443d-bee9-f85182e35fd4
+  m_position:
+    serializedVersion: 2
+    x: 439.65222
+    y: 890.087
+    width: 0
+    height: 0
+  typeName: Time Limit
+  priority: 0
+  child: {fileID: 0}
+  timeLimit: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,6 +366,7 @@ MonoBehaviour:
   - {fileID: 1399468310895655337}
   - {fileID: 4302018771259354275}
   - {fileID: -5348843045529535200}
+  - {fileID: -409866445953930847}
   rootNode: {fileID: 4009271883461909621}
   blackboard: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   Self: {fileID: 0}
@@ -666,10 +690,10 @@ MonoBehaviour:
   m_guid: 795e95d4-1f18-43ba-8b43-8e3814928982
   m_position:
     serializedVersion: 2
-    x: 262.4
-    y: 640.8
-    width: 147.20001
-    height: 96.79999
+    x: 246.4
+    y: 630.4
+    width: 142.40001
+    height: 120
   typeName: Sequence
   priority: 0
   children:
