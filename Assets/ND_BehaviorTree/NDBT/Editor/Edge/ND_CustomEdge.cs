@@ -34,7 +34,7 @@ namespace ND_BehaviorTree.Editor
         {   
             
 
-            string edgeStylePath = ND_BehaviorTreeSetting.Instance.GetEdgeUSSPath();
+            string edgeStylePath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Edge");
             if (!string.IsNullOrEmpty(edgeStylePath))
             {
                 StyleSheet goapStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(edgeStylePath);
