@@ -1,4 +1,5 @@
-
+using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -6,14 +7,21 @@ using UnityEngine.UIElements;
 
 namespace ND_BehaviorTree.Editor
 {
-    //[CreateAssetMenu(fileName = "ND_BehaviorTree_Settings", menuName = "ND_BehaviorTree/Settings Asset")] // Standardized name
+    
     public sealed class ND_BehaviorTreeSetting : ScriptableObject
     {
-
+        
+        [Serializable]
+        class StyleSheetEntry
+        {
+            public string nodeType;
+            public StyleSheet styleSheet;
+        }
+        
+        
         [HideInInspector] 
         public string enableSettingPassword = "SubcribeToNDDEVGAME"; 
 
-        // Corrected path to match the CreateAssetMenu fileName if that's the intention
         private const string SettingsAssetPath = "Assets/ND_BehaviorTree/NDBT/Editor/Resources/ND_BehaviorTree_Settings.asset";
 
         [Tooltip("The UXML file to use for the default appearance of nodes in the editor.")]
@@ -23,21 +31,14 @@ namespace ND_BehaviorTree.Editor
         [Tooltip("The USS file for the main GraphView's appearance.")]
         [SerializeField]
         private StyleSheet graphViewStyle;
- 
-        [Header("USS_ZONE")]
-        [SerializeField]
-        private StyleSheet nodeDefaultUSS;
-        [SerializeField]
-        private StyleSheet auxiliaryUSS;
-        [SerializeField]
-        private StyleSheet goapUSS;
-        [SerializeField]
-        private StyleSheet edgeUSS;
 
+        [Header("Node Style Sheets")]
+        [Tooltip("Dictionary mapping node types to their corresponding USS files.")]
+        [SerializeField]
+        private List<StyleSheetEntry> _styleSheets;
 
 
         private static ND_BehaviorTreeSetting _instance;
-
         public static ND_BehaviorTreeSetting Instance
         {
             get
@@ -56,54 +57,34 @@ namespace ND_BehaviorTree.Editor
                         AssetDatabase.CreateAsset(_instance, SettingsAssetPath);
                         AssetDatabase.SaveAssets();
                         AssetDatabase.Refresh();
-                        Debug.LogWarning($"Created new ND_DrawTrelloSetting at: {SettingsAssetPath}. Please configure it.");
+                        Debug.LogWarning($"Created new ND_BehaviorTreeSetting at: {SettingsAssetPath}. Please configure it.");
                     }
                 }
                 return _instance;
             }
         }
+        
 
-        public StyleSheet AuxiliaryUSSStyle => auxiliaryUSS; // Public getter
-        public string GetAuxiliaryUSSPath()
+        #region USS
+
+        public string GetStyleSheetPath(string nodeType)
         {
-            if (auxiliaryUSS == null) return null;
-            return AssetDatabase.GetAssetPath(auxiliaryUSS);
+            if (TryGetStyleSheet(nodeType, out StyleSheet styleSheet) && styleSheet != null)
+            {
+                return AssetDatabase.GetAssetPath(styleSheet);
+            }
+            return null;
         }
 
-        public StyleSheet GOAPUSSStyle => goapUSS; // Public getter
-        public string GetGOAPUSSPath()
-        {
-            if (goapUSS == null) return null;
-            return AssetDatabase.GetAssetPath(goapUSS);
-        }
-
-        public StyleSheet edgeUSSStyle => edgeUSS;
-        public string GetEdgeUSSPath()
-        {
-            if (edgeUSS == null) return null;
-            return AssetDatabase.GetAssetPath(edgeUSS);
-        }
-
-
-
-        public StyleSheet NodeDefaultUSSStyle => nodeDefaultUSS; // Public getter
-
-        public string GetNodeDefaultUSSPath()
-        {
-            if (nodeDefaultUSS == null) return null;
-            return AssetDatabase.GetAssetPath(nodeDefaultUSS);
-        }
-
-
-        public StyleSheet GraphViewStyle => graphViewStyle; // Public getter
-
+        #endregion
+        
+        #region Graph
+        
         public string GetGraphViewStyleSheetPath()
         {
             if (graphViewStyle == null) return null;
             return AssetDatabase.GetAssetPath(graphViewStyle);
         }
-
-        public VisualTreeAsset DefaultNodeUXML => defaultNodeUXML; // Public getter
 
         public string GetNodeDefaultUXMLPath()
         {
@@ -118,9 +99,31 @@ namespace ND_BehaviorTree.Editor
         [MenuItem("Tools/ND_DrawTrello/Select Settings Asset", false, 100)]
         public static void SelectSettingsAsset()
         {
-            Selection.activeObject = Instance; // This will also trigger Instance creation if needed
-            // Optionally, ping the object in the project window
+            Selection.activeObject = Instance;
             if (Instance != null) EditorGUIUtility.PingObject(Instance);
         }
+        
+        #endregion
+        
+        #region Ults
+        
+        public bool TryGetStyleSheet(string nodeType, out StyleSheet styleSheet)
+        {
+            styleSheet = null;
+            if (string.IsNullOrEmpty(nodeType))
+                return false;
+
+            foreach (var entry in _styleSheets)
+            {
+                if (entry.nodeType == nodeType && entry.styleSheet != null)
+                {
+                    styleSheet = entry.styleSheet;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        #endregion
     }
 }
