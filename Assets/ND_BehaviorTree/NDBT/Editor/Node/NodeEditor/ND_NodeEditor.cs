@@ -42,6 +42,7 @@ namespace ND_BehaviorTree.Editor
         public ND_BehaviorTreeView m_GraphView;
 
         public  Label titleLabel;
+        public string goapStylePath;
 
         // --- Caches for runtime updates ---
         private readonly List<ExposedPropertyUpdater> m_ExposedPropertyUpdaters = new List<ExposedPropertyUpdater>();
