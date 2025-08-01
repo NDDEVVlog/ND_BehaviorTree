@@ -31,7 +31,7 @@ namespace ND_BehaviorTree.Editor
 
             List<DropdownMenuItem> items = evt.menu.MenuItems();
 
-            // Hàm tiện lợi để xóa action theo tên
+
             void RemoveActionByName(string name, out int index)
             {   
                 index = -1;
@@ -46,7 +46,7 @@ namespace ND_BehaviorTree.Editor
                 }
             }
             int PasteIndex, CopyIndex;
-            // XÓA các action cũ nếu có
+
             RemoveActionByName("Paste",out PasteIndex);
             RemoveActionByName("Copy",out CopyIndex);
 

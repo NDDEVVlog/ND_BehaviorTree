@@ -1,25 +1,31 @@
+/*
+================================================================================
+=== AI-GENERATED STYLE: "LIGHT & CLEAN THEME" ===
+================================================================================
+*/
+
 /* --- Base Node Styles --- */
 .node-border {
-    background-color: #383838;
-    border-color: #222222;
+    background-color: #DCDCDC; /* Light Grey "shadow" color */
+    border-color: #A9A9A9; /* Mid-grey border */
     border-width: 2px;
     border-radius: 12px;
     padding: 2px;
 }
 
 .selected>.node-border {
-    /* A bright, easily noticeable blue for selection */
-    border-color: #008cff;
+    /* A standard, clear blue for selection */
+    border-color: #0078D4; 
     
     /* Make the border slightly thicker to stand out more */
     border-width: 3px;
     
-    /* Optional: Add a subtle glow to make it pop */
-    box-shadow: 0 0 10px 2px rgba(0, 140, 255, 0.4);
+    /* A subtle glow that works well on a light background */
+    box-shadow: 0 0 8px 1px rgba(0, 120, 212, 0.5);
 }
 
 .main-container {
-    background-color: #4D4D4D;
+    background-color: #F5F5F5; /* Off-white main background */
     border-radius: 10px;
 }
 
@@ -47,7 +53,7 @@
 .title-textfield {
     font-size: 16px;
     -unity-font-style: bold;
-    color: #E0E0E0;
+    color: #212121; /* Dark text for readability */
     background-color: transparent;
     border-width: 0;
     padding: 0;
@@ -63,15 +69,15 @@
 
 /* Style for when the text field is focused for editing */
 .title-textfield:focus {
-    background-color: #2F2F2F;
-    border-color:rgb(26, 115, 232);
+    background-color: #E0E0E0; /* Slightly darker background on focus */
+    border-color: #0078D4; /* Use selection color for focus border */
     border-width: 1px;
 }
 
 /* Style for the node type label (e.g., "Selector") */
 .type-label {
     font-size: 12px;
-    color: #A0A0A0; /* Lighter grey for secondary text */
+    color: #666666; /* Medium grey for secondary text */
     margin-top: 2px;
     -unity-font-style: italic;
 }
@@ -86,9 +92,9 @@
     padding: 4px 8px;
     flex-direction: column;
     display: none; /* Hidden by default, enabled via script if content exists */
-    background-color: rgba(0, 0, 0, 0.1);
-    border-top: 1px solid #333;
-    border-bottom: 1px solid #333;
+    background-color: rgba(0, 0, 0, 0.04); /* Very subtle darker shade */
+    border-top: 1px solid #D0D0D0;
+    border-bottom: 1px solid #D0D0D0;
 }
 
 /* Styles for exposed variables (Key-Value Pair) */
@@ -99,11 +105,11 @@
     margin-top: 2px;
 }
 .exposed-property-label {
-    color: #B0B0B0;
+    color: #555555; /* Darker grey for labels */
     margin-right: 5px;
 }
 .exposed-property-value {
-    color: #E0E0E0;
+    color: #111111; /* Almost black for values */
     -unity-font-style: bold;
 }
 
@@ -113,12 +119,12 @@
     margin-bottom: 2px;
     height: 8px;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #D4D4D4; /* Light grey track */
     border-radius: 4px;
     overflow: hidden; /* This clips the fill element */
 }
 .progress-bar-fill {
-    background-color: #4CAF50; /* A nice green color for progress */
+    background-color: #28a745; /* A vibrant, modern green */
     height: 100%;
     width: 0%; /* Initial width, updated by script */
     transition: width 0.1s linear; /* Smooth transition for updates */
@@ -128,8 +134,8 @@
 /* --- Child Node Container (for Decorators/Services) --- */
 .child-node-container {
      min-height: 40px;
-    background-color: rgba(0, 0, 0, 0.15);
-    border: 1px dashed rgb(80, 80, 80);
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px dashed #B0B0B0; /* Mid-grey dashed border */
     border-radius: 3px;
     margin: 5px 0;
     padding: 5px;
@@ -138,10 +144,10 @@
 
 /* --- Individual Child Item Styling --- */
 .child-node-item {
-    background-color: #5A5A5A; /* Default child color */
+    background-color: #EAEAEA; /* Default light grey child color */
     border-radius: 6px;
     border-width: 2px;
-    border-color: #383838;
+    border-color: #C0C0C0;
     margin-top: 5px;
     padding: 5px;
     flex-direction: row;
@@ -151,14 +157,14 @@
 
 /* Specific color for Decorators */
 .decorator-child {
-    background-color: #3A5A3A; /* Greenish */
-    border-color: #2A4A2A;
+    background-color: #DFF0D8; /* Light, soft green */
+    border-color: #B2DAB9;
 }
 
 /* Specific color for Services */
 .service-child {
-    background-color: #2D4F6A; /* Blueish */
-    border-color: #1E3A52;
+    background-color: #D9EDF7; /* Light, soft blue */
+    border-color: #BCE8F1;
 }
 
 .child-node-item .icon-image {
@@ -170,6 +176,7 @@
 .child-node-item .title-label {
     font-size: 14px;
     -unity-font-style: normal;
+    color: #212121;
 }
 
 /* --- TaskNode Specific Styling (no changes needed) --- */
@@ -185,7 +192,7 @@
 }
 .task-node-label {
     font-size: 18px;
-    color: #E0E0E0;
+    color: #212121; /* Dark text */
 }
 
 /* --- Port Styling --- */
@@ -197,8 +204,6 @@
     width: 100%;
 }
 
-
-
 /*
 ================================================================================
 === STYLES FOR RUNTIME STATUS (DEBUGGING) ===
@@ -207,21 +212,19 @@
 
 /* Style for a node that is currently running */
 .running > .node-border {
-    border-color: #FFD700; /* Bright Gold/Yellow */
+    border-color: #FFB900; /* A gold/amber that has good contrast on light bg */
     border-width: 3px;
-    box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.5); /* Add a subtle glow */
+    box-shadow: 0 0 8px 2px rgba(255, 185, 0, 0.6); /* Matching glow */
 }
 
 /* Optional: Style for a node that just returned Success */
 .success > .node-border {
-    border-color: #4CAF50; /* Green */
+    border-color: #1E8449; /* A darker, clearer green */
     border-width: 3px;
 }
 
 /* Optional: Style for a node that just returned Failure */
 .failure > .node-border {
-    border-color: #F44336; /* Red */
+    border-color: #C0392B; /* A darker, clearer red */
     border-width: 3px;
 }
-
-

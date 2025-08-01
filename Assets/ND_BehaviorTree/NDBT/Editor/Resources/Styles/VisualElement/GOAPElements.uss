@@ -31,6 +31,18 @@ It defines the basic shape, dark background, and typography.
     padding: 2px;
 }
 
+.selected > .goap-node >  .node-border {
+    /* A bright, easily noticeable blue for selection */
+    border-color: rgba(67, 182, 10, 1);
+        
+    /* Make the border slightly thicker to stand out more */
+    border-width: 10px;
+    
+    /* Optional: Add a subtle glow to make it pop */
+    box-shadow: 0 0 10px 2px rgba(0, 140, 255, 0.4);
+}
+
+
 /* --- Inner Content Container --- */
 /* This is the main dark background of the node. */
 .goap-node > .node-border > .main-container {
@@ -160,20 +172,20 @@ This ensures the connection ports match the sci-fi theme.
 }
 
 
-.goap-node > .running > .node-border {
+.running > .goap-node > .node-border {
     border-color: #FFD700; /* Bright Gold/Yellow */
     border-width: 3px;
     box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.5); /* Add a subtle glow */
 }
 
 /* Optional: Style for a node that just returned Success */
-.goap-node > .success > .node-border {
+.success >.goap-node >  .node-border {
     border-color: #4CAF50; /* Green */
     border-width: 3px;
 }
 
 /* Optional: Style for a node that just returned Failure */
-.goap-node > .failure > .node-border {
+.failure > .goap-node >  .node-border {
     border-color: #F44336; /* Red */
     border-width: 3px;
 }
