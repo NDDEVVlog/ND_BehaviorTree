@@ -37,7 +37,9 @@ namespace ND_BehaviorTree.Editor
             edgeControl.AddToClassList("nd-custom-edge");
             this.AddToClassList("nd-custom-edge-container");
 
-            
+
+            this.style.borderBottomColor = Color.red;
+            this.style.borderBottomWidth = 3;
 
             arrow = new VisualElement();
             arrow.name = "EdgeArrow"; // Optional for debugging

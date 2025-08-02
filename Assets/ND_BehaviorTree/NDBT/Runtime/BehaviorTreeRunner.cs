@@ -3,15 +3,13 @@
 using UnityEngine;
 using ND_BehaviorTree;
 using System.Linq;
-using UnityEngine.Events; // Added for LINQ to easily get key names
 
 public class BehaviorTreeRunner : MonoBehaviour
 {
-    [Tooltip("The BehaviorTree asset to run.")]
+    [Tooltip("The BehaviorTree asset to run. The blackboard defined in this asset will be cloned and used.")]
     public BehaviorTree treeAsset;
 
-    [Tooltip("(Optional) A specific Blackboard asset to use for this runner. If left empty, a clone of the one from the Tree Asset will be used. Values can be set below.")]
-    public Blackboard blackboardOverride;
+    // The 'blackboardOverride' field has been removed to simplify the component.
 
     public BehaviorTree RuntimeTree { get; private set; }
 
@@ -23,38 +21,33 @@ public class BehaviorTreeRunner : MonoBehaviour
             return;
         }
 
-        // 1. Clone the asset to create a runtime instance for this agent
         RuntimeTree = treeAsset.Clone();
         RuntimeTree.Self = this.gameObject;
+        
 
-        // 2. If there is an override blackboard, clone it and replace the default one
-        //    This must happen BEFORE Init() so we populate the correct blackboard.
-        if (blackboardOverride != null)
-        {
-            RuntimeTree.blackboard = blackboardOverride.Clone();
-        }
-
-        // 3. Now that the finalblackboard is in place, initialize it with runtime values.
+        // 2. Now that the tree and its blackboard are cloned, initialize it with runtime values.
         Init();
 
-        // If blackboard is still null after the above, print a warning.
+        // 3. Log the result for debugging purposes.
         if (RuntimeTree.blackboard == null)
         {
-            Debug.LogWarning($"Runner for '{treeAsset.name}' on GameObject '{gameObject.name}' has no blackboard assigned (neither on the tree asset nor as an override).", this);
+            Debug.LogWarning($"Runner for '{treeAsset.name}' on GameObject '{gameObject.name}' has no blackboard assigned to the tree asset.", this);
         }
-        else // Otherwise, log th e names of the keys it was initialized with.
+        else
         {
-            var keyNames = RuntimeTree.blackboard.keys.Select(key => key.keyName);
+            var keyNames = RuntimeTree.blackboard.keys.Select(key => key.name);
             string keysDebugString = string.Join(", ", keyNames);
-
-            // Log a formatted message to the console. The 'this' context makes it clickable.
             Debug.Log($"[{gameObject.name}] BehaviorTreeRunner initialized with Blackboard keys: [{keysDebugString}]", this);
         }
     }
 
+    /// <summary>
+    /// This method can be overridden in child classes to populate the blackboard
+    /// with component references or initial values at runtime.
+    /// It is called after the tree and blackboard have been cloned.
+    /// </summary>
     public virtual void Init()
     {
-        RuntimeTree.blackboard.SetValue<UnityEvent>("RandomUnityEvent", randomShit);
     }
 
     void Update()
@@ -63,13 +56,5 @@ public class BehaviorTreeRunner : MonoBehaviour
         {
             RuntimeTree.Update();
         }
-    }
-
-
-    public UnityEvent randomShit;
-
-    public void DebugCMM()
-    {
-        Debug.Log("UNITAOI{HDAO{FIHG}}");
     }
 }
