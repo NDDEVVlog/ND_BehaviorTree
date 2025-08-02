@@ -167,6 +167,14 @@ namespace ND_BehaviorTree.Editor
             {
                 m_InputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
                 m_InputPort.portName = "";
+                //m_InputPort.portColor = Color.cyan;
+
+                m_InputPort.AddToClassList("myport");
+              
+
+                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleDefaultPath);
+                m_InputPort.styleSheets.Add(styleSheet);
+
                 topPortContainer.Add(m_InputPort);
                 m_Ports.Add(m_InputPort);
             }

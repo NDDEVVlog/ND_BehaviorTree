@@ -343,6 +343,7 @@ MonoBehaviour:
   - {fileID: 1399468310895655337}
   - {fileID: 4302018771259354275}
   - {fileID: -5348843045529535200}
+  - {fileID: 8206109389023323246}
   rootNode: {fileID: 4009271883461909621}
   blackboard: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   Self: {fileID: 0}
@@ -487,6 +488,7 @@ MonoBehaviour:
   children:
   - {fileID: 1399468310895655337}
   - {fileID: 4302018771259354275}
+  - {fileID: 8206109389023323246}
   services: []
 --- !u!114 &2035194374559882698
 MonoBehaviour:
@@ -572,8 +574,8 @@ MonoBehaviour:
   m_guid: 8af5dcdd-d6fb-4de6-a246-1feb012d4e0b
   m_position:
     serializedVersion: 2
-    x: 1168
-    y: 737.6
+    x: 1099.2
+    y: 756.8
     width: 244
     height: 96.79999
   typeName: SetBooleanValueNode
@@ -666,10 +668,10 @@ MonoBehaviour:
   m_guid: 795e95d4-1f18-43ba-8b43-8e3814928982
   m_position:
     serializedVersion: 2
-    x: 309.6
-    y: 616.8
-    width: 142.4
-    height: 88.79999
+    x: 323.2
+    y: 632.8
+    width: 147.20001
+    height: 96.79999
   typeName: Sequence
   priority: 0
   children:
@@ -740,3 +742,34 @@ MonoBehaviour:
   typeName: Wait
   priority: 0
   duration: 1
+--- !u!114 &8206109389023323246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5efd9179035b9b347b3a33e236c9ec73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 8e2da61e-68f8-45bd-b8bf-3828233eb91f
+  m_position:
+    serializedVersion: 2
+    x: 1389.6
+    y: 772.8
+    width: 185.59998
+    height: 96.79999
+  typeName: SetBlackBoardValue
+  priority: 0
+  setBlackBoardValue:
+    rid: 3796477367081500673
+  references:
+    version: 2
+    RefIds:
+    - rid: 3796477367081500673
+      type: {class: SetFloatValue, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
+      data:
+        floatKey: {fileID: 0}
+        valueToSet: 0
