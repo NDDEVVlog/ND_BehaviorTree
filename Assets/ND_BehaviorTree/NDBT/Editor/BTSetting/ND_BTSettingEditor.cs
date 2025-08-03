@@ -10,6 +10,7 @@ namespace ND_BehaviorTree.Editor
         private bool _isUnlocked = false;
         private const string UnlockSessionStateKey = "ND_BehaviorTreeSetting_IsUnlocked";
 
+        private SerializedProperty _isLockEnabledProp;
         private SerializedProperty _defaultNodeUXMLProp;
         private SerializedProperty _graphViewStyleProp;
         private SerializedProperty _styleSheetsProp;
@@ -17,21 +18,34 @@ namespace ND_BehaviorTree.Editor
         private void OnEnable()
         {
             _isUnlocked = SessionState.GetBool(UnlockSessionStateKey, false);
-            Debug.Log($"OnEnable: IsUnlocked={_isUnlocked}");
 
+            _isLockEnabledProp = serializedObject.FindProperty("isLockEnabled");
             _defaultNodeUXMLProp = serializedObject.FindProperty("defaultNodeUXML");
             _graphViewStyleProp = serializedObject.FindProperty("graphViewStyle");
             _styleSheetsProp = serializedObject.FindProperty("_styleSheets");
-
-            Debug.Log($"Properties bound: defaultNodeUXML={(_defaultNodeUXMLProp != null)}, graphViewStyle={(_graphViewStyleProp != null)}, styleSheets={(_styleSheetsProp != null)}");
         }
 
         public override void OnInspectorGUI()
         {
             ND_BehaviorTreeSetting settings = (ND_BehaviorTreeSetting)target;
             serializedObject.Update();
-            //Debug.Log($"Inspector GUI: IsUnlocked={_isUnlocked}");
 
+            if (_isLockEnabledProp.boolValue)
+            {
+                // --- LOCK FEATURE IS ENABLED ---
+                HandleLockedState(settings);
+            }
+            else
+            {
+                // --- LOCK FEATURE IS DISABLED ---
+                HandlePermanentlyUnlockedState();
+            }
+            
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleLockedState(ND_BehaviorTreeSetting settings)
+        {
             if (!_isUnlocked)
             {
                 EditorGUILayout.HelpBox("Enter the password to enable editing.", MessageType.Info);
@@ -50,7 +64,7 @@ namespace ND_BehaviorTree.Editor
                         _enteredPassword = "";
                         Debug.Log("ND_BehaviorTree Settings Unlocked for editing.");
                         GUI.FocusControl(null);
-                        Repaint(); // Force Inspector refresh
+                        Repaint(); 
                     }
                     else
                     {
@@ -62,15 +76,13 @@ namespace ND_BehaviorTree.Editor
             }
 
             EditorGUI.BeginDisabledGroup(!_isUnlocked);
-            {
-                DrawSettingsFields();
-            }
+            DrawSettingsFields();
             EditorGUI.EndDisabledGroup();
 
             if (_isUnlocked)
             {
                 EditorGUILayout.Space();
-                if (GUILayout.Button("Lock Settings"))
+                if (GUILayout.Button("Lock Settings (This Session)"))
                 {
                     _isUnlocked = false;
                     _enteredPassword = "";
@@ -78,9 +90,33 @@ namespace ND_BehaviorTree.Editor
                     GUI.FocusControl(null);
                     Repaint();
                 }
+
+                EditorGUILayout.Space(10);
+                EditorGUILayout.HelpBox("This will permanently disable the password lock feature, making settings always accessible. You can re-enable it later.", MessageType.Warning);
+                if (GUILayout.Button("Permanently Disable Lock"))
+                {
+                    if (EditorUtility.DisplayDialog("Disable Password Lock?", 
+                        "Are you sure you want to disable the password lock? The settings will become permanently editable until the lock is re-enabled.", 
+                        "Yes, Disable Lock", "Cancel"))
+                    {
+                        _isLockEnabledProp.boolValue = false;
+                        _isUnlocked = false; // Reset session state as it's no longer relevant
+                        SessionState.SetBool(UnlockSessionStateKey, false);
+                        GUI.FocusControl(null);
+                    }
+                }
             }
-            
-            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandlePermanentlyUnlockedState()
+        {
+            EditorGUILayout.HelpBox("Password protection is currently disabled.", MessageType.Info);
+            if (GUILayout.Button("Enable Password Lock"))
+            {
+                 _isLockEnabledProp.boolValue = true;
+            }
+            EditorGUILayout.Space();
+            DrawSettingsFields();
         }
 
         private void DrawSettingsFields()
@@ -97,17 +133,17 @@ namespace ND_BehaviorTree.Editor
             if (_styleSheetsProp != null)
             {
                 EditorGUILayout.PropertyField(_styleSheetsProp, new GUIContent("Node Styles"), true);
-                //Debug.Log($"StyleSheets array size: {_styleSheetsProp.arraySize}");
             }
             else
             {
                 EditorGUILayout.HelpBox("StyleSheets property is null!", MessageType.Error);
             }
 
-            if (_isUnlocked)
+            // Show editable message if session is unlocked OR if the lock feature is disabled entirely
+            if (_isUnlocked || (_isLockEnabledProp != null && !_isLockEnabledProp.boolValue))
             {
                 EditorGUILayout.Space();
-                EditorGUILayout.HelpBox("Settings are currently editable. Remember to lock them if needed.", MessageType.None);
+                EditorGUILayout.HelpBox("Settings are currently editable.", MessageType.None);
             }
         }
     }

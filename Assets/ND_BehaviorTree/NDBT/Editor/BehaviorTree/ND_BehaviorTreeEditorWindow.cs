@@ -14,7 +14,7 @@ namespace ND_BehaviorTree.Editor
     public class ND_BehaviorTreeEditorWindow : EditorWindow
     {
         // --- Menu Items & Open Methods (no changes) ---
-        [MenuItem("Window/ND Behavior Tree Editor")]
+        [MenuItem("ND_BehaviorTree/ND Behavior Tree Window Editor")]
         public static void OpenWindow()
         {
             ND_BehaviorTreeEditorWindow window = GetWindow<ND_BehaviorTreeEditorWindow>();
