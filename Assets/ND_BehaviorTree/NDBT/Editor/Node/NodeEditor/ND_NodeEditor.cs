@@ -58,16 +58,16 @@ namespace ND_BehaviorTree.Editor
             this.styleSheetPath = styleSheetPath;
             this.styleDefaultPath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Default");
 
-            if (!string.IsNullOrEmpty(styleSheetPath))
+            if (!string.IsNullOrEmpty(styleDefaultPath))
             {
-                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
+                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleDefaultPath);
                 if (styleSheet != null)
                 {
                     this.styleSheets.Add(styleSheet);
                 }
                 else
                 {
-                    Debug.LogWarning($"[ND_NodeEditor] Không thể tải stylesheet tại đường dẫn: {styleSheetPath}");
+                    Debug.LogWarning($"[ND_NodeEditor] Không thể tải stylesheet tại đường dẫn: {styleDefaultPath}");
                 }
             }
             m_GraphView = (ND_BehaviorTreeView)graphView;
@@ -148,15 +148,10 @@ namespace ND_BehaviorTree.Editor
 
        public virtual void AddBottomPortStyleSheet(string portStylePath)
         {
-            // --- FIX: Add a null check here ---
-            // If this node type doesn't have an input port, just exit silently.
             if (m_InputPort == null)
             {
                 return;
             }
-
-            // The Debug.Log can stay for testing, it's useful.
-            Debug.Log($"Applying bottom port style: {portStylePath}");
 
             m_InputPort.AddToClassList("btport");
             StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(portStylePath);

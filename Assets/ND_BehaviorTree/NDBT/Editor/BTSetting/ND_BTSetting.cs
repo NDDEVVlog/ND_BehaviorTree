@@ -7,13 +7,11 @@ using UnityEngine.UIElements;
 
 namespace ND_BehaviorTree.Editor
 {   
-
-    
     public sealed class ND_BehaviorTreeSetting : ScriptableObject
     {
-
-
-
+        [Header("Security")]
+        [Tooltip("If true, the settings inspector will be locked behind a password.")]
+        public bool isLockEnabled = true;
 
         [HideInInspector]
         public string enableSettingPassword = "SubcribeToNDDEVGAME";
@@ -41,6 +39,7 @@ namespace ND_BehaviorTree.Editor
             {
                 if (_instance == null)
                 {
+                    Debug.Log("Load BT Setting");
                     _instance = AssetDatabase.LoadAssetAtPath<ND_BehaviorTreeSetting>(SettingsAssetPath);
                     if (_instance == null)
                     {
@@ -92,7 +91,7 @@ namespace ND_BehaviorTree.Editor
             return AssetDatabase.GetAssetPath(defaultNodeUXML);
         }
 
-        [MenuItem("Tools/ND_DrawTrello/Select Settings Asset", false, 100)]
+        [MenuItem("ND_BehaviorTree/Settings Asset", false, 100)]
         public static void SelectSettingsAsset()
         {
             Selection.activeObject = Instance;
