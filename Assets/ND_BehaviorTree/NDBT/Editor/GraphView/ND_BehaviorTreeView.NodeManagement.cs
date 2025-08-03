@@ -1,5 +1,3 @@
-// --- FILE: ND_BehaviorTreeView.NodeManagement.cs ---
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

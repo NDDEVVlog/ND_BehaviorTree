@@ -30,7 +30,6 @@ namespace ND_BehaviorTree.Editor
         
         private BlackboardView m_blackboardView;
 
-        // --- Constructor ---
         public ND_BehaviorTreeView(SerializedObject serializedObject, ND_BehaviorTreeEditorWindow editorWindow)
         {
             m_editorWindow = editorWindow;

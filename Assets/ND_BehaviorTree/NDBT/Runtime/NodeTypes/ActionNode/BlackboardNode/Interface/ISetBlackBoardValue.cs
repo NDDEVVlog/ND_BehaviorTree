@@ -6,6 +6,6 @@ namespace ND_BehaviorTree
 {
     public interface ISetBlackBoardValue
     {
-        public bool TrySetValue(Blackboard blackboard);
+        public bool TrySetValue(GameObject ownerTree,Blackboard blackboard);
     }
 }
