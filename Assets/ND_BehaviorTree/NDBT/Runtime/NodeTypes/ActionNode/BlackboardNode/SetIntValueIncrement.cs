@@ -18,7 +18,7 @@ namespace ND_BehaviorTree
         [Tooltip("The amount to add to the key's current value. Use a negative number to decrement.")]
         public int incrementAmount = 1;
 
-        public bool TrySetValue(Blackboard blackboard)
+        public bool TrySetValue(GameObject owwnerTree,Blackboard blackboard)
         {
             // 1. Guard against missing blackboard or unassigned key
             if (blackboard == null || intKey == null)

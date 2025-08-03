@@ -20,8 +20,8 @@ namespace ND_BehaviorTree.Editor
                 ProcessMappings((NodeEditorConfig)target);
             }
             
-            // Also, automatically process mappings whenever the inspector is drawn.
-            // This catches cases where assembly references might have just been fixed.
+            
+
             ProcessMappings((NodeEditorConfig)target);
         }
 
@@ -72,8 +72,6 @@ namespace ND_BehaviorTree.Editor
                 }
             }
                 
-            // If any of the names were updated, mark the asset as "dirty"
-            // so Unity knows to save the changes to disk.
             if (hasChanged)
             {
                 EditorUtility.SetDirty(config);

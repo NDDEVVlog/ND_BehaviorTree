@@ -7,7 +7,7 @@ using ND_BehaviorTree;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements; // Required for Toolbar and ToolbarToggle
+using UnityEditor.UIElements;
 
 namespace ND_BehaviorTree.Editor
 {

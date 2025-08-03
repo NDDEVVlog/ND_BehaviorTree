@@ -58,29 +58,6 @@ namespace ND_BehaviorTree.Editor
             }
         }
         
-        /// <summary>
-        /// This is the new debug version of CanPaste. It tells us WHY the paste button is enabled or disabled.
-        /// </summary>
-        // private DropdownMenuAction.Status CanPaste_WithDebug()
-        // {
-        //     string clipboardContent = EditorGUIUtility.systemCopyBuffer;
-        //     if (string.IsNullOrEmpty(clipboardContent))
-        //     {
-        //         Debug.Log("[CanPaste?] Result: DISABLED. Reason: System clipboard is empty.");
-        //         return DropdownMenuAction.Status.Disabled;
-        //     }
-        //     else
-        //     {
-        //         Debug.Log("[CanPaste?] Result: ENABLED. Reason: System clipboard has content.");
-        //         return DropdownMenuAction.Status.Normal;
-        //     }
-        // }
-        // private DropdownMenuAction.Status CanPaste()
-        // {
-        //     try { return !string.IsNullOrEmpty(EditorGUIUtility.systemCopyBuffer) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled; }
-        //     catch { return DropdownMenuAction.Status.Disabled; }
-        // }
-
         private void CopySelectionToClipboard()
         {
             var selectedEditorNodes = selection.OfType<ND_NodeEditor>().ToList();

@@ -14,7 +14,7 @@ namespace ND_BehaviorTree
         [Tooltip("The new integer value to set.")]
         public int valueToSet;
 
-        public bool TrySetValue(Blackboard blackboard)
+        public bool TrySetValue(GameObject owwnerTree,Blackboard blackboard)
         {
             if (blackboard == null || intKey == null)
             {

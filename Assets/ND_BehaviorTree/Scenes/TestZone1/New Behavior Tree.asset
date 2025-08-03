@@ -357,7 +357,6 @@ MonoBehaviour:
   - {fileID: 1788777279908683041}
   - {fileID: -5844898184024730655}
   - {fileID: -4912801335699234050}
-  - {fileID: 7012430020752034260}
   - {fileID: 1939292052299459149}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
@@ -377,10 +376,10 @@ MonoBehaviour:
   m_guid: 9658a66f-4b4f-498f-ba0c-5b1cd7cf0d2f
   m_position:
     serializedVersion: 2
-    x: 116.799995
-    y: 506.40002
-    width: 318.4
-    height: 96.79999
+    x: 102.399994
+    y: 507.2
+    width: 333.59998
+    height: 109.599976
   typeName: Selector go to Player or Random
   priority: 0
   children:
@@ -523,10 +522,10 @@ MonoBehaviour:
   m_guid: f78cfddd-9e49-4a54-8bcd-bc2a859bf8ec
   m_position:
     serializedVersion: 2
-    x: 905.60004
-    y: 458.4
-    width: 240
-    height: 95.19998
+    x: 962.4
+    y: 515.2
+    width: 223.99994
+    height: 109.599976
   typeName: GachaSelector xD
   priority: 0
   children:
@@ -701,28 +700,6 @@ MonoBehaviour:
   - {fileID: 8050742415459131951}
   services:
   - {fileID: 1939292052299459149}
---- !u!114 &7012430020752034260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 846a55a2431de6049b94dc4c049818d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 362d0bc8-e9d8-4220-a940-fb338ab9f746
-  m_position:
-    serializedVersion: 2
-    x: 1190.3999
-    y: 761.6
-    width: 171.20007
-    height: 95.20001
-  typeName: Invoke Unity Event
-  priority: 0
-  unityEventKey: {fileID: 0}
 --- !u!114 &7981926055889722451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -817,7 +794,6 @@ MonoBehaviour:
   typeName: Sequence
   priority: 10
   children:
-  - {fileID: 7012430020752034260}
   - {fileID: 1788777279908683041}
   services: []
 --- !u!114 &8920281827989162788

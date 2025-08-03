@@ -16,7 +16,7 @@ namespace ND_BehaviorTree
         [Tooltip("The new float value to set.")]
         public float valueToSet;
 
-        public bool TrySetValue(Blackboard blackboard)
+        public bool TrySetValue(GameObject owwnerTree,Blackboard blackboard)
         {
             if (blackboard == null || string.IsNullOrEmpty(floatKey.keyName))
             {

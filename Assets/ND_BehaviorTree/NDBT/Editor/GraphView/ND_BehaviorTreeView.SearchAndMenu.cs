@@ -29,6 +29,8 @@ namespace ND_BehaviorTree.Editor
         {
             base.BuildContextualMenu(evt);
 
+            // Why Unity Whyyyyyyyyyyyyyyyy
+
             List<DropdownMenuItem> items = evt.menu.MenuItems();
 
 
@@ -64,8 +66,6 @@ namespace ND_BehaviorTree.Editor
 
             evt.menu.AppendAction("Create Node...", (a) => OpenSearchWindow(screenMousePosition));
 
-            // --- MODIFIED PASTE ACTION ---
-            // This now calls a special debug function to check if pasting is allowed.
             evt.menu.AppendAction("Test Log", (a) => Debug.Log("Test clicked!"));
 
             evt.menu.InsertAction(PasteIndex >= 0 ? PasteIndex : items.Count, "Paste", (a) =>

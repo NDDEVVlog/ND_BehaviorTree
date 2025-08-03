@@ -47,8 +47,7 @@ namespace ND_BehaviorTree.Editor
             {
                 foreach (var config in _availableConfigs) 
                 {
-                    // Using the clean and efficient LINQ search again.
-                    // This relies on 'nodeTypeFullName' being correct.
+
                     var foundMapping = config.mappings.FirstOrDefault(m => m.nodeTypeFullName == currentType.AssemblyQualifiedName);
                     if (foundMapping != null)
                     {
