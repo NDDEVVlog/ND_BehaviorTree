@@ -343,10 +343,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 4268ad1c72d74264fb2aafd7c39f1e41, type: 2}
-  blackboardOverride: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
-  randomShit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &434350207
 GameObject:
   m_ObjectHideFlags: 0
@@ -956,10 +952,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 4268ad1c72d74264fb2aafd7c39f1e41, type: 2}
-  blackboardOverride: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
-  randomShit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &810807871
 MonoBehaviour:
   m_ObjectHideFlags: 0

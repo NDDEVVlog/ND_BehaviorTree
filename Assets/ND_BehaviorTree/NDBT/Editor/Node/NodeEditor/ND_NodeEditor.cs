@@ -42,7 +42,7 @@ namespace ND_BehaviorTree.Editor
         public List<Port> Ports => m_Ports;
         public ND_BehaviorTreeView m_GraphView;
 
-        public  Label titleLabel;
+        public Label titleLabel;
         public string StylePath = "Default";
 
         // --- Caches for runtime updates ---
@@ -52,11 +52,11 @@ namespace ND_BehaviorTree.Editor
         string styleSheetPath;
         string styleDefaultPath;
 
-        public ND_NodeEditor(Node node, SerializedObject btObject, GraphView graphView, string styleSheetPath, string styleDefaultPath)
+        public ND_NodeEditor(Node node, SerializedObject btObject, GraphView graphView, string styleSheetPath)
            : base(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUXMLPath())
         {
             this.styleSheetPath = styleSheetPath;
-            this.styleDefaultPath = styleDefaultPath;
+            this.styleDefaultPath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Default");
 
             if (!string.IsNullOrEmpty(styleSheetPath))
             {
@@ -74,22 +74,7 @@ namespace ND_BehaviorTree.Editor
             InitializeNodeView(node, btObject, graphView);
         }
 
-        // --- Selection Handling ---
-        public override void OnSelected()
-        {
-            base.OnSelected();
-            this.AddToClassList("selected");
-            // For debugging, you can also log to the console:
-            Debug.Log($"Node '{node.typeName}' was selected.");
-        }
 
-        public override void OnUnselected()
-        {
-            base.OnUnselected();
-            this.RemoveFromClassList("selected");
-            // For debugging:
-            // Debug.Log($"Node '{node.typeName}' was unselected.");
-        }
 
 
         // --- Initialization ---
@@ -102,7 +87,7 @@ namespace ND_BehaviorTree.Editor
             Type typeInfo = node.GetType();
             NodeInfoAttribute info = typeInfo.GetCustomAttribute<NodeInfoAttribute>();
 
-            
+
             // --- Query UXML Elements ---
             var topPortContainer = this.Q<VisualElement>("top-port");
             var bottomPortContainer = this.Q<VisualElement>("bottom-port");
@@ -161,22 +146,72 @@ namespace ND_BehaviorTree.Editor
             RefreshPorts();
         }
 
+       public virtual void AddBottomPortStyleSheet(string portStylePath)
+        {
+            // --- FIX: Add a null check here ---
+            // If this node type doesn't have an input port, just exit silently.
+            if (m_InputPort == null)
+            {
+                return;
+            }
+
+            // The Debug.Log can stay for testing, it's useful.
+            Debug.Log($"Applying bottom port style: {portStylePath}");
+
+            m_InputPort.AddToClassList("btport");
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(portStylePath);
+
+            // This check is also good practice, in case the path is invalid.
+            if (styleSheet != null)
+            {
+                m_InputPort.styleSheets.Add(styleSheet);
+            }
+            else
+            {
+                Debug.LogWarning($"Could not load stylesheet for port at path: {portStylePath}");
+            }
+        }
+
+    public virtual void AddTopPortStyleSheet(string portStylePath)
+    {
+        // --- FIX: Add a null check here ---
+        // If this node type doesn't have an output port, just exit silently.
+        if (m_OutputPort == null)
+        {
+            return;
+        }
+        
+        // The original check for the path string is also good, let's keep it.
+        if (!string.IsNullOrEmpty(portStylePath))
+        {
+            m_OutputPort.AddToClassList("btport");
+
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(portStylePath);
+
+            if (styleSheet != null)
+            {
+                m_OutputPort.styleSheets.Add(styleSheet);
+            }
+            else
+            {
+                Debug.LogWarning($"Could not load stylesheet for port at path: {portStylePath}");
+            }
+        }
+    }
+
+        #region DrawSection
+
         public virtual void DrawPort(NodeInfoAttribute info, VisualElement topPortContainer, VisualElement bottomPortContainer)
         {
             if (info.hasFlowInput)
             {
                 m_InputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(PortType.FlowPort));
                 m_InputPort.portName = "";
-                //m_InputPort.portColor = Color.cyan;
 
-                m_InputPort.AddToClassList("myport");
-              
-
-                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleDefaultPath);
-                m_InputPort.styleSheets.Add(styleSheet);
 
                 topPortContainer.Add(m_InputPort);
                 m_Ports.Add(m_InputPort);
+                    
             }
 
             if (info.hasFlowOutput)
@@ -259,16 +294,13 @@ namespace ND_BehaviorTree.Editor
             {
                 if (serviceNode != null)
                 {
-                    var serviceEditor = new ND_AuxiliaryEditor(serviceNode, m_SerializedObject, graphView,styleSheetPath, styleDefaultPath);
+                    var serviceEditor = new ND_AuxiliaryEditor(serviceNode, m_SerializedObject, graphView, styleSheetPath);
                     m_ServiceContainer.Add(serviceEditor);
                 }
             }
         }
 
-        public void SavePosition()
-        {
-            m_Node.SetPosition(GetPosition());
-        }
+        #endregion
 
         #region IDropTarget Implementation
         public bool CanAcceptDrop(List<ISelectable> selection)
@@ -314,6 +346,28 @@ namespace ND_BehaviorTree.Editor
         }
         #endregion
 
+
+        #region UpdateNodeEditor
+                // --- Selection Handling ---
+        public override void OnSelected()
+        {
+            base.OnSelected();
+            this.AddToClassList("selected");
+            Debug.Log($"Node '{node.typeName}' was selected.");
+        }
+
+        public override void OnUnselected()
+        {
+            base.OnUnselected();
+            this.RemoveFromClassList("selected");
+
+            // Debug.Log($"Node '{node.typeName}' was unselected.");
+        }
+
+        public void SavePosition()
+        {
+            m_Node.SetPosition(GetPosition());
+        }
         public void UpdateNode()
         {
             titleLabel.text = node.typeName;
@@ -442,5 +496,6 @@ namespace ND_BehaviorTree.Editor
                 updater.fillElement.style.width = Length.Percent(0);
             }
         }
+        #endregion
     }
 }

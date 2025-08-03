@@ -230,7 +230,7 @@
 /* --- CORRECTED STYLESHEET --- */
 
 /* This works because it's on the top-level element */
-.myport {
+.btport {
     --port-color: orange; 
 }
 
@@ -238,7 +238,7 @@
   TARGET THE CAP: Use a descendant selector (space).
   This says "find an element with class .connectorCap ANYWHERE inside .myport"
 */
-.myport .connectorCap {
+.btport .connectorCap {
     /* Change the circle into a square */
     border-radius: 0px; 
     
@@ -251,7 +251,7 @@
   TARGET THE INPUT PORT'S CAP: For the diamond shape.
   We can chain classes on the same element and use a descendant selector.
 */
-.myport.input .connectorCap {
+.btport.input .connectorCap {
     border-radius: 0px;
     
     /* Rotate the square by 45 degrees to make a diamond */
@@ -261,7 +261,7 @@
 /* 
   TARGET THE CONNECTOR NUB: Use a descendant selector (space).
 */
-.myport .connectorBox {
+.btport .connectorBox {
     width: 12px;
     height: 12px;
     border-radius: 0px; /* 0 = square */

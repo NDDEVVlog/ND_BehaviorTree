@@ -251,10 +251,10 @@ MonoBehaviour:
   m_guid: d0a39782-171d-4711-8066-b1a845b19551
   m_position:
     serializedVersion: 2
-    x: 550.4
-    y: 361.6
-    width: 218.39996
-    height: 95.19998
+    x: 551.2
+    y: 376.8
+    width: 214.40002
+    height: 95.20001
   typeName: GOAPPlannerNode
   priority: 0
   children:
