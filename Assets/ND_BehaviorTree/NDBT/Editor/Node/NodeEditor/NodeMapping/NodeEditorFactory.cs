@@ -81,11 +81,12 @@ namespace ND_BehaviorTree.Editor
                 styleEntryPath = winningConfig.GetStyleSheetPath(styleKey);
             }
             
-            string defaultStylePath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Default");
             
             try
             {
-                var editorInstance = (ND_NodeEditor)Activator.CreateInstance(editorType, nodeData, serializedObject, graphView, styleEntryPath, defaultStylePath);
+                var editorInstance = (ND_NodeEditor)Activator.CreateInstance(editorType, nodeData, serializedObject, graphView, styleEntryPath);
+                editorInstance.AddBottomPortStyleSheet( ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Port"));
+
                 return editorInstance;
             }
             catch (Exception e)

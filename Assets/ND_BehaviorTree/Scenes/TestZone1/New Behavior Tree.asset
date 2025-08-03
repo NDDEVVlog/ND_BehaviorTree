@@ -236,6 +236,29 @@ MonoBehaviour:
   priority: 0
   child: {fileID: -5844898184024730655}
   timeLimit: 2.5
+--- !u!114 &-4312741819010080383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1bac15d76d910642927e26586521fcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 984eea2f-90e9-4a83-8697-ff633e5b85b4
+  m_position:
+    serializedVersion: 2
+    x: 656.2272
+    y: 1017.9216
+    width: 0
+    height: 0
+  typeName: Set Animator Trigger
+  priority: 0
+  animatorKey: {fileID: 0}
+  triggerName: 
 --- !u!114 &-2349795449894800531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,10 +297,10 @@ MonoBehaviour:
   m_guid: cfce0746-5c34-411f-85a3-9cf6d5be0171
   m_position:
     serializedVersion: 2
-    x: 537.60004
-    y: 637.6
-    width: 139.19995
-    height: 95.20001
+    x: 522.4
+    y: 632.8
+    width: 140.79999
+    height: 96.79999
   typeName: Random Patrol
   priority: 0
   patrolRadius: 50
@@ -354,10 +377,10 @@ MonoBehaviour:
   m_guid: 9658a66f-4b4f-498f-ba0c-5b1cd7cf0d2f
   m_position:
     serializedVersion: 2
-    x: 92.799995
-    y: 457.6
-    width: 316.8
-    height: 95.19998
+    x: 116.799995
+    y: 506.40002
+    width: 318.4
+    height: 96.79999
   typeName: Selector go to Player or Random
   priority: 0
   children:
@@ -644,10 +667,10 @@ MonoBehaviour:
   m_guid: 82930fe3-1880-455c-939e-ae2d23b8b6e7
   m_position:
     serializedVersion: 2
-    x: -139.2
-    y: 601.6
-    width: 218.4
-    height: 95.20001
+    x: -147.2
+    y: 624.8
+    width: 220
+    height: 96.79999
   typeName: Check if See Player
   priority: 0
   child: {fileID: 508742229169387133}
@@ -740,10 +763,10 @@ MonoBehaviour:
   m_guid: dba88620-754d-4b3e-ad17-fb6c816956da
   m_position:
     serializedVersion: 2
-    x: 576
-    y: 395.2
-    width: 145.60004
-    height: 95.20001
+    x: 546.4
+    y: 361.6
+    width: 147.20001
+    height: 96.79999
   typeName: Sequence
   priority: 0
   children:
