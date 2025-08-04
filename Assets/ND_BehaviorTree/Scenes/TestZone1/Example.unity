@@ -190,6 +190,7 @@ GameObject:
   - component: {fileID: 279225746}
   - component: {fileID: 279225745}
   - component: {fileID: 279225751}
+  - component: {fileID: 279225752}
   m_Layer: 3
   m_Name: AI
   m_TagString: Untagged
@@ -343,6 +344,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 4268ad1c72d74264fb2aafd7c39f1e41, type: 2}
+--- !u!114 &279225752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279225743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 249f730296f0710489a719551428a9f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blackboardTemplate: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+  overrides:
+  - keyName: RandomUnityEvent
+    data:
+      rid: 3796477409491943425
+  references:
+    version: 2
+    RefIds:
+    - rid: 3796477409491943425
+      type: {class: OverrideDataUnityEvent, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
+      data:
+        value:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 810807871}
+              m_TargetAssemblyTypeName: SpellTech.DynamicMethodEvent.MethodTester,
+                ND_BehaviorTree.Runtime
+              m_MethodName: PlaySound
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
 --- !u!1 &434350207
 GameObject:
   m_ObjectHideFlags: 0

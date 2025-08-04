@@ -26,8 +26,8 @@ public class FieldOfView : MonoBehaviour
         {
             
             _canSeePlayer = value;
-            if(value == true)
-                OnPlayerSee.OnSawPlayer(playerRef.transform, value);
+            // if(value == true)
+            //     OnPlayerSee.OnSawPlayer(playerRef.transform, value);
            /* if (_canSeePlayer != value)
             {
                

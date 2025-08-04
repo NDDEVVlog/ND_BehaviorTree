@@ -1,4 +1,4 @@
-// --- CORRECTED FILE: BehaviorTreeRunnerEditor.cs ---
+// --- MODIFIED FILE: BehaviorTreeRunnerEditor.cs ---
 
 using UnityEditor;
 using UnityEngine;
@@ -6,17 +6,37 @@ using System.Linq;
 
 namespace ND_BehaviorTree.Editor
 {
-    // The second parameter 'true' tells the editor to apply to all child classes of BehaviorTreeRunner.
     [CustomEditor(typeof(BehaviorTreeRunner), true)]
     public class BehaviorTreeRunnerEditor : UnityEditor.Editor
     {
-        private bool blackboardFoldout = true;
+        private bool runtimeBlackboardFoldout = true;
 
         public override void OnInspectorGUI()
         {
-            DrawDefaultInspector();
+            serializedObject.Update();
 
+            // Draw the Tree Asset field
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("treeAsset"));
+            
             BehaviorTreeRunner runner = (BehaviorTreeRunner)target;
+
+            // --- EDIT MODE: Show Overrides ---
+            if (runner.treeAsset != null)
+            {
+                if (runner.treeAsset.blackboard == null)
+                {
+                    EditorGUILayout.HelpBox("The assigned Behavior Tree has no Blackboard asset. Overrides cannot be configured.", MessageType.Warning);
+                }
+                else
+                {
+                    // Draw the 'overrides' list. The KeyOverrideDrawer will automatically handle the UI for each element.
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("overrides"), true);
+                }
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("Assign a BehaviorTree asset to configure key overrides.", MessageType.Info);
+            }
 
             // --- Button to open the main editor ---
             EditorGUI.BeginDisabledGroup(runner.treeAsset == null);
@@ -27,66 +47,16 @@ namespace ND_BehaviorTree.Editor
             }
             EditorGUI.EndDisabledGroup();
 
-            if (runner.treeAsset == null)
-            {
-                EditorGUILayout.HelpBox("Assign a BehaviorTree asset to enable blackboard editing.", MessageType.Info);
-                return;
-            }
-
             EditorGUILayout.Space(10);
 
-            // --- DYNAMIC GUI: Switch between Edit Mode and Play Mode ---
+            // --- PLAY MODE: Show Live Values ---
             if (Application.isPlaying)
             {
                 DrawRuntimeBlackboard(runner);
+                Repaint(); // Ensure the inspector updates continuously
             }
-            else
-            {
-                DrawInitialBlackboard(runner);
-            }
-
-            // This ensures the inspector updates continuously during play mode to show live values.
-            if (Application.isPlaying)
-            {
-                Repaint();
-            }
-        }
-        
-        /// <summary>
-        /// Draws the blackboard values for setting up initial state in Edit Mode.
-        /// </summary>
-        private void DrawInitialBlackboard(BehaviorTreeRunner runner)
-        {
-            Blackboard targetBlackboard = runner.treeAsset?.blackboard;
-
-            if (targetBlackboard == null)
-            {
-                EditorGUILayout.HelpBox("The assigned Behavior Tree asset does not have a Blackboard.", MessageType.Warning);
-                return;
-            }
-
-            EditorGUILayout.HelpBox("You are editing default values on the shared Blackboard asset. These changes will affect all runners using this tree.", MessageType.Info);
-
-            blackboardFoldout = EditorGUILayout.Foldout(blackboardFoldout, "Blackboard Initial Values", true, EditorStyles.boldLabel);
-            if (blackboardFoldout)
-            {
-                EditorGUI.indentLevel++;
-                SerializedObject blackboardSO = new SerializedObject(targetBlackboard);
-
-                foreach (var key in targetBlackboard.keys.OrderBy(k => k.keyName)) // Optional: Sort by keyName
-                {
-                    if (key != null)
-                    {
-                        DrawKeyField(key);
-                    }
-                }
-                
-                if (blackboardSO.hasModifiedProperties)
-                {
-                    blackboardSO.ApplyModifiedProperties();
-                }
-                EditorGUI.indentLevel--;
-            }
+            
+            serializedObject.ApplyModifiedProperties();
         }
 
         /// <summary>
@@ -98,15 +68,16 @@ namespace ND_BehaviorTree.Editor
 
             if (runtimeBlackboard == null)
             {
-                EditorGUILayout.HelpBox("Runtime Blackboard is not available. (Tree might not be initialized yet).", MessageType.Info);
+                EditorGUILayout.HelpBox("Runtime Blackboard not yet available.", MessageType.Info);
                 return;
             }
 
-            blackboardFoldout = EditorGUILayout.Foldout(blackboardFoldout, "Runtime Blackboard (Live Values)", true, EditorStyles.boldLabel);
-            if (blackboardFoldout)
+            runtimeBlackboardFoldout = EditorGUILayout.Foldout(runtimeBlackboardFoldout, "Runtime Blackboard (Live Values)", true, EditorStyles.boldLabel);
+            if (runtimeBlackboardFoldout)
             {
                 EditorGUI.indentLevel++;
-                foreach (var key in runtimeBlackboard.keys.OrderBy(k => k.keyName)) // Optional: Sort by keyName
+                // Group by key name just in case of duplicates, though there shouldn't be any
+                foreach (var key in runtimeBlackboard.keys.OrderBy(k => k.keyName))
                 {
                     if (key != null)
                     {
@@ -117,32 +88,21 @@ namespace ND_BehaviorTree.Editor
             }
         }
 
-        /// <summary>
-        /// Draws a generic editor field for any Key type.
-        /// </summary>
         private void DrawKeyField(Key key)
         {
             SerializedObject keySO = new SerializedObject(key);
             SerializedProperty valueProperty = keySO.FindProperty("value");
 
-            // *** FIX IS APPLIED HERE ***
             if (valueProperty == null)
             {
-                // Use key.keyName here as well for consistency in error messages.
                 EditorGUILayout.LabelField(key.keyName, "Error: Could not find 'value' property.");
                 return;
             }
 
             EditorGUILayout.BeginHorizontal();
-
             string keyTypeName = key.GetValueType()?.Name ?? "null";
-            
-            // *** AND THE MAIN FIX IS APPLIED HERE ***
-            // Use key.keyName instead of key.name to show the logical name of the key.
             EditorGUILayout.LabelField(new GUIContent(key.keyName, $"Type: {keyTypeName}"), GUILayout.Width(EditorGUIUtility.labelWidth - 5));
-
             EditorGUILayout.PropertyField(valueProperty, GUIContent.none, true);
-
             EditorGUILayout.EndHorizontal();
 
             if (keySO.hasModifiedProperties)

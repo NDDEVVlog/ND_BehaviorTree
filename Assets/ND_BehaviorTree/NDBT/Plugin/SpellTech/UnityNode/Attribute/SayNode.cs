@@ -17,7 +17,7 @@ using ND_BehaviorTree;
 [CustomNodeTitleProperty("[GameObjectKey] say [quote]")]
 public class SayNode : ActionNode
 {
-
+    [BlackboardKeyType(typeof(GameObject))]
     public Key<GameObject> GameObjectKey;
     public string quote;
 

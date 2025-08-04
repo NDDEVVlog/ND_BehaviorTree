@@ -3,13 +3,15 @@
 using UnityEngine;
 using ND_BehaviorTree;
 using System.Linq;
+using System.Collections.Generic;
 
 public class BehaviorTreeRunner : MonoBehaviour
 {
     [Tooltip("The BehaviorTree asset to run. The blackboard defined in this asset will be cloned and used.")]
     public BehaviorTree treeAsset;
 
-    // The 'blackboardOverride' field has been removed to simplify the component.
+    [Tooltip("Define overrides for this specific agent. These values will replace the template values at runtime.")]
+    public List<KeyOverride> overrides = new List<KeyOverride>();
 
     public BehaviorTree RuntimeTree { get; private set; }
 
@@ -21,30 +23,51 @@ public class BehaviorTreeRunner : MonoBehaviour
             return;
         }
 
+        // 1. Clone the tree asset to create a unique instance for this agent.
+        // This includes cloning the blackboard with its default values.
         RuntimeTree = treeAsset.Clone();
         RuntimeTree.Self = this.gameObject;
-        
 
-        // 2. Now that the tree and its blackboard are cloned, initialize it with runtime values.
+        // 2. Apply the per-instance overrides defined in the Inspector.
+        // This is where scene references are injected.
+        ApplyOverrides();
+
+        // 3. Call the virtual Init() for any additional programmatic setup.
         Init();
 
-        // 3. Log the result for debugging purposes.
+        // 4. Log the result for debugging.
         if (RuntimeTree.blackboard == null)
         {
-            Debug.LogWarning($"Runner for '{treeAsset.name}' on GameObject '{gameObject.name}' has no blackboard assigned to the tree asset.", this);
+            Debug.LogWarning($"Runner for '{treeAsset.name}' on GameObject '{gameObject.name}' has no blackboard.", this);
         }
         else
         {
-            var keyNames = RuntimeTree.blackboard.keys.Select(key => key.name);
-            string keysDebugString = string.Join(", ", keyNames);
-            Debug.Log($"[{gameObject.name}] BehaviorTreeRunner initialized with Blackboard keys: [{keysDebugString}]", this);
+            Debug.Log($"[{gameObject.name}] BehaviorTreeRunner initialized.", this);
         }
     }
 
     /// <summary>
+    /// Applies the values from the 'overrides' list to the runtime blackboard.
+    /// </summary>
+    private void ApplyOverrides()
+    {
+        if (RuntimeTree.blackboard == null) return;
+
+        foreach (var keyOverride in overrides)
+        {
+            if (!string.IsNullOrEmpty(keyOverride.keyName) && keyOverride.data != null)
+            {
+                // This uses the generic SetValueObject method to handle any data type
+                RuntimeTree.blackboard.SetValueObject(keyOverride.keyName, keyOverride.data.GetValue());
+            }
+        }
+    }
+
+
+    /// <summary>
     /// This method can be overridden in child classes to populate the blackboard
-    /// with component references or initial values at runtime.
-    /// It is called after the tree and blackboard have been cloned.
+    /// with component references or initial values at runtime via code.
+    /// It is called *after* the Inspector overrides have been applied.
     /// </summary>
     public virtual void Init()
     {
@@ -55,6 +78,7 @@ public class BehaviorTreeRunner : MonoBehaviour
         if (RuntimeTree != null)
         {
             RuntimeTree.Update();
+            ApplyOverrides();
         }
     }
 }
