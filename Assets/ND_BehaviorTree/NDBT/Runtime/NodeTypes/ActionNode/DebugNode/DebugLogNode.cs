@@ -14,6 +14,7 @@ namespace ND_BehaviorTree
         [Tooltip("(Optional) A Blackboard key to log the value of.")]
         public Key keyToLog;
 
+
         public Status returningStatus = Status.Success;
 
         protected override Status OnProcess()

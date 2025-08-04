@@ -15,3 +15,4 @@ MonoBehaviour:
   activeConfig: {fileID: 0}
   allConfigs:
   - {fileID: 11400000, guid: 7e9507e1ae79fa9459fbd8dd87f6603d, type: 2}
+  - {fileID: 11400000, guid: 18cb3a13e53bf8e4992b45653c27ae78, type: 2}

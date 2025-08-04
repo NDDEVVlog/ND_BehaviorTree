@@ -259,6 +259,29 @@ MonoBehaviour:
   priority: 0
   animatorKey: {fileID: 0}
   triggerName: 
+--- !u!114 &-4000623493126551238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8236ddab67bf5b64280caf275319bd9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: a01624c0-acef-4014-98b0-a89758085c82
+  m_position:
+    serializedVersion: 2
+    x: 743.88043
+    y: 1146.353
+    width: 0
+    height: 0
+  typeName: SayNode
+  priority: 0
+  GameObjectKey: {fileID: -7088729774540916159, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
+  quote: AlahuAba
 --- !u!114 &-2349795449894800531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,10 +320,10 @@ MonoBehaviour:
   m_guid: cfce0746-5c34-411f-85a3-9cf6d5be0171
   m_position:
     serializedVersion: 2
-    x: 522.4
-    y: 632.8
-    width: 140.79999
-    height: 96.79999
+    x: 450.40002
+    y: 637.6
+    width: 160
+    height: 109.60004
   typeName: Random Patrol
   priority: 0
   patrolRadius: 50
@@ -358,6 +381,7 @@ MonoBehaviour:
   - {fileID: -5844898184024730655}
   - {fileID: -4912801335699234050}
   - {fileID: 1939292052299459149}
+  - {fileID: -4000623493126551238}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   Self: {fileID: 0}
@@ -401,10 +425,10 @@ MonoBehaviour:
   m_guid: 067bc0f8-adbd-47f6-af77-f93782e7ca25
   m_position:
     serializedVersion: 2
-    x: -163.2
-    y: 746.4
-    width: 264
-    height: 95.19995
+    x: -146.40001
+    y: 756.8
+    width: 280.8
+    height: 109.60004
   typeName: Move to TargetSequence
   priority: 0
   children:
@@ -644,10 +668,10 @@ MonoBehaviour:
   m_guid: cb064ea3-e30a-4d3a-8e20-1d6ff275db3b
   m_position:
     serializedVersion: 2
-    x: 768
-    y: 785.6
-    width: 104
-    height: 95.20001
+    x: 726.4
+    y: 777.6
+    width: 120.79999
+    height: 109.60004
   typeName: Wait
   priority: 0
   duration: 1
