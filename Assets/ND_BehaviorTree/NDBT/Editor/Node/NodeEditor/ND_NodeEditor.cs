@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Codice.CM.Common;
 using ND_BehaviorTree.GOAP;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -42,7 +44,10 @@ namespace ND_BehaviorTree.Editor
         public List<Port> Ports => m_Ports;
         public ND_BehaviorTreeView m_GraphView;
 
-        public Label titleLabel;
+        private VisualElement m_titleContainer;
+        private VisualElement m_titleContentContainer; // Container cho title tĩnh
+        public Label titleLabel; // Label textfield mặc định
+        private Label m_typeLabel; // Label loại Node
         public string StylePath = "Default";
 
         // --- Caches for runtime updates ---
@@ -91,18 +96,17 @@ namespace ND_BehaviorTree.Editor
             // --- Query UXML Elements ---
             var topPortContainer = this.Q<VisualElement>("top-port");
             var bottomPortContainer = this.Q<VisualElement>("bottom-port");
-            var typeLabel = this.Q<Label>("type-label");
+
+            m_titleContainer = this.Q("title");
+            m_titleContentContainer = this.Q("title-content-container"); // Lấy container của title tĩnh
             titleLabel = this.Q<Label>("title-textfield");
+            m_typeLabel = this.Q<Label>("type-label");
+
             var iconImage = this.Q<Image>("icon-image");
             m_ServiceContainer = this.Q<VisualElement>("child-node-container");
             m_DetailsContainer = this.Q<VisualElement>("details-container");
 
-            if (string.IsNullOrEmpty(node.typeName))
-            {
-                node.typeName = info.title;
-            }
-            titleLabel.text = node.typeName;
-            typeLabel.text = info.title ?? "Node";
+            BuildTitle();
 
             // --- Configure Icon ---
             if (iconImage != null && !string.IsNullOrEmpty(info.iconPath))
@@ -145,6 +149,103 @@ namespace ND_BehaviorTree.Editor
             RefreshExpandedState();
             RefreshPorts();
         }
+        
+        public virtual void BuildTitle()
+        {
+            NodeInfoAttribute info = m_Node.GetType().GetCustomAttribute<NodeInfoAttribute>();
+            
+            // Logic mặc định: chỉ đặt text cho các label đã có sẵn
+            if (titleLabel != null)
+            {
+                if (string.IsNullOrEmpty(m_Node.typeName))
+                {
+                    m_Node.typeName = info.title;
+                }
+                titleLabel.text = m_Node.typeName;
+            }
+            if (m_typeLabel != null && info != null)
+            {
+                m_typeLabel.text = info.title ?? "Node";
+            }
+        }
+
+        protected void BuildDynamicTitleFromAttribute()
+        {
+            var titleAttribute = m_Node.GetType().GetCustomAttribute<CustomNodeTitlePropertyAttribute>();
+            if (titleAttribute == null || string.IsNullOrEmpty(titleAttribute.TitleFormat))
+            {
+                // Nếu không có attribute, quay lại hành vi mặc định
+                BuildTitle();
+                return;
+            }
+
+            // 1. Ẩn container chứa title tĩnh
+            if (m_titleContentContainer != null)
+            {
+                m_titleContentContainer.style.display = DisplayStyle.None;
+            }
+
+            // Tạo một container mới để chứa các thành phần động, giúp kiểm soát layout tốt hơn
+            var dynamicTitleContent = new VisualElement();
+            dynamicTitleContent.style.flexDirection = FlexDirection.Row;
+            dynamicTitleContent.style.alignItems = Align.Center;
+            m_titleContainer.Add(dynamicTitleContent); // Thêm vào sau icon
+
+            // 2. Phân tích chuỗi và xây dựng UI động
+            string format = titleAttribute.TitleFormat;
+            var matches = Regex.Matches(format, @"\[(.*?)\]");
+            int lastIndex = 0;
+            
+            var serializedNode = new SerializedObject(m_Node);
+
+            foreach (Match match in matches)
+            {
+                // Thêm phần text tĩnh
+                if (match.Index > lastIndex)
+                {
+                    string staticText = format.Substring(lastIndex, match.Index - lastIndex);
+                    var staticLabel = new Label(staticText);
+                    staticLabel.style.unityTextAlign = TextAnchor.MiddleLeft; // Căn giữa theo chiều dọc
+                    dynamicTitleContent.Add(staticLabel);
+                }
+
+                string propertyName = match.Groups[1].Value;
+                SerializedProperty property = serializedNode.FindProperty(propertyName);
+
+                if (property != null)
+                {
+                    var propertyField = new PropertyField(property, string.Empty);
+                    propertyField.Bind(serializedNode);
+                    
+                    // Thêm class để có thể style riêng cho các field trong title
+                    propertyField.AddToClassList("title-property-field");
+
+                    // Xóa label của PropertyField
+                    var fieldLabel = propertyField.Q<Label>();
+                    if(fieldLabel != null) fieldLabel.style.display = DisplayStyle.None;
+                    
+                    dynamicTitleContent.Add(propertyField);
+                }
+                else
+                {
+                    // Nếu không tìm thấy property, hiển thị như text tĩnh
+                    dynamicTitleContent.Add(new Label($"[{propertyName}]"));
+                    Debug.LogWarning($"[BuildDynamicTitle] Property '{propertyName}' not found on node type '{m_Node.GetType().Name}'.", m_Node);
+                }
+                
+                lastIndex = match.Index + match.Length;
+            }
+
+            // Thêm phần text tĩnh cuối cùng
+            if (lastIndex < format.Length)
+            {
+                var staticLabel = new Label(format.Substring(lastIndex));
+                staticLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+                dynamicTitleContent.Add(staticLabel);
+            }
+        }
+
+
 
        public virtual void AddBottomPortStyleSheet(string portStylePath)
         {
@@ -363,7 +464,7 @@ namespace ND_BehaviorTree.Editor
         {
             m_Node.SetPosition(GetPosition());
         }
-        public void UpdateNode()
+        public virtual void UpdateNode()
         {
             titleLabel.text = node.typeName;
         }

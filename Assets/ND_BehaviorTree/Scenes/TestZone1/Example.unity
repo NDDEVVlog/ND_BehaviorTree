@@ -470,49 +470,19 @@ MonoBehaviour:
     target: {fileID: 1996653176523952668}
     methodName: AddScore
     genericParameters:
-    - rid: 1809910093078331402
-    - rid: 1809910093078331403
+    - rid: -2
+    - rid: -2
   - eventName: 
     target: {fileID: 1996653176523952668}
     methodName: ToggleInvincibility
     genericParameters:
-    - rid: 1809910093078331404
-    - rid: 1809910093078331405
+    - rid: -2
+    - rid: -2
   references:
     version: 2
     RefIds:
-    - rid: 1809910093078331402
-      type: {class: IntParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
-      data:
-        parameterName: points
-        useConstant: 1
-        sourceComponent: {fileID: 0}
-        sourceFieldName: 
-        constantValue: 949446
-    - rid: 1809910093078331403
-      type: {class: AudioClipParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
-      data:
-        parameterName: feedbackClip
-        useConstant: 1
-        sourceComponent: {fileID: 0}
-        sourceFieldName: 
-        constantValue: {fileID: 0}
-    - rid: 1809910093078331404
-      type: {class: BoolParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
-      data:
-        parameterName: isEnabled
-        useConstant: 1
-        sourceComponent: {fileID: 0}
-        sourceFieldName: 
-        constantValue: 0
-    - rid: 1809910093078331405
-      type: {class: FloatParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
-      data:
-        parameterName: delay
-        useConstant: 0
-        sourceComponent: {fileID: 434350208}
-        sourceFieldName: contactOffset
-        constantValue: 0
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!114 &434350213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,20 +527,12 @@ MonoBehaviour:
   dynamicBranchSelector:
     rid: -2
   parameter:
-    rid: 1809910093437468675
+    rid: -2
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 1809910093437468675
-      type: {class: FloatParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
-      data:
-        parameterName: 
-        useConstant: 1
-        sourceComponent: {fileID: 0}
-        sourceFieldName: 
-        constantValue: 0
 --- !u!1 &702931141
 GameObject:
   m_ObjectHideFlags: 0
@@ -1746,6 +1708,14 @@ PrefabInstance:
     - target: {fileID: 6019111970731031877, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055901187794926574, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
+      propertyPath: dynamicEvents.Array.data[0].methodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055901187794926574, guid: da64fb9778bc8304ea26cfb2069c8742, type: 3}
+      propertyPath: dynamicEvents.Array.data[1].methodName
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
