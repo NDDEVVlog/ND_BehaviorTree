@@ -1,10 +1,11 @@
-// FILE: Editor/KeyOverrideDrawer.cs (CORRECTED AND FINAL)
+// FILE: Editor/KeyOverrideDrawer.cs (Corrected and Final Version)
 
 using UnityEngine;
 using UnityEditor;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine.Events;
 
 namespace ND_BehaviorTree.Editor
@@ -13,7 +14,46 @@ namespace ND_BehaviorTree.Editor
     public class KeyOverrideDrawer : PropertyDrawer
     {
         private const string NO_OVERRIDE_LABEL = "Not Overridden";
+        private static Dictionary<Type, Type> _typeToOverrideDataMap;
 
+        // Static constructor runs once when the editor loads the class.
+        static KeyOverrideDrawer()
+        {
+            BuildTypeMap();
+        }
+
+        private static void BuildTypeMap()
+        {
+            _typeToOverrideDataMap = new Dictionary<Type, Type>();
+
+            var overrideDataTypes = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(t => t.IsSubclassOf(typeof(KeyOverrideData)) && !t.IsAbstract);
+
+            foreach (var odType in overrideDataTypes)
+            {
+                // Make the binding flags more robust to find the 'value' field even in base classes.
+                FieldInfo valueField = odType.GetField("value", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                if (valueField == null)
+                {
+                     // If not in the declared type, check the base type (for our generic wrappers)
+                     if(odType.BaseType != null)
+                     {
+                        valueField = odType.BaseType.GetField("value", BindingFlags.Public | BindingFlags.Instance);
+                     }
+                }
+
+                if (valueField != null)
+                {
+                    Type valueType = valueField.FieldType;
+                    if (!_typeToOverrideDataMap.ContainsKey(valueType))
+                    {
+                        _typeToOverrideDataMap.Add(valueType, odType);
+                    }
+                }
+            }
+        }
+        
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
@@ -21,12 +61,7 @@ namespace ND_BehaviorTree.Editor
             var keyNameProp = property.FindPropertyRelative("keyName");
             var dataProp = property.FindPropertyRelative("data");
 
-            // --- DYNAMICALLY FIND THE BLACKBOARD TEMPLATE ---
-            Blackboard blackboardTemplate = null;
-             if (property.serializedObject.targetObject is BehaviorTreeRunner runner)
-            {
-                blackboardTemplate = runner.treeAsset?.blackboard;
-            }
+            Blackboard blackboardTemplate = GetBlackboardTemplateFromProperty(property);
             
             if (blackboardTemplate == null)
             {
@@ -52,7 +87,8 @@ namespace ND_BehaviorTree.Editor
 
                 if (sourceKey != null)
                 {
-                    dataProp.managedReferenceValue = CreateOverrideDataForType(sourceKey.GetValueType());
+                    // Pass the property to get the context object for the warning message.
+                    dataProp.managedReferenceValue = CreateOverrideDataForType(sourceKey.GetValueType(), property);
                 }
                 else
                 {
@@ -83,51 +119,6 @@ namespace ND_BehaviorTree.Editor
             EditorGUI.EndProperty();
         }
 
-        private KeyOverrideData CreateOverrideDataForType(Type keyType)
-        {
-            switch (true)
-            {
-                case bool _ when keyType == typeof(float):
-                    return new OverrideDataFloat();
-                    
-                case bool _ when keyType == typeof(int):
-                    return new OverrideDataInt();
-                    
-                case bool _ when keyType == typeof(bool):
-                    return new OverrideDataBool();
-                    
-                case bool _ when keyType == typeof(string):
-                    return new OverrideDataString();
-                    
-                case bool _ when keyType == typeof(Vector3):
-                    return new OverrideDataVector3();
-
-                case bool _ when keyType == typeof(Transform):
-                    return new OverrideDataTransform();
-                    
-                case bool _ when keyType == typeof(UnityEvent):
-                    return new OverrideDataUnityEvent();
-                    
-                case bool _ when keyType.IsEnum:
-                    return new OverrideDataEnum { enumType = keyType.AssemblyQualifiedName };
-                    
-                case bool _ when typeof(UnityEngine.Object).IsAssignableFrom(keyType):
-                    return new OverrideDataObject();
-                    
-                default:
-                    Debug.LogWarning($"No dedicated override data class for type {keyType.Name}. Override may not work as expected.");
-                    return null;
-            }
-        }
-        
-        private void DrawEnumField(Rect position, SerializedProperty valueProp, Type enumType)
-        {
-            if (enumType == null) return;
-            Enum currentValue = (Enum)Enum.ToObject(enumType, valueProp.intValue);
-            Enum newValue = EditorGUI.EnumPopup(position, currentValue);
-            valueProp.intValue = Convert.ToInt32(newValue);
-        }
-
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             var dataProp = property.FindPropertyRelative("data");
@@ -142,6 +133,47 @@ namespace ND_BehaviorTree.Editor
                 }
             }
             return EditorGUIUtility.singleLineHeight;
+        }
+        
+        // *** FIX APPLIED HERE: Added 'property' parameter to get the context object ***
+        private KeyOverrideData CreateOverrideDataForType(Type keyType, SerializedProperty property)
+        {
+            if (_typeToOverrideDataMap.TryGetValue(keyType, out Type overrideDataType))
+            {
+                return Activator.CreateInstance(overrideDataType) as KeyOverrideData;
+            }
+
+            if (keyType.IsEnum)
+            {
+                return new OverrideDataEnum { enumType = keyType.AssemblyQualifiedName };
+            }
+
+            if (typeof(UnityEngine.Object).IsAssignableFrom(keyType))
+            {
+                return new OverrideDataObject();
+            }
+
+            // *** FIX APPLIED HERE: Use property.serializedObject.targetObject as the context ***
+            Debug.LogWarning($"No dedicated override data class found for type '{keyType.Name}'. Please create a class like '[Serializable] public class OverrideData{keyType.Name} : OverrideDataValue<{keyType.Name}> {{}}' to support it.", property.serializedObject.targetObject);
+            return null;
+        }
+        
+        private void DrawEnumField(Rect position, SerializedProperty valueProp, Type enumType)
+        {
+            if (enumType == null) return;
+            Enum currentValue = (Enum)Enum.ToObject(enumType, valueProp.intValue);
+            Enum newValue = EditorGUI.EnumPopup(position, currentValue);
+            valueProp.intValue = Convert.ToInt32(newValue);
+        }
+
+        private Blackboard GetBlackboardTemplateFromProperty(SerializedProperty property)
+        {
+
+            if (property.serializedObject.targetObject is BehaviorTreeRunner runner)
+            {
+                return runner.treeAsset?.blackboard;
+            }
+            return null;
         }
     }
 }

@@ -15,10 +15,10 @@ MonoBehaviour:
   m_guid: ec3da66c-e539-4c52-9873-cecb2991634b
   m_position:
     serializedVersion: 2
-    x: 377.6
-    y: -404.8
+    x: 404.80002
+    y: -419.2
     width: 199.19998
-    height: 109.59999
+    height: 109.600006
   typeName: Move To Transform
   priority: 0
   agentKey: {fileID: -5823742072851934633, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
@@ -408,7 +408,7 @@ MonoBehaviour:
   - {fileID: -4000623493126551238}
   - {fileID: -8904210690778589058}
   rootNode: {fileID: 1756551281706341290}
-  blackboard: {fileID: 11400000, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
+  blackboard: {fileID: 11400000, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   Self: {fileID: 0}
 --- !u!114 &151498456585129743
 MonoBehaviour:
@@ -745,7 +745,8 @@ MonoBehaviour:
     height: 225.6
   typeName: Selector
   priority: 0
-  children: []
+  children:
+  - {fileID: 8050742415459131951}
   services:
   - {fileID: 1939292052299459149}
 --- !u!114 &7981926055889722451
@@ -789,7 +790,7 @@ MonoBehaviour:
   m_position:
     serializedVersion: 2
     x: 563.2
-    y: 423.2
+    y: 395.2
     width: 162.40002
     height: 109.599976
   typeName: Sequence
