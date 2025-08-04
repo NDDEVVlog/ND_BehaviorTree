@@ -8,9 +8,11 @@ namespace ND_BehaviorTree
     public class MoveToTransformNode : ActionNode
     {
         [Tooltip("The Blackboard key for the NavMeshAgent component on the AI.")]
+        [BlackboardKeyType(typeof(NavMeshAgent))]
         public Key agentKey;
-        
+
         [Tooltip("The Blackboard key (of type Transform) for the target to move towards.")]
+        [BlackboardKeyType(typeof(Transform))]
         public Key targetTransformKey;
 
         [Tooltip("How often, in seconds, to update the agent's destination. A lower value means more responsive chasing, but higher performance cost. 0 means every frame.")]
@@ -30,7 +32,9 @@ namespace ND_BehaviorTree
             }
 
             if (targetTransformKey != null && blackboard != null)
-            {
+            {   
+                
+
                 targetTransform = blackboard.GetValue<Transform>(targetTransformKey.keyName);
             }
 

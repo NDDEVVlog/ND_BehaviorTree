@@ -12,7 +12,6 @@ namespace ND_BehaviorTree.Editor
         public UnityNode(Node node, SerializedObject btObject, GraphView graphView, string styleSheetPath)
             : base(node, btObject, graphView, styleSheetPath)
         {
-            UnityEngine. Debug.Log("UnityNode");
             
             
         }

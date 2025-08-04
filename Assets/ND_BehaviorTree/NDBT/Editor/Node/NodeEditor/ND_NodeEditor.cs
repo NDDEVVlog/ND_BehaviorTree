@@ -449,7 +449,6 @@ namespace ND_BehaviorTree.Editor
         {
             base.OnSelected();
             this.AddToClassList("selected");
-            Debug.Log($"Node '{node.typeName}' was selected.");
         }
 
         public override void OnUnselected()
