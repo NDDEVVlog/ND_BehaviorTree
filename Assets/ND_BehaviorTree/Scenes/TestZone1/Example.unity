@@ -190,7 +190,6 @@ GameObject:
   - component: {fileID: 279225746}
   - component: {fileID: 279225745}
   - component: {fileID: 279225751}
-  - component: {fileID: 279225752}
   m_Layer: 3
   m_Name: AI
   m_TagString: Untagged
@@ -340,49 +339,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 279225743}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00c0be7686d020c4ea71d0d525949977, type: 3}
+  m_Script: {fileID: 11500000, guid: da85c92ce678b21439df6e58fafa38de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 4268ad1c72d74264fb2aafd7c39f1e41, type: 2}
---- !u!114 &279225752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 279225743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 249f730296f0710489a719551428a9f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blackboardTemplate: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   overrides:
-  - keyName: RandomUnityEvent
+  - keyName: ammo
     data:
-      rid: 3796477409491943425
+      rid: 3796477431369170944
+  - keyName: AI_Agent
+    data:
+      rid: 3796477431369170945
+  - keyName: Target
+    data:
+      rid: 3796477431369170946
   references:
     version: 2
     RefIds:
-    - rid: 3796477409491943425
-      type: {class: OverrideDataUnityEvent, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
+    - rid: 3796477431369170944
+      type: {class: OverrideDataInt, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
       data:
-        value:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 810807871}
-              m_TargetAssemblyTypeName: SpellTech.DynamicMethodEvent.MethodTester,
-                ND_BehaviorTree.Runtime
-              m_MethodName: PlaySound
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: 
-                m_BoolArgument: 0
-              m_CallState: 2
+        value: 5
+    - rid: 3796477431369170945
+      type: {class: OverrideDataObject, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
+      data:
+        value: {fileID: 279225746}
+    - rid: 3796477431369170946
+      type: {class: OverrideDataTransform, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
+      data:
+        value: {fileID: 434350211}
 --- !u!1 &434350207
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,13 +493,13 @@ MonoBehaviour:
   dynamicEvents:
   - eventName: 
     target: {fileID: 1996653176523952668}
-    methodName: AddScore
+    methodName: 
     genericParameters:
     - rid: -2
     - rid: -2
   - eventName: 
     target: {fileID: 1996653176523952668}
-    methodName: ToggleInvincibility
+    methodName: 
     genericParameters:
     - rid: -2
     - rid: -2
@@ -622,7 +607,8 @@ Transform:
   m_LocalPosition: {x: 54.4608, y: 1.62, z: 43.89929}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2066292378}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &761476446
@@ -954,6 +940,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 4268ad1c72d74264fb2aafd7c39f1e41, type: 2}
+  overrides: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &810807871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1691,11 +1681,11 @@ Transform:
   m_GameObject: {fileID: 2066292376}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.29888293, z: -0, w: 0.9542898}
-  m_LocalPosition: {x: 35.51, y: 1.62, z: 17.69}
+  m_LocalPosition: {x: -18.950802, y: 0, z: -26.209288}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 702931143}
   m_LocalEulerAnglesHint: {x: 0, y: -34.781, z: 0}
 --- !u!1001 &794238924587363763
 PrefabInstance:
@@ -1784,7 +1774,6 @@ SceneRoots:
   - {fileID: 810807869}
   - {fileID: 434350211}
   - {fileID: 702931143}
-  - {fileID: 2066292378}
   - {fileID: 899733265}
   - {fileID: 112866852}
   - {fileID: 794238924587363763}

@@ -11,113 +11,219 @@ namespace ND_BehaviorTree.Editor
     [CustomPropertyDrawer(typeof(Key), true)]
     public class KeyDrawer : PropertyDrawer
     {
-        // Define a constant for the spacing to keep it consistent.
-        private const float k_VerticalSpacing = 2f;
+        private const float k_ButtonWidth = 22f;
+        private const float k_Spacing = 2f;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
+            if (label != GUIContent.none)
+            {
+                position = EditorGUI.PrefixLabel(position, label);
+            }
 
+            Rect fieldRect = position;
+            fieldRect.width -= (k_ButtonWidth + k_Spacing);
+            Rect buttonRect = position;
+            buttonRect.x = fieldRect.xMax + k_Spacing;
+            buttonRect.width = k_ButtonWidth;
+
+            Key currentKey = property.objectReferenceValue as Key;
+            bool isLinkedToBlackboard = currentKey != null && !string.IsNullOrEmpty(currentKey.keyName);
+
+            if (isLinkedToBlackboard)
+            {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUI.TextField(fieldRect, currentKey.keyName, EditorStyles.objectField);
+                EditorGUI.EndDisabledGroup();
+            }
+            else
+            {
+                DrawDirectValueEditor(fieldRect, property, GUIContent.none);
+            }
+
+            if (GUI.Button(buttonRect, "●", EditorStyles.miniButton))
+            {
+                ShowBlackboardMenu(property);
+            }
+            EditorGUI.EndProperty();
+        }
+
+        private void ShowBlackboardMenu(SerializedProperty property)
+        {
+            GenericMenu menu = new GenericMenu();
             BehaviorTree tree = FindBehaviorTreeFromProperty(property);
 
-            if (tree == null || tree.blackboard == null)
+            menu.AddItem(new GUIContent("[None] (Direct Value)"), false, () =>
             {
-                var helpRect = position;
-                helpRect.height = EditorGUIUtility.singleLineHeight * 2;
-                EditorGUI.HelpBox(helpRect, "No Blackboard found on parent Behavior Tree.", MessageType.Warning);
-                EditorGUI.EndProperty();
-                return;
-            }
+                property.objectReferenceValue = null;
+                property.serializedObject.ApplyModifiedProperties();
+            });
 
-            var keyTypeAttribute = fieldInfo.GetCustomAttribute<BlackboardKeyTypeAttribute>();
-            Type requiredType = keyTypeAttribute?.RequiredType;
-
-            var allKeys = tree.blackboard.keys.Where(k => k != null).ToList();
-            var validKeys = requiredType != null 
-                ? allKeys.Where(k => k.GetValueType() == requiredType || (k.GetValueType().IsSubclassOf(requiredType))).ToList()
-                : allKeys;
-
-            if (validKeys.Count == 0)
+            if (tree != null && tree.blackboard != null)
             {
-                // --- THIS BLOCK IS MODIFIED ---
-
-                // 1. Draw the main label for the field (e.g., "Float Key")
-                var labelRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-                EditorGUI.LabelField(labelRect, label);
-
-                // 2. Calculate the position for the help box below the label, with added spacing.
-                var helpRect = new Rect(
-                    position.x, 
-                    position.y + EditorGUIUtility.singleLineHeight + k_VerticalSpacing, // <-- ADDED SPACE HERE
-                    position.width, 
-                    EditorGUIUtility.singleLineHeight * 2
-                );
-
-                // 3. Draw the help box.
-                string typeName = requiredType != null ? requiredType.Name : "any";
-                EditorGUI.HelpBox(helpRect, $"No keys of type '{typeName}' found in the Blackboard.", MessageType.Warning);
-
-                // --- END OF MODIFICATION ---
+                menu.AddSeparator("");
+                Type valueType = GetValueTypeForField(property);
                 
-                EditorGUI.EndProperty();
-                return;
+                // FIXED: Added a check for valueType being null.
+                var validKeys = tree.blackboard.keys
+                    .Where(k => k != null && (valueType == null || valueType == typeof(object) || valueType.IsAssignableFrom(k.GetValueType())))
+                    .ToList();
+                    
+                if (validKeys.Any())
+                {
+                    foreach (Key key in validKeys)
+                    {
+                        menu.AddItem(new GUIContent(key.keyName), false, () =>
+                        {
+                            property.objectReferenceValue = key;
+                            property.serializedObject.ApplyModifiedProperties();
+                        });
+                    }
+                }
+                else
+                {
+                    menu.AddDisabledItem(new GUIContent("No compatible keys on Blackboard"));
+                }
             }
+            menu.ShowAsContext();
+        }
 
-            // --- This part remains unchanged ---
-            var keyNames = validKeys.Select(k => k.keyName).ToList();
-            keyNames.Insert(0, "[None]");
-
-            var currentKey = property.objectReferenceValue as Key;
-            int currentIndex = currentKey != null ? validKeys.FindIndex(k => k == currentKey) + 1 : 0;
-            
-            Rect popupPosition = EditorGUI.PrefixLabel(position, label);
-            int newIndex = EditorGUI.Popup(popupPosition, currentIndex, keyNames.ToArray());
-
-            if (newIndex != currentIndex)
+        private void DrawDirectValueEditor(Rect position, SerializedProperty property, GUIContent label)
+        {
+            if (property.objectReferenceValue == null)
             {
-                property.objectReferenceValue = (newIndex == 0) ? null : validKeys[newIndex - 1];
+                Type valueType = GetValueTypeForField(property);
+                if (valueType == null)
+                {
+                    EditorGUI.HelpBox(position, "Type is ambiguous.", MessageType.Warning);
+                    return;
+                }
+                
+                var newKeyInstance = CreateKeyInstance(valueType, property.serializedObject.targetObject);
+                if (newKeyInstance != null)
+                {
+                    property.objectReferenceValue = newKeyInstance;
+                    GUI.changed = true; 
+                }
+                else
+                {
+                    EditorGUI.HelpBox(position, "Failed to create key.", MessageType.Error);
+                    return;
+                }
             }
 
-            EditorGUI.EndProperty();
+            var keyObject = new SerializedObject(property.objectReferenceValue);
+            var valueProperty = keyObject.FindProperty("value");
+            if (valueProperty != null)
+            {
+                EditorGUI.BeginChangeCheck();
+                keyObject.Update();
+                
+                Type valueType = GetValueTypeForField(property);
+                if (valueType != null && valueType.IsEnum)
+                {
+                    Enum currentValue = (Enum)Enum.ToObject(valueType, valueProperty.intValue);
+                    var newValue = EditorGUI.EnumPopup(position, currentValue);
+                    if (!currentValue.Equals(newValue))
+                    {
+                        valueProperty.intValue = Convert.ToInt32(newValue);
+                    }
+                }
+                else
+                {
+                    EditorGUI.PropertyField(position, valueProperty, label, true);
+                }
+                
+                if (EditorGUI.EndChangeCheck())
+                {
+                     keyObject.ApplyModifiedProperties();
+                     EditorUtility.SetDirty(property.serializedObject.targetObject);
+                }
+            }
+            else
+            {
+                EditorGUI.LabelField(position, label, new GUIContent("(Value field not found)"));
+            }
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            BehaviorTree tree = FindBehaviorTreeFromProperty(property);
-            if (tree == null || tree.blackboard == null)
+            Key currentKey = property.objectReferenceValue as Key;
+            bool isLinkedToBlackboard = currentKey != null && !string.IsNullOrEmpty(currentKey.keyName);
+
+            if (isLinkedToBlackboard)
             {
-                return EditorGUIUtility.singleLineHeight * 2 + EditorGUIUtility.standardVerticalSpacing;
+                return EditorGUIUtility.singleLineHeight;
+            }
+            else
+            {
+                if (currentKey == null)
+                {
+                    return EditorGUIUtility.singleLineHeight;
+                }
+                var keyObject = new SerializedObject(currentKey);
+                var valueProperty = keyObject.FindProperty("value");
+                if (valueProperty != null)
+                {
+                    return EditorGUI.GetPropertyHeight(valueProperty, true);
+                }
+                return EditorGUIUtility.singleLineHeight;
+            }
+        }
+
+        private Type GetValueTypeForField(SerializedProperty property)
+        {
+            var fieldType = fieldInfo.FieldType;
+            if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Key<>))
+            {
+                return fieldType.GetGenericArguments()[0];
+            }
+            if (fieldType.BaseType != null && fieldType.BaseType.IsGenericType && fieldType.BaseType.GetGenericTypeDefinition() == typeof(Key<>))
+            {
+                return fieldType.BaseType.GetGenericArguments()[0];
+            }
+
+            var detachAttribute = fieldInfo.GetCustomAttribute<DetachKeyAttribute>();
+            if (detachAttribute != null)
+            {
+                var controlProperty = property.serializedObject.FindProperty(detachAttribute.ControlKeyFieldName);
+                // FIXED: Added a check for GetValueType() not being null.
+                if (controlProperty?.objectReferenceValue is Key controlKey && controlKey.GetValueType() != null)
+                {
+                    return controlKey.GetValueType();
+                }
             }
 
             var keyTypeAttribute = fieldInfo.GetCustomAttribute<BlackboardKeyTypeAttribute>();
-            Type requiredType = keyTypeAttribute?.RequiredType;
-            var allKeys = tree.blackboard.keys.Where(k => k != null).ToList();
-            var validKeys = requiredType != null 
-                ? allKeys.Where(k => k.GetValueType() == requiredType || (k.GetValueType().IsSubclassOf(requiredType))).ToList()
-                : allKeys;
-            
-            // --- THIS BLOCK IS MODIFIED TO ACCOUNT FOR THE NEW SPACE ---
-            if (validKeys.Count == 0)
+            if (keyTypeAttribute != null)
             {
-                // Height Breakdown:
-                // 1. Height of the label field.
-                // 2. The custom vertical space we added.
-                // 3. Height of the 2-line help box.
-                // 4. Standard spacing after the entire control.
-                return EditorGUIUtility.singleLineHeight + k_VerticalSpacing + (EditorGUIUtility.singleLineHeight * 2) + EditorGUIUtility.standardVerticalSpacing;
+                return keyTypeAttribute.RequiredType;
             }
-            // --- END OF MODIFICATION ---
 
-            return base.GetPropertyHeight(property, label);
+            return null;
+        }
+
+        private Key CreateKeyInstance(Type valueType, UnityEngine.Object assetObject)
+        {
+            var keyClassType = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(asm => asm.GetTypes())
+                .FirstOrDefault(t => !t.IsAbstract && t.BaseType == typeof(Key<>).MakeGenericType(valueType));
+
+            Type typeToCreate = keyClassType ?? typeof(Key<>).MakeGenericType(valueType);
+            var newKeyInstance = ScriptableObject.CreateInstance(typeToCreate) as Key;
+            if (newKeyInstance != null)
+            {
+                newKeyInstance.name = $"{valueType.Name} (local)";
+                AssetDatabase.AddObjectToAsset(newKeyInstance, assetObject);
+            }
+            return newKeyInstance;
         }
 
         private BehaviorTree FindBehaviorTreeFromProperty(SerializedProperty property)
         {
             var target = property.serializedObject.targetObject;
-            if (target is BehaviorTree tree)
-            {
-                return tree;
-            }
+            if (target is BehaviorTree tree) return tree;
             if (target is Node node)
             {
                 string assetPath = AssetDatabase.GetAssetPath(node);

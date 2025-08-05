@@ -11,6 +11,7 @@ namespace ND_BehaviorTree
         public float patrolRadius = 20.0f;
 
         [Tooltip("The Blackboard key for the NavMeshAgent component on the AI.")]
+        [BlackboardKeyType(typeof(NavMeshAgent))]
         public Key agentKey;
 
         // --- Runtime variables ---

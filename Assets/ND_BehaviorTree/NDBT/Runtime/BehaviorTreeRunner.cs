@@ -59,6 +59,7 @@ public class BehaviorTreeRunner : MonoBehaviour
             {
                 // This uses the generic SetValueObject method to handle any data type
                 RuntimeTree.blackboard.SetValueObject(keyOverride.keyName, keyOverride.data.GetValue());
+               
             }
         }
     }
@@ -78,7 +79,6 @@ public class BehaviorTreeRunner : MonoBehaviour
         if (RuntimeTree != null)
         {
             RuntimeTree.Update();
-            ApplyOverrides();
         }
     }
 }
