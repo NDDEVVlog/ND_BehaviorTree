@@ -13,11 +13,11 @@ using ND_BehaviorTree;
 /// such as moving, attacking, or playing an animation. They do not have 
 /// children and return a status of Success, Failure, or Running.
 /// </summary>
-[NodeInfo("SayNode", "Action/SayNode", true, false, iconPath: null)]
-[CustomNodeTitleProperty("[GameObjectKey] say [quote]")]
+[NodeInfo("SayNode", "Action/SayNode", true, false, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/POPCat1.png")]
+[CustomNodeTitleProperty("[GameObjectKey] say [quote] . WTF")]
 public class SayNode : ActionNode
 {
-    [BlackboardKeyType(typeof(GameObject))]
+
     public Key<GameObject> GameObjectKey;
     public string quote;
 

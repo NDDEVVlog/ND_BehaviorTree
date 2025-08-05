@@ -230,3 +230,46 @@
 /* --- CORRECTED STYLESHEET --- */
 
 
+.title-property-field {
+    /* Đây là thuộc tính quan trọng nhất! 
+       Nó cho phép field này "lớn lên" để lấp đầy không gian trống trong hàng. */
+    flex-grow: 1;
+
+    /* Đặt một chiều rộng tối thiểu để field không bị quá nhỏ. */
+    min-width: 60px; 
+    
+    /* Xóa bỏ khoảng cách mặc định để các field nằm sát nhau hơn. */
+    margin-left: 3px;
+    margin-right: 3px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* 
+  Style cho các Label tĩnh (ví dụ: chữ "say") trong tiêu đề.
+  Giúp chúng có một chút khoảng đệm để không bị dính vào các field.
+*/
+.title-static-label {
+    margin-left: 3px;
+    margin-right: 3px;
+    /* Căn giữa text theo chiều dọc để thẳng hàng với các field */
+    unity-text-align: middle-left;
+}
+
+/* 
+  Nhắm mục tiêu cụ thể vào phần text input bên trong một PropertyField trong title,
+  để đảm bảo nó cũng co giãn theo.
+*/
+.title-property-field .unity-base-text-field {
+    /* Đảm bảo nó chiếm toàn bộ chiều rộng của container cha (PropertyField) */
+    flex-grow: 1;
+}
+
+/*
+  Style cho KeyDrawer khi nó nằm trong title.
+  Cụ thể là trường text hiển thị tên Key hoặc giá trị trực tiếp.
+*/
+.title-property-field .key-drawer-field {
+    /* Thêm các style nếu cần, ví dụ: */
+    flex-grow: 1;
+}
