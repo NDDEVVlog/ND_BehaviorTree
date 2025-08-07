@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace ND_BehaviorTree.GOAP
 {   
-    
-    [NodeInfo("GOAPPlannerNode", "GOAP/GOAPPlannerNode", true, true,iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/Brain.png")]
+    [NodeInfo("GOAPPlannerNode", "GOAP/GOAPPlannerNode", true, true, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/Brain.png")]
     public class GOAPPlannerNode : CompositeNode
     {
-        [Tooltip("The ultimate goal this planner is trying to achieve.")]
-        public List<GOAPState> goal = new List<GOAPState>();
+        [Tooltip("The ultimate goal this planner is trying to achieve. Can be composed of multiple conditions.")]
+        [SerializeReference]
+        public List<IGoapPrecondition> goal = new List<IGoapPrecondition>();
 
         private Queue<GOAPActionNode> _currentPlan;
 
@@ -22,33 +22,44 @@ namespace ND_BehaviorTree.GOAP
 
             var planner = new Planner();
 
+            // === DEBUG: KIỂM TRA WORLD STATE BAN ĐẦU ===
+            Debug.Log("--- GOAP: STARTING NEW PLAN ---");
             var worldState = new Dictionary<string, object>();
             if (blackboard != null)
             {
                 foreach (var key in blackboard.keys)
                 {
-                    worldState.Add(key.keyName, key.GetValueObject());
+                    if (key != null && !string.IsNullOrEmpty(key.keyName))
+                    {
+                        worldState[key.keyName] = key.GetValueObject();
+                        // Dòng log bạn đã thêm - rất tốt!
+                        Debug.Log($"[World State Init] Key: '{key.keyName}', Value: '{key.GetValueObject()}'");
+                    }
                 }
             }
+            
+            // Pass the agent's GameObject to the planner for context-aware preconditions.
+            // var plan = planner.FindPlan(ownerTree.Self, worldState, this.goal, ActionPool); // Giả sử ownerTree.Self tồn tại
+            var plan = planner.FindPlan(ownerTree.Self,blackboard, worldState, this.goal, ActionPool);
 
-            var plan = planner.FindPlan(worldState, this.goal, ActionPool);
 
-            if (plan != null)
+            if (plan != null && plan.Count > 0)
             {
                 _currentPlan = new Queue<GOAPActionNode>(plan);
-                Debug.Log($"GOAP Plan Found: {string.Join(" -> ", plan.Select(a => a.typeName))}");
+                Debug.Log($"<color=green>GOAP Plan Found:</color> {string.Join(" -> ", plan.Select(a => a.name))}");
             }
             else
             {
-                Debug.LogWarning("GOAP Planner could not find a valid plan.");
+                Debug.LogWarning("GOAP Planner could not find a valid plan.", this);
             }
+            Debug.Log("--- GOAP: PLANNING FINISHED ---");
         }
 
         protected override Status OnProcess()
         {
             if (_currentPlan == null || _currentPlan.Count == 0)
             {
-                return Status.Failure;
+                return Status.Failure; // No plan exists or plan is finished
             }
 
             var currentAction = _currentPlan.Peek();
@@ -57,15 +68,19 @@ namespace ND_BehaviorTree.GOAP
             switch (actionStatus)
             {
                 case Status.Success:
-                    _currentPlan.Dequeue();
+                    _currentPlan.Dequeue(); // Action succeeded, move to the next one
+                    if (_currentPlan.Count == 0)
+                    {
+                        Debug.Log("GOAP Plan Completed Successfully.");
+                    }
                     return _currentPlan.Count == 0 ? Status.Success : Status.Running;
 
                 case Status.Running:
                     return Status.Running;
 
                 case Status.Failure:
-                    _currentPlan.Clear();
-                    Debug.LogWarning($"Action '{currentAction.name}' failed. Invalidating plan.");
+                    _currentPlan.Clear(); // Action failed, invalidate the entire plan
+                    Debug.LogWarning($"Action '{currentAction.name}' failed. Invalidating plan.", currentAction);
                     return Status.Failure;
             }
             return Status.Running;

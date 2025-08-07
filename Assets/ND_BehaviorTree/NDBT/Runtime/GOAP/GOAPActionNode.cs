@@ -1,17 +1,19 @@
+// FILE: GOAP/GOAPActionNode.cs
+
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ND_BehaviorTree.GOAP
 {   
-    
-    [NodeInfo("GOAPActionNode", "GOAP/GOAPActionNode", true, true,iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/actionable.png")]
+    [NodeInfo("GOAPActionNode", "GOAP/GOAPActionNode", true, true, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/actionable.png")]
     public class GOAPActionNode : ActionNode
     {
         [Tooltip("The conditions that must be met for this action to be chosen.")]
-        public List<GOAPState> preconditions = new List<GOAPState>();
+        [SerializeReference]
+        public List<IGoapPrecondition> preconditions;
 
         [Tooltip("The changes to the world state after this action is successfully completed.")]
-        public List<GOAPState> effects = new List<GOAPState>();
+        public List<GOAPState> effects ;
 
         [Tooltip("The cost of performing this action. The planner will try to find the lowest cost plan.")]
         public float cost = 1.0f;
@@ -22,7 +24,7 @@ namespace ND_BehaviorTree.GOAP
         {
             if (child == null)
             {
-                Debug.LogWarning($"GOAP Action Node '{name}' has no child to execute.", this);
+                Debug.LogWarning($"GOAP Action Node '{name}' has no child Behavior Tree to execute.", this);
                 return Status.Failure;
             }
             return child.Process();
