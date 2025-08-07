@@ -316,9 +316,9 @@ MonoBehaviour:
   m_guid: 0e371801-1d08-49ca-9077-52d54d0a0a93
   m_position:
     serializedVersion: 2
-    x: 295.2
-    y: 804.8
-    width: 204.79999
+    x: 205.59999
+    y: 796.8
+    width: 204.80002
     height: 109.60004
   typeName: SetBlackBoardValue
   priority: 0
@@ -620,9 +620,9 @@ MonoBehaviour:
   effects:
   - key: NumberOfLog
     valueType: 1
-    comparison: 1
+    comparison: 2
     boolValue: 1
-    intValue: 0
+    intValue: 50
     floatValue: 0
     gameObjectValue: {fileID: 0}
     stringValue: 
@@ -752,6 +752,29 @@ MonoBehaviour:
     y: 908
     width: 244.00006
     height: 96.80005
+  typeName: SetBooleanValueNode
+  priority: 0
+  conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+  ValueToSet: 0
+--- !u!114 &-2892594324651682940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 8c4b17f2-1079-4904-9f3d-7b1aa937a7af
+  m_position:
+    serializedVersion: 2
+    x: 416.80002
+    y: 798.4
+    width: 259.19998
+    height: 109.599976
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
@@ -1099,6 +1122,7 @@ MonoBehaviour:
   - {fileID: -7154159237428318390}
   - {fileID: 4121900773682319423}
   - {fileID: -6415080848553409387}
+  - {fileID: -2892594324651682940}
   rootNode: {fileID: 4009271883461909621}
   blackboard: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   Self: {fileID: 0}
@@ -1297,10 +1321,10 @@ MonoBehaviour:
   m_guid: 8ba9f309-6ebf-4f3d-a700-9bb798f3c841
   m_position:
     serializedVersion: 2
-    x: 716
-    y: 790.4
+    x: 729.60004
+    y: 844.8
     width: 120.79999
-    height: 109.599976
+    height: 109.60004
   typeName: Wait
   priority: 0
   duration: 1
@@ -1546,10 +1570,10 @@ MonoBehaviour:
   m_guid: 674bd0f5-ae36-4b5f-9643-9b4e9089bf10
   m_position:
     serializedVersion: 2
-    x: 560.8
-    y: 204
-    width: 105.60004
-    height: 96.80002
+    x: 675.2
+    y: 256
+    width: 120.79999
+    height: 109.600006
   typeName: Root
   priority: 0
   child: {fileID: -1165108541859606460}
@@ -1992,6 +2016,7 @@ MonoBehaviour:
   children:
   - {fileID: -4734503684602027960}
   - {fileID: -6415080848553409387}
+  - {fileID: -2892594324651682940}
   services: []
 --- !u!114 &7249488118851278663
 MonoBehaviour:
