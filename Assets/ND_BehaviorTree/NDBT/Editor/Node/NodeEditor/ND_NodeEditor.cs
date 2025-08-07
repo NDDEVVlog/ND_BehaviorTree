@@ -195,7 +195,7 @@ namespace ND_BehaviorTree.Editor
             string format = titleAttribute.TitleFormat;
             var matches = Regex.Matches(format, @"\[(.*?)\]");
             int lastIndex = 0;
-            
+
             var serializedNode = new SerializedObject(m_Node);
 
             foreach (Match match in matches)
@@ -216,14 +216,14 @@ namespace ND_BehaviorTree.Editor
                 {
                     var propertyField = new PropertyField(property, string.Empty);
                     propertyField.Bind(serializedNode);
-                    
+
                     // Thêm class để có thể style riêng cho các field trong title
                     propertyField.AddToClassList("title-property-field");
 
                     // Xóa label của PropertyField
                     var fieldLabel = propertyField.Q<Label>();
-                    if(fieldLabel != null) fieldLabel.style.display = DisplayStyle.None;
-                    
+                    if (fieldLabel != null) fieldLabel.style.display = DisplayStyle.None;
+
                     dynamicTitleContent.Add(propertyField);
                 }
                 else
@@ -232,7 +232,7 @@ namespace ND_BehaviorTree.Editor
                     dynamicTitleContent.Add(new Label($"[{propertyName}]"));
                     Debug.LogWarning($"[BuildDynamicTitle] Property '{propertyName}' not found on node type '{m_Node.GetType().Name}'.", m_Node);
                 }
-                
+
                 lastIndex = match.Index + match.Length;
             }
 
@@ -243,6 +243,8 @@ namespace ND_BehaviorTree.Editor
                 staticLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
                 dynamicTitleContent.Add(staticLabel);
             }
+            
+            
         }
 
 

@@ -172,7 +172,8 @@ Transform:
   m_LocalPosition: {x: 31.7, y: 8.55, z: 50.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6019111970228386575}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &279225743
@@ -320,10 +321,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 2f2b5458ce64b5247a99dba8aa651205, type: 2}
-  blackboardOverride: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-  randomShit:
-    m_PersistentCalls:
-      m_Calls: []
+  overrides: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &279225752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1457,12 +1458,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4232913060562548709}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.744703, y: -20.639498, z: 50.05723}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -11.955297, y: -29.189499, z: 0.027233124}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 112866852}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6055901187622518180
 MonoBehaviour:
@@ -1480,42 +1481,20 @@ MonoBehaviour:
   dynamicEvents:
   - eventName: Yep
     target: {fileID: 3362767704704820966}
-    methodName: PlaySound
+    methodName: 
     genericParameters:
-    - rid: 1809910107478949888
+    - rid: -2
   - eventName: HellNo
     target: {fileID: 3362767704704820966}
-    methodName: FlashColor
+    methodName: 
     genericParameters:
-    - rid: 1809910093078331396
-    - rid: 1809910093078331397
+    - rid: -2
+    - rid: -2
   references:
     version: 2
     RefIds:
-    - rid: 1809910093078331396
-      type: {class: ColorParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
-      data:
-        parameterName: flashColor
-        useConstant: 1
-        sourceComponent: {fileID: 0}
-        sourceFieldName: 
-        constantValue: {r: 1, g: 0, b: 0, a: 0}
-    - rid: 1809910093078331397
-      type: {class: FloatParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
-      data:
-        parameterName: duration
-        useConstant: 1
-        sourceComponent: {fileID: 0}
-        sourceFieldName: 
-        constantValue: 50
-    - rid: 1809910107478949888
-      type: {class: StringParameter, ns: SpellTech.DynamicMethodEvent, asm: Assembly-CSharp}
-      data:
-        parameterName: soundName
-        useConstant: 1
-        sourceComponent: {fileID: 0}
-        sourceFieldName: 
-        constantValue: 
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1529,4 +1508,3 @@ SceneRoots:
   - {fileID: 2066292378}
   - {fileID: 899733265}
   - {fileID: 112866852}
-  - {fileID: 6019111970228386575}
