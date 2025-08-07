@@ -35,39 +35,31 @@ namespace ND_BehaviorTree.GOAP
 
             // --- Get the first value (val1) ---
             object val1 = null;
-            string source1 = "";
             if (!string.IsNullOrEmpty(value.keyName) && worldState.TryGetValue(value.keyName, out var blackboardVal1))
             {
                 val1 = blackboardVal1;
-                source1 = $"WorldState['{value.keyName}']";
             }
             else
             {
                 val1 = value.GetValueObject();
-                source1 = "Direct Value";
             }
 
             var op = compareType.GetValue();
 
             // --- Get the second value (val2) ---
             object val2 = null;
-            string source2 = "";
             if (!string.IsNullOrEmpty(targetValue.keyName) && worldState.TryGetValue(targetValue.keyName, out var blackboardVal2))
             {
                 val2 = blackboardVal2;
-                source2 = $"WorldState['{targetValue.keyName}']";
             }
             else
             {
                 val2 = targetValue.GetValueObject();
-                source2 = "Direct Value";
+
             }
             
             bool result = ComparisonHelper.PerformComparison(val1, val2, op);
 
-            // --- The main debug log ---
-            string resultColor = result ? "lime" : "red";
-            Debug.Log($"[StatePrecondition] Comparing: ({source1}: '{val1}') {op} ({source2}: '{val2}') -> <color={resultColor}>{result.ToString().ToUpper()}</color>");
 
             return result;
         }
@@ -104,13 +96,11 @@ namespace ND_BehaviorTree.GOAP
         {
             if (keyA == null || compareType == null || keyB == null)
             {
-                 Debug.Log($"Key A: {keyA.keyName}");
                 return false;
             }
             var op = compareType.GetValue();
             if (!worldState.TryGetValue(keyA.keyName, out object valueA))
             {
-                Debug.Log($"[KeyComparisonPrecondition] FAILED: Key '{keyA.keyName}' not found in WorldState.");
                 return false;
             }
 
@@ -121,10 +111,6 @@ namespace ND_BehaviorTree.GOAP
             
             
             bool result = ComparisonHelper.PerformComparison(valueA, valueB, op);
-
-            // --- The main debug log ---
-            string resultColor = result ? "lime" : "red";
-            Debug.Log($"[KeyComparisonPrecondition] Comparing: (WorldState['{keyA.keyName}']: '{valueA}') {op} (WorldState['{keyB.keyName}']: '{valueB}') -> <color={resultColor}>{result.ToString().ToUpper()}</color>");
             
             return result;
         }
@@ -175,7 +161,6 @@ namespace ND_BehaviorTree.GOAP
 
             if (targetValue == null)
             {
-                Debug.LogWarning($"[DistancePrecondition] FAILED: Target value is null. Source: {source}");
                 return false;
             }
 

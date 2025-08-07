@@ -64,7 +64,6 @@ namespace ND_BehaviorTree.GOAP
                 // === DEBUG: KIỂM TRA XEM ĐÃ ĐẠT MỤC TIÊU CHƯA ===
                 if (ArePreconditionsMet(agent,blackboard, goal, currentNode.State, isGoalCheck: true))
                 {
-                    Debug.Log("<color=lime>[Planner] Goal Met! Reconstructing plan.</color>");
                     // Nếu đã đạt mục tiêu, xây dựng lại kế hoạch bằng cách đi ngược từ node hiện tại về gốc
                     var plan = new List<GOAPActionNode>();
                     var n = currentNode;
@@ -77,26 +76,17 @@ namespace ND_BehaviorTree.GOAP
                 }
                 
                 // === DEBUG: XEM XÉT CÁC HÀNH ĐỘNG KHẢ THI TỪ NODE HIỆN TẠI ===
-                Debug.Log($"[Planner] Exploring node (Cost: {currentNode.Cost}). Checking {usableActions.Count} available actions...");
                 foreach (var action in usableActions)
                 {
-                    Debug.Log($"-- [Planner] Evaluating action: '{action.name}' (Cost: {action.cost})");
 
                     // Kiểm tra xem các điều kiện tiên quyết của hành động có được đáp ứng bởi trạng thái hiện tại không
                     if (ArePreconditionsMet(agent,blackboard, action.preconditions, currentNode.State))
                     {
-                        // Nếu đáp ứng, tạo ra một trạng thái thế giới mới sau khi thực hiện hành động
-                        Debug.Log($"<color=cyan>-- [Planner] Action '{action.name}' is VALID. Creating next state.</color>");
                         var nextState = ApplyEffects(currentNode.State, action.effects);
                         
                         // Tạo một node mới cho kế hoạch và thêm vào openSet để xem xét ở các vòng lặp sau
                         var neighborNode = new PlanNode(currentNode, currentNode.Cost + action.cost, nextState, action);
                         openSet.Add(neighborNode);
-                    }
-                    else
-                    {
-                        // Dòng này rất quan trọng để biết tại sao một hành động bị loại bỏ
-                        Debug.Log($"-- [Planner] Action '{action.name}' is INVALID. Preconditions not met.");
                     }
                 }
             }
@@ -121,11 +111,6 @@ namespace ND_BehaviorTree.GOAP
                     Debug.Log($"<color=red>{logPrefix} FAILED:</color> {condition.GetDescription()}");
                     return false;
                 }
-                // (Tùy chọn) Bỏ comment dòng dưới nếu muốn xem cả các điều kiện đã thành công
-                // else
-                // {
-                //     Debug.Log($"{logPrefix} PASSED: {condition.GetDescription()}");
-                // }
             }
             return true;
         }
