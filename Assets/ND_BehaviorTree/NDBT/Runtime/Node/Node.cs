@@ -91,6 +91,13 @@ namespace ND_BehaviorTree
         public void SetPosition(Rect newPosition) => m_position = newPosition;
         public void SetNewID(string newID) => m_guid = newID;
 
+        public void SetOwwnerTree(BehaviorTree tree)
+        {
+            ownerTree = tree;
+        }
+        public BehaviorTree GetOwwnerTree() =>ownerTree;
+        public GameObject GetOwnerTreeGameObject() => ownerTree?.Self.gameObject;
+
         
         public Action InteruptAction;
     }

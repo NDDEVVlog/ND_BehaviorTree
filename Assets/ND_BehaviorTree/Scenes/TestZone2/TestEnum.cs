@@ -10,6 +10,4 @@ public enum TestEnum
     Chasing,
     Attacking
 }
-
-[CreateAssetMenu(menuName = "ND_BehaviorTree/Keys/AIState Key")]
-    public class TestEnumKey : Key<TestEnum> {}
+public class TestEnumKey : Key<TestEnum> {}

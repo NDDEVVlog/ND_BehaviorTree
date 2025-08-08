@@ -1,3 +1,4 @@
+// --- FILE: ND_BTSearchProvider.cs (CORRECTED) ---
 
 using System;
 using System.Collections.Generic;
@@ -10,15 +11,15 @@ using UnityEditor;
 
 namespace ND_BehaviorTree.Editor
 {
-    // SearchContextElement remains the same
+    // SearchContextElement is modified to hold a Type instead of an object instance.
     public struct SearchContextElement
     {
-        public object target { get; private set; }
+        public Type targetType { get; private set; }
         public string title { get; private set; }
 
-        public SearchContextElement(object target, string title)
+        public SearchContextElement(Type type, string title)
         {
-            this.target = target;
+            this.targetType = type;
             this.title = title;
         }
     }
@@ -41,9 +42,6 @@ namespace ND_BehaviorTree.Editor
         public void Initialize(ND_BehaviorTreeView graphView)
         {
             this.view = graphView;
-            // --- CRITICAL FIX ---
-            // Reset the context to null. This prevents the filter from the 
-            // "Add Service" action from leaking into the general "Create Node" action.
             this.m_parentCompositeNode = null;
             this.m_filterType = null;
         }
@@ -76,16 +74,18 @@ namespace ND_BehaviorTree.Editor
 
                             if (string.IsNullOrEmpty(attribute.menuItem)) 
                                 continue;
-
-                            var nodeInstanceForSearch = Activator.CreateInstance(type);
-                            elements.Add(new SearchContextElement(nodeInstanceForSearch, attribute.menuItem));
+                            
+                            // --- FIX ---
+                            // Removed the problematic instantiation: `Activator.CreateInstance(type)`
+                            // We now pass the 'type' directly into the SearchContextElement.
+                            elements.Add(new SearchContextElement(type, attribute.menuItem));
                         }
                     }
                 }
                 catch { /* Ignore assemblies that cause errors */ }
             }
 
-            // Sorting logic from original
+            // Sorting logic remains the same.
             elements.Sort((a, b) =>
             {
                 var aSplits = a.title.Split('/');
@@ -105,7 +105,7 @@ namespace ND_BehaviorTree.Editor
                 return 0;
             });
 
-            // Tree building logic
+            // Tree building logic remains the same.
             List<string> groups = new List<string>();
             foreach (SearchContextElement element in elements)
             {
@@ -134,12 +134,16 @@ namespace ND_BehaviorTree.Editor
             if (view == null) return false;
             
             SearchContextElement searchElement = (SearchContextElement)searchTreeEntry.userData;
-            Type nodeDataType = searchElement.target.GetType();
+            
+            // --- FIX ---
+            // Retrieve the type directly from our modified SearchContextElement.
+            Type nodeDataType = searchElement.targetType;
 
              if (m_parentCompositeNode != null && typeof(ServiceNode).IsAssignableFrom(nodeDataType))
             {
                 Undo.RecordObject(view.BTree, "Add Service");
                 
+                // Use the retrieved type to correctly create a ScriptableObject instance.
                 ServiceNode service = (ServiceNode)ScriptableObject.CreateInstance(nodeDataType);
                 service.name = nodeDataType.Name;
                 AssetDatabase.AddObjectToAsset(service, view.BTree);
@@ -155,6 +159,7 @@ namespace ND_BehaviorTree.Editor
                 Vector2 windowLocalMousePosition = context.screenMousePosition - view.EditorWindow.position.position;
                 Vector2 graphMousePosition = view.contentViewContainer.WorldToLocal(windowLocalMousePosition);
                 
+                // Use the retrieved type to correctly create a ScriptableObject instance.
                 Node nodeData = (ND_BehaviorTree.Node)ScriptableObject.CreateInstance(nodeDataType); 
                 nodeData.SetPosition(new Rect(graphMousePosition, Vector2.zero));
                 Debug.Log("AddNode as Position:" + graphMousePosition);

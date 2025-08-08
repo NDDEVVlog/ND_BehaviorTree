@@ -9,7 +9,7 @@ using UnityEngine;
 using ND_BehaviorTree;
 
 namespace ND_BehaviorTree
-{
+{   [RequireComponentInRunner(typeof(Animator))]
     [NodeInfo("Set Animator Trigger", "Action/Animation/SetAnimatorTrigger", true, false)]
     public class SetAnimatorTriggerNode : ActionNode
     {

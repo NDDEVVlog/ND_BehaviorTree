@@ -1,5 +1,3 @@
-// --- FULL CODE: NodePropertyEditorWindow.cs ---
-
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;

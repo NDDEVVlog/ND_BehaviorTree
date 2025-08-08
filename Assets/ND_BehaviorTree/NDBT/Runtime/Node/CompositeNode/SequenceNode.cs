@@ -10,7 +10,6 @@ namespace ND_BehaviorTree
         protected override void OnEnter()
         {
             currentChildIndex = 0;
-            Debug.Log("Children of " + typeName + ":" + children.Count);
         }
 
         protected override Status OnProcess()

@@ -277,6 +277,20 @@ MonoBehaviour:
   typeName: Wait
   priority: 0
   duration: 1
+--- !u!114 &-5133301526121411020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c0ec67c4b8faf4a8a383d0477af380, type: 3}
+  m_Name: NavMeshAgent (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: {fileID: 0}
 --- !u!114 &-5053310088734558554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,6 +375,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
+--- !u!114 &-4725410696474279349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c0ec67c4b8faf4a8a383d0477af380, type: 3}
+  m_Name: NavMeshAgent (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: {fileID: 0}
 --- !u!114 &-4515419559068359620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,7 +453,7 @@ MonoBehaviour:
   m_Name: ComparisonType (local)
   m_EditorClassIdentifier: 
   keyName: 
-  value: 0
+  value: 4
 --- !u!114 &-2518212336824640012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,9 +646,9 @@ MonoBehaviour:
     height: 138.40001
   typeName: Check Condition
   priority: 0
-  value: {fileID: 4961731053835136659, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  value: {fileID: -7534604966913028412, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   compareType: {fileID: -3984750101635791620}
-  targetValue: {fileID: 4640552753686707804}
+  targetValue: {fileID: 0}
 --- !u!114 &151498456585129743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1166,6 +1194,20 @@ MonoBehaviour:
   child: {fileID: 508742229169387133}
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   shouldInvert: 0
+--- !u!114 &6713263043186892538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: Int32 (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: 0
 --- !u!114 &6722135165623225885
 MonoBehaviour:
   m_ObjectHideFlags: 0

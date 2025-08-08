@@ -4,6 +4,6 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    [KeyColor(1.0f, 1.0f, 0.3f)]
+    [KeyColor(0.8f, 0.6f, 0.2f)]
     public class Vector2Key : Key<Vector2> { }
 }

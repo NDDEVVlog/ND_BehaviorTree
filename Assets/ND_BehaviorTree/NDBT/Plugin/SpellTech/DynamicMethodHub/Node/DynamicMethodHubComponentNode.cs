@@ -24,7 +24,7 @@ public class DynamicMethodHubComponentNode : ActionNode
     protected override void OnEnter()
     {   
         //Simple and quick. Yes sirrrr
-        animationEventHub = SpellTech.SoraExtensions.CustomHelper.GetComp<MethodHub>(ownerTree.Self);
+        animationEventHub = SpellTech.SoraExtensions.CustomHelper.GetComp<MethodHub>(GetOwnerTreeGameObject());
     }
 
     protected override Status OnProcess()
