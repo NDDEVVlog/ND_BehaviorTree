@@ -8,12 +8,12 @@ namespace ND_BehaviorTree.Editor
     {
         public override void OnInspectorGUI()
         {
-            // Draw the default inspector fields first
+           
             DrawDefaultInspector();
 
             EditorGUILayout.Space();
             
-            // Add a prominent button to manually refresh the data
+
             if (GUILayout.Button("Force Refresh Mappings", GUILayout.Height(30)))
             {
                 // When the button is clicked, immediately process the mappings
@@ -32,27 +32,24 @@ namespace ND_BehaviorTree.Editor
             // Loop through all the mappings in this config.
             foreach (var mapping in config.mappings)
             {
-                // If a node script has been assigned...
                 if (mapping.nodeScript != null)
                 {
-                    // ...get its Type.
+
                     System.Type nodeType = mapping.nodeScript.GetClass();
                     if (nodeType != null)
                     {
                         string newFullName = nodeType.AssemblyQualifiedName;
-                        // Check if the stored name is incorrect or missing.
+
                         if (mapping.nodeTypeFullName != newFullName)
                         {
-                            // Store the correct full name. This is the crucial step.
+
                             mapping.nodeTypeFullName = newFullName;
-                            hasChanged = true; // Mark that we made a change.
+                            hasChanged = true; 
                             Debug.Log($"Updated mapping for '{mapping.nodeScript.name}' to '{newFullName}'");
                         }
                     }
                     else
                     {
-                        // The script is assigned but doesn't resolve to a valid Type.
-                        // This can happen after deleting a script or assembly reference issues.
                         if (mapping.nodeTypeFullName != null)
                         {
                             mapping.nodeTypeFullName = null;

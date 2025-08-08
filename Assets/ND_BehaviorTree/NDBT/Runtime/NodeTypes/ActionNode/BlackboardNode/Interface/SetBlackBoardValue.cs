@@ -29,7 +29,7 @@ namespace ND_BehaviorTree
                 return Status.Failure;
             }
 
-            bool success = setBlackBoardValue.TrySetValue(this.ownerTree.Self,this.blackboard);
+            bool success = setBlackBoardValue.TrySetValue(this.GetOwnerTreeGameObject(),this.blackboard);
 
             return success ? Status.Success : Status.Failure;
         }

@@ -20,7 +20,6 @@ namespace ND_BehaviorTree.Editor
 
         protected override void RegisterCallbacksOnTarget()
         {
-            // The 'target' is the _nodeEditorVisual itself
             target.RegisterCallback<PointerDownEvent>(OnPointerDown);
         }
 
@@ -60,12 +59,10 @@ namespace ND_BehaviorTree.Editor
             var clickedElement = evt.target as VisualElement;
             Node targetNode = null;
 
-            // Traverse up the visual tree from the clicked element
-            // Stop when we hit the main node's boundary (the 'target' of this manipulator)
+
             while (clickedElement != null && clickedElement != target)
             {
-                // Check if the current element in our traversal has a Node data object attached.
-                // This is the "tag" we set in Step 1.
+                
                 if (clickedElement.userData is Node childNodeData)
                 {
                     // We found a child node visual! This is our target.
@@ -76,9 +73,6 @@ namespace ND_BehaviorTree.Editor
                 clickedElement = clickedElement.parent;
             }
 
-            // If the loop finished without finding a child node,
-            // it means the user clicked the main node's background.
-            // In that case, the target is the main node itself.
             if (targetNode == null)
             {
                 targetNode = _nodeEditorVisual.m_Node; // Use the main node's data

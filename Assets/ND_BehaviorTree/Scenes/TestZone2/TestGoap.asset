@@ -323,11 +323,11 @@ MonoBehaviour:
   typeName: SetBlackBoardValue
   priority: 0
   setBlackBoardValue:
-    rid: 3796477471816679440
+    rid: 3796477482900389889
   references:
     version: 2
     RefIds:
-    - rid: 3796477471816679440
+    - rid: 3796477482900389889
       type: {class: SetIntValueIncrement, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
       data:
         intKey: {fileID: -7385322539704590012, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
@@ -733,6 +733,20 @@ MonoBehaviour:
   child: {fileID: 0}
   repeatCount: 3
   currentCount: 0
+--- !u!114 &-3278198527877183761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: Int32 (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: 0
 --- !u!114 &-2972828095666861792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -771,10 +785,10 @@ MonoBehaviour:
   m_guid: 8c4b17f2-1079-4904-9f3d-7b1aa937a7af
   m_position:
     serializedVersion: 2
-    x: 416.80002
-    y: 798.4
-    width: 259.19998
-    height: 109.599976
+    x: 443.2
+    y: 812.8
+    width: 259.2
+    height: 109.60004
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
@@ -943,10 +957,10 @@ MonoBehaviour:
   m_guid: d0a39782-171d-4711-8066-b1a845b19551
   m_position:
     serializedVersion: 2
-    x: 620.8
-    y: 368
+    x: 648
+    y: 389.6
     width: 230.40002
-    height: 106.400024
+    height: 106.399994
   typeName: GOAPPlannerNode
   priority: 0
   children:
@@ -1321,10 +1335,10 @@ MonoBehaviour:
   m_guid: 8ba9f309-6ebf-4f3d-a700-9bb798f3c841
   m_position:
     serializedVersion: 2
-    x: 729.60004
-    y: 844.8
+    x: 744
+    y: 1151.2
     width: 120.79999
-    height: 109.60004
+    height: 109.6001
   typeName: Wait
   priority: 0
   duration: 1
@@ -1391,9 +1405,9 @@ MonoBehaviour:
   m_guid: 550bd029-5542-4aec-86b2-598050d4d420
   m_position:
     serializedVersion: 2
-    x: 778.4
-    y: 672.8
-    width: 277.60004
+    x: 792.8
+    y: 979.2
+    width: 277.59998
     height: 109.60004
   typeName: Scout for Tree Sequence
   priority: 0
@@ -1670,10 +1684,10 @@ MonoBehaviour:
   m_guid: 8af5dcdd-d6fb-4de6-a246-1feb012d4e0b
   m_position:
     serializedVersion: 2
-    x: 907.2
-    y: 828.8
+    x: 921.60004
+    y: 1135.2
     width: 259.19995
-    height: 109.60004
+    height: 109.6001
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
@@ -2007,10 +2021,10 @@ MonoBehaviour:
   m_guid: 795e95d4-1f18-43ba-8b43-8e3814928982
   m_position:
     serializedVersion: 2
-    x: 323.2
-    y: 632.8
-    width: 147.20001
-    height: 96.79999
+    x: 240
+    y: 635.2
+    width: 162.40001
+    height: 109.599976
   typeName: Sequence
   priority: 0
   children:
@@ -2033,10 +2047,10 @@ MonoBehaviour:
   m_guid: f3e7c3fc-ca40-439c-a772-5a97780dca3f
   m_position:
     serializedVersion: 2
-    x: 772.8
-    y: 530.4
+    x: 787.2
+    y: 836.8
     width: 220
-    height: 106.39996
+    height: 106.400024
   typeName: ScoutForTheTree
   priority: 0
   preconditions:
@@ -2256,6 +2270,20 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
+--- !u!114 &8511946492125430908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: Int32 (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: 0
 --- !u!114 &8725025704285076848
 MonoBehaviour:
   m_ObjectHideFlags: 0

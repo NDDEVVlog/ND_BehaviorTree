@@ -1,4 +1,3 @@
-// FILE: Editor/UnityNode.cs (VẪN GIỮ NGUYÊN)
 using System.Diagnostics;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -18,7 +17,6 @@ namespace ND_BehaviorTree.Editor
 
         public override void BuildTitle()
         {
-            // Ghi đè hành vi mặc định và gọi helper để xây dựng title động
             BuildDynamicTitleFromAttribute();
         }
     }

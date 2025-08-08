@@ -28,36 +28,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: NumberOfLog
   value: 0
---- !u!114 &-6135758524474687627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e349dfd61e59cb646ab54ea13165d13e, type: 3}
-  m_Name: TestEnumKey
-  m_EditorClassIdentifier: 
-  keyName: New TestEnumKey
-  value: 0
---- !u!114 &-3350979285441124233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfee2e00b035058419e04e5c6999c555, type: 3}
-  m_Name: UnityEventKey
-  m_EditorClassIdentifier: 
-  keyName: RandomUnityEvent
-  value:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,8 +45,6 @@ MonoBehaviour:
   - {fileID: 2524366029454991468}
   - {fileID: -7385322539704590012}
   - {fileID: 5862101188314091657}
-  - {fileID: -3350979285441124233}
-  - {fileID: -6135758524474687627}
 --- !u!114 &2524366029454991468
 MonoBehaviour:
   m_ObjectHideFlags: 0

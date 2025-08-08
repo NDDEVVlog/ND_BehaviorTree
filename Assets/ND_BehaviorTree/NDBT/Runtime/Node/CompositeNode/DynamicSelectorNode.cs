@@ -24,7 +24,7 @@ public class DynamicSelectorNode : CompositeNode
     {
         // Reset state and initialize the condition logic.
         _runningChildIndex = -1;
-        condition?.OnInitialize(ownerTree.Self);
+        condition?.OnInitialize(GetOwnerTreeGameObject());
     }
 
     protected override Status OnProcess()
@@ -57,7 +57,7 @@ public class DynamicSelectorNode : CompositeNode
             return Status.Failure;
         }
 
-        if (condition.TrySelectBranch(ownerTree.Self, blackboard, out int selectedIndex))
+        if (condition.TrySelectBranch(GetOwnerTreeGameObject(), blackboard, out int selectedIndex))
         {
             // Safety check: ensure the returned index is valid.
             if (selectedIndex < 0 || selectedIndex >= children.Count)

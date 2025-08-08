@@ -59,6 +59,7 @@ MonoBehaviour:
   - {fileID: -7085167248233984719}
   - {fileID: -2108471717452254684}
   - {fileID: -7534604966913028412}
+  - {fileID: 7088936421184883294}
 --- !u!114 &4961731053835136659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,3 +74,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: AI_Agent
   value: {fileID: 0}
+--- !u!114 &7088936421184883294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c84d27be7f1af41b9744be55380dd5, type: 3}
+  m_Name: ListFloatKey
+  m_EditorClassIdentifier: 
+  keyName: New ListFloatKey
+  value: []

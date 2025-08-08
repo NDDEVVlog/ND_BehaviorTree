@@ -24,7 +24,7 @@ namespace ND_BehaviorTree
             if (targetKey == null) return Status.Failure;
 
             // Find all colliders within the search radius on the specified layer.
-            Collider[] colliders = Physics.OverlapSphere(ownerTree.Self.transform.position, searchRadius, searchLayer);
+            Collider[] colliders = Physics.OverlapSphere(GetOwnerTreeGameObject().transform.position, searchRadius, searchLayer);
 
             Transform closestTarget = null;
             float closestDistanceSqr = float.MaxValue;
@@ -33,7 +33,7 @@ namespace ND_BehaviorTree
             {
                 if (collider.CompareTag(targetTag))
                 {
-                    float sqrDistance = (collider.transform.position - ownerTree.Self.transform.position).sqrMagnitude;
+                    float sqrDistance = (collider.transform.position - GetOwnerTreeGameObject().transform.position).sqrMagnitude;
                     if (sqrDistance < closestDistanceSqr)
                     {
                         closestDistanceSqr = sqrDistance;

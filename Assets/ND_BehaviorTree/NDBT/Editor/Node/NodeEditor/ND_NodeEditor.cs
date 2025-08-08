@@ -169,6 +169,10 @@ namespace ND_BehaviorTree.Editor
             }
         }
 
+        
+        /// <summary>
+        /// Gen UNITY NODE (Testing)
+        /// </summary>
         protected void BuildDynamicTitleFromAttribute()
         {
             var titleAttribute = m_Node.GetType().GetCustomAttribute<CustomNodeTitlePropertyAttribute>();
@@ -243,10 +247,14 @@ namespace ND_BehaviorTree.Editor
                 staticLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
                 dynamicTitleContent.Add(staticLabel);
             }
-            
-            
+
+
         }
 
+        /// <summary>
+        /// Further Update for add modding to Bottom and Top Port
+        /// </summary>
+        /// <param name="portStylePath"></param>
 
 
        public virtual void AddBottomPortStyleSheet(string portStylePath)
@@ -272,14 +280,13 @@ namespace ND_BehaviorTree.Editor
 
     public virtual void AddTopPortStyleSheet(string portStylePath)
     {
-        // --- FIX: Add a null check here ---
-        // If this node type doesn't have an output port, just exit silently.
+
         if (m_OutputPort == null)
         {
             return;
         }
         
-        // The original check for the path string is also good, let's keep it.
+
         if (!string.IsNullOrEmpty(portStylePath))
         {
             m_OutputPort.AddToClassList("btport");
@@ -446,7 +453,7 @@ namespace ND_BehaviorTree.Editor
 
 
         #region UpdateNodeEditor
-                // --- Selection Handling ---
+
         public override void OnSelected()
         {
             base.OnSelected();
@@ -457,8 +464,6 @@ namespace ND_BehaviorTree.Editor
         {
             base.OnUnselected();
             this.RemoveFromClassList("selected");
-
-            // Debug.Log($"Node '{node.typeName}' was unselected.");
         }
 
         public void SavePosition()

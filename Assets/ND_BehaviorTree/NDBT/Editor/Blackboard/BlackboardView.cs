@@ -1,4 +1,4 @@
-// FILE: Assets/ND_BehaviorTree/Editor/BlackboardView.cs
+// --- MODIFIED FILE: BlackboardView.cs ---
 
 using System;
 using System.Linq;
@@ -17,15 +17,21 @@ namespace ND_BehaviorTree.Editor
         private BehaviorTree m_BTree;
         private Color m_defaultKeyColor = Color.grey;
 
+        // --- NEW: Add a field for our search provider ---
+        private BlackboardKeySearchProvider m_keySearchProvider;
+
         public BlackboardView(SerializedObject treeSerializer)
         {
             this.m_treeSerializer = treeSerializer;
             this.m_BTree = treeSerializer.targetObject as BehaviorTree;
 
+            // --- NEW: Create an instance of the provider and initialize it ---
+            m_keySearchProvider = ScriptableObject.CreateInstance<BlackboardKeySearchProvider>();
+            m_keySearchProvider.Initialize(this);
+
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/ND_BehaviorTree/NDBT/Editor/Resources/Styles/BlackBoard/BlackboardView.uxml");
             visualTree.CloneTree(this);
 
-            // Make the panel draggable by its header
             this.Q("header").AddManipulator(new Dragger { clampToParentEdges = true });
 
             var addKeyButton = this.Q<Button>("add-key-button");
@@ -47,20 +53,10 @@ namespace ND_BehaviorTree.Editor
                 return;
             }
 
-            var menu = new GenericMenu();
-            // Use TypeCache for performance. Find all non-abstract types deriving from Key.
-            var keyTypes = TypeCache.GetTypesDerivedFrom<Key>().Where(t => !t.IsAbstract);
-
-            foreach (var type in keyTypes)
-            {
-                string menuName = type.Name.Replace("Key_", "");
-                menu.AddItem(new GUIContent(menuName), false, () => AddKey(type));
-            }
-
-            menu.ShowAsContext();
+            var screenMousePosition = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
+            SearchWindow.Open(new SearchWindowContext(screenMousePosition), m_keySearchProvider);
         }
-
-        // ... (CreateAndAssignBlackboard and AddKey methods remain the same as before) ...
+        
         private void CreateAndAssignBlackboard()
         {
             var blackboard = ScriptableObject.CreateInstance<Blackboard>();
@@ -76,7 +72,7 @@ namespace ND_BehaviorTree.Editor
             PopulateView();
         }
 
-        private void AddKey(Type keyType)
+        public void AddKey(Type keyType)
         {
             Undo.RecordObject(m_BTree.blackboard, "Add Blackboard Key");
             var newKey = ScriptableObject.CreateInstance(keyType) as Key;
@@ -99,20 +95,16 @@ namespace ND_BehaviorTree.Editor
 
             if (m_BTree.blackboard == null)
             {
-                foldout.style.display = DisplayStyle.None; // Hide the foldout if no blackboard
-
-                // --- NEW: Add a message to guide the user ---
+                foldout.style.display = DisplayStyle.None; 
                 var helpLabel = new Label("No Blackboard found. Please assign a Blackboard asset to the BehaviorTree.");
-                helpLabel.style.unityTextAlign = TextAnchor.MiddleCenter; // Center the text
+                helpLabel.style.unityTextAlign = TextAnchor.MiddleCenter; 
                 helpLabel.style.paddingTop = 5;
                 helpLabel.style.paddingBottom = 5;
                 keysContainer.Add(helpLabel);
-                // -------------------------------------------
-
                 return;
             }
 
-            foldout.style.display = DisplayStyle.Flex; // Show it if there is a blackboard
+            foldout.style.display = DisplayStyle.Flex; 
             var blackboardSerializer = new SerializedObject(m_BTree.blackboard);
             var keysProperty = blackboardSerializer.FindProperty("keys");
 
@@ -125,14 +117,12 @@ namespace ND_BehaviorTree.Editor
                 var keyRow = new VisualElement();
                 keyRow.AddToClassList("key-row");
 
-                // --- NEW: Read the [KeyColor] attribute and create the indicator ---
                 var colorIndicator = new VisualElement();
                 colorIndicator.AddToClassList("key-color-indicator");
                 var keyColorAttr = key.GetType().GetCustomAttribute<KeyColorAttribute>();
                 colorIndicator.style.backgroundColor = keyColorAttr != null ? keyColorAttr.Color : m_defaultKeyColor;
                 keyRow.Add(colorIndicator);
-                // ---------------------------------------------------------------------
-
+                
                 var keyNameField = new TextField { value = key.keyName };
                 keyNameField.AddToClassList("key-row-field-name");
                 keyNameField.RegisterValueChangedCallback(evt =>
@@ -157,7 +147,6 @@ namespace ND_BehaviorTree.Editor
             }
         }
 
-        // ... (DeleteKey method remains the same) ...
         private void DeleteKey(Key keyToDelete)
         {
             Undo.RecordObject(m_BTree.blackboard, "Remove Blackboard Key");

@@ -37,8 +37,8 @@ namespace ND_BehaviorTree.GOAP
             }
             
             // Pass the agent's GameObject to the planner for context-aware preconditions.
-            // var plan = planner.FindPlan(ownerTree.Self, worldState, this.goal, ActionPool); // Giả sử ownerTree.Self tồn tại
-            var plan = planner.FindPlan(ownerTree.Self,blackboard, worldState, this.goal, ActionPool);
+            // var plan = planner.FindPlan(GetOwnerTreeGameObject(), worldState, this.goal, ActionPool); // Giả sử GetOwnerTreeGameObject() tồn tại
+            var plan = planner.FindPlan(GetOwnerTreeGameObject(),blackboard, worldState, this.goal, ActionPool);
 
 
             if (plan != null && plan.Count > 0)
