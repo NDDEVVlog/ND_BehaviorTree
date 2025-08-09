@@ -1,4 +1,3 @@
-// FILE: Editor/KeyOverrideDrawer.cs (Corrected and Final Version)
 
 using UnityEngine;
 using UnityEditor;

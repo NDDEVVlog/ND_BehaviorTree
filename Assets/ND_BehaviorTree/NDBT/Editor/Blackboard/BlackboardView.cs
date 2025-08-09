@@ -1,4 +1,3 @@
-// --- MODIFIED FILE: BlackboardView.cs ---
 
 using System;
 using System.Linq;

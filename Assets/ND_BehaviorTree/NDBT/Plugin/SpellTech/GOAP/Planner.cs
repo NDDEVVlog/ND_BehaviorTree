@@ -1,4 +1,3 @@
-// FILE: GOAP/Planner.cs
 
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +8,20 @@ namespace ND_BehaviorTree.GOAP
     public class Planner
     {
         /// <summary>
-        /// Một node bên trong cây tìm kiếm của thuật toán A*.
-        /// Nó chứa trạng thái thế giới, hành động đã dẫn đến trạng thái này,
-        /// chi phí để đến đây, và node cha của nó.
+        /// A safeguard to prevent the planner from getting stuck in an infinite loop
+        /// or taking too long on a very complex plan.
+        /// </summary>
+        private const int MAX_ITERATIONS = 1000;
+
+        /// <summary>
+        /// A node within the A* search tree.
+        /// It contains the world state, the action that led to this state,
+        /// the cost to get here, and its parent node.
         /// </summary>
         private class PlanNode
         {
             public PlanNode Parent;
-            public float Cost; // g(n): Chi phí từ điểm bắt đầu đến node hiện tại
+            public float Cost; // g(n): Cost from the start node to the current node
             public Dictionary<string, object> State;
             public GOAPActionNode Action;
 
@@ -30,41 +35,52 @@ namespace ND_BehaviorTree.GOAP
         }
 
         /// <summary>
-        /// Tìm một chuỗi các hành động (một kế hoạch) để đi từ trạng thái bắt đầu đến trạng thái mục tiêu.
+        /// Finds a sequence of actions (a plan) to get from a starting state to a goal state.
         /// </summary>
-        /// <param name="agent">GameObject đang chạy AI, dùng cho các điều kiện cần ngữ cảnh (như khoảng cách).</param>
-        /// <param name="startState">Trạng thái thế giới ban đầu, được lấy từ Blackboard.</param>
-        /// <param name="goal">Danh sách các điều kiện định nghĩa trạng thái mục tiêu.</param>
-        /// <param name="availableActions">Tất cả các hành động mà AI có thể thực hiện.</param>
-        /// <returns>Một danh sách các GOAPActionNode (kế hoạch), hoặc null nếu không tìm thấy kế hoạch nào.</returns>
-        public List<GOAPActionNode> FindPlan(GameObject agent, Blackboard blackboard,Dictionary<string, object> startState, List<IGoapPrecondition> goal, List<GOAPActionNode> availableActions)
+        /// <param name="agent">The GameObject running the AI, used for context-sensitive conditions (like distance).</param>
+        /// <param name="blackboard">The blackboard instance to resolve world state values from.</param>
+        /// <param name="startState">The initial world state, derived from the Blackboard.</param>
+        /// <param name="goal">A list of conditions that define the goal state.</param>
+        /// <param name="availableActions">All actions the AI can perform.</param>
+        /// <returns>A list of GOAPActionNodes (the plan), or null if no plan was found.</returns>
+        public List<GOAPActionNode> FindPlan(GameObject agent, Blackboard blackboard, Dictionary<string, object> startState, List<IGoapPrecondition> goal, List<GOAPActionNode> availableActions)
         {
-            // === DEBUG: IN RA MỤC TIÊU CẦN ĐẠT ===
+            // Log the goal being pursued.
             var goalDescriptions = goal.Select(g => g.GetDescription());
-            Debug.Log($"[Planner] Starting search for goal: [ {string.Join(" AND ", goalDescriptions)} ]");
+            string goalString = $"[ {string.Join(" AND ", goalDescriptions)} ]";
+            //Debug.Log($"[Planner] Starting search for goal: {goalString}");
 
             var usableActions = new HashSet<GOAPActionNode>(availableActions);
             var openSet = new List<PlanNode>();
             var closedSet = new HashSet<PlanNode>();
 
-            // Bắt đầu với một node gốc không có hành động, chi phí bằng 0 và trạng thái ban đầu
+            // Start with a root node with no action, zero cost, and the initial state.
             openSet.Add(new PlanNode(null, 0, startState, null));
+            
+            int iterations = 0;
 
-            // Vòng lặp chính của thuật toán A*
+            // The main A* algorithm loop.
             while (openSet.Count > 0)
             {
-                // Tìm node trong openSet có chi phí f(n) = g(n) + h(n) thấp nhất
-                // g(n) là currentNode.Cost
-                // h(n) là Heuristic()
-                var currentNode = openSet.OrderBy(n => n.Cost + Heuristic(agent,blackboard, n.State, goal)).First();
+                // ** NEW: INFINITE LOOP PREVENTION **
+                if (++iterations > MAX_ITERATIONS)
+                {
+                    Debug.LogWarning($"[Planner] Search aborted after {MAX_ITERATIONS} iterations. This could indicate an infinite loop or a very complex/unsolvable plan. Goal was: {goalString}");
+                    return null;
+                }
+
+                // Find the node in the openSet with the lowest f(n) = g(n) + h(n) cost.
+                // g(n) is currentNode.Cost
+                // h(n) is the Heuristic()
+                var currentNode = openSet.OrderBy(n => n.Cost + Heuristic(agent, blackboard, n.State, goal)).First();
                 
                 openSet.Remove(currentNode);
                 closedSet.Add(currentNode);
 
-                // === DEBUG: KIỂM TRA XEM ĐÃ ĐẠT MỤC TIÊU CHƯA ===
-                if (ArePreconditionsMet(agent,blackboard, goal, currentNode.State, isGoalCheck: true))
+                // Check if the goal has been met.
+                if (ArePreconditionsMet(agent, blackboard, goal, currentNode.State, isGoalCheck: true))
                 {
-                    // Nếu đã đạt mục tiêu, xây dựng lại kế hoạch bằng cách đi ngược từ node hiện tại về gốc
+                    // If the goal is met, reconstruct the plan by tracing back from the current node to the root.
                     var plan = new List<GOAPActionNode>();
                     var n = currentNode;
                     while (n.Parent != null)
@@ -72,43 +88,43 @@ namespace ND_BehaviorTree.GOAP
                         plan.Insert(0, n.Action);
                         n = n.Parent;
                     }
+                    Debug.Log($"[Planner] Plan found! Goal: {goalString}");
                     return plan;
                 }
                 
-                // === DEBUG: XEM XÉT CÁC HÀNH ĐỘNG KHẢ THI TỪ NODE HIỆN TẠI ===
+                // Consider viable actions from the current node.
                 foreach (var action in usableActions)
                 {
-
-                    // Kiểm tra xem các điều kiện tiên quyết của hành động có được đáp ứng bởi trạng thái hiện tại không
-                    if (ArePreconditionsMet(agent,blackboard, action.preconditions, currentNode.State))
+                    // Check if the action's preconditions are met by the current state.
+                    if (ArePreconditionsMet(agent, blackboard, action.preconditions, currentNode.State))
                     {
                         var nextState = ApplyEffects(currentNode.State, action.effects);
                         
-                        // Tạo một node mới cho kế hoạch và thêm vào openSet để xem xét ở các vòng lặp sau
+                        // Create a new plan node and add it to the openSet for future consideration.
                         var neighborNode = new PlanNode(currentNode, currentNode.Cost + action.cost, nextState, action);
                         openSet.Add(neighborNode);
                     }
                 }
             }
 
-            Debug.LogWarning("[Planner] Search finished. No valid plan found because the open set is empty.");
+            Debug.LogWarning($"[Planner] Search finished. No valid plan found because the open set is empty. Goal was: {goalString}");
             return null;
         }
         
         /// <summary>
-        /// Kiểm tra xem một tập hợp các điều kiện có được đáp ứng bởi một trạng thái thế giới cụ thể không.
+        /// Checks if a set of conditions is met by a specific world state.
         /// </summary>
-        private bool ArePreconditionsMet(GameObject agent,Blackboard blackboard, List<IGoapPrecondition> conditions, Dictionary<string, object> worldState, bool isGoalCheck = false)
+        private bool ArePreconditionsMet(GameObject agent, Blackboard blackboard, List<IGoapPrecondition> conditions, Dictionary<string, object> worldState, bool isGoalCheck = false)
         {
             string logPrefix = isGoalCheck ? "[Goal Check]" : "[Action Precondition Check]";
 
             foreach (var condition in conditions)
             {
-                bool met = condition.IsMet(agent, blackboard , worldState);
+                bool met = condition.IsMet(agent, blackboard, worldState);
                 if (!met)
                 {
-                    // === DEBUG: IN RA CHÍNH XÁC ĐIỀU KIỆN NÀO BỊ LỖI ===
-                    Debug.Log($"<color=red>{logPrefix} FAILED:</color> {condition.GetDescription()}");
+                    // This log is very useful for debugging which specific condition failed.
+                    // Debug.Log($"<color=orange>{logPrefix} NOT MET:</color> {condition.GetDescription()}");
                     return false;
                 }
             }
@@ -116,28 +132,28 @@ namespace ND_BehaviorTree.GOAP
         }
 
         /// <summary>
-        /// Áp dụng các hiệu ứng (effects) của một hành động để tạo ra một trạng thái thế giới mới.
+        /// Applies the effects of an action to create a new world state.
         /// </summary>
         private Dictionary<string, object> ApplyEffects(Dictionary<string, object> state, List<GOAPState> effects)
         {
-            // Tạo một bản sao của trạng thái hiện tại để không làm thay đổi trạng thái gốc
+            // Create a copy of the current state to avoid modifying the original.
             var newState = new Dictionary<string, object>(state);
             foreach (var effect in effects)
             {
-                // Ghi đè hoặc thêm giá trị mới vào trạng thái
+                // Overwrite or add the new value to the state.
                 newState[effect.key] = effect.GetValue();
             }
             return newState;
         }
         
         /// <summary>
-        /// Hàm heuristic (hàm ước tính) của thuật toán A*.
-        /// Nó ước tính "khoảng cách" còn lại từ trạng thái hiện tại đến mục tiêu.
-        /// Một hàm heuristic đơn giản là đếm số điều kiện mục tiêu chưa được đáp ứng.
+        /// The heuristic function (h-cost) for the A* algorithm.
+        /// It estimates the remaining "distance" from the current state to the goal.
+        /// A simple heuristic is to count the number of goal conditions that are not yet met.
         /// </summary>
-        private float Heuristic(GameObject agent,Blackboard blackboard,  Dictionary<string, object> state, List<IGoapPrecondition> goal)
+        private float Heuristic(GameObject agent, Blackboard blackboard,  Dictionary<string, object> state, List<IGoapPrecondition> goal)
         {
-            return goal.Count(condition => !condition.IsMet(agent,blackboard, state));
+            return goal.Count(condition => !condition.IsMet(agent, blackboard, state));
         }
     }
 }

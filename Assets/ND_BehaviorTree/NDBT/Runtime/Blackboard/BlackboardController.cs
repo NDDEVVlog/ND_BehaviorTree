@@ -1,4 +1,3 @@
-// FILE: BlackboardController.cs (RUNTIME-SAFE AND CORRECTED)
 
 using UnityEngine;
 using System;

@@ -1,4 +1,3 @@
-// FILE: Key.cs
 
 using UnityEngine;
 

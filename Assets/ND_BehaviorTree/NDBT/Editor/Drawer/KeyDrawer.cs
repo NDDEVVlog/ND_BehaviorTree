@@ -1,4 +1,3 @@
-// FILE: Editor/KeyDrawer.cs
 
 using System;
 using System.Linq;

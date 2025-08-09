@@ -1,4 +1,3 @@
-// --- FINAL CORRECTED FILE: SerializeReferenceDrawer.cs ---
 
 using System;
 using System.Linq;

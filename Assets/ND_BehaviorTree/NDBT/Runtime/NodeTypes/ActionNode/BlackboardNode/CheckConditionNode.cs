@@ -1,4 +1,3 @@
-// FILE: CheckConditionNode.cs (CORRECTED)
 using System;
 using UnityEngine;
 

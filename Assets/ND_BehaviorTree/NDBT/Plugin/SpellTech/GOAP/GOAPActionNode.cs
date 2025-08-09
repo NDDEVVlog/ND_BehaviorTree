@@ -13,7 +13,7 @@ namespace ND_BehaviorTree.GOAP
         public List<IGoapPrecondition> preconditions;
 
         [Tooltip("The changes to the world state after this action is successfully completed.")]
-        public List<GOAPState> effects ;
+        public List<GOAPState> effects;
 
         [Tooltip("The cost of performing this action. The planner will try to find the lowest cost plan.")]
         public float cost = 1.0f;
@@ -27,7 +27,19 @@ namespace ND_BehaviorTree.GOAP
                 Debug.LogWarning($"GOAP Action Node '{name}' has no child Behavior Tree to execute.", this);
                 return Status.Failure;
             }
-            return child.Process();
+
+            // Process the child node and store its status
+            var status = child.Process();
+
+            // ** NEW: ACTION FAILURE LOGGING **
+            // If the underlying behavior tree fails, log a specific error
+            // to make debugging the plan execution much easier.
+            if (status == Status.Failure)
+            {
+                Debug.LogError($"[GOAP Execution Error] Action '{name}' failed. The associated Behavior Tree returned Failure. The current plan will be aborted.", this);
+            }
+            
+            return status;
         }
 
         public override void Reset()

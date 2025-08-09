@@ -1,4 +1,4 @@
-// --- MODIFIED FILE: BehaviorTreeRunnerEditor.cs ---
+
 
 using UnityEditor;
 using UnityEngine;

@@ -1,4 +1,3 @@
-// FILE: CustomNodeTitlePropertyAttribute.cs
 using System;
 
 namespace ND_BehaviorTree

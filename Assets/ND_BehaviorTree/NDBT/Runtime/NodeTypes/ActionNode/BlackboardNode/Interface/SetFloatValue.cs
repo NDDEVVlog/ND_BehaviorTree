@@ -1,4 +1,3 @@
-// FILE: SetFloatValue.cs
 
 using UnityEngine;
 

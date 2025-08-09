@@ -1,4 +1,3 @@
-// --- REFACTORED NODE ---
 
 using UnityEngine;
 using ND_BehaviorTree;

@@ -1,4 +1,3 @@
-// FILE: Editor/ISetBlackBoardValueDrawer.cs
 
 using System;
 using System.Collections.Generic;
