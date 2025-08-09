@@ -1,5 +1,3 @@
-// FILE: SetIntValueIncrement.cs
-
 using UnityEngine;
 
 namespace ND_BehaviorTree

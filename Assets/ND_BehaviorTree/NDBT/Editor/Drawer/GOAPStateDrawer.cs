@@ -1,5 +1,3 @@
-// FILE: GOAPStateDrawer.cs (in an Editor folder)
-
 using UnityEngine;
 using UnityEditor;
 using System.Linq;

@@ -1,4 +1,3 @@
-// --- FILE: ND_BTSearchProvider.cs (CORRECTED) ---
 
 using System;
 using System.Collections.Generic;

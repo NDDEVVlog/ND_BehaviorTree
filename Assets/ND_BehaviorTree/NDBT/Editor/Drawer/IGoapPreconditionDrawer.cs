@@ -1,4 +1,3 @@
-// FILE: Editor/IGoapPreconditionDrawer.cs
 
 using System;
 using System.Collections.Generic;

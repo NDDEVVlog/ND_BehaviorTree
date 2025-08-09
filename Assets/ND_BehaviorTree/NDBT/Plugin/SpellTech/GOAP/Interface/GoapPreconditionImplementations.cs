@@ -1,5 +1,3 @@
-// FILE: GOAP/GoapPreconditionImplementations.cs
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,7 +55,7 @@ namespace ND_BehaviorTree.GOAP
                 val2 = targetValue.GetValueObject();
 
             }
-            
+
             bool result = ComparisonHelper.PerformComparison(val1, val2, op);
 
 
@@ -108,10 +106,10 @@ namespace ND_BehaviorTree.GOAP
             {
                 valueB = keyB.GetValueObject();
             }
-            
-            
+
+
             bool result = ComparisonHelper.PerformComparison(valueA, valueB, op);
-            
+
             return result;
         }
 
@@ -167,7 +165,7 @@ namespace ND_BehaviorTree.GOAP
             Vector3 targetPosition;
             if (targetValue is Transform targetTransform) { targetPosition = targetTransform.position; }
             else if (targetValue is GameObject targetGo) { targetPosition = targetGo.transform.position; }
-            else 
+            else
             {
                 Debug.LogWarning($"[DistancePrecondition] FAILED: Target value is not a Transform or GameObject. It is a {targetValue.GetType().Name}.");
                 return false;
@@ -175,7 +173,7 @@ namespace ND_BehaviorTree.GOAP
 
             float currentDistance = Vector3.Distance(agent.transform.position, targetPosition);
             bool result = (comparison == CompareOp.LessThan) ? currentDistance < distance : currentDistance > distance;
-            
+
             // --- The main debug log ---
             string resultColor = result ? "lime" : "red";
             Debug.Log($"[DistancePrecondition] Comparing: Distance to '{source}' ({currentDistance:F2}m) {comparison} {distance}m -> <color={resultColor}>{result.ToString().ToUpper()}</color>");
@@ -188,6 +186,28 @@ namespace ND_BehaviorTree.GOAP
             if (target == null) return "Invalid Distance Check";
             var targetName = string.IsNullOrEmpty(target.keyName) ? "Direct Target" : target.keyName;
             return $"Distance to '{targetName}' {comparison} {distance}m";
+        }
+    }
+
+    [System.Serializable]
+    public class SoraCondition : IGoapPrecondition
+    {
+        public Animator animator;
+
+        public bool IsMet(GameObject agent, Blackboard blackboard, Dictionary<string, object> worldState)
+        {   
+            if(animator == null)
+            {
+                Debug.LogWarning("[SoraCondition] Animator is not set. Cannot perform action.");
+            }
+            animator = agent.GetComponent<Animator>();
+            animator.SetTrigger("SomeTrigger");
+            return animator.enabled;
+        }
+
+        public string GetDescription()
+        {
+            return "Sora Condition";
         }
     }
 }

@@ -1,6 +1,4 @@
-// File: IContextualMenuCommand.cs
-using UnityEditor.Experimental.GraphView; // For ContextualMenuPopulateEvent
-using UnityEngine.UIElements; // For DropdownMenuAction
+using UnityEngine.UIElements; 
 
 namespace ND_BehaviorTree.Editor
 {

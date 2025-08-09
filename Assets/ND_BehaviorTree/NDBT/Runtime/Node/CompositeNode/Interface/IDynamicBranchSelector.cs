@@ -1,4 +1,3 @@
-// --- REFACTORED INTERFACE ---
 
 using UnityEngine;
 

@@ -1,4 +1,3 @@
-// --- FILE: ND_BehaviorTreeView.SearchAndMenu.cs ---
 
 using System;
 using System.Collections.Generic;

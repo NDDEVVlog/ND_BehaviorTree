@@ -350,9 +350,6 @@ MonoBehaviour:
   - keyName: AI_Agent
     data:
       rid: 3796477431369170945
-  - keyName: Target
-    data:
-      rid: 3796477431369170946
   references:
     version: 2
     RefIds:
@@ -364,10 +361,6 @@ MonoBehaviour:
       type: {class: OverrideDataObject, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
       data:
         value: {fileID: 279225746}
-    - rid: 3796477431369170946
-      type: {class: OverrideDataTransform, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
-      data:
-        value: {fileID: 434350211}
 --- !u!1 &434350207
 GameObject:
   m_ObjectHideFlags: 0

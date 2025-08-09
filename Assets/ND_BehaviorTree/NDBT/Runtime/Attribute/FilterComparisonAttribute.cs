@@ -1,4 +1,4 @@
-// FILE: FilterComparisonAttribute.cs
+
 
 using System;
 using UnityEngine;

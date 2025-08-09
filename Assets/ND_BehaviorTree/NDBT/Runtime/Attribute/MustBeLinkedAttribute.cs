@@ -1,4 +1,4 @@
-// FILE: MustBeLinkedAttribute.cs
+
 using UnityEngine;
 
 namespace ND_BehaviorTree

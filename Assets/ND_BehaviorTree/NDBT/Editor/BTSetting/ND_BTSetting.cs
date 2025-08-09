@@ -39,7 +39,7 @@ namespace ND_BehaviorTree.Editor
             {
                 if (_instance == null)
                 {
-                    Debug.Log("Load BT Setting");
+                    //Debug.Log("Load BT Setting");
                     _instance = AssetDatabase.LoadAssetAtPath<ND_BehaviorTreeSetting>(SettingsAssetPath);
                     if (_instance == null)
                     {

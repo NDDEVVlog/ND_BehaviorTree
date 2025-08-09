@@ -1,4 +1,3 @@
-// --- START OF FILE NodeProgressBar.cs ---
 using System;
 using UnityEngine;
 

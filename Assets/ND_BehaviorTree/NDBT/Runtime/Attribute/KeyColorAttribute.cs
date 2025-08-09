@@ -1,4 +1,3 @@
-// --- NEW FILE: KeyColorAttribute.cs ---
 
 using System;
 using UnityEngine;

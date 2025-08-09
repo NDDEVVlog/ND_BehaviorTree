@@ -14,13 +14,13 @@ using ND_BehaviorTree;
 /// children and return a status of Success, Failure, or Running.
 /// </summary>
 [NodeInfo("SayNode", "Action/SayNode", true, false, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/POPCat1.png")]
-[CustomNodeTitleProperty("[GameObjectKey] say [quote] . WTF")]
+[CustomNodeTitleProperty("[GameObjectKey] say [quote] . WTF and [mmm]")]
 public class SayNode : ActionNode
 {
 
     public Key<GameObject> GameObjectKey;
     public string quote;
-
+    public bool mmm;
 
 
     protected override void OnEnter()

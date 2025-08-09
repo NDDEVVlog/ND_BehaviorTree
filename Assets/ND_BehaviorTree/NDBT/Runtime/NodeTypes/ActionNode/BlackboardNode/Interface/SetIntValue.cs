@@ -1,4 +1,3 @@
-// FILE: SetIntValue.cs
 
 using UnityEngine;
 
