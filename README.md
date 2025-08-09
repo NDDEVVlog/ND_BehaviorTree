@@ -12,6 +12,6 @@ It supports modular nodes, reusable actions, and a clear visual editor to stream
 
 ## 📬 Contact  
 - **Developer Email:** nddevgame@gmail.com  
-- **Studio Email:** spelltech@gmail.com  
+- **Studio Email:** spelltechstudio@gmail.com  
 
 ---
