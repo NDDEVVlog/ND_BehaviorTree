@@ -90,14 +90,14 @@ MonoBehaviour:
   m_guid: f36a70a5-5539-477a-a3c4-e40bd6e5d5c5
   m_position:
     serializedVersion: 2
-    x: -309.59998
-    y: 904.8
-    width: 178.4
-    height: 95.20001
+    x: -521.6
+    y: 850.4
+    width: 180
+    height: 96.79999
   typeName: Move To Transform
   priority: 0
-  agentKey: {fileID: -5823742072851934633, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
-  targetTransformKey: {fileID: 2840027302853802495, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
+  agentKey: {fileID: 4961731053835136659, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  targetTransformKey: {fileID: 7000449476151166740, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   updateInterval: 0.1
 --- !u!114 &-7920662352193702460
 MonoBehaviour:
@@ -192,10 +192,10 @@ MonoBehaviour:
   m_guid: 4b399e8e-f67e-45a8-a585-926686c11ce7
   m_position:
     serializedVersion: 2
-    x: 804
-    y: 621.6
-    width: 145.60004
-    height: 95.20001
+    x: 592
+    y: 567.2
+    width: 147.20001
+    height: 96.79999
   typeName: Sequence
   priority: 50
   children:
@@ -284,10 +284,10 @@ MonoBehaviour:
   m_guid: 16f00f60-cc4d-4708-81e8-71b58e09b56c
   m_position:
     serializedVersion: 2
-    x: -64.8
-    y: 1051.2
-    width: 104
-    height: 95.20007
+    x: -276.8
+    y: 996.80005
+    width: 105.600006
+    height: 96.79993
   typeName: Wait
   priority: 0
   duration: 1
@@ -367,10 +367,10 @@ MonoBehaviour:
   m_guid: 618be2ac-c7e3-4ae3-8a2b-d48f17cb6865
   m_position:
     serializedVersion: 2
-    x: -82.4
-    y: 896.8
-    width: 129.6
-    height: 133.60004
+    x: -294.4
+    y: 842.4
+    width: 131.20001
+    height: 135.19995
   typeName: Time Limit
   priority: 0
   child: {fileID: -5844898184024730655}
@@ -483,14 +483,28 @@ MonoBehaviour:
   m_guid: 2f2d12a5-a0d6-4e21-a03c-bcea76d05a59
   m_position:
     serializedVersion: 2
-    x: 116.799995
-    y: 912.8
-    width: 242.4
-    height: 95.20001
+    x: -95.200005
+    y: 858.4
+    width: 244
+    height: 96.79999
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   ValueToSet: 0
+--- !u!114 &-2043227021559062390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0016b02fe855ec14880ac49904668f41, type: 3}
+  m_Name: Transform (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: {fileID: 0}
 --- !u!114 &-1982685294785045496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,14 +575,14 @@ MonoBehaviour:
   m_guid: cfce0746-5c34-411f-85a3-9cf6d5be0171
   m_position:
     serializedVersion: 2
-    x: 450.40002
-    y: 637.6
-    width: 160
-    height: 109.60004
+    x: 238.4
+    y: 583.2
+    width: 140.8
+    height: 96.79999
   typeName: Random Patrol
   priority: 0
   patrolRadius: 50
-  agentKey: {fileID: -5823742072851934633, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
+  agentKey: {fileID: 4961731053835136659, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
 --- !u!114 &-327562354993633928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,10 +654,10 @@ MonoBehaviour:
   m_guid: 9658a66f-4b4f-498f-ba0c-5b1cd7cf0d2f
   m_position:
     serializedVersion: 2
-    x: 102.399994
-    y: 507.2
-    width: 333.59998
-    height: 109.599976
+    x: -109.600006
+    y: 452.8
+    width: 318.40002
+    height: 96.79999
   typeName: Selector go to Player or Random
   priority: 0
   children:
@@ -677,6 +691,20 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
+--- !u!114 &476590986621999617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0016b02fe855ec14880ac49904668f41, type: 3}
+  m_Name: Transform (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: {fileID: 0}
 --- !u!114 &508742229169387133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -692,10 +720,10 @@ MonoBehaviour:
   m_guid: 067bc0f8-adbd-47f6-af77-f93782e7ca25
   m_position:
     serializedVersion: 2
-    x: -146.40001
-    y: 756.8
-    width: 280.8
-    height: 109.60004
+    x: -358.4
+    y: 702.4
+    width: 265.6
+    height: 96.79999
   typeName: Move to TargetSequence
   priority: 0
   children:
@@ -728,6 +756,20 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbfb757f94cc4244096b2cbbaa0c14aa, type: 3}
   m_Name: ComparisonType (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: 0
+--- !u!114 &1511981177737220003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: Boolean (local)
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
@@ -768,10 +810,10 @@ MonoBehaviour:
   m_guid: dba3b2e6-cebb-41c9-88b2-05c8dced18d5
   m_position:
     serializedVersion: 2
-    x: 1375.2
-    y: 745.6
-    width: 152
-    height: 95.20001
+    x: 1043.2
+    y: 716
+    width: 153.59998
+    height: 96.79999
   typeName: Debug Log
   priority: 0
   message: Rate 10
@@ -841,10 +883,10 @@ MonoBehaviour:
   m_guid: f78cfddd-9e49-4a54-8bcd-bc2a859bf8ec
   m_position:
     serializedVersion: 2
-    x: 962.4
-    y: 515.2
-    width: 223.99994
-    height: 109.599976
+    x: 750.4
+    y: 460.8
+    width: 208.79999
+    height: 96.79999
   typeName: GachaSelector xD
   priority: 0
   children:
@@ -852,6 +894,20 @@ MonoBehaviour:
   - {fileID: 8649712526444436019}
   services: []
   weightingMode: 1
+--- !u!114 &2153463049358508827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c0ec67c4b8faf4a8a383d0477af380, type: 3}
+  m_Name: NavMeshAgent (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: {fileID: 0}
 --- !u!114 &2249366901889051599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -889,15 +945,15 @@ MonoBehaviour:
   m_guid: eb3dc14c-41d5-4ab2-96ab-842b20a96975
   m_position:
     serializedVersion: 2
-    x: 937.60004
-    y: 793.6
-    width: 168.79993
-    height: 109.60004
+    x: 725.60004
+    y: 739.2
+    width: 153.59998
+    height: 96.79999
   typeName: Debug Log
   priority: 0
   message: 'Rate 50 '
   logColor: {r: 0.2618456, g: 0, b: 1, a: 1}
-  keyToLog: {fileID: -7085167248233984719, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  keyToLog: {fileID: 0}
   returningStatus: 0
 --- !u!114 &2760005651414610262
 MonoBehaviour:
@@ -1102,10 +1158,10 @@ MonoBehaviour:
   m_guid: cb064ea3-e30a-4d3a-8e20-1d6ff275db3b
   m_position:
     serializedVersion: 2
-    x: 726.4
-    y: 777.6
-    width: 120.79999
-    height: 109.60004
+    x: 514.4
+    y: 723.2
+    width: 105.599976
+    height: 96.79999
   typeName: Wait
   priority: 0
   duration: 1
@@ -1124,14 +1180,14 @@ MonoBehaviour:
   m_guid: 82930fe3-1880-455c-939e-ae2d23b8b6e7
   m_position:
     serializedVersion: 2
-    x: -147.2
-    y: 624.8
+    x: -359.19998
+    y: 570.4
     width: 220
     height: 96.79999
   typeName: Check if See Player
   priority: 0
   child: {fileID: 508742229169387133}
-  conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
+  conditionKey: {fileID: 9089760615352239267, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   shouldInvert: 0
 --- !u!114 &6713263043186892538
 MonoBehaviour:
@@ -1185,6 +1241,20 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
+--- !u!114 &7664351322123968891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c0ec67c4b8faf4a8a383d0477af380, type: 3}
+  m_Name: NavMeshAgent (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: {fileID: 0}
 --- !u!114 &7936600363708960553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1239,10 +1309,10 @@ MonoBehaviour:
   m_guid: dba88620-754d-4b3e-ad17-fb6c816956da
   m_position:
     serializedVersion: 2
-    x: 563.2
-    y: 395.2
-    width: 162.40002
-    height: 109.599976
+    x: 351.2
+    y: 340.8
+    width: 147.20001
+    height: 96.80002
   typeName: Sequence
   priority: 0
   children:
@@ -1300,10 +1370,10 @@ MonoBehaviour:
   m_guid: eaccafe2-81e0-4b21-a5dd-5230d494f430
   m_position:
     serializedVersion: 2
-    x: 1221.6
-    y: 605.6
-    width: 145.59998
-    height: 95.20001
+    x: 1009.60004
+    y: 551.2
+    width: 147.19995
+    height: 96.79999
   typeName: Sequence
   priority: 10
   children:
