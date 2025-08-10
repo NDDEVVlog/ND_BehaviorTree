@@ -622,37 +622,9 @@ MonoBehaviour:
   - {fileID: -5844898184024730655}
   - {fileID: -4912801335699234050}
   - {fileID: 1939292052299459149}
-  - {fileID: 35282110098959829}
-  - {fileID: 720441684368132441}
-  - {fileID: 6076072672209246992}
-  - {fileID: 4209846554493581035}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   Self: {fileID: 0}
---- !u!114 &35282110098959829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3660b20ad1fec843862015cd03f203f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 4450093d-f029-4b3e-b964-13a37f646b82
-  m_position:
-    serializedVersion: 2
-    x: 345.6
-    y: -309.6
-    width: 176.00003
-    height: 138.40001
-  typeName: Check Condition
-  priority: 0
-  value: {fileID: -7534604966913028412, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
-  compareType: {fileID: 625547232653080270}
-  targetValue: {fileID: -1878923434199190206}
 --- !u!114 &151498456585129743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -744,38 +716,7 @@ MonoBehaviour:
   m_Name: ComparisonType (local)
   m_EditorClassIdentifier: 
   keyName: 
-  value: 2
---- !u!114 &720441684368132441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5efd9179035b9b347b3a33e236c9ec73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 61661301-f233-4e77-a654-a44e9477e87c
-  m_position:
-    serializedVersion: 2
-    x: 876
-    y: -264.8
-    width: 204.79999
-    height: 109.600006
-  typeName: SetBlackBoardValue
-  priority: 0
-  setBlackBoardValue:
-    rid: 3796477431369170948
-  references:
-    version: 2
-    RefIds:
-    - rid: 3796477431369170948
-      type: {class: SetIntValueIncrement, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
-      data:
-        intKey: {fileID: -7534604966913028412, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
-        incrementAmount: 2
+  value: 5
 --- !u!114 &1365508428664345266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,13 +746,13 @@ MonoBehaviour:
   m_guid: 14cca445-6cc2-4085-815b-2690b9ca19ba
   m_position:
     serializedVersion: 2
-    x: 416.80002
-    y: -591.2
-    width: 162.4
-    height: 109.600006
+    x: 516
+    y: 1.5999985
+    width: 147.20001
+    height: 96.799995
   typeName: RootNode
   priority: 0
-  child: {fileID: 6076072672209246992}
+  child: {fileID: 6722135165623225885}
 --- !u!114 &1788777279908683041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1041,28 +982,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: {fileID: 0}
---- !u!114 &4209846554493581035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 1bb1a9d5-b149-4fe0-b7b9-97c635194f93
-  m_position:
-    serializedVersion: 2
-    x: 640.8
-    y: -266.4
-    width: 120.80005
-    height: 109.59999
-  typeName: Wait
-  priority: 0
-  duration: 0.5
 --- !u!114 &4388896904653830363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1154,32 +1073,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
---- !u!114 &6076072672209246992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 981254d1-9031-4d2d-b55a-37d3f9617176
-  m_position:
-    serializedVersion: 2
-    x: 531.2
-    y: -442.4
-    width: 162.40002
-    height: 109.600006
-  typeName: Sequence
-  priority: 0
-  children:
-  - {fileID: 35282110098959829}
-  - {fileID: 4209846554493581035}
-  - {fileID: 720441684368132441}
-  services: []
 --- !u!114 &6111791629988338020
 MonoBehaviour:
   m_ObjectHideFlags: 0

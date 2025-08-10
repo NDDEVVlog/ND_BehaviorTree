@@ -322,10 +322,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 2f2b5458ce64b5247a99dba8aa651205, type: 2}
-  overrides: []
+  overrides:
+  - keyName: IsThereAnyTreeAround
+    data:
+      rid: 3796477529608159232
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3796477529608159232
+      type: {class: OverrideDataBool, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
+      data:
+        value: 0
 --- !u!114 &279225752
 MonoBehaviour:
   m_ObjectHideFlags: 0

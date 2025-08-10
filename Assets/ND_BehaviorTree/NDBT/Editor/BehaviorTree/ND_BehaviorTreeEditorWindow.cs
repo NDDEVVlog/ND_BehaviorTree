@@ -70,7 +70,6 @@ namespace ND_BehaviorTree.Editor
             Selection.selectionChanged -= OnSelectionChanged;
         }
 
-        // --- OnSelectionChanged (no changes) ---
         private void OnSelectionChanged()
         {
             // If locked, do nothing.
@@ -166,7 +165,6 @@ namespace ND_BehaviorTree.Editor
             rootVisualElement.Add(toolbar);
         }
 
-        // --- Load & Draw Methods (DrawGraph is modified) ---
         
         public void Load(BehaviorTreeRunner runner)
         {
@@ -234,7 +232,7 @@ namespace ND_BehaviorTree.Editor
             SetUnsavedChanges(false);
         }
 
-        // --- Other Methods (no changes) ---
+
         private GraphViewChange OnChange(GraphViewChange graphViewChange)
         {
             if (m_currentGraph == null) return graphViewChange;

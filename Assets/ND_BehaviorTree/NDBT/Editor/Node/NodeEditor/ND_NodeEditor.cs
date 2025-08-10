@@ -495,10 +495,10 @@ namespace ND_BehaviorTree.Editor
                     case Node.Status.Running: AddToClassList("running"); break;
                     case Node.Status.Success: AddToClassList("success"); break;
                     case Node.Status.Failure: AddToClassList("failure"); break;
+                    default: break;
                 }
 
-                // --- THIS IS THE FIX FOR THE TEXT LABEL ---
-                // Update exposed properties
+
                 foreach (var updater in m_ExposedPropertyUpdaters)
                 {
                     var value = updater.fieldInfo.GetValue(runtimeNode);
