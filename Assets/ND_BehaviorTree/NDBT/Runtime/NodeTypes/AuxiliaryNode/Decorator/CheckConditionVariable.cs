@@ -8,6 +8,7 @@ namespace ND_BehaviorTree
     public class CheckConditionVariable : DecoratorNode
     {
         [Tooltip("The Blackboard key (of type bool) to check.")]
+        [BlackboardKeyType(typeof(bool))]
         public Key conditionKey;
         
         [Tooltip("If checked, the result of the condition will be inverted. (e.g., 'Is False' instead of 'Is True').")]

@@ -339,25 +339,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 279225743}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da85c92ce678b21439df6e58fafa38de, type: 3}
+  m_Script: {fileID: 11500000, guid: 00c0be7686d020c4ea71d0d525949977, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   treeAsset: {fileID: 11400000, guid: 4268ad1c72d74264fb2aafd7c39f1e41, type: 2}
   overrides:
-  - keyName: ammo
-    data:
-      rid: 3796477431369170944
   - keyName: AI_Agent
     data:
-      rid: 3796477431369170945
+      rid: 3796477546939023360
   references:
     version: 2
     RefIds:
-    - rid: 3796477431369170944
-      type: {class: OverrideDataInt, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
-      data:
-        value: 5
-    - rid: 3796477431369170945
+    - rid: 3796477546939023360
       type: {class: OverrideDataObject, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
       data:
         value: {fileID: 279225746}
@@ -1517,8 +1510,8 @@ Transform:
   m_GameObject: {fileID: 1794295139}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.8, y: 0, z: 0}
-  m_LocalScale: {x: 133.84189, y: 1.0844434, z: 115.05782}
+  m_LocalPosition: {x: 30.5, y: 0, z: 0}
+  m_LocalScale: {x: 59.54072, y: 1.0844434, z: 115.05782}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 761476448}
