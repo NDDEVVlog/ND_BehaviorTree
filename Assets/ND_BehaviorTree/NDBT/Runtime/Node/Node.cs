@@ -22,7 +22,7 @@ namespace ND_BehaviorTree
         public Blackboard blackboard => ownerTree?.blackboard;
       
 
-        public enum Status { Success, Failure, Running }
+        public enum Status { Success, Failure, Running,None }
 
         // Runtime state. [NonSerialized] ensures it's not saved to the asset file.
         public Status status { get; protected set; } = Status.Failure;
@@ -67,7 +67,7 @@ namespace ND_BehaviorTree
         public virtual void Reset()
         {
             _isProcessing = false;
-            status = Status.Failure;
+            status = Status.None;
         }
 
         public virtual Node Clone()
