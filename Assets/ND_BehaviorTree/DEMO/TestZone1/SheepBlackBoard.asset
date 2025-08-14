@@ -24,13 +24,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08fb034fe2c07504ea5249566ce4797d, type: 3}
-  m_Name: New Behavior Tree_Blackboard
+  m_Name: SheepBlackBoard
   m_EditorClassIdentifier: 
   keys:
   - {fileID: 4961731053835136659}
   - {fileID: -2108471717452254684}
   - {fileID: 9089760615352239267}
   - {fileID: 7000449476151166740}
+  - {fileID: 8449235630841594770}
 --- !u!114 &4961731053835136659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,7 +58,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0016b02fe855ec14880ac49904668f41, type: 3}
   m_Name: TransformKey
   m_EditorClassIdentifier: 
-  keyName: PlayerTransform
+  keyName: TargetTransform
+  value: {fileID: 0}
+--- !u!114 &8449235630841594770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8c45c27bbaa221488330554c76871d0, type: 3}
+  m_Name: AudioSourceKey
+  m_EditorClassIdentifier: 
+  keyName: AudioSource
   value: {fileID: 0}
 --- !u!114 &9089760615352239267
 MonoBehaviour:
@@ -71,5 +86,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
   m_Name: BoolKey
   m_EditorClassIdentifier: 
-  keyName: IsSawPlayer
+  keyName: IsSawTarget
   value: 0

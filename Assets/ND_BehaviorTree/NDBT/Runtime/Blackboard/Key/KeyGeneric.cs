@@ -1,5 +1,6 @@
 
 using System;
+using PlasticPipe.PlasticProtocol.Messages;
 using UnityEngine;
 
 namespace ND_BehaviorTree
@@ -10,7 +11,7 @@ namespace ND_BehaviorTree
         private T value;
 
         public event Action ValueChanged;
-        
+
         public override object GetValueObject()
         {
             return value;
@@ -19,6 +20,15 @@ namespace ND_BehaviorTree
         public T GetValue()
         {
             return value;
+        }
+        public T GetValue(Blackboard blackboard)
+        {
+            if (blackboard == null)
+            {
+                Debug.LogError($"Blackboard is null when trying to get value of key '{keyName}'.", this);
+                return default;
+            }
+            return blackboard.GetValue<T>(keyName);
         }
 
         public void SetValue(T newValue)
@@ -68,5 +78,7 @@ namespace ND_BehaviorTree
         {
             return typeof(T);
         }
+        
+        
     }
 }

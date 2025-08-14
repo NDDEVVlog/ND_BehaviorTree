@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface ISawPlayer
 {
-    public void OnSawPlayer(Transform playerTransform,bool isSeePlayer);
+    public void OnSawPlayer(Transform playerTransform, bool isSeePlayer);
+    
 }

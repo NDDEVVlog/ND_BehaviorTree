@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    [NodeInfo("Parallel", "Composite/Parallel", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Parallel.png")]
+    [NodeInfo("Parallel", "Composite/Parallel", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Parallel.png")]
     public class ParallelNode : CompositeNode
     {
         public enum Policy { RequireOne, RequireAll }

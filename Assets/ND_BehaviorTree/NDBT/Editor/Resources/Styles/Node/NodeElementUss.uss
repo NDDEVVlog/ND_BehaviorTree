@@ -1,4 +1,9 @@
-/* --- Base Node Styles --- */
+/*
+================================================================================
+=== ND_BEHAVIORTREE Base THEME ===
+================================================================================
+*/
+/* === Base Node Border === */
 .node-border {
     background-color: #383838;
     border-color: #222222;
@@ -7,29 +12,20 @@
     padding: 2px;
 }
 
-.selected>.node-border {
-    /* A bright, easily noticeable blue for selection */
-    border-color: #008cff;
-    
-    /* Make the border slightly thicker to stand out more */
-    border-width: 3px;
-    
-    /* Optional: Add a subtle glow to make it pop */
-    box-shadow: 0 0 10px 2px rgba(0, 140, 255, 0.4);
-}
-
+/* === Main Container === */
 .main-container {
     background-color: #4D4D4D;
     border-radius: 10px;
 }
 
-/* --- Header / Title Area --- */
+/* === Title === */
 .title {
     flex-direction: row;
     align-items: center;
     padding: 5px;
 }
 
+/* === Icon === */
 .icon-image {
     width: 32px;
     height: 32px;
@@ -37,13 +33,13 @@
     flex-shrink: 0;
 }
 
-/* Container for title text field and type label */
+/* === Title Container === */
 .title-content-container {
     flex-direction: column;
     flex-grow: 1;
 }
 
-/* Style for the title text field to make it look like a label */
+/* === Title Label === */
 .title-textfield {
     font-size: 16px;
     -unity-font-style: bold;
@@ -68,7 +64,7 @@
     border-width: 1px;
 }
 
-/* Style for the node type label (e.g., "Selector") */
+/* === Type Label === */
 .type-label {
     font-size: 12px;
     color: #A0A0A0; /* Lighter grey for secondary text */
@@ -79,7 +75,7 @@
 
 /*
 ================================================================================
-=== NEW: STYLES FOR DETAILS CONTAINER (EXPOSED VARS & PROGRESS BARS) ===
+=== DETAILS CONTAINER (EXPOSED VARS & PROGRESS BARS) ===
 ================================================================================
 */
 .details-container {
@@ -125,7 +121,11 @@
 }
 
 
-/* --- Child Node Container (for Decorators/Services) --- */
+/*
+================================================================================
+=== Child Node Container ===
+================================================================================
+*/
 .child-node-container {
      min-height: 40px;
     background-color: rgba(0, 0, 0, 0.15);
@@ -151,13 +151,13 @@
 
 /* Specific color for Decorators */
 .decorator-child {
-    background-color: #3A5A3A; /* Greenish */
+    background-color: #3A5A3A; 
     border-color: #2A4A2A;
 }
 
 /* Specific color for Services */
 .service-child {
-    background-color: #2D4F6A; /* Blueish */
+    background-color: #2D4F6A; 
     border-color: #1E3A52;
 }
 
@@ -172,7 +172,7 @@
     -unity-font-style: normal;
 }
 
-/* --- TaskNode Specific Styling (no changes needed) --- */
+/* --- TaskNode Specific Styling --- */
 .task-node .title,
 .task-node .child-node-container {
     display: none;
@@ -201,7 +201,7 @@
 
 /*
 ================================================================================
-=== STYLES FOR RUNTIME STATUS (DEBUGGING) ===
+=== Node Outline ===
 ================================================================================
 */
 
@@ -222,6 +222,12 @@
 .failure > .node-border {
     border-color: #F44336; /* Red */
     border-width: 3px;
+}
+/* Optional: Style for a node it is being selected */
+.selected>.node-border {
+    border-color: #008cff;
+    border-width: 3px;
+    box-shadow: 0 0 10px 2px rgba(0, 140, 255, 0.4);
 }
 
 

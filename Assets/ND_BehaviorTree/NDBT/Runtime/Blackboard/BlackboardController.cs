@@ -56,6 +56,11 @@ namespace ND_BehaviorTree
     [Serializable] public class OverrideDataGradient : KeyOverrideData { public Gradient value; public override object GetValue() => value; }
     [Serializable] public class OverrideDataDateTime : KeyOverrideData { public DateTime value; public override object GetValue() => value; }
     [Serializable] public class OverrideDataTimeSpan : KeyOverrideData { public TimeSpan value; public override object GetValue() => value; }
+    [Serializable] public class OverideDataAudioClip : KeyOverrideData
+    {
+        public AudioClip value;
+        public override object GetValue() => value;
+    }
     [Serializable]
     public class OverrideDataEnum : KeyOverrideData
     {
