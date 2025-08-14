@@ -65,7 +65,6 @@ namespace ND_BehaviorTree.Editor
 
             evt.menu.AppendAction("Create Node...", (a) => OpenSearchWindow(screenMousePosition));
 
-            evt.menu.AppendAction("Test Log", (a) => Debug.Log("Test clicked!"));
 
             evt.menu.InsertAction(PasteIndex >= 0 ? PasteIndex : items.Count, "Paste", (a) =>
             {

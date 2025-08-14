@@ -14,7 +14,7 @@ namespace ND_BehaviorTree.Editor
         public bool isLockEnabled = true;
 
         [HideInInspector]
-        public string enableSettingPassword = "SubcribeToNDDEVGAME";
+        public string enableSettingPassword = "SubcribeToNDDEVGAMEandSORA";
 
         private const string SettingsAssetPath = "Assets/ND_BehaviorTree/NDBT/Editor/Resources/ND_BehaviorTree_Settings.asset";
 
