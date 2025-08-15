@@ -33,47 +33,37 @@ public class PlayParticleNode : ActionNode
 
     // OnEnter is called once when the node is first processed.
     // Use it for initialization and setup.
+    private float _startTime;
+    private float _timeout = 10f; // Max duration in seconds
+
     protected override void OnEnter()
     {
-        // Get the ParticleSystem from the blackboard once for optimization.
         _runtimeParticleSystem = particleSystemKey.GetValue(blackboard);
+        _startTime = Time.time;
     }
 
-    // OnProcess is called every frame while the node is in a 'Running' state.
-    // This is where the core logic of the action resides.
     protected override Status OnProcess()
     {
-        // If there's no ParticleSystem, the node fails.
         if (_runtimeParticleSystem == null)
         {
             return Status.Failure;
         }
 
-        // Start playing the effect (if it's not already playing).
         if (!_runtimeParticleSystem.isPlaying)
         {
             _runtimeParticleSystem.Play(withChildren);
         }
 
-        // Decide on the return status.
         if (waitForCompletion)
         {
-            // Check if the Particle System is still alive.
-            // IsAlive() is more reliable than isPlaying() when looping is disabled.
-            if (_runtimeParticleSystem.IsAlive(withChildren))
+            if (Time.time - _startTime > _timeout)
             {
-                return Status.Running; // Still active.
+                Debug.LogWarning($"ParticleSystem '{_runtimeParticleSystem.name}' timed out after {_timeout} seconds.");
+                return Status.Failure;
             }
-            else
-            {
-                return Status.Success; // Finished.
-            }
+            return _runtimeParticleSystem.IsAlive(withChildren) ? Status.Running : Status.Success;
         }
-        else
-        {
-            // "Fire and forget", return Success immediately.
-            return Status.Success;
-        }
+        return Status.Success;
     }
 
     // OnExit is called once when the node's status is no longer 'Running'.

@@ -36,7 +36,6 @@ namespace ND_BehaviorTree
             // Check if the time limit has been exceeded.
             if (elapsedTime > timeLimit)
             {
-                Debug.LogWarning($"TimeLimitNode cut off child '{child.name}' after {timeLimit}s.");
                 child.InteruptAction?.Invoke();
                 child.Reset();
                 return Status.Failure;

@@ -77,6 +77,7 @@ MonoBehaviour:
   - {fileID: -5012134825283186487}
   - {fileID: -7629191614923159799}
   - {fileID: -996888632824591278}
+  - {fileID: 6825130129802392008}
 --- !u!114 &4961731053835136659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,6 +92,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: EnermyAgent
   value: {fileID: 0}
+--- !u!114 &6825130129802392008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: BoolKey
+  m_EditorClassIdentifier: 
+  keyName: DidCatchSheep
+  value: 0
 --- !u!114 &7000449476151166740
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -48,7 +48,16 @@ namespace ND_BehaviorTree
             {
                 return;
             }
-            
+
+            //Stop the agent if this node is aborted or finishes.
+            InteruptAction += () =>
+            {
+                if (agent != null && agent.hasPath)
+                {
+                    agent.ResetPath();
+                }
+            };
+
             // --- 3. Set the first destination immediately ---
             agent.SetDestination(targetTransform.position);
             timeSinceLastUpdate = 0f; // Reset timer
@@ -85,9 +94,6 @@ namespace ND_BehaviorTree
 
         protected override void OnExit()
         {
-            // Clean up: Stop the agent if this node is aborted or finishes.
-            // This is crucial to prevent the AI from continuing to move
-            // when it should be doing something else (e.g., attacking).
             if (agent != null && agent.hasPath)
             {
                 agent.ResetPath();

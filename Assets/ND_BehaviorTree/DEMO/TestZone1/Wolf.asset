@@ -149,6 +149,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
+--- !u!114 &-7469728009823285540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: Boolean (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: 0
+--- !u!114 &-7379404595023731829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 067bc0f8-adbd-47f6-af77-f93782e7ca25
+  m_position:
+    serializedVersion: 2
+    x: -104
+    y: 538.4
+    width: 265.59998
+    height: 96.79999
+  typeName: Move to TargetSequence
+  priority: 0
+  children:
+  - {fileID: -1333071673789618973}
+  services: []
 --- !u!114 &-7256388693403135369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,14 +311,14 @@ MonoBehaviour:
   m_guid: e72d1ca5-48e5-44bb-ab4f-dcb23e5d2b67
   m_position:
     serializedVersion: 2
-    x: 54.4
-    y: 1026.4
-    width: 123.2
-    height: 96.79993
+    x: 358.40002
+    y: 1104
+    width: 123.19998
+    height: 96.80005
   typeName: Play Particle
   priority: 50
   particleSystemKey: {fileID: -996888632824591278, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
-  withChildren: 1
+  withChildren: 0
   waitForCompletion: 1
 --- !u!114 &-5133301526121411020
 MonoBehaviour:
@@ -450,30 +488,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: {fileID: 0}
---- !u!114 &-3799251981229168218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f3df45f75215714faef95beffe01a06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: c4ff26a7-4e20-4b82-9d67-21394fbc8fa0
-  m_position:
-    serializedVersion: 2
-    x: 633.60004
-    y: 442.4
-    width: 220
-    height: 96.80002
-  typeName: Check if See Player
-  priority: 0
-  child: {fileID: -401080771899902491}
-  conditionKey: {fileID: 9089760615352239267, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
-  shouldInvert: 1
 --- !u!114 &-3218970866458653484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,10 +517,10 @@ MonoBehaviour:
   m_guid: 51149665-326f-47fd-bd87-9fafeee5bbd6
   m_position:
     serializedVersion: 2
-    x: -12.8
-    y: 782.4
-    width: 417.6
-    height: 96.79999
+    x: 402.40002
+    y: 954.4
+    width: 417.59998
+    height: 96.79993
   typeName: Random Between Sleep or Continue to Patrol
   priority: 0
   children:
@@ -552,14 +566,14 @@ MonoBehaviour:
   m_guid: 2f2d12a5-a0d6-4e21-a03c-bcea76d05a59
   m_position:
     serializedVersion: 2
-    x: 440
-    y: 790.4
+    x: 108.799995
+    y: 769.6
     width: 244
-    height: 96.79999
+    height: 96.80005
   typeName: SetBooleanValueNode
   priority: 0
-  conditionKey: {fileID: 9089760615352239267, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
-  ValueToSet: 0
+  conditionKey: {fileID: 6825130129802392008, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  ValueToSet: 1
 --- !u!114 &-2043227021559062390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,8 +603,8 @@ MonoBehaviour:
   m_guid: 7cb4099c-3c91-4b63-a95a-ad25c4bf476f
   m_position:
     serializedVersion: 2
-    x: 175.2
-    y: 1010.4
+    x: 495.2
+    y: 1104.8
     width: 316.8
     height: 96.79993
   typeName: PlayAudioClipFromAudioSourceNode
@@ -709,8 +723,8 @@ MonoBehaviour:
   m_guid: cfce0746-5c34-411f-85a3-9cf6d5be0171
   m_position:
     serializedVersion: 2
-    x: 666.4
-    y: 584.8
+    x: 992
+    y: 564
     width: 140.79999
     height: 96.79999
   typeName: Random Patrol
@@ -739,6 +753,30 @@ MonoBehaviour:
   typeName: InverterNode
   priority: 0
   child: {fileID: 0}
+--- !u!114 &-287050991217985359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3df45f75215714faef95beffe01a06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: e5bd598d-e259-4019-88ee-434d229433db
+  m_position:
+    serializedVersion: 2
+    x: -42.399998
+    y: 443.2
+    width: 220
+    height: 96.79999
+  typeName: Check if See Player
+  priority: 0
+  child: {fileID: 508742229169387133}
+  conditionKey: {fileID: 9089760615352239267, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  shouldInvert: 0
 --- !u!114 &-145788635524948990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -777,7 +815,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_nodes:
   - {fileID: 1756551281706341290}
-  - {fileID: 6696274325822658715}
   - {fileID: -401080771899902491}
   - {fileID: 6722135165623225885}
   - {fileID: -8507657268125193687}
@@ -791,7 +828,11 @@ MonoBehaviour:
   - {fileID: -5766741202329768383}
   - {fileID: -2040339880240442167}
   - {fileID: -2569454900252663959}
-  - {fileID: -3799251981229168218}
+  - {fileID: -287050991217985359}
+  - {fileID: 2617754942502123600}
+  - {fileID: 2958195330120306249}
+  - {fileID: 1099517789094484778}
+  - {fileID: 789006153192908161}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   Self: {fileID: 0}
@@ -851,15 +892,14 @@ MonoBehaviour:
   m_guid: 067bc0f8-adbd-47f6-af77-f93782e7ca25
   m_position:
     serializedVersion: 2
-    x: -104
-    y: 538.4
-    width: 265.59998
+    x: -65.600006
+    y: 584
+    width: 265.6
     height: 96.79999
   typeName: Move to TargetSequence
   priority: 0
   children:
   - {fileID: -1333071673789618973}
-  - {fileID: -2772698465460146331}
   - {fileID: -2349795449894800531}
   services: []
 --- !u!114 &625547232653080270
@@ -876,6 +916,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 5
+--- !u!114 &789006153192908161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3df45f75215714faef95beffe01a06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 993eb1ed-d997-4885-8ed5-2c26ac847899
+  m_position:
+    serializedVersion: 2
+    x: 959.2
+    y: 423.2
+    width: 220
+    height: 96.79999
+  typeName: Check if See Player
+  priority: 0
+  child: {fileID: -401080771899902491}
+  conditionKey: {fileID: 9089760615352239267, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  shouldInvert: 1
+--- !u!114 &1099517789094484778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 2b269996-65aa-4c0f-8827-41ec163515b5
+  m_position:
+    serializedVersion: 2
+    x: 887.2
+    y: 867.2
+    width: 244
+    height: 96.79999
+  typeName: SetBooleanValueNode
+  priority: 0
+  conditionKey: {fileID: 6825130129802392008, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  ValueToSet: 0
 --- !u!114 &1170863364557261292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1038,6 +1125,30 @@ MonoBehaviour:
   typeName: 
   priority: 0
   child: {fileID: 0}
+--- !u!114 &2617754942502123600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3df45f75215714faef95beffe01a06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 0892f19e-3294-4b22-8930-e60b0a587577
+  m_position:
+    serializedVersion: 2
+    x: 386.40002
+    y: 431.2
+    width: 267.2
+    height: 96.79999
+  typeName: Check Condition Variable
+  priority: 0
+  child: {fileID: 2958195330120306249}
+  conditionKey: {fileID: 6825130129802392008, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  shouldInvert: 0
 --- !u!114 &2760005651414610262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1052,6 +1163,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
+--- !u!114 &2958195330120306249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: e2a7fd38-c72e-4f1f-857e-49ee4c175912
+  m_position:
+    serializedVersion: 2
+    x: 511.2
+    y: 678.4
+    width: 256.8
+    height: 96.79999
+  typeName: After Caught The Sheep
+  priority: 0
+  children:
+  - {fileID: -2772698465460146331}
+  - {fileID: 1099517789094484778}
+  services: []
 --- !u!114 &3075105605719276493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1178,9 +1314,9 @@ MonoBehaviour:
   m_guid: 31853d57-0f3b-4603-9aad-668a6928d876
   m_position:
     serializedVersion: 2
-    x: -664.8
-    y: 1082.4
-    width: 316.8
+    x: -611.2
+    y: 1050.4
+    width: 316.80002
     height: 96.79993
   typeName: PlayAudioClipFromAudioSourceNode
   priority: 0
@@ -1250,6 +1386,20 @@ MonoBehaviour:
   child: {fileID: 0}
   conditionKey: {fileID: 8490125263854316317, guid: 8737fbf7b9fcb1443907be5a9efcdcec, type: 2}
   shouldInvert: 0
+--- !u!114 &5633794160623494692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: Boolean (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value: 1
 --- !u!114 &5718515801591437116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1278,30 +1428,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: {fileID: 0}
---- !u!114 &6696274325822658715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f3df45f75215714faef95beffe01a06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 82930fe3-1880-455c-939e-ae2d23b8b6e7
-  m_position:
-    serializedVersion: 2
-    x: -96
-    y: 416.8
-    width: 220
-    height: 96.79999
-  typeName: Check if See Player
-  priority: 0
-  child: {fileID: 508742229169387133}
-  conditionKey: {fileID: 9089760615352239267, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
-  shouldInvert: 0
 --- !u!114 &6713263043186892538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1338,8 +1464,9 @@ MonoBehaviour:
   typeName: Selector
   priority: 0
   children:
-  - {fileID: 6696274325822658715}
-  - {fileID: -3799251981229168218}
+  - {fileID: -287050991217985359}
+  - {fileID: 2617754942502123600}
+  - {fileID: 789006153192908161}
   services:
   - {fileID: 1939292052299459149}
 --- !u!114 &7652175890572185632

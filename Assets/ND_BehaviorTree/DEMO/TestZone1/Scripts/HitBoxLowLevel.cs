@@ -17,11 +17,13 @@ public class HitBoxLowLevel : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other)
-    {
+    {   
+        Debug.Log("HitBoxLowLevel: OnTriggerEnter with " + other.gameObject.name);
         if (other.gameObject.GetComponent<BehaviorTreeRunner>())
         {
             BehaviorTreeRunner behaviorTreeRunner = other.gameObject.GetComponent<BehaviorTreeRunner>();
-            behaviorTreeRunner.RuntimeTree.blackboard.SetValue("HitBoxLowLevel", true);
+            float health = behaviorTreeRunner.RuntimeTree.blackboard.GetValue<float>("Health");
+            behaviorTreeRunner.RuntimeTree.blackboard.SetValue("Health", health - 100);
         }
     }
 }
