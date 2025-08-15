@@ -1,6 +1,5 @@
 #if UNITY_EDITOR
 using UnityEditor;
-
 using UnityEngine;
 
 [CustomEditor(typeof(FieldOfView))]
@@ -24,15 +23,25 @@ public class FieldOfViewEditor : Editor
         Handles.DrawLine(offsetPosition, offsetPosition + viewAngle01 * fov.radius);
         Handles.DrawLine(offsetPosition, offsetPosition + viewAngle02 * fov.radius);
 
-        // Draw line to player if visible
-        if (fov.canSeePlayer)
+        // Draw lines to visible targets
+        foreach (GameObject target in fov.targetObjects)
         {
-            Handles.color = Color.green;
-            Handles.DrawLine(offsetPosition, fov.playerRef.transform.position);
+            if (target == null) continue;
+
+            // Access the visibility dictionary via reflection since it's private
+            var visibilityDict = (System.Collections.Generic.Dictionary<GameObject, bool>)typeof(FieldOfView)
+                .GetField("targetVisibility", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                ?.GetValue(fov);
+
+            if (visibilityDict != null && visibilityDict.TryGetValue(target, out bool isVisible) && isVisible)
+            {
+                Handles.color = Color.green;
+                Handles.DrawLine(offsetPosition, target.transform.position);
+            }
         }
 
         // Draw wireframe sphere with fewer segments
-        DrawWireframeSphere(offsetPosition, fov.radius, Color.white, 2); // Reduced segments to 8
+        DrawWireframeSphere(offsetPosition, fov.radius, Color.white, 2);
     }
 
     private void DrawWireframeSphere(Vector3 center, float radius, Color color, int segments)

@@ -68,7 +68,8 @@ namespace ND_BehaviorTree.Editor
 
             evt.menu.InsertAction(PasteIndex >= 0 ? PasteIndex : items.Count, "Paste", (a) =>
             {
-                PasteFromClipboard(screenMousePosition );
+                // Use graphMousePosition (local to the graph) instead of screenMousePosition
+                PasteFromClipboard(graphMousePosition);
             });
 
             if (selection.Any())

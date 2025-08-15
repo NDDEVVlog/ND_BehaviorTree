@@ -32,6 +32,21 @@ MonoBehaviour:
   - {fileID: 9089760615352239267}
   - {fileID: 7000449476151166740}
   - {fileID: 8449235630841594770}
+  - {fileID: 2208147998085658049}
+--- !u!114 &2208147998085658049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: FloatKey
+  m_EditorClassIdentifier: 
+  keyName: Health
+  value: 0
 --- !u!114 &4961731053835136659
 MonoBehaviour:
   m_ObjectHideFlags: 0
