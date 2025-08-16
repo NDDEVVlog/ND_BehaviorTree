@@ -28,7 +28,7 @@ public class PlayAudioSourceNode : ActionNode
 
     protected override void OnEnter()
     {
-        _runtimeAudioSource = GetOwwnerTree().blackboard.GetValue<AudioSource>(audioSourceKey.keyName);
+        _runtimeAudioSource = GetOwnerTree().blackboard.GetValue<AudioSource>(audioSourceKey.keyName);
         _hasStartedPlaying = false;
     }
 

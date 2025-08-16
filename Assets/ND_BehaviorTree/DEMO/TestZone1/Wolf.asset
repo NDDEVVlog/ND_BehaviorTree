@@ -90,9 +90,9 @@ MonoBehaviour:
   m_guid: f36a70a5-5539-477a-a3c4-e40bd6e5d5c5
   m_position:
     serializedVersion: 2
-    x: -260
-    y: 1034.4
-    width: 180.00002
+    x: -61.6
+    y: 1066.4
+    width: 180
     height: 96.79993
   typeName: Move To Transform
   priority: 0
@@ -320,6 +320,7 @@ MonoBehaviour:
   particleSystemKey: {fileID: -996888632824591278, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   withChildren: 0
   waitForCompletion: 1
+  _timeout: 12
 --- !u!114 &-5133301526121411020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,8 +544,8 @@ MonoBehaviour:
   m_guid: f5a841c5-5b54-4fe2-9205-63623663ec7e
   m_position:
     serializedVersion: 2
-    x: -248
-    y: 848.8
+    x: -49.6
+    y: 880.8
     width: 131.2
     height: 135.20001
   typeName: Time Limit
@@ -608,7 +609,7 @@ MonoBehaviour:
     width: 316.8
     height: 96.79993
   typeName: PlayAudioClipFromAudioSourceNode
-  priority: 10
+  priority: 1
   audioSourceKey: {fileID: 8449235630841594770, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   audioClipKey: {fileID: -7629191614923159799, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   waitForCompletion: 1
@@ -668,9 +669,9 @@ MonoBehaviour:
   m_guid: b694b564-e6ff-42a1-b2b4-24b389974feb
   m_position:
     serializedVersion: 2
-    x: -365.59998
-    y: 705.6
-    width: 84.79999
+    x: -167.2
+    y: 737.6
+    width: 84.799995
     height: 96.80005
   typeName: Parallel
   priority: 0
@@ -792,9 +793,9 @@ MonoBehaviour:
   m_guid: d6bd9af2-908e-4696-9ff1-6860e9d5141a
   m_position:
     serializedVersion: 2
-    x: -500
-    y: 848.8
-    width: 140.80002
+    x: -301.59998
+    y: 880.8
+    width: 140.79999
     height: 120.79999
   typeName: Repeater
   priority: 0
@@ -955,8 +956,8 @@ MonoBehaviour:
   m_guid: 2b269996-65aa-4c0f-8827-41ec163515b5
   m_position:
     serializedVersion: 2
-    x: 887.2
-    y: 867.2
+    x: 904.8
+    y: 880.8
     width: 244
     height: 96.79999
   typeName: SetBooleanValueNode
@@ -1140,8 +1141,8 @@ MonoBehaviour:
   m_guid: 0892f19e-3294-4b22-8930-e60b0a587577
   m_position:
     serializedVersion: 2
-    x: 386.40002
-    y: 431.2
+    x: 394.40002
+    y: 532.8
     width: 267.2
     height: 96.79999
   typeName: Check Condition Variable
@@ -1178,8 +1179,8 @@ MonoBehaviour:
   m_guid: e2a7fd38-c72e-4f1f-857e-49ee4c175912
   m_position:
     serializedVersion: 2
-    x: 511.2
-    y: 678.4
+    x: 475.2
+    y: 695.2
     width: 256.8
     height: 96.79999
   typeName: After Caught The Sheep
@@ -1314,9 +1315,9 @@ MonoBehaviour:
   m_guid: 31853d57-0f3b-4603-9aad-668a6928d876
   m_position:
     serializedVersion: 2
-    x: -611.2
-    y: 1050.4
-    width: 316.80002
+    x: -412.8
+    y: 1082.4
+    width: 316.8
     height: 96.79993
   typeName: PlayAudioClipFromAudioSourceNode
   priority: 0
