@@ -9,8 +9,7 @@ using UnityEngine;
 using ND_BehaviorTree;
 
 /// <summary>
-/// An Action Node that plays a Particle System.
-/// It retrieves the ParticleSystem from the Blackboard.
+/// An Action Node that plays a Particle System retrieved from the Blackboard.
 /// </summary>
 [NodeInfo("Play Particle", "Action/VFX/PlayParticle", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Effect.png")]
 public class PlayParticleNode : ActionNode
@@ -26,22 +25,35 @@ public class PlayParticleNode : ActionNode
     [Tooltip("If true, the node will remain in the 'Running' state until the Particle System finishes. If false, it returns 'Success' immediately.")]
     public bool waitForCompletion = false;
 
+    [Tooltip("Max duration in seconds to wait for completion before failing. Prevents infinite loops on looping particle systems.")]
+    public float timeout = 10f;
+
     // --- Private Runtime Variables ---
     private ParticleSystem _runtimeParticleSystem;
+    private float _startTime;
 
     // --- Lifecycle Methods ---
 
-    // OnEnter is called once when the node is first processed.
-    // Use it for initialization and setup.
-    private float _startTime;
-    private float _timeout = 10f; // Max duration in seconds
-
+    // Called once when the node is first processed.
     protected override void OnEnter()
     {
         _runtimeParticleSystem = particleSystemKey.GetValue(blackboard);
-        _startTime = Time.time;
+
+        if (_runtimeParticleSystem == null)
+        {
+            Debug.LogWarning($"PlayParticleNode: ParticleSystem with key '{particleSystemKey.keyName}' not found in Blackboard.");
+            return;
+        }
+
+        _runtimeParticleSystem.Play(withChildren);
+
+        if (waitForCompletion)
+        {
+            _startTime = Time.time;
+        }
     }
 
+    // Called every frame while the node is 'Running'.
     protected override Status OnProcess()
     {
         if (_runtimeParticleSystem == null)
@@ -49,27 +61,25 @@ public class PlayParticleNode : ActionNode
             return Status.Failure;
         }
 
-        if (!_runtimeParticleSystem.isPlaying)
+        if (!waitForCompletion)
         {
-            _runtimeParticleSystem.Play(withChildren);
+            return Status.Success;
         }
 
-        if (waitForCompletion)
+        // --- Logic for waiting ---
+
+        if (Time.time - _startTime > timeout)
         {
-            if (Time.time - _startTime > _timeout)
-            {
-                Debug.LogWarning($"ParticleSystem '{_runtimeParticleSystem.name}' timed out after {_timeout} seconds.");
-                return Status.Failure;
-            }
-            return _runtimeParticleSystem.IsAlive(withChildren) ? Status.Running : Status.Success;
+            Debug.LogWarning($"PlayParticleNode: ParticleSystem '{_runtimeParticleSystem.name}' timed out after {timeout} seconds.");
+            return Status.Failure;
         }
-        return Status.Success;
+
+        return _runtimeParticleSystem.IsAlive(withChildren) ? Status.Running : Status.Success;
     }
 
-    // OnExit is called once when the node's status is no longer 'Running'.
-    // Use it for cleanup.
+    // Called once when the node's status is no longer 'Running'.
     protected override void OnExit()
     {
-        // Not much to clean up here, as we have a dedicated Stop node.
+        _runtimeParticleSystem = null;
     }
 }

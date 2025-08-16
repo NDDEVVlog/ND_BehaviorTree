@@ -392,10 +392,10 @@ MonoBehaviour:
   m_guid: 58521434-7b01-4d93-8b98-c66839413672
   m_position:
     serializedVersion: 2
-    x: 467.2
-    y: 935.2
-    width: 88.79999
-    height: 96.79999
+    x: 492.80002
+    y: 968
+    width: 88.80002
+    height: 96.80005
   typeName: Wander
   priority: 0
   walkRadius: 30
