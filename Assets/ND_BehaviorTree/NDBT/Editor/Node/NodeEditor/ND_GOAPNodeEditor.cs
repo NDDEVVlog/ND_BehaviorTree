@@ -11,26 +11,10 @@ namespace ND_BehaviorTree.Editor
     /// </summary>
     public class ND_GOAPNodeEditor : ND_NodeEditor
     {
-        public ND_GOAPNodeEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView,string styleSheetPath) 
-        : base(node, BTObject, graphView,styleSheetPath)
+        public ND_GOAPNodeEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView, string styleSheetPath)
+        : base(node, BTObject, graphView, styleSheetPath)
         {
-            // 1. Load the stylesheet for GOAP nodes.
-            // Note: The path should come from your settings singleton.
-
-            string goapStylePath = styleSheetPath;
-
-
-            if (string.IsNullOrEmpty(goapStylePath))
-            {
-                goapStylePath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("GOAP");
-            }
-            StyleSheet goapStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(goapStylePath);
-                if (goapStyleSheet != null)
-                {
-                    this.styleSheets.Add(goapStyleSheet);
-                }
-
-            // 2. Add USS classes to this specific node instance for styling.
+            
             this.AddToClassList("goap-node");
 
             if (m_Node is GOAP.GOAPPlannerNode)
@@ -42,7 +26,21 @@ namespace ND_BehaviorTree.Editor
                 this.AddToClassList("goap-action-node");
             }
         }
-
+        protected override void LoadStyleSheet(string styleSheetPath)
+        {
+            string goapStylePath = styleSheetPath;
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleDefaultPath);
+            this.styleSheets.Add(styleSheet);
+            if (string.IsNullOrEmpty(goapStylePath))
+            {
+                goapStylePath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("GOAP");
+            }
+            StyleSheet goapStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(goapStylePath);
+            if (goapStyleSheet != null)
+            {
+                this.styleSheets.Add(goapStyleSheet);
+            }
+        }
 
     }
 }

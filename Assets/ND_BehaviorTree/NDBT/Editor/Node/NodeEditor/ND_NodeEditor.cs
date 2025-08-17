@@ -45,9 +45,9 @@ namespace ND_BehaviorTree.Editor
         public ND_BehaviorTreeView m_GraphView;
 
         private VisualElement m_titleContainer;
-        private VisualElement m_titleContentContainer; // Container cho title tĩnh
-        public Label titleLabel; // Label textfield mặc định
-        private Label m_typeLabel; // Label loại Node
+        private VisualElement m_titleContentContainer; 
+        public Label titleLabel; 
+        private Label m_typeLabel; 
         public Image iconImage;
         public string StylePath = "Default";
 
@@ -56,7 +56,7 @@ namespace ND_BehaviorTree.Editor
         private readonly List<ProgressBarUpdater> m_ProgressBarUpdaters = new List<ProgressBarUpdater>();
 
         string styleSheetPath;
-        string styleDefaultPath;
+        protected string styleDefaultPath;
 
         public ND_NodeEditor(Node node, SerializedObject btObject, GraphView graphView, string styleSheetPath)
            : base(ND_BehaviorTreeSetting.Instance.GetNodeDefaultUXMLPath())
@@ -64,20 +64,20 @@ namespace ND_BehaviorTree.Editor
             this.styleSheetPath = styleSheetPath;
             this.styleDefaultPath = ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Default");
 
-            if (!string.IsNullOrEmpty(styleDefaultPath))
-            {
-                StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleDefaultPath);
-                if (styleSheet != null)
-                {
-                    this.styleSheets.Add(styleSheet);
-                }
-                else
-                {
-                    Debug.LogWarning($"[ND_NodeEditor] Không thể tải stylesheet tại đường dẫn: {styleDefaultPath}");
-                }
-            }
+            LoadStyleSheet(styleSheetPath);
+
             m_GraphView = (ND_BehaviorTreeView)graphView;
             InitializeNodeView(node, btObject, graphView);
+        }
+
+        protected virtual void LoadStyleSheet(string styleSheetPath)
+        {
+            string pathToLoad = string.IsNullOrEmpty(styleSheetPath) ? styleDefaultPath : styleSheetPath;
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(pathToLoad);
+            if (styleSheet != null)
+            {
+                this.styleSheets.Add(styleSheet);
+            }
         }
 
 
@@ -154,8 +154,7 @@ namespace ND_BehaviorTree.Editor
         public virtual void BuildTitle()
         {
             NodeInfoAttribute info = m_Node.GetType().GetCustomAttribute<NodeInfoAttribute>();
-            
-            // Logic mặc định: chỉ đặt text cho các label đã có sẵn
+
             if (titleLabel != null)
             {
                 if (string.IsNullOrEmpty(m_Node.typeName))
@@ -179,24 +178,22 @@ namespace ND_BehaviorTree.Editor
             var titleAttribute = m_Node.GetType().GetCustomAttribute<CustomNodeTitlePropertyAttribute>();
             if (titleAttribute == null || string.IsNullOrEmpty(titleAttribute.TitleFormat))
             {
-                // Nếu không có attribute, quay lại hành vi mặc định
+
                 BuildTitle();
                 return;
             }
 
-            // 1. Ẩn container chứa title tĩnh
             if (m_titleContentContainer != null)
             {
                 m_titleContentContainer.style.display = DisplayStyle.None;
             }
 
-            // Tạo một container mới để chứa các thành phần động, giúp kiểm soát layout tốt hơn
             var dynamicTitleContent = new VisualElement();
             dynamicTitleContent.style.flexDirection = FlexDirection.Row;
             dynamicTitleContent.style.alignItems = Align.Center;
-            m_titleContainer.Add(dynamicTitleContent); // Thêm vào sau icon
+            m_titleContainer.Add(dynamicTitleContent); 
 
-            // 2. Phân tích chuỗi và xây dựng UI động
+            
             string format = titleAttribute.TitleFormat;
             var matches = Regex.Matches(format, @"\[(.*?)\]");
             int lastIndex = 0;
@@ -205,12 +202,12 @@ namespace ND_BehaviorTree.Editor
 
             foreach (Match match in matches)
             {
-                // Thêm phần text tĩnh
+                
                 if (match.Index > lastIndex)
                 {
                     string staticText = format.Substring(lastIndex, match.Index - lastIndex);
                     var staticLabel = new Label(staticText);
-                    staticLabel.style.unityTextAlign = TextAnchor.MiddleLeft; // Căn giữa theo chiều dọc
+                    staticLabel.style.unityTextAlign = TextAnchor.MiddleLeft; 
                     dynamicTitleContent.Add(staticLabel);
                 }
 
@@ -222,10 +219,10 @@ namespace ND_BehaviorTree.Editor
                     var propertyField = new PropertyField(property, string.Empty);
                     propertyField.Bind(serializedNode);
 
-                    // Thêm class để có thể style riêng cho các field trong title
+
                     propertyField.AddToClassList("title-property-field");
 
-                    // Xóa label của PropertyField
+
                     var fieldLabel = propertyField.Q<Label>();
                     if (fieldLabel != null) fieldLabel.style.display = DisplayStyle.None;
 
@@ -233,7 +230,7 @@ namespace ND_BehaviorTree.Editor
                 }
                 else
                 {
-                    // Nếu không tìm thấy property, hiển thị như text tĩnh
+
                     dynamicTitleContent.Add(new Label($"[{propertyName}]"));
                     Debug.LogWarning($"[BuildDynamicTitle] Property '{propertyName}' not found on node type '{m_Node.GetType().Name}'.", m_Node);
                 }
@@ -241,7 +238,6 @@ namespace ND_BehaviorTree.Editor
                 lastIndex = match.Index + match.Length;
             }
 
-            // Thêm phần text tĩnh cuối cùng
             if (lastIndex < format.Length)
             {
                 var staticLabel = new Label(format.Substring(lastIndex));
