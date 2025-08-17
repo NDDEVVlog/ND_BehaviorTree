@@ -15,7 +15,9 @@ MonoBehaviour:
   editorScript: {fileID: 11500000, guid: e536785ba97455a46a649754ba062e4d, type: 3}
   mappings:
   - nodeScript: {fileID: 11500000, guid: 7734850b999cc8841bd5dc650106f8cf, type: 3}
-    styleSheetStringEntry: 
+    styleSheetStringEntry: SteamPunk
     nodeTypeFullName: ND_BehaviorTree.MoveToTransformNode, ND_BehaviorTree.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _styleSheets: []
+  _styleSheets:
+  - nodeType: SteamPunk
+    styleSheet: {fileID: 7433441132597879392, guid: 7ca312c7d66ce4244b01ba01d33b5d48, type: 3}

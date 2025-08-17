@@ -7,12 +7,9 @@ namespace ND_BehaviorTree.Editor
 {
     public class ND_AuxiliaryEditor : ND_NodeEditor
     {
-        public ND_AuxiliaryEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView,string styleSheetPath) 
-        : base(node, BTObject, graphView,styleSheetPath)    
+        public ND_AuxiliaryEditor(Node node, UnityEditor.SerializedObject BTObject, GraphView graphView, string styleSheetPath)
+        : base(node, BTObject, graphView, styleSheetPath)
         {
-            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
-            if(styleSheet == null) styleSheet =  AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Auxiliary"));
-            this.styleSheets.Add(styleSheet);
             this.AddToClassList("auxiliary-node-editor");
 
 
@@ -47,9 +44,18 @@ namespace ND_BehaviorTree.Editor
                 base.DrawPort(info, topPortContainer, bottomPortContainer);
             else
             {
-                topPortContainer.style.display =DisplayStyle.None;
-                bottomPortContainer.style.display =DisplayStyle.None;
+                topPortContainer.style.display = DisplayStyle.None;
+                bottomPortContainer.style.display = DisplayStyle.None;
             }
+        }
+         protected override void LoadStyleSheet(string styleSheetPath)
+        {   
+            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleDefaultPath);
+            this.styleSheets.Add(styleSheet);
+            // Load the default style sheet for auxiliary nodes.
+            styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
+            if (styleSheet == null) styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ND_BehaviorTreeSetting.Instance.GetStyleSheetPath("Auxiliary"));
+            this.styleSheets.Add(styleSheet);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace ND_BehaviorTree.Editor
@@ -15,7 +16,7 @@ namespace ND_BehaviorTree.Editor
 
         [Tooltip("A list of all available editor configurations/themes. Drag your theme assets here.")]
         public List<NodeEditorConfig> allConfigs = new List<NodeEditorConfig>();
-        
+
         private static NodeEditorConfigManager _instance;
         public static NodeEditorConfigManager Instance
         {
@@ -34,5 +35,13 @@ namespace ND_BehaviorTree.Editor
                 return _instance;
             }
         }
+
+        [MenuItem("ND_BehaviorTree/Node Config Magnager", false, 100)]
+        public static void SelectManagerAsset()
+        {
+            Selection.activeObject = Instance;
+            if (Instance != null) EditorGUIUtility.PingObject(Instance);
+        }
     }
+    
 }

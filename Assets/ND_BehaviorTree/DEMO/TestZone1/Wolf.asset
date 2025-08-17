@@ -99,6 +99,34 @@ MonoBehaviour:
   agentKey: {fileID: 4961731053835136659, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   targetTransformKey: {fileID: 7000449476151166740, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   updateInterval: 0.1
+--- !u!114 &-8089018007360783965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2de36b0f5fdee4ab2cafd3c11232da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 37bccadd-a410-4c7f-a5df-09226b87043a
+  m_position:
+    serializedVersion: 2
+    x: 1013.7241
+    y: 745.81116
+    width: 0
+    height: 0
+  typeName: GOAPActionNode
+  priority: 0
+  preconditions: []
+  effects: []
+  cost: 1
+  child: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &-7920662352193702460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -580,30 +608,6 @@ MonoBehaviour:
   priority: 0
   child: {fileID: -8507657268125193687}
   timeLimit: 5
---- !u!114 &-2564801403069153883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7734850b999cc8841bd5dc650106f8cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 052d3b29-de03-4f01-87fe-f3be217d4d23
-  m_position:
-    serializedVersion: 2
-    x: 1088.7999
-    y: 108.8
-    width: 222.40002
-    height: 96.8
-  typeName: Move To Transform
-  priority: 0
-  agentKey: {fileID: -7680809290219333679}
-  targetTransformKey: {fileID: -3540863126722807650}
-  updateInterval: 0.25
 --- !u!114 &-2349795449894800531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -886,7 +890,7 @@ MonoBehaviour:
   - {fileID: 2958195330120306249}
   - {fileID: 1099517789094484778}
   - {fileID: 789006153192908161}
-  - {fileID: -2564801403069153883}
+  - {fileID: -8089018007360783965}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   Self: {fileID: 0}
