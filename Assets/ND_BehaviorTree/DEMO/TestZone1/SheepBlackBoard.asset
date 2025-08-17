@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2108471717452254684
+--- !u!114 &-8637539828562538352
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a00aaece8c260a46a21212a5d5e4a2f, type: 3}
-  m_Name: GameObjectKey
+  m_Script: {fileID: 11500000, guid: 0016b02fe855ec14880ac49904668f41, type: 3}
+  m_Name: TransformKey
   m_EditorClassIdentifier: 
-  keyName: Self
+  keyName: TargetTransform
   value: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -28,11 +28,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keys:
   - {fileID: 4961731053835136659}
-  - {fileID: -2108471717452254684}
   - {fileID: 9089760615352239267}
-  - {fileID: 7000449476151166740}
   - {fileID: 8449235630841594770}
   - {fileID: 2208147998085658049}
+  - {fileID: -8637539828562538352}
 --- !u!114 &2208147998085658049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,20 +59,6 @@ MonoBehaviour:
   m_Name: NavMeshAgentKey
   m_EditorClassIdentifier: 
   keyName: AI_Agent
-  value: {fileID: 0}
---- !u!114 &7000449476151166740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0016b02fe855ec14880ac49904668f41, type: 3}
-  m_Name: TransformKey
-  m_EditorClassIdentifier: 
-  keyName: TargetTransform
   value: {fileID: 0}
 --- !u!114 &8449235630841594770
 MonoBehaviour:

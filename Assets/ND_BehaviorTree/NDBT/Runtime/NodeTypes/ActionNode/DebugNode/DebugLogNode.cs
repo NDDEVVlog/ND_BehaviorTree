@@ -12,6 +12,7 @@ namespace ND_BehaviorTree
         public Color logColor = Color.green;
 
         [Tooltip("(Optional) A Blackboard key to log the value of.")]
+        [BlackboardKeyType(typeof(object))]
         public Key keyToLog;
 
 

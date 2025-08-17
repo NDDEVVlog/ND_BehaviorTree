@@ -56,8 +56,9 @@ namespace ND_BehaviorTree
             {
                 return Status.Success;
             }
-            if (successPolicy == Policy.RequireAll && successCount == children.Count)
-            {
+            if (successPolicy == Policy.RequireAll && successCount >= children.Count)
+            {   
+                Debug.Log("ParallelNode: All children succeeded.");
                 return Status.Success;
             }
 
@@ -66,7 +67,7 @@ namespace ND_BehaviorTree
             {
                 return Status.Failure;
             }
-            if (failurePolicy == Policy.RequireAll && failureCount == children.Count)
+            if (failurePolicy == Policy.RequireAll && failureCount >= children.Count)
             {
                 return Status.Failure;
             }
