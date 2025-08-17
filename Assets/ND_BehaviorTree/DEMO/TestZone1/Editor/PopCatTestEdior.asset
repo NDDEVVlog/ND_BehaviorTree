@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c9e5bf2e4f79246b5eecf50c0467d9, type: 3}
+  m_Name: PopCatTestEdior
+  m_EditorClassIdentifier: 
+  editorScript: {fileID: 11500000, guid: e536785ba97455a46a649754ba062e4d, type: 3}
+  mappings:
+  - nodeScript: {fileID: 11500000, guid: 7734850b999cc8841bd5dc650106f8cf, type: 3}
+    styleSheetStringEntry: 
+    nodeTypeFullName: ND_BehaviorTree.MoveToTransformNode, ND_BehaviorTree.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  _styleSheets: []
