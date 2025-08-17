@@ -90,43 +90,15 @@ MonoBehaviour:
   m_guid: f36a70a5-5539-477a-a3c4-e40bd6e5d5c5
   m_position:
     serializedVersion: 2
-    x: -61.6
-    y: 1066.4
-    width: 180
-    height: 96.79993
+    x: -380
+    y: 1220
+    width: 237.6
+    height: 109.599976
   typeName: Move To Transform
   priority: 0
   agentKey: {fileID: 4961731053835136659, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   targetTransformKey: {fileID: 7000449476151166740, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   updateInterval: 0.1
---- !u!114 &-8089018007360783965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb2de36b0f5fdee4ab2cafd3c11232da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 37bccadd-a410-4c7f-a5df-09226b87043a
-  m_position:
-    serializedVersion: 2
-    x: 1013.7241
-    y: 745.81116
-    width: 0
-    height: 0
-  typeName: GOAPActionNode
-  priority: 0
-  preconditions: []
-  effects: []
-  cost: 1
-  child: {fileID: 0}
-  references:
-    version: 2
-    RefIds: []
 --- !u!114 &-7920662352193702460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,16 +325,29 @@ MonoBehaviour:
   m_guid: e72d1ca5-48e5-44bb-ab4f-dcb23e5d2b67
   m_position:
     serializedVersion: 2
-    x: 358.40002
-    y: 1104
-    width: 123.19998
-    height: 96.80005
+    x: 247.2
+    y: 824.8
+    width: 123.20001
+    height: 96.79999
   typeName: Play Particle
   priority: 50
   particleSystemKey: {fileID: -996888632824591278, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   withChildren: 0
   waitForCompletion: 1
   timeout: 10
+--- !u!114 &-5642125957327244573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0dbaf2f0bbaab24cb3496878e57998e, type: 3}
+  m_Name: Object (local)
+  m_EditorClassIdentifier: 
+  keyName: 
 --- !u!114 &-5133301526121411020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,6 +437,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: {fileID: 0}
+--- !u!114 &-4704670610875142060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba998ae87c5a084bb46e1b85c26dcce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 84d707ab-b72d-49b5-8746-2c86665a6907
+  m_position:
+    serializedVersion: 2
+    x: -364
+    y: 919.2
+    width: 153.6
+    height: 96.79999
+  typeName: Succeeder
+  priority: 0
+  child: {fileID: -2569454900252663959}
 --- !u!114 &-4515419559068359620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -559,6 +566,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: {fileID: 0}
+--- !u!114 &-2797772894471554198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: 816e2127-ef3a-4939-b945-875272e04b23
+  m_position:
+    serializedVersion: 2
+    x: -416
+    y: 683.2
+    width: 153.6
+    height: 96.79999
+  typeName: Debug Log
+  priority: 0
+  message: Set See Player to False
+  logColor: {r: 0, g: 1, b: 0, a: 1}
+  keyToLog: {fileID: -5642125957327244573}
+  returningStatus: 0
 --- !u!114 &-2772698465460146331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -574,10 +606,10 @@ MonoBehaviour:
   m_guid: 51149665-326f-47fd-bd87-9fafeee5bbd6
   m_position:
     serializedVersion: 2
-    x: 402.40002
-    y: 954.4
+    x: 291.2
+    y: 675.2
     width: 417.59998
-    height: 96.79993
+    height: 96.79999
   typeName: Random Between Sleep or Continue to Patrol
   priority: 0
   children:
@@ -600,10 +632,10 @@ MonoBehaviour:
   m_guid: f5a841c5-5b54-4fe2-9205-63623663ec7e
   m_position:
     serializedVersion: 2
-    x: -49.6
-    y: 880.8
-    width: 131.2
-    height: 135.20001
+    x: -349.59998
+    y: 1064.8
+    width: 131.19998
+    height: 135.19995
   typeName: Time Limit
   priority: 0
   child: {fileID: -8507657268125193687}
@@ -623,14 +655,14 @@ MonoBehaviour:
   m_guid: 2f2d12a5-a0d6-4e21-a03c-bcea76d05a59
   m_position:
     serializedVersion: 2
-    x: 108.799995
-    y: 769.6
-    width: 244
-    height: 96.80005
+    x: -257.59998
+    y: 699.2
+    width: 243.99998
+    height: 96.79999
   typeName: SetBooleanValueNode
   priority: 0
-  conditionKey: {fileID: 6825130129802392008, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
-  ValueToSet: 1
+  conditionKey: {fileID: 9089760615352239267, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  ValueToSet: 0
 --- !u!114 &-2043227021559062390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -660,10 +692,10 @@ MonoBehaviour:
   m_guid: 7cb4099c-3c91-4b63-a95a-ad25c4bf476f
   m_position:
     serializedVersion: 2
-    x: 495.2
-    y: 1104.8
+    x: 384
+    y: 825.6
     width: 316.8
-    height: 96.79993
+    height: 96.80005
   typeName: PlayAudioClipFromAudioSourceNode
   priority: 1
   audioSourceKey: {fileID: 8449235630841594770, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
@@ -725,15 +757,15 @@ MonoBehaviour:
   m_guid: b694b564-e6ff-42a1-b2b4-24b389974feb
   m_position:
     serializedVersion: 2
-    x: -167.2
-    y: 737.6
-    width: 84.799995
-    height: 96.80005
+    x: -533.6
+    y: 667.2
+    width: 84.79999
+    height: 96.79999
   typeName: Parallel
   priority: 0
   children:
   - {fileID: -145788635524948990}
-  - {fileID: -2569454900252663959}
+  - {fileID: -4704670610875142060}
   services: []
   successPolicy: 1
   failurePolicy: 1
@@ -825,8 +857,8 @@ MonoBehaviour:
   m_guid: e5bd598d-e259-4019-88ee-434d229433db
   m_position:
     serializedVersion: 2
-    x: -42.399998
-    y: 443.2
+    x: -152
+    y: 356
     width: 220
     height: 96.79999
   typeName: Check if See Player
@@ -849,10 +881,10 @@ MonoBehaviour:
   m_guid: d6bd9af2-908e-4696-9ff1-6860e9d5141a
   m_position:
     serializedVersion: 2
-    x: -301.59998
-    y: 880.8
+    x: -656.8
+    y: 833.6
     width: 140.79999
-    height: 120.79999
+    height: 120.80005
   typeName: Repeater
   priority: 0
   child: {fileID: 5111194212664291654}
@@ -890,7 +922,9 @@ MonoBehaviour:
   - {fileID: 2958195330120306249}
   - {fileID: 1099517789094484778}
   - {fileID: 789006153192908161}
-  - {fileID: -8089018007360783965}
+  - {fileID: -4704670610875142060}
+  - {fileID: -2797772894471554198}
+  - {fileID: 6492232037815252564}
   rootNode: {fileID: 1756551281706341290}
   blackboard: {fileID: 11400000, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   Self: {fileID: 0}
@@ -950,14 +984,15 @@ MonoBehaviour:
   m_guid: 067bc0f8-adbd-47f6-af77-f93782e7ca25
   m_position:
     serializedVersion: 2
-    x: -65.600006
-    y: 584
-    width: 265.6
+    x: -175.2
+    y: 496.8
+    width: 265.59998
     height: 96.79999
   typeName: Move to TargetSequence
   priority: 0
   children:
   - {fileID: -1333071673789618973}
+  - {fileID: -2797772894471554198}
   - {fileID: -2349795449894800531}
   services: []
 --- !u!114 &625547232653080270
@@ -1013,9 +1048,9 @@ MonoBehaviour:
   m_guid: 2b269996-65aa-4c0f-8827-41ec163515b5
   m_position:
     serializedVersion: 2
-    x: 904.8
-    y: 880.8
-    width: 244
+    x: 814.4
+    y: 707.2
+    width: 243.99994
     height: 96.79999
   typeName: SetBooleanValueNode
   priority: 0
@@ -1198,8 +1233,8 @@ MonoBehaviour:
   m_guid: 0892f19e-3294-4b22-8930-e60b0a587577
   m_position:
     serializedVersion: 2
-    x: 394.40002
-    y: 532.8
+    x: 366.40002
+    y: 391.2
     width: 267.2
     height: 96.79999
   typeName: Check Condition Variable
@@ -1236,8 +1271,8 @@ MonoBehaviour:
   m_guid: e2a7fd38-c72e-4f1f-857e-49ee4c175912
   m_position:
     serializedVersion: 2
-    x: 475.2
-    y: 695.2
+    x: 387.2
+    y: 532.8
     width: 256.8
     height: 96.79999
   typeName: After Caught The Sheep
@@ -1372,10 +1407,10 @@ MonoBehaviour:
   m_guid: 31853d57-0f3b-4603-9aad-668a6928d876
   m_position:
     serializedVersion: 2
-    x: -412.8
-    y: 1082.4
+    x: -749.6
+    y: 1033.6
     width: 316.8
-    height: 96.79993
+    height: 96.80005
   typeName: PlayAudioClipFromAudioSourceNode
   priority: 0
   audioSourceKey: {fileID: 8449235630841594770, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
@@ -1486,6 +1521,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: {fileID: 0}
+--- !u!114 &6492232037815252564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: dc9990a3-6545-431a-8363-2168bf807efa
+  m_position:
+    serializedVersion: 2
+    x: 393.19986
+    y: 0
+    width: 243.99994
+    height: 96.79999
+  typeName: SetBooleanValueNode
+  priority: 0
+  conditionKey: {fileID: 6825130129802392008, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
+  ValueToSet: 0
 --- !u!114 &6713263043186892538
 MonoBehaviour:
   m_ObjectHideFlags: 0

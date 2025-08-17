@@ -11,7 +11,8 @@ namespace ND_BehaviorTree
         public float rotationSpeed = 5.0f;
 
         [Tooltip("The Blackboard key for the NavMeshAgent component on the AI.")]
-        public Key agentKey;
+
+        public Key<NavMeshAgent> agentKey;
 
         private NavMeshAgent agent;
         private Transform agentTransform;

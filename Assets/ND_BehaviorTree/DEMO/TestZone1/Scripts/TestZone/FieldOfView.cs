@@ -61,6 +61,7 @@ public class FieldOfView : MonoBehaviour
         // Create a list to store targets to remove
         List<GameObject> targetsToRemove = new List<GameObject>();
 
+        
         // Update visibility for each target
         foreach (GameObject target in targetObjects)
         {
@@ -87,22 +88,24 @@ public class FieldOfView : MonoBehaviour
             }
 
             // Update visibility status and trigger event if changed
-            if (targetVisibility.ContainsKey(target) && targetVisibility[target] != canSee)
+            if (targetVisibility.ContainsKey(target) && targetVisibility[target] != canSee && target != null)
             {
                 targetVisibility[target] = canSee;
                 OnPlayerSee?.OnSawPlayer(target.transform, canSee);
             }
         }
 
-        // Remove destroyed or null targets from both lists
         foreach (GameObject target in targetsToRemove)
         {
             if (targetObjects.Contains(target))
-            {
+            {   
+
                 targetObjects.Remove(target);
+                 
             }
             if (targetVisibility.ContainsKey(target))
             {
+
                 targetVisibility.Remove(target);
             }
         }
