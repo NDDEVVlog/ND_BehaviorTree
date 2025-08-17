@@ -48,6 +48,7 @@ namespace ND_BehaviorTree.Editor
         private VisualElement m_titleContentContainer; // Container cho title tĩnh
         public Label titleLabel; // Label textfield mặc định
         private Label m_typeLabel; // Label loại Node
+        public Image iconImage;
         public string StylePath = "Default";
 
         // --- Caches for runtime updates ---
@@ -102,7 +103,7 @@ namespace ND_BehaviorTree.Editor
             titleLabel = this.Q<Label>("title-textfield");
             m_typeLabel = this.Q<Label>("type-label");
 
-            var iconImage = this.Q<Image>("icon-image");
+            iconImage = this.Q<Image>("icon-image");
             m_ServiceContainer = this.Q<VisualElement>("child-node-container");
             m_DetailsContainer = this.Q<VisualElement>("details-container");
 

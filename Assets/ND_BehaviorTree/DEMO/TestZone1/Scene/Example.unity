@@ -555,7 +555,7 @@ Transform:
   m_GameObject: {fileID: 279225743}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 66.6, y: 2.9, z: -90.2}
+  m_LocalPosition: {x: 66.6, y: 2.9, z: -90.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -583,10 +583,10 @@ MonoBehaviour:
       rid: 3796477635649339392
   - keyName: WolfIdle
     data:
-      rid: 3796477635649339393
+      rid: 3796477681106681860
   - keyName: WolfHowl
     data:
-      rid: 3796477635649339394
+      rid: 3796477681106681858
   - keyName: New SleepParticle
     data:
       rid: 3796477635649339395
@@ -600,14 +600,6 @@ MonoBehaviour:
       type: {class: OverrideDataAudioSource, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
       data:
         value: {fileID: 1078625016}
-    - rid: 3796477635649339393
-      type: {class: OverideDataAudioClip, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
-      data:
-        value: {fileID: 8300000, guid: 31c7d87d01ec20746953008b2f4396c8, type: 3}
-    - rid: 3796477635649339394
-      type: {class: OverideDataAudioClip, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
-      data:
-        value: {fileID: 8300000, guid: e7bc48bb7cf555c429292da4b4b20daf, type: 3}
     - rid: 3796477635649339395
       type: {class: OverrideDataParticleSystem, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
       data:
@@ -616,6 +608,14 @@ MonoBehaviour:
       type: {class: OverrideDataObject, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
       data:
         value: {fileID: 279225746}
+    - rid: 3796477681106681858
+      type: {class: OverrideDataAudioClip, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
+      data:
+        value: {fileID: 8300000, guid: e7bc48bb7cf555c429292da4b4b20daf, type: 3}
+    - rid: 3796477681106681860
+      type: {class: OverrideDataAudioClip, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
+      data:
+        value: {fileID: 8300000, guid: 31c7d87d01ec20746953008b2f4396c8, type: 3}
 --- !u!1 &537622993
 GameObject:
   m_ObjectHideFlags: 0
@@ -27496,6 +27496,9 @@ MonoBehaviour:
   - keyName: Health
     data:
       rid: 3796477654883631110
+  - keyName: Health
+    data:
+      rid: 3796477654883631110
   references:
     version: 2
     RefIds:
@@ -27510,7 +27513,7 @@ MonoBehaviour:
     - rid: 3796477654883631110
       type: {class: OverrideDataFloat, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
       data:
-        value: 200
+        value: 35168456
 --- !u!114 &1261143506
 MonoBehaviour:
   m_ObjectHideFlags: 0
