@@ -10,10 +10,6 @@ namespace ND_BehaviorTree
         [SerializeReference]
         public ISetBlackBoardValue setBlackBoardValue;
 
-        protected override void OnEnter()
-        {
-            // No setup needed on enter
-        }
 
         protected override Status OnProcess()
         {
@@ -34,9 +30,5 @@ namespace ND_BehaviorTree
             return success ? Status.Success : Status.Failure;
         }
 
-        protected override void OnExit()
-        {
-            // No cleanup needed on exit
-        }
     }
 }

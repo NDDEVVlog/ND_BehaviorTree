@@ -37,14 +37,13 @@ namespace ND_BehaviorTree.Editor
         {
             if (evt.commandName == "Copy" || evt.commandName == "Paste")
             {
-                //Debug.Log($"[Keyboard] ValidateCommand received: {evt.commandName}");
+
                 evt.StopPropagation(); // let ExecuteCommandEvent trigger
             }
         }
         private void OnExecuteCommand(ExecuteCommandEvent evt)
         {
-            // --- DEBUG LOG FOR KEYBOARD SHORTCUTS ---
-            //Debug.Log($"[Keyboard] Event received: {evt.commandName}");
+
 
             if (evt.commandName == "Copy")
             {

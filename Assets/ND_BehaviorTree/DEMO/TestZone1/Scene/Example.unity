@@ -436,12 +436,13 @@ MonoBehaviour:
   angle: 97
   targetObjects:
   - {fileID: 1759421414}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1066722023}
+  - {fileID: 346050815}
+  - {fileID: 1020334426}
+  - {fileID: 1982035638}
+  - {fileID: 875935405}
+  - {fileID: 1761455048}
+  - {fileID: 66468891}
   targetMask:
     serializedVersion: 2
     m_Bits: 8

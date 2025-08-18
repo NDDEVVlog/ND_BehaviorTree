@@ -994,6 +994,7 @@ MonoBehaviour:
   - {fileID: -1333071673789618973}
   - {fileID: -2797772894471554198}
   - {fileID: -2349795449894800531}
+  - {fileID: 6492232037815252564}
   services: []
 --- !u!114 &625547232653080270
 MonoBehaviour:
@@ -1536,14 +1537,14 @@ MonoBehaviour:
   m_guid: dc9990a3-6545-431a-8363-2168bf807efa
   m_position:
     serializedVersion: 2
-    x: 393.19986
-    y: 0
-    width: 243.99994
-    height: 96.79999
+    x: -16.8
+    y: 689.6
+    width: 244
+    height: 96.80005
   typeName: SetBooleanValueNode
   priority: 0
   conditionKey: {fileID: 6825130129802392008, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
-  ValueToSet: 0
+  ValueToSet: 1
 --- !u!114 &6713263043186892538
 MonoBehaviour:
   m_ObjectHideFlags: 0

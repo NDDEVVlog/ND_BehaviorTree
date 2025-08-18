@@ -13,7 +13,7 @@ namespace ND_BehaviorTree.Editor
 {
     public partial class ND_BehaviorTreeView : GraphView
     {
-        // --- Fields ---
+
         private BehaviorTree m_BTree;
         private SerializedObject m_serialLizeObject;
         private ND_BehaviorTreeEditorWindow m_editorWindow;

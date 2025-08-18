@@ -15,7 +15,7 @@ using ND_BehaviorTree;
 [NodeInfo("Stop Particle", "Action/VFX/StopParticle", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/StopEffect.png")]
 public class StopParticleNode : ActionNode
 {
-    // --- Public Parameters ---
+
 
     [Tooltip("The Blackboard key for the ParticleSystem that will be stopped.")]
     public Key<ParticleSystem> particleSystemKey;

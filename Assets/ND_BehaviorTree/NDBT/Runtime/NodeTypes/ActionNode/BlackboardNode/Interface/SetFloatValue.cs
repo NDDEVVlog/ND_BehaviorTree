@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
-    // A concrete implementation for setting a float value.
-    [System.Serializable] // Important for serialization with SerializeReference
+
+    [System.Serializable] 
     public class SetFloatValue : ISetBlackBoardValue
     {
         // This is a placeholder for the real key. We will use its name to find the key on the blackboard.
