@@ -74,9 +74,7 @@ namespace ND_BehaviorTree.Editor
                             if (string.IsNullOrEmpty(attribute.menuItem)) 
                                 continue;
                             
-                            // --- FIX ---
-                            // Removed the problematic instantiation: `Activator.CreateInstance(type)`
-                            // We now pass the 'type' directly into the SearchContextElement.
+                          
                             elements.Add(new SearchContextElement(type, attribute.menuItem));
                         }
                     }
@@ -134,8 +132,7 @@ namespace ND_BehaviorTree.Editor
             
             SearchContextElement searchElement = (SearchContextElement)searchTreeEntry.userData;
             
-            // --- FIX ---
-            // Retrieve the type directly from our modified SearchContextElement.
+            
             Type nodeDataType = searchElement.targetType;
 
              if (m_parentCompositeNode != null && typeof(ServiceNode).IsAssignableFrom(nodeDataType))
