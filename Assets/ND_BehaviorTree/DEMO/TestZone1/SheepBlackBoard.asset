@@ -14,6 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: TargetTransform
   value: {fileID: 0}
+--- !u!114 &-8484314297624301951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfee2e00b035058419e04e5c6999c555, type: 3}
+  m_Name: UnityEventKey
+  m_EditorClassIdentifier: 
+  keyName: OnDieEvent
+  value:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,6 +48,7 @@ MonoBehaviour:
   - {fileID: 8449235630841594770}
   - {fileID: 2208147998085658049}
   - {fileID: -8637539828562538352}
+  - {fileID: -8484314297624301951}
 --- !u!114 &2208147998085658049
 MonoBehaviour:
   m_ObjectHideFlags: 0
