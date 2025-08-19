@@ -639,7 +639,7 @@ MonoBehaviour:
   typeName: Time Limit
   priority: 0
   child: {fileID: -8507657268125193687}
-  timeLimit: 5
+  timeLimit: 10
 --- !u!114 &-2349795449894800531
 MonoBehaviour:
   m_ObjectHideFlags: 0

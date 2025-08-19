@@ -273,6 +273,28 @@ MonoBehaviour:
   priority: 0
   child: {fileID: 7335768733476701035}
   timeLimit: 12
+--- !u!114 &-1860792550998540488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846a55a2431de6049b94dc4c049818d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_guid: eb7d3b87-3a99-4e7c-939f-06c69a227fe1
+  m_position:
+    serializedVersion: 2
+    x: 811.2
+    y: 1032
+    width: 172.79999
+    height: 96.80005
+  typeName: Invoke Unity Event
+  priority: 0
+  unityEventKey: {fileID: -8484314297624301951, guid: 709721dd937d9b64483b6598489b1814, type: 2}
 --- !u!114 &-1777941151262640007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,6 +366,7 @@ MonoBehaviour:
   priority: 0
   children:
   - {fileID: 5967261432585537659}
+  - {fileID: -1860792550998540488}
   - {fileID: 4410861917820483253}
   services: []
 --- !u!114 &-774474304355541786
@@ -414,6 +437,7 @@ MonoBehaviour:
   - {fileID: -1187537161347742319}
   - {fileID: 5967261432585537659}
   - {fileID: -3895582391266595982}
+  - {fileID: -1860792550998540488}
   rootNode: {fileID: -3483150373465065430}
   blackboard: {fileID: 11400000, guid: 709721dd937d9b64483b6598489b1814, type: 2}
   Self: {fileID: 0}
@@ -431,6 +455,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
+--- !u!114 &2540433505845536680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfee2e00b035058419e04e5c6999c555, type: 3}
+  m_Name: UnityEvent (local)
+  m_EditorClassIdentifier: 
+  keyName: 
+  value:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3124880912256659981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -469,8 +509,8 @@ MonoBehaviour:
   m_guid: a7215bed-df13-4c04-890b-2e3c4492009f
   m_position:
     serializedVersion: 2
-    x: 839.2
-    y: 1044
+    x: 1054.3999
+    y: 1032
     width: 208.80005
     height: 96.80005
   typeName: SelfDestructNode

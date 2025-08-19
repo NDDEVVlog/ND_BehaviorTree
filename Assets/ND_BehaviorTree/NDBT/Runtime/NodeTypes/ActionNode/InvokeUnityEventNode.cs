@@ -30,7 +30,7 @@ namespace ND_BehaviorTree
             {
                 // The core of the node: trigger the event.
                 // This will call all functions that have been registered to it in the Inspector.
-                eventToInvoke.Invoke();
+                eventToInvoke?.Invoke();
                 
                 // This action is instantaneous, so it succeeds immediately.
                 return Status.Success;
