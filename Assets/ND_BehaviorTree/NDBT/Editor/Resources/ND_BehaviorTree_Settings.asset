@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ND_BehaviorTree_Settings
   m_EditorClassIdentifier: 
   isLockEnabled: 1
-  enableSettingPassword: SubcribeToNDDEVGAME
+  enableSettingPassword: SubcribeToNDDEVGAMEandSORA
   defaultNodeUXML: {fileID: 9197481963319205126, guid: 28fb3ed3c12cbbe4da0dd006c6cc7a24, type: 3}
   graphViewStyle: {fileID: 7433441132597879392, guid: 960474170df95f842adf94741758ef3d, type: 3}
   _styleSheets:
