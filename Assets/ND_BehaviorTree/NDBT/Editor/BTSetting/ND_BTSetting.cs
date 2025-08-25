@@ -13,7 +13,7 @@ namespace ND_BehaviorTree.Editor
         [Tooltip("If true, the settings inspector will be locked behind a password.")]
         public bool isLockEnabled = true;
 
-        [HideInInspector]
+        //[HideInInspector]
         public string enableSettingPassword = "SubcribeToNDDEVGAMEandSORA";
 
         private const string SettingsAssetPath = "Assets/ND_BehaviorTree/NDBT/Editor/Resources/ND_BehaviorTree_Settings.asset";
