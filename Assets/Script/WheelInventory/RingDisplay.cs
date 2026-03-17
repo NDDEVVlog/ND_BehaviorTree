@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -65,6 +66,7 @@ public class RingDisplay : MonoBehaviour
     private VisualElement root;
     private List<RingElement> ringElements = new List<RingElement>();
 
+ 
     void OnEnable()
     {
         uiDoc = GetComponent<UIDocument>();
@@ -129,8 +131,8 @@ public class RingDisplay : MonoBehaviour
             ringElement.outerRadius = this.outerRadius;
             ringElement.segments = this.segmentsPerSlice;
             
-            ringElement.itemName = item.itemName;
-            ringElement.itemIcon = item.itemIcon;
+            ringElement.itemName = item.gearData != null ? item.gearData.GearID : "Empty Slot";
+            ringElement.itemIcon = item.gearData != null ? item.gearData.icon : null;
             ringElement.iconSize = finalIconSize;
             
             ringElement.defaultColor = this.defaultColor;
@@ -141,6 +143,7 @@ public class RingDisplay : MonoBehaviour
             ringElement.showEdge = this.showEdge;
             ringElement.edgeWidth = this.edgeWidth;
             ringElement.edgeColor = this.edgeColor;
+            ringElement.onHoverSelected = OnRingElementHoverSelected;
             
             if (this.rectangularGaps)
             {
@@ -162,5 +165,12 @@ public class RingDisplay : MonoBehaviour
             
             currentAngle += sliceAngle + gapAngle;
         }
+    }
+
+    private void OnRingElementHoverSelected(RingElement element)
+    {
+        // This callback is invoked when a RingElement is hovered over.
+        // You can add additional logic here if needed, such as updating UI elements or triggering events.
+         Debug.Log($"Hovering over: {element.itemName}");
     }
 }
