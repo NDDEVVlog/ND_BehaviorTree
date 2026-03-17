@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -82,6 +83,8 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
     private VisualElement _contentContainer;
 
     private bool isHovered = false;
+
+    public Action<RingElement> onHoverSelected;
 
     public RingElement()
     {
@@ -260,6 +263,7 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
         }
         MarkDirtyRepaint();
         Debug.Log($"Hovering over: {itemName}");
+        onHoverSelected?.Invoke(this);
     }
 
     private void OnPointerLeave(PointerLeaveEvent evt)
@@ -280,7 +284,7 @@ public class RingElement : VisualElement, IRectangularGap // Implement the inter
         Vector2 delta = localPoint - center;
         float pointerAngle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
         
-        Debug.Log($"Pointer distance: {delta.magnitude} | {innerRadius * hoverRangeMin}");
+        //Debug.Log($"Pointer distance: {delta.magnitude} | {innerRadius * hoverRangeMin}");
         return (IsAngleBetween(pointerAngle, startAngle, endAngle) && delta.magnitude > (innerRadius * hoverRangeMin));
     }
 
