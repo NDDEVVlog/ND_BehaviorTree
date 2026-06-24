@@ -1,19 +1,16 @@
-
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using ND_BehaviorTree;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using ND_BehaviorTree.Editor.CustomGraph;
 
 namespace ND_BehaviorTree.Editor
 {
     public class ND_BehaviorTreeEditorWindow : EditorWindow
     {
-        // --- Menu Items & Open Methods (no changes) ---
         [MenuItem("ND_BehaviorTree/ND Behavior Tree Window Editor")]
         public static void OpenWindow()
         {
@@ -35,23 +32,22 @@ namespace ND_BehaviorTree.Editor
             window.Load(target);
         }
 
-        // --- Fields ---
         [SerializeField] private BehaviorTree m_currentGraph;
         [SerializeField] private SerializedObject m_serializeObject;
-        [SerializeField] private ND_BehaviorTreeView m_currentView;
+        [SerializeField] private ND_BTGraphCanvas m_currentView;
         [SerializeField] public BehaviorTreeRunner m_targetRunner;
         
         [SerializeField] private bool m_isLocked;
         private VisualElement m_contentContainer;
         private ToolbarToggle m_lockToggle;
 
-        // --- NEW: Fields for Blackboard Toggle ---
-        [SerializeField] private bool m_isBlackboardVisible = true; // Remember state
+        [SerializeField] private bool m_isBlackboardVisible = true;
         private ToolbarToggle m_blackboardToggle;
+        
+        private BlackboardView m_blackboardView;
 
         public BehaviorTree currentGraph => m_currentGraph;
         
-        // --- Unity Messages (OnEnable is modified) ---
         private void OnEnable()
         {
             EditorApplication.update -= OnEditorUpdate;
@@ -72,10 +68,7 @@ namespace ND_BehaviorTree.Editor
 
         private void OnSelectionChanged()
         {
-            // If locked, do nothing.
             if (m_isLocked) return;
-            
-            // If the window is closed, do nothing.
             if (this == null) return;
             
             BehaviorTree treeToLoad = null;
@@ -118,7 +111,6 @@ namespace ND_BehaviorTree.Editor
             }
         }
         
-        // --- UI Creation (CreateToolbar is modified) ---
         private void CreateUIStructure()
         {
             rootVisualElement.Clear();
@@ -132,24 +124,17 @@ namespace ND_BehaviorTree.Editor
         {
             var toolbar = new Toolbar();
 
-            // --- NEW: Blackboard Toggle ---
             m_blackboardToggle = new ToolbarToggle { text = "Blackboard" };
             m_blackboardToggle.tooltip = "Show or hide the Blackboard panel.";
-            m_blackboardToggle.value = m_isBlackboardVisible; // Restore saved state
+            m_blackboardToggle.value = m_isBlackboardVisible;
             m_blackboardToggle.RegisterValueChangedCallback(evt => {
                 m_isBlackboardVisible = evt.newValue;
-                if (m_currentView != null)
-                {
-                    m_currentView.ToggleBlackboard(m_isBlackboardVisible);
-                }
+                ToggleBlackboard(m_isBlackboardVisible);
             });
             toolbar.Add(m_blackboardToggle);
-            // --- END NEW ---
 
-            // Add a separator
             toolbar.Add(new ToolbarSpacer());
 
-            // Lock toggle
             m_lockToggle = new ToolbarToggle { text = "Lock" };
             m_lockToggle.tooltip = "Prevents the editor from changing the tree when you select a different object.";
             m_lockToggle.value = m_isLocked;
@@ -165,7 +150,6 @@ namespace ND_BehaviorTree.Editor
             rootVisualElement.Add(toolbar);
         }
 
-        
         public void Load(BehaviorTreeRunner runner)
         {
             if (runner == null || runner.treeAsset == null) 
@@ -178,8 +162,6 @@ namespace ND_BehaviorTree.Editor
             titleContent = new GUIContent($"{runner.gameObject.name} ({runner.treeAsset.name})", EditorGUIUtility.ObjectContent(null, typeof(BehaviorTree)).image);
             DrawGraph();
         }
-
-
 
         public void Load(BehaviorTree target)
         {   
@@ -199,22 +181,31 @@ namespace ND_BehaviorTree.Editor
             if (m_currentGraph == null || m_contentContainer == null) return;
             
             m_serializeObject = new SerializedObject(m_currentGraph);
-            m_currentView = new ND_BehaviorTreeView(m_serializeObject, this);
-            m_currentView.graphViewChanged += OnChange;
-            
-            // --- NEW: Ensure blackboard visibility is set correctly on load ---
-            m_currentView.ToggleBlackboard(m_isBlackboardVisible);
+            m_currentView = new ND_BTGraphCanvas(m_serializeObject, this);
             
             m_contentContainer.Clear(); 
             m_contentContainer.Add(m_currentView);
+
+            m_blackboardView = new BlackboardView(m_serializeObject);
+            m_contentContainer.Add(m_blackboardView);
+            ToggleBlackboard(m_isBlackboardVisible);
         }
         
+        private void ToggleBlackboard(bool isVisible)
+        {
+            if (m_blackboardView != null)
+            {
+                m_blackboardView.style.display = isVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+        }
+
         private void ClearView()
         {
             m_currentGraph = null;
             m_serializeObject = null;
             m_currentView = null;
             m_targetRunner = null;
+            m_blackboardView = null;
             
             if (m_contentContainer == null) return;
             m_contentContainer.Clear();
@@ -232,15 +223,6 @@ namespace ND_BehaviorTree.Editor
             SetUnsavedChanges(false);
         }
 
-
-        private GraphViewChange OnChange(GraphViewChange graphViewChange)
-        {
-            if (m_currentGraph == null) return graphViewChange;
-            this.hasUnsavedChanges = true;
-            EditorUtility.SetDirty(m_currentGraph);
-            return graphViewChange;
-        }
-
         public void SetUnsavedChanges(bool unsaved)
         {
             this.hasUnsavedChanges = unsaved;
@@ -250,17 +232,21 @@ namespace ND_BehaviorTree.Editor
         {
             if (m_currentView == null) return;
 
+            var nodes = m_currentView.Query<ND_BTNodeView>().ToList();
+
             if (Application.isPlaying && m_targetRunner != null && m_targetRunner.RuntimeTree != null)
             {
-                m_currentView.nodes.ForEach(n => {
-                    if (n is ND_NodeEditor nodeView) nodeView.UpdateState();
-                });
+                foreach (var nodeView in nodes)
+                {
+                    nodeView.UpdateState(m_targetRunner.RuntimeTree);
+                }
             }
             else
             {
-                 m_currentView.nodes.ForEach(n => {
-                    if (n is ND_NodeEditor nodeView) nodeView.ClearState();
-                });
+                foreach (var nodeView in nodes)
+                {
+                    nodeView.ClearState();
+                }
             }
         }
     }
