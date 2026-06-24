@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e81d723cb845e04bb3bc2f452105051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 0bd26a6a-26eb-439b-9629-4f53fe17528b
+  m_guid: 14a410b3-6a6a-44fc-b9ba-63cf643270b1
   m_position:
     serializedVersion: 2
-    x: 196
-    y: 947.19995
-    width: 135.20001
-    height: 96.80005
+    x: -129.90207
+    y: 555.8602
+    width: 0
+    height: 0
   typeName: Selector
   priority: 0
   children:
@@ -51,13 +51,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b242a0ea53c145144b9268abb2ccb1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 4d010445-55b7-4aea-8e00-85b25d6fb6af
+  m_guid: ddef5a2b-d01d-49a2-afdc-b3a01d061863
   m_position:
     serializedVersion: 2
-    x: 266.4
-    y: 1094.4
-    width: 201.6
-    height: 96.79993
+    x: -12.307678
+    y: 840.1681
+    width: 0
+    height: 0
   typeName: PlayAudioSourceNode
   priority: 0
   audioSourceKey: {fileID: 8449235630841594770, guid: 709721dd937d9b64483b6598489b1814, type: 2}
@@ -88,44 +88,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f3df45f75215714faef95beffe01a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: f651642d-767e-49e9-b6cc-6e3b0ec8aa64
+  m_guid: 9f4d0b07-b3a4-470a-8f9f-60c588f2f724
   m_position:
     serializedVersion: 2
-    x: -256.8
-    y: 816
-    width: 219.99998
-    height: 96.79999
+    x: -443.41275
+    y: 238.09796
+    width: 0
+    height: 0
   typeName: Check if See Player
   priority: 0
   child: {fileID: -2345535323826963483}
   conditionKey: {fileID: 9089760615352239267, guid: ca425a67f04137b4e91aebc5219cd430, type: 2}
   shouldInvert: 0
---- !u!114 &-3895582391266595982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92ea9ade17043d243999edb5020ad986, type: 3}
-  m_Name: RotateToTargetService
-  m_EditorClassIdentifier: 
-  m_guid: c00948c4-7d35-47ac-9626-0463e4fabbb4
-  m_position:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  typeName: Rotate To Target
-  priority: 0
-  child: {fileID: 0}
-  interval: 1
-  runOnEnter: 1
-  rotationSpeed: 5
-  agentKey: {fileID: 4961731053835136659, guid: 709721dd937d9b64483b6598489b1814, type: 2}
 --- !u!114 &-3571231559796289812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,13 +126,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f35d581bcb7e647a3e636e68dbf72f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: f0dc641f-5ade-460e-83c7-06272d7b7bac
+  m_guid: 013c89d2-3b27-48a9-961b-530fb4052f84
   m_position:
     serializedVersion: 2
-    x: 116
-    y: 1280
-    width: 88.8
-    height: 96.79993
+    x: -288
+    y: 909.2029
+    width: 0
+    height: 0
   typeName: Wander
   priority: 0
   walkRadius: 30
@@ -174,13 +148,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e11269abd4d414b96e89e1a2ef6079, type: 3}
   m_Name: Root
   m_EditorClassIdentifier: 
-  m_guid: 34a67225-2160-4af8-9c12-57691e51de28
+  m_guid: aae873de-f738-48c6-9682-9cb076faebbb
   m_position:
     serializedVersion: 2
-    x: 250
-    y: 100
-    width: 150
-    height: 100
+    x: 78.285934
+    y: -524.8573
+    width: 0
+    height: 0
   typeName: Root
   priority: 0
   child: {fileID: -1296715323217117950}
@@ -196,13 +170,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3660b20ad1fec843862015cd03f203f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 01ab6075-c803-4bbd-86c5-e7f5b9605f20
+  m_guid: ae430761-5775-4428-b0f0-f69442059a10
   m_position:
     serializedVersion: 2
-    x: 625.60004
-    y: 430.4
-    width: 199.19995
-    height: 96.80002
+    x: 89.84621
+    y: 208.00002
+    width: 0
+    height: 0
   typeName: Check Condition
   priority: 0
   child: {fileID: -1187537161347742319}
@@ -222,13 +196,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3660b20ad1fec843862015cd03f203f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 0d6d7a8e-b87f-456a-afec-a3f841df98ee
+  m_guid: 8bd41610-2077-4967-a1fe-183dbd0adc1d
   m_position:
     serializedVersion: 2
-    x: -83.200005
-    y: 390.4
-    width: 199.20001
-    height: 96.80002
+    x: -247.38463
+    y: -220.30774
+    width: 0
+    height: 0
   typeName: Check Condition
   priority: 0
   child: {fileID: 5000900465819190813}
@@ -262,13 +236,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd4493e868ea87e4290ecd571487789c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 553846f4-cbb5-4278-b2a5-98fabc6abb1a
+  m_guid: d4025c97-7d21-42fd-97f0-8107ab9e14a4
   m_position:
     serializedVersion: 2
-    x: -205.6
-    y: 932
-    width: 131.20001
-    height: 135.19995
+    x: -452.81116
+    y: 436.3637
+    width: 0
+    height: 0
   typeName: Time Limit
   priority: 0
   child: {fileID: 7335768733476701035}
@@ -285,13 +259,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846a55a2431de6049b94dc4c049818d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: eb7d3b87-3a99-4e7c-939f-06c69a227fe1
+  m_guid: 11162e89-393b-4597-91d2-b2edafb348a0
   m_position:
     serializedVersion: 2
-    x: 706.4
-    y: 772.8
-    width: 172.79999
-    height: 96.79999
+    x: 669.45056
+    y: 603.6924
+    width: 0
+    height: 0
   typeName: Invoke Unity Event
   priority: 0
   unityEventKey: {fileID: -8484314297624301951, guid: 709721dd937d9b64483b6598489b1814, type: 2}
@@ -321,13 +295,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66707d42bd7ce5e448a257d8b9e9f45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: aca4be5d-6e25-4190-93b2-d131e44b4340
+  m_guid: 638b21f6-7d03-4ae0-b58c-63b30d2eeccf
   m_position:
     serializedVersion: 2
-    x: 220.8
-    y: 240
-    width: 206.40001
-    height: 96.80002
+    x: 12.28577
+    y: -337.14294
+    width: 0
+    height: 0
   typeName: Dynamic Selector
   priority: 0
   children:
@@ -355,20 +329,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 7d9b0443-9795-4f9c-940e-aa2a53848c82
+  m_guid: 081274f5-4c7c-4efb-b9b5-bf4e69ff08cf
   m_position:
     serializedVersion: 2
-    x: 658.4
-    y: 625.6
-    width: 147.19995
-    height: 96.79999
+    x: 324.92313
+    y: 290.4616
+    width: 0
+    height: 0
   typeName: Sequence
   priority: 0
   children:
   - {fileID: 5967261432585537659}
   - {fileID: -1860792550998540488}
   - {fileID: 4410861917820483253}
-  services: []
+  services:
+  - {fileID: 1939292052299459149, guid: 4268ad1c72d74264fb2aafd7c39f1e41, type: 2}
 --- !u!114 &-774474304355541786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,13 +370,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f3df45f75215714faef95beffe01a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 742b8c66-f1b0-4701-b5ff-6d935e830da1
+  m_guid: 6e6ed969-d98f-4448-aa7f-5c90a2526143
   m_position:
     serializedVersion: 2
-    x: 76
-    y: 809.6
-    width: 220
-    height: 96.79999
+    x: -182.82515
+    y: 305.56653
+    width: 0
+    height: 0
   typeName: Check if See Player
   priority: 0
   child: {fileID: -8918375856160254079}
@@ -436,7 +411,6 @@ MonoBehaviour:
   - {fileID: 4410861917820483253}
   - {fileID: -1187537161347742319}
   - {fileID: 5967261432585537659}
-  - {fileID: -3895582391266595982}
   - {fileID: -1860792550998540488}
   rootNode: {fileID: -3483150373465065430}
   blackboard: {fileID: 11400000, guid: 709721dd937d9b64483b6598489b1814, type: 2}
@@ -483,13 +457,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd4493e868ea87e4290ecd571487789c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: a844e88d-271d-4038-b635-942b98ee6191
+  m_guid: eb75b74b-8d44-4b5e-b411-a2bc4eb17ad0
   m_position:
     serializedVersion: 2
-    x: 80.8
-    y: 1110.4
-    width: 131.2
-    height: 135.19995
+    x: -190.65735
+    y: 713.95825
+    width: 0
+    height: 0
   typeName: Time Limit
   priority: 0
   child: {fileID: -3544056861286120703}
@@ -506,13 +480,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cebc65e46f448448bf9b2ce15a4a45b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: a7215bed-df13-4c04-890b-2e3c4492009f
+  m_guid: 4880ef20-3d21-4f4a-8309-88f252a5d70b
   m_position:
     serializedVersion: 2
-    x: 949.6
-    y: 772.8
-    width: 208.80005
-    height: 96.79999
+    x: 366.76923
+    y: 579.69244
+    width: 0
+    height: 0
   typeName: SelfDestructNode
   priority: 0
 --- !u!114 &5000900465819190813
@@ -527,20 +501,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e81d723cb845e04bb3bc2f452105051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 24724cfa-beda-467c-be62-14a1903045fd
+  m_guid: 1b208429-8350-4302-bdd8-f387e7c953e3
   m_position:
     serializedVersion: 2
-    x: -98.4
-    y: 536
-    width: 177.6
-    height: 171.19995
+    x: -257.2308
+    y: -20.923065
+    width: 0
+    height: 0
   typeName: Selector
   priority: 0
   children:
   - {fileID: -4490006586755683091}
   - {fileID: -432306772233542866}
-  services:
-  - {fileID: -3895582391266595982}
+  services: []
 --- !u!114 &5967261432585537659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,13 +526,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b242a0ea53c145144b9268abb2ccb1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 613e70f9-88d9-4c65-8315-7ea56a2339a3
+  m_guid: be079354-ede3-4bbd-87c7-86472b907589
   m_position:
     serializedVersion: 2
-    x: 471.2
-    y: 756.8
-    width: 201.59998
-    height: 96.79999
+    x: 53.09883
+    y: 538.1979
+    width: 0
+    height: 0
   typeName: PlayAudioSourceNode
   priority: 0
   audioSourceKey: {fileID: 8449235630841594770, guid: 709721dd937d9b64483b6598489b1814, type: 2}
@@ -576,13 +549,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b4ab89ebc8115b40be7b809f4e89617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_guid: 113d7291-f5fe-43ad-b270-61f752370a94
+  m_guid: 4a5ed905-64f3-4c00-a206-688de0e526b6
   m_position:
     serializedVersion: 2
-    x: -176
-    y: 1078.4
-    width: 60
-    height: 96.79993
+    x: -423.94415
+    y: 699.3007
+    width: 0
+    height: 0
   typeName: Flee
   priority: 0
   targetKey: {fileID: -8637539828562538352, guid: 709721dd937d9b64483b6598489b1814, type: 2}

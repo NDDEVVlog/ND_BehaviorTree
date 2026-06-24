@@ -9,13 +9,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 5bad98a047707244fb4e00061b6ffd51, type: 3}
   m_Name: ND_BehaviorTree_Settings
-  m_EditorClassIdentifier: ND_BehaviorTreeEditor:ND_BehaviorTree.Editor:ND_BehaviorTreeSetting
+  m_EditorClassIdentifier: 
   isLockEnabled: 1
   enableSettingPassword: SubcribeToNDDEVGAMEandSORA
+  activeConfig: {fileID: 11400000, guid: 7e9507e1ae79fa9459fbd8dd87f6603d, type: 2}
   defaultNodeUXML: {fileID: 9197481963319205126, guid: 28fb3ed3c12cbbe4da0dd006c6cc7a24, type: 3}
+  defaultNodeStyle: {fileID: 7433441132597879392, guid: 56edd9fb931184641b0c2e7fe3d72ef4, type: 3}
   graphViewStyle: {fileID: 7433441132597879392, guid: 960474170df95f842adf94741758ef3d, type: 3}
-  _styleSheets:
-  - nodeType: Default
-    styleSheet: {fileID: 7433441132597879392, guid: 56edd9fb931184641b0c2e7fe3d72ef4, type: 3}
+  graphBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 1}
+  gridColor: {r: 0.18, g: 0.18, b: 0.18, a: 1}
+  edgeTheme:
+    edgeColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+    edgeThickness: 3
+    labelBackgroundColor: {r: 0.15, g: 0.15, b: 0.15, a: 0.8}
+    labelTextColor: {r: 1, g: 1, b: 1, a: 1}
+  portTheme:
+    inputPortColor: {r: 0.4, g: 0.8, b: 0.4, a: 1}
+    outputPortColor: {r: 0.8, g: 0.6, b: 0.1, a: 1}
+    portSize: 14
+  blackboardTheme:
+    customUXML: {fileID: 9197481963319205126, guid: 1d3c559267abb0845aec1e1f0f8e8b53, type: 3}
+    customUSS: {fileID: 7433441132597879392, guid: c9a5a90f29796c64ba22cc9df9b99087, type: 3}
+    backgroundColor: {r: 0.15, g: 0.15, b: 0.15, a: 0.95}

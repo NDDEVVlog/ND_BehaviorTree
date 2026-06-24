@@ -1114,10 +1114,10 @@ MonoBehaviour:
   m_guid: 14cca445-6cc2-4085-815b-2690b9ca19ba
   m_position:
     serializedVersion: 2
-    x: 338.40002
-    y: 4
-    width: 147.19998
-    height: 96.8
+    x: 325.59998
+    y: -60.000008
+    width: 0
+    height: 0
   typeName: RootNode
   priority: 0
   child: {fileID: 6722135165623225885}
@@ -1156,7 +1156,6 @@ MonoBehaviour:
     height: 0
   typeName: Rotate To Target
   priority: 0
-  child: {fileID: 0}
   interval: 1
   runOnEnter: 1
   rotationSpeed: 5
