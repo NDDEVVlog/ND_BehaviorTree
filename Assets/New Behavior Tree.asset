@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2058636915716669191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0cfde30bd2a9494ab399998b7f18388, type: 3}
+  m_Name: GOAPPlannerNode
+  m_EditorClassIdentifier: 
+  m_guid: f6e61282-8de9-4570-8710-016bd3faef34
+  m_position:
+    serializedVersion: 2
+    x: 757.407
+    y: 197.2237
+    width: 0
+    height: 0
+  typeName: 
+  priority: 0
+  children: []
+  services: []
+  goal: []
+  references:
+    version: 2
+    RefIds: []
+--- !u!114 &-713420947326472970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e11269abd4d414b96e89e1a2ef6079, type: 3}
+  m_Name: Root
+  m_EditorClassIdentifier: 
+  m_guid: c56895a6-c129-4034-9e56-516481e693f5
+  m_position:
+    serializedVersion: 2
+    x: -20.206253
+    y: -6.1598663
+    width: 0
+    height: 0
+  typeName: 
+  priority: 0
+  child: {fileID: 2722129795116262113}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e30e10dae0a048499a4cc3b0964bcbf, type: 3}
+  m_Name: New Behavior Tree
+  m_EditorClassIdentifier: 
+  m_nodes:
+  - {fileID: -713420947326472970}
+  - {fileID: 2722129795116262113}
+  - {fileID: -2058636915716669191}
+  - {fileID: 3160093810681516047}
+  rootNode: {fileID: -713420947326472970}
+  blackboard: {fileID: 11400000, guid: 709721dd937d9b64483b6598489b1814, type: 2}
+  Self: {fileID: 0}
+--- !u!114 &2722129795116262113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1bac15d76d910642927e26586521fcb, type: 3}
+  m_Name: SetAnimatorTriggerNode
+  m_EditorClassIdentifier: 
+  m_guid: 970611a0-3833-4770-896d-5f1a604b854d
+  m_position:
+    serializedVersion: 2
+    x: 140.9774
+    y: 587.2724
+    width: 0
+    height: 0
+  typeName: 
+  priority: 0
+  animatorKey: {fileID: 0}
+  triggerName: 
+--- !u!114 &3160093810681516047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cfd971f0e590e408866a3e1ba329b3, type: 3}
+  m_Name: ParallelNode
+  m_EditorClassIdentifier: 
+  m_guid: 3eceb337-4ac7-4189-a0e0-55d36b6ea6ba
+  m_position:
+    serializedVersion: 2
+    x: 661.4588
+    y: 230.25883
+    width: 0
+    height: 0
+  typeName: 
+  priority: 0
+  children: []
+  services: []
+  successPolicy: 0
+  failurePolicy: 1

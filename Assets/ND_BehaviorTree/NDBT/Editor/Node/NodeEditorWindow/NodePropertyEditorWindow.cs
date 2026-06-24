@@ -1,26 +1,22 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Reflection;
+using ND_BehaviorTree.Editor.CustomGraph;
 
 namespace ND_BehaviorTree.Editor
 {
     public class NodePropertyEditorWindow : EditorWindow
     {
         private Node _targetNode;
-        private ND_NodeEditor _nodeEditorVisual;
+        private ND_BTNodeView _nodeEditorVisual;
         private SerializedObject _serializedNodeObject;
         private Vector2 _scrollPosition;
 
         private static readonly Dictionary<string, NodePropertyEditorWindow> _openWindows = new Dictionary<string, NodePropertyEditorWindow>();
 
-        public static void Open(Node nodeToEdit, ND_NodeEditor nodeEditorVisual)
+        public static void Open(Node nodeToEdit, ND_BTNodeView nodeEditorVisual)
         {
-            if (nodeToEdit == null)
-            {
-                Debug.LogError("NodePropertyEditorWindow.Open: nodeToEdit is null.");
-                return;
-            }
+            if (nodeToEdit == null) return;
 
             if (_openWindows.TryGetValue(nodeToEdit.id, out NodePropertyEditorWindow existingWindow) && existingWindow != null)
             {
@@ -37,7 +33,7 @@ namespace ND_BehaviorTree.Editor
             _openWindows[nodeToEdit.id] = window;
         }
 
-        private void SetNode(Node node, ND_NodeEditor nodeEditorVisual)
+        private void SetNode(Node node, ND_BTNodeView nodeEditorVisual)
         {
             _targetNode = node;
             _nodeEditorVisual = nodeEditorVisual;
@@ -98,7 +94,6 @@ namespace ND_BehaviorTree.Editor
 
             if (_serializedNodeObject.ApplyModifiedProperties())
             {
-                if (_nodeEditorVisual != null) _nodeEditorVisual.UpdateNode();
                 EditorUtility.SetDirty(_targetNode);
             }
         }
@@ -134,7 +129,6 @@ namespace ND_BehaviorTree.Editor
                     continue;
                 }
                 
-                // This single line handles everything thanks to our custom drawers.
                 EditorGUILayout.PropertyField(property, true);
 
             } while (property.NextVisible(false));

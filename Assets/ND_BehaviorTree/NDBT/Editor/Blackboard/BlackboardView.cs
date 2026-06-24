@@ -1,4 +1,3 @@
-
 using System;
 using System.Linq;
 using UnityEditor;
@@ -14,58 +13,98 @@ namespace ND_BehaviorTree.Editor
     {
         private SerializedObject m_treeSerializer;
         private BehaviorTree m_BTree;
-        private Color m_defaultKeyColor = Color.grey;
-
-        // --- NEW: Add a field for our search provider ---
         private BlackboardKeySearchProvider m_keySearchProvider;
+        private BlackboardTheme m_Theme;
+
+        private bool m_IsDragging;
+        private Vector2 m_DragStartMousePos;
+        private Vector2 m_DragStartPanelPos;
 
         public BlackboardView(SerializedObject treeSerializer)
         {
-            this.m_treeSerializer = treeSerializer;
-            this.m_BTree = treeSerializer.targetObject as BehaviorTree;
+            m_treeSerializer = treeSerializer;
+            m_BTree = treeSerializer.targetObject as BehaviorTree;
+            m_Theme = ND_BehaviorTreeSetting.Instance.blackboardTheme;
 
-            // --- NEW: Create an instance of the provider and initialize it ---
+            style.position = Position.Absolute;
+            style.left = style.top = 20;
+            style.minWidth = 250; style.minHeight = 150; style.maxHeight = 400;
+            style.backgroundColor = m_Theme.backgroundColor;
+            style.borderTopWidth = style.borderBottomWidth = style.borderLeftWidth = style.borderRightWidth = 1;
+            style.borderTopColor = style.borderBottomColor = style.borderLeftColor = style.borderRightColor = new Color(0.1f, 0.1f, 0.1f, 1.0f);
+            style.borderTopLeftRadius = style.borderTopRightRadius = style.borderBottomLeftRadius = style.borderBottomRightRadius = 8;
+
             m_keySearchProvider = ScriptableObject.CreateInstance<BlackboardKeySearchProvider>();
             m_keySearchProvider.Initialize(this);
 
-            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/ND_BehaviorTree/NDBT/Editor/Resources/Styles/BlackBoard/BlackboardView.uxml");
-            visualTree.CloneTree(this);
+            if (m_Theme.customUXML != null) m_Theme.customUXML.CloneTree(this);
+            else CreateFallbackUI();
 
-            this.Q("header").AddManipulator(new Dragger { clampToParentEdges = true });
+            if (m_Theme.customUSS != null) styleSheets.Add(m_Theme.customUSS);
 
-            var addKeyButton = this.Q<Button>("add-key-button");
-            addKeyButton.clicked += OnAddKeyClicked;
-
-            this.Q<Label>("title-label").text = m_BTree.name;
+            SetupHeaderDrag();
+            this.Q<Button>("add-key-button")?.RegisterCallback<ClickEvent>(e => OnAddKeyClicked());
+            var title = this.Q<Label>("title-label");
+            if (title != null) title.text = m_BTree.name + " Blackboard";
 
             PopulateView();
         }
 
+        private void SetupHeaderDrag()
+        {
+            var header = this.Q<VisualElement>("header");
+            if (header == null) return;
+            header.RegisterCallback<PointerDownEvent>(e => {
+                if (e.button != 0) return;
+                m_IsDragging = true;
+                m_DragStartMousePos = e.position;
+                m_DragStartPanelPos = new Vector2(style.left.value.value, style.top.value.value);
+                header.CapturePointer(e.pointerId);
+                BringToFront();
+                e.StopPropagation();
+            });
+            header.RegisterCallback<PointerMoveEvent>(e => {
+                if (!m_IsDragging || !header.HasPointerCapture(e.pointerId)) return;
+                Vector2 d = e.position - (Vector3)m_DragStartMousePos;
+                style.left = m_DragStartPanelPos.x + d.x;
+                style.top = m_DragStartPanelPos.y + d.y;
+                e.StopPropagation();
+            });
+            header.RegisterCallback<PointerUpEvent>(e => {
+                if (m_IsDragging && header.HasPointerCapture(e.pointerId)) {
+                    m_IsDragging = false; header.ReleasePointer(e.pointerId); e.StopPropagation();
+                }
+            });
+        }
+
+        private void CreateFallbackUI()
+        {
+            var header = new VisualElement { name = "header", style = { flexDirection = FlexDirection.Row, justifyContent = Justify.SpaceBetween, backgroundColor = new Color(0.1f, 0.1f, 0.1f), paddingBottom = 5, paddingTop = 5 } };
+            header.Add(new Label("Blackboard") { name = "title-label", style = { color = Color.white, unityFontStyleAndWeight = FontStyle.Bold } });
+            header.Add(new Button { name = "add-key-button", text = "+" });
+            Add(header);
+            var scroll = new ScrollView();
+            var foldout = new Foldout { text = "Keys", name = "blackboard-foldout" };
+            foldout.Add(new VisualElement { name = "keys-container" });
+            scroll.Add(foldout); Add(scroll);
+        }
+
         private void OnAddKeyClicked()
         {
-            if (m_BTree.blackboard == null)
-            {
-                if (EditorUtility.DisplayDialog("Create Blackboard", "This Behavior Tree does not have a Blackboard asset. Would you like to create one?", "Create", "Cancel"))
-                {
-                    CreateAndAssignBlackboard();
-                }
+            if (m_BTree.blackboard == null) {
+                if (EditorUtility.DisplayDialog("Create", "No Blackboard found. Create one?", "Yes", "No")) CreateAndAssignBlackboard();
                 return;
             }
-
-            var screenMousePosition = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
-            SearchWindow.Open(new SearchWindowContext(screenMousePosition), m_keySearchProvider);
+            SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), m_keySearchProvider);
         }
-        
+
         private void CreateAndAssignBlackboard()
         {
-            var blackboard = ScriptableObject.CreateInstance<Blackboard>();
-            blackboard.name = $"{m_BTree.name}_Blackboard";
-            string treePath = AssetDatabase.GetAssetPath(m_BTree);
-            string directory = System.IO.Path.GetDirectoryName(treePath);
-            string blackboardPath = AssetDatabase.GenerateUniqueAssetPath($"{directory}/{blackboard.name}.asset");
-            AssetDatabase.CreateAsset(blackboard, blackboardPath);
+            var bb = ScriptableObject.CreateInstance<Blackboard>();
+            bb.name = $"{m_BTree.name}_Blackboard";
+            AssetDatabase.CreateAsset(bb, AssetDatabase.GenerateUniqueAssetPath($"{System.IO.Path.GetDirectoryName(AssetDatabase.GetAssetPath(m_BTree))}/{bb.name}.asset"));
             AssetDatabase.SaveAssets();
-            m_treeSerializer.FindProperty("blackboard").objectReferenceValue = blackboard;
+            m_treeSerializer.FindProperty("blackboard").objectReferenceValue = bb;
             m_treeSerializer.ApplyModifiedProperties();
             EditorUtility.SetDirty(m_BTree);
             PopulateView();
@@ -73,14 +112,12 @@ namespace ND_BehaviorTree.Editor
 
         public void AddKey(Type keyType)
         {
-            Undo.RecordObject(m_BTree.blackboard, "Add Blackboard Key");
-            var newKey = ScriptableObject.CreateInstance(keyType) as Key;
-            newKey.name = keyType.Name;
-            var baseName = keyType.Name.Replace("Key_", "");
-            var existingKeys = m_BTree.blackboard.keys.Select(k => k.keyName);
-            newKey.keyName = ObjectNames.GetUniqueName(existingKeys.ToArray(), $"New {baseName}");
-            AssetDatabase.AddObjectToAsset(newKey, m_BTree.blackboard);
-            m_BTree.blackboard.keys.Add(newKey);
+            Undo.RecordObject(m_BTree.blackboard, "Add Key");
+            var key = ScriptableObject.CreateInstance(keyType) as Key;
+            key.name = keyType.Name;
+            key.keyName = ObjectNames.GetUniqueName(m_BTree.blackboard.keys.Select(k => k.keyName).ToArray(), $"New {keyType.Name.Replace("Key_", "")}");
+            AssetDatabase.AddObjectToAsset(key, m_BTree.blackboard);
+            m_BTree.blackboard.keys.Add(key);
             EditorUtility.SetDirty(m_BTree.blackboard);
             AssetDatabase.SaveAssets();
             PopulateView();
@@ -88,72 +125,44 @@ namespace ND_BehaviorTree.Editor
 
         public void PopulateView()
         {
-            var foldout = this.Q<Foldout>("blackboard-foldout");
             var keysContainer = this.Q("keys-container");
+            if (keysContainer == null) return;
             keysContainer.Clear();
+            var foldout = this.Q<Foldout>("blackboard-foldout");
 
-            if (m_BTree.blackboard == null)
-            {
-                foldout.style.display = DisplayStyle.None; 
-                var helpLabel = new Label("No Blackboard found. Please assign a Blackboard asset to the BehaviorTree.");
-                helpLabel.style.unityTextAlign = TextAnchor.MiddleCenter; 
-                helpLabel.style.paddingTop = 5;
-                helpLabel.style.paddingBottom = 5;
-                keysContainer.Add(helpLabel);
+            if (m_BTree.blackboard == null) {
+                if (foldout != null) foldout.style.display = DisplayStyle.None;
+                keysContainer.Add(new Label("No Blackboard Asset.") { style = { unityTextAlign = TextAnchor.MiddleCenter } });
                 return;
             }
 
-            foldout.style.display = DisplayStyle.Flex; 
-            var blackboardSerializer = new SerializedObject(m_BTree.blackboard);
-            var keysProperty = blackboardSerializer.FindProperty("keys");
+            if (foldout != null) foldout.style.display = DisplayStyle.Flex;
+            var serObj = new SerializedObject(m_BTree.blackboard);
+            var keysProp = serObj.FindProperty("keys");
 
-            for (int i = 0; i < m_BTree.blackboard.keys.Count; i++)
-            {
+            for (int i = 0; i < m_BTree.blackboard.keys.Count; i++) {
                 Key key = m_BTree.blackboard.keys[i];
                 if (key == null) continue;
 
-                var keyProperty = keysProperty.GetArrayElementAtIndex(i);
-                var keyRow = new VisualElement();
-                keyRow.AddToClassList("key-row");
-
-                var colorIndicator = new VisualElement();
-                colorIndicator.AddToClassList("key-color-indicator");
-                var keyColorAttr = key.GetType().GetCustomAttribute<KeyColorAttribute>();
-                colorIndicator.style.backgroundColor = keyColorAttr != null ? keyColorAttr.Color : m_defaultKeyColor;
-                keyRow.Add(colorIndicator);
+                var row = new VisualElement { style = { flexDirection = FlexDirection.Row, marginTop = 2, marginBottom = 2 } };
+                var colorAttr = key.GetType().GetCustomAttribute<KeyColorAttribute>();
                 
-                var keyNameField = new TextField { value = key.keyName };
-                keyNameField.AddToClassList("key-row-field-name");
-                keyNameField.RegisterValueChangedCallback(evt =>
-                {
-                    Undo.RecordObject(key, "Rename Blackboard Key");
-                    key.keyName = evt.newValue;
-                    EditorUtility.SetDirty(key);
-                });
-
-                var valueProperty = keyProperty.FindPropertyRelative("value");
-                var propertyField = new PropertyField(valueProperty, "");
-                propertyField.AddToClassList("key-row-field-value");
-                propertyField.Bind(keyProperty.serializedObject);
-
-                var deleteButton = new Button(() => DeleteKey(key)) { text = "X" };
-                deleteButton.AddToClassList("key-row-delete-button");
-
-                keyRow.Add(keyNameField);
-                keyRow.Add(propertyField);
-                keyRow.Add(deleteButton);
-                keysContainer.Add(keyRow);
+                row.Add(new VisualElement { style = { width = 10, height = 10, alignSelf = Align.Center, marginRight = 5, borderTopLeftRadius = 5, borderTopRightRadius = 5, borderBottomLeftRadius = 5, borderBottomRightRadius = 5, backgroundColor = colorAttr?.Color ?? Color.grey } });
+                
+                var nameField = new TextField { value = key.keyName, style = { width = 100 } };
+                nameField.RegisterValueChangedCallback(e => { Undo.RecordObject(key, "Rename"); key.keyName = e.newValue; EditorUtility.SetDirty(key); });
+                
+                var propField = new PropertyField(keysProp.GetArrayElementAtIndex(i).FindPropertyRelative("value"), "") { style = { flexGrow = 1 } };
+                propField.Bind(serObj);
+                
+                row.Add(nameField); row.Add(propField);
+                row.Add(new Button(() => {
+                    Undo.RecordObject(m_BTree.blackboard, "Delete Key"); m_BTree.blackboard.keys.Remove(key); Undo.DestroyObjectImmediate(key);
+                    EditorUtility.SetDirty(m_BTree.blackboard); AssetDatabase.SaveAssets(); PopulateView();
+                }) { text = "X", style = { width = 20 } });
+                
+                keysContainer.Add(row);
             }
-        }
-
-        private void DeleteKey(Key keyToDelete)
-        {
-            Undo.RecordObject(m_BTree.blackboard, "Remove Blackboard Key");
-            m_BTree.blackboard.keys.Remove(keyToDelete);
-            Undo.DestroyObjectImmediate(keyToDelete);
-            EditorUtility.SetDirty(m_BTree.blackboard);
-            AssetDatabase.SaveAssets();
-            PopulateView();
         }
     }
 }

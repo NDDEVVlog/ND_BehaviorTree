@@ -1,167 +1,65 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEditor;
 
-namespace ND_BehaviorTree.Editor
+namespace ND_BehaviorTree.Editor.CustomGraph
 {
-    // SearchContextElement is modified to hold a Type instead of an object instance.
-    public struct SearchContextElement
-    {
-        public Type targetType { get; private set; }
-        public string title { get; private set; }
-
-        public SearchContextElement(Type type, string title)
-        {
-            this.targetType = type;
-            this.title = title;
-        }
-    }
-
     public class ND_BTSearchProvider : ScriptableObject, ISearchWindowProvider
     {
-        public ND_BehaviorTreeView view;
-        public static List<SearchContextElement> elements;
+        private ND_BTGraphCanvas m_Canvas;
+        private Vector2 m_LocalPos;
+        private ND_BTNodeView m_TargetComposite;
+        private bool m_IsServiceSearch;
 
-        private Type m_filterType;
-        private CompositeNode m_parentCompositeNode;
-
-        public void Initialize(ND_BehaviorTreeView graphView, CompositeNode parent, Type filterType)
+        public void InitializeNodeSearch(ND_BTGraphCanvas canvas, Vector2 localPos)
         {
-            this.view = graphView;
-            this.m_parentCompositeNode = parent;
-            this.m_filterType = filterType;
+            m_Canvas = canvas;
+            m_LocalPos = localPos;
+            m_IsServiceSearch = false;
         }
 
-        public void Initialize(ND_BehaviorTreeView graphView)
+        public void InitializeServiceSearch(ND_BTGraphCanvas canvas, ND_BTNodeView targetComposite)
         {
-            this.view = graphView;
-            this.m_parentCompositeNode = null;
-            this.m_filterType = null;
+            m_Canvas = canvas;
+            m_TargetComposite = targetComposite;
+            m_IsServiceSearch = true;
         }
 
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
-            List<SearchTreeEntry> tree = new List<SearchTreeEntry>();
-            string title = m_filterType == null ? "Create Node" : $"Add {m_filterType.Name.Replace("Node", "")}";
-            tree.Add(new SearchTreeGroupEntry(new GUIContent(title), 0));
+            var tree = new List<SearchTreeEntry> { new SearchTreeGroupEntry(new GUIContent(m_IsServiceSearch ? "Add Service" : "Add Node"), 0) };
+            
+            Type baseType = m_IsServiceSearch ? typeof(ServiceNode) : typeof(Node);
+            var types = TypeCache.GetTypesDerivedFrom(baseType).Where(t => !t.IsAbstract && (m_IsServiceSearch || t != typeof(ServiceNode)));
 
-            elements = new List<SearchContextElement>();
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly assembly in assemblies)
+            foreach (var t in types)
             {
-                try
+                var attr = t.GetCustomAttributes(typeof(NodeInfoAttribute), false).FirstOrDefault() as NodeInfoAttribute;
+                string path = attr?.title ?? (m_IsServiceSearch ? "Services/" : "Nodes/") + t.Name;
+                
+                string[] parts = path.Split('/');
+                for (int i = 0; i < parts.Length - 1; i++)
                 {
-                    foreach (Type type in assembly.GetTypes())
-                    {
-                        if (!typeof(ND_BehaviorTree.Node).IsAssignableFrom(type) || type.IsAbstract)
-                            continue;
-                        
-                        if (m_filterType != null && !m_filterType.IsAssignableFrom(type))
-                            continue;
-                        
-                        var attribute = type.GetCustomAttribute<NodeInfoAttribute>();
-                        if (attribute != null)
-                        {
-                            if (m_filterType == null && attribute.isChildOnly) 
-                                continue;
-
-                            if (string.IsNullOrEmpty(attribute.menuItem)) 
-                                continue;
-                            
-                          
-                            elements.Add(new SearchContextElement(type, attribute.menuItem));
-                        }
-                    }
+                    string groupName = parts[i];
+                    if (!tree.Any(x => x.content.text == groupName && x.level == i + 1))
+                        tree.Add(new SearchTreeGroupEntry(new GUIContent(groupName), i + 1));
                 }
-                catch { /* Ignore assemblies that cause errors */ }
-            }
-
-            // Sorting logic remains the same.
-            elements.Sort((a, b) =>
-            {
-                var aSplits = a.title.Split('/');
-                var bSplits = b.title.Split('/');
-                for (var i = 0; i < aSplits.Length; i++)
-                {
-                    if (i >= bSplits.Length)
-                        return 1;
-                    var result = string.Compare(aSplits[i], bSplits[i], StringComparison.Ordinal);
-                    if (result != 0)
-                    {
-                        if (aSplits.Length != bSplits.Length && (i == aSplits.Length - 1 || i == bSplits.Length - 1))
-                            return bSplits.Length.CompareTo(aSplits.Length);
-                        return result;
-                    }
-                }
-                return 0;
-            });
-
-            // Tree building logic remains the same.
-            List<string> groups = new List<string>();
-            foreach (SearchContextElement element in elements)
-            {
-                string[] entryTitle = element.title.Split('/');
-                string groupName = "";
-                for (int i = 0; i < entryTitle.Length - 1; i++)
-                {
-                    groupName += entryTitle[i];
-                    if (!groups.Contains(groupName))
-                    {
-                        tree.Add(new SearchTreeGroupEntry(new GUIContent(entryTitle[i]), i + 1));
-                        groups.Add(groupName);
-                    }
-                    groupName += "/";
-                }
-                SearchTreeEntry entry = new SearchTreeEntry(new GUIContent(entryTitle.Last()));
-                entry.level = entryTitle.Length;
-                entry.userData = element; 
-                tree.Add(entry);
+                
+                tree.Add(new SearchTreeEntry(new GUIContent(parts.Last())) { level = parts.Length, userData = t });
             }
             return tree;
         }
 
         public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
         {
-            if (view == null) return false;
-            
-            SearchContextElement searchElement = (SearchContextElement)searchTreeEntry.userData;
-            
-            
-            Type nodeDataType = searchElement.targetType;
+            Type type = searchTreeEntry.userData as Type;
+            if (type == null) return false;
 
-             if (m_parentCompositeNode != null && typeof(ServiceNode).IsAssignableFrom(nodeDataType))
-            {
-                Undo.RecordObject(view.BTree, "Add Service");
-                
-                // Use the retrieved type to correctly create a ScriptableObject instance.
-                ServiceNode service = (ServiceNode)ScriptableObject.CreateInstance(nodeDataType);
-                service.name = nodeDataType.Name;
-                AssetDatabase.AddObjectToAsset(service, view.BTree);
-                view.BTree.nodes.Add(service);
-                
-                view.AddServiceToNode(m_parentCompositeNode, service);
-                
-                EditorUtility.SetDirty(view.BTree);
-                AssetDatabase.SaveAssets();
-            }
-            else
-            {
-                Vector2 windowLocalMousePosition = context.screenMousePosition - view.EditorWindow.position.position;
-                Vector2 graphMousePosition = view.contentViewContainer.WorldToLocal(windowLocalMousePosition);
-                
-                // Use the retrieved type to correctly create a ScriptableObject instance.
-                Node nodeData = (ND_BehaviorTree.Node)ScriptableObject.CreateInstance(nodeDataType); 
-                nodeData.SetPosition(new Rect(graphMousePosition, Vector2.zero));
-                Debug.Log("AddNode as Position:" + graphMousePosition);
-                view.AddNewNodeFromSearch(nodeData);
-            }
-
+            if (m_IsServiceSearch) m_Canvas.AddServiceToNode(type, m_TargetComposite);
+            else m_Canvas.AddNewNodeFromSearch(type, m_LocalPos);
             return true;
         }
     }
