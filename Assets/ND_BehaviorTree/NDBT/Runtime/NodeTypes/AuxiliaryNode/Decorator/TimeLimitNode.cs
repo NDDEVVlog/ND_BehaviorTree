@@ -6,6 +6,8 @@ namespace ND_BehaviorTree
     [NodeInfo("Time Limit", "Decorator/TimeLimit", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Timer.png")]
     public class TimeLimitNode : DecoratorNode
     {
+        [System.NonSerialized] private bool m_NoChildWarned;
+
         [Tooltip("The maximum time in seconds the child node can be in the Running state.")]
         public float timeLimit = 1.0f;
         
@@ -27,6 +29,11 @@ namespace ND_BehaviorTree
         {
             if (child == null)
             {
+                if (!m_NoChildWarned)
+                {
+                    m_NoChildWarned = true;
+                    Debug.LogWarning($"[TimeLimitNode] '{name}' has no child; it always fails. (Logged once.)", this);
+                }
                 return Status.Failure;
             }
             

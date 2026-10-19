@@ -1,0 +1,179 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7028941414629931683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80866d4ad159d7f4c92418320be4487b, type: 3}
+  m_Name: AgentSpeedService
+  m_EditorClassIdentifier: Assembly-CSharp::ND_BehaviorTree.Demo.Xeno.AgentSpeedService
+  m_guid: c784c22e-4860-4af3-9160-d2b29607c89c
+  m_position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  typeName: 
+  priority: 0
+  decorators: []
+  services: []
+  interval: 1000
+  runOnEnter: 1
+  agentKey: {fileID: 2898636267766363130, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
+  speed: 2.4
+  restoreOnExit: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e30e10dae0a048499a4cc3b0964bcbf, type: 3}
+  m_Name: Xeno_Search
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BehaviorTree
+  m_nodes:
+  - {fileID: 7606992611628614580}
+  - {fileID: 8911887565647358058}
+  - {fileID: 2359382299002103002}
+  - {fileID: 6364399553328804760}
+  rootNode: {fileID: 7606992611628614580}
+  blackboard: {fileID: 11400000, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
+  Self: {fileID: 0}
+  m_SchemaVersion: 2
+  groups: []
+  notes:
+  - id: 6bc45254-99ed-4179-8359-41e944569f34
+    title: Xeno_Search (subtree)
+    content: 'Shared search: after a noise, after losing the player, and while roaming.
+
+      The
+      caller sets SearchCenter (Copy Key On Enter on the subtree node).
+
+      Uses
+      the caller''s blackboard; keys are resolved by name.'
+    rect:
+      serializedVersion: 2
+      x: -300
+      y: 100
+      width: 240
+      height: 140
+    color: {r: 0.95, g: 0.85, b: 0.35, a: 0.95}
+--- !u!114 &2359382299002103002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f528e38f57c5c14d964df3e9c456269, type: 3}
+  m_Name: SearchAreaNode
+  m_EditorClassIdentifier: Assembly-CSharp::ND_BehaviorTree.Demo.Xeno.SearchAreaNode
+  m_guid: 04083ba1-5235-4505-9f0f-b638cab96d72
+  m_position:
+    serializedVersion: 2
+    x: 80
+    y: 500
+    width: 0
+    height: 0
+  typeName: Sweep around SearchCenter
+  priority: 0
+  decorators: []
+  services: []
+  agentKey: {fileID: 2898636267766363130, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
+  centerKey: {fileID: -1128353405876665246, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
+  radius: 6
+  points: 3
+  pauseDuration: 1.5
+  lookAroundSpeed: 140
+--- !u!114 &6364399553328804760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ce01c416545124b85c5243b8680062, type: 3}
+  m_Name: CheckHidingSpotNode
+  m_EditorClassIdentifier: Assembly-CSharp::ND_BehaviorTree.Demo.Xeno.CheckHidingSpotNode
+  m_guid: e7578dfe-c692-4302-8a71-6c482cf7b5f0
+  m_position:
+    serializedVersion: 2
+    x: 420
+    y: 500
+    width: 0
+    height: 0
+  typeName: Check a locker (learned chance)
+  priority: 0
+  decorators: []
+  services: []
+  bodyKey: {fileID: 7717698017717060514, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
+  centerKey: {fileID: -1128353405876665246, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
+  chanceKey: {fileID: 7208480747853624910, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
+  chance: 0.3
+  searchRadius: 9
+  inspectDuration: 1.5
+  recheckCooldown: 20
+--- !u!114 &7606992611628614580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e11269abd4d414b96e89e1a2ef6079, type: 3}
+  m_Name: Root
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.RootNode
+  m_guid: af1bdc72-6183-4247-a18a-803163c332af
+  m_position:
+    serializedVersion: 2
+    x: 250
+    y: 100
+    width: 150
+    height: 100
+  typeName: 
+  priority: 0
+  decorators: []
+  services: []
+  child: {fileID: 8911887565647358058}
+--- !u!114 &8911887565647358058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.SequenceNode
+  m_guid: 09b75481-741b-4bfd-b92d-404bbd81ca19
+  m_position:
+    serializedVersion: 2
+    x: 250
+    y: 260
+    width: 0
+    height: 0
+  typeName: 'Search: sweep, then a locker'
+  priority: 0
+  decorators: []
+  services:
+  - {fileID: -7028941414629931683}
+  children:
+  - {fileID: 2359382299002103002}
+  - {fileID: 6364399553328804760}

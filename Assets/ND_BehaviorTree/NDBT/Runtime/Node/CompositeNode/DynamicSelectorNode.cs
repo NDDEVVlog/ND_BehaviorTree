@@ -28,7 +28,6 @@ public class DynamicSelectorNode : CompositeNode
 
     protected override Status OnProcess()
     {
-        TickServices();
 
         // 1. If a child is already running, continue to process it.
         //    This is more efficient and prevents the condition from being re-checked every frame.

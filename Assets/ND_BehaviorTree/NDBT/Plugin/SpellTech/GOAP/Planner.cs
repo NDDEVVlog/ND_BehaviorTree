@@ -1,6 +1,5 @@
 
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ND_BehaviorTree.GOAP
@@ -22,7 +21,9 @@ namespace ND_BehaviorTree.GOAP
         {
             public PlanNode Parent;
             public float Cost; // g(n): Cost from the start node to the current node
+            public float F;    // f(n) = g(n) + h(n), computed once when the node is created
             public Dictionary<string, object> State;
+            public int StateHash;
             public GOAPActionNode Action;
 
             public PlanNode(PlanNode parent, float cost, Dictionary<string, object> state, GOAPActionNode action)
@@ -30,6 +31,7 @@ namespace ND_BehaviorTree.GOAP
                 Parent = parent;
                 Cost = cost;
                 State = state;
+                StateHash = ComputeStateHash(state);
                 Action = action;
             }
         }
@@ -42,56 +44,72 @@ namespace ND_BehaviorTree.GOAP
         /// <param name="startState">The initial world state, derived from the Blackboard.</param>
         /// <param name="goal">A list of conditions that define the goal state.</param>
         /// <param name="availableActions">All actions the AI can perform.</param>
-        /// <returns>A list of GOAPActionNodes (the plan), or null if no plan was found.</returns>
+        /// <returns>
+        /// A list of GOAPActionNodes (the plan). An EMPTY list means the goal is already satisfied.
+        /// Null means no plan was found.
+        /// </returns>
         public List<GOAPActionNode> FindPlan(GameObject agent, Blackboard blackboard, Dictionary<string, object> startState, List<IGoapPrecondition> goal, List<GOAPActionNode> availableActions)
         {
-            // Log the goal being pursued.
-            var goalDescriptions = goal.Select(g => g.GetDescription());
-            string goalString = $"[ {string.Join(" AND ", goalDescriptions)} ]";
-            //Debug.Log($"[Planner] Starting search for goal: {goalString}");
+            if (goal == null) goal = new List<IGoapPrecondition>();
+            if (startState == null) startState = new Dictionary<string, object>();
 
-            var usableActions = new HashSet<GOAPActionNode>(availableActions);
+            var usableActions = new List<GOAPActionNode>();
+            if (availableActions != null)
+            {
+                foreach (var action in availableActions)
+                    if (action != null && !usableActions.Contains(action)) usableActions.Add(action);
+            }
+
             var openSet = new List<PlanNode>();
-            var closedSet = new HashSet<PlanNode>();
+            // Closed set keyed by state hash; colliding states are disambiguated by full comparison.
+            var closedSet = new Dictionary<int, List<Dictionary<string, object>>>();
 
             // Start with a root node with no action, zero cost, and the initial state.
-            openSet.Add(new PlanNode(null, 0, startState, null));
-            
+            var start = new PlanNode(null, 0, startState, null);
+            start.F = Heuristic(agent, blackboard, start.State, goal);
+            openSet.Add(start);
+
             int iterations = 0;
 
             // The main A* algorithm loop.
             while (openSet.Count > 0)
             {
-                // ** NEW: INFINITE LOOP PREVENTION **
                 if (++iterations > MAX_ITERATIONS)
                 {
-                    Debug.LogWarning($"[Planner] Search aborted after {MAX_ITERATIONS} iterations. This could indicate an infinite loop or a very complex/unsolvable plan. Goal was: {goalString}");
+                    Debug.LogWarning($"[Planner] Search aborted after {MAX_ITERATIONS} iterations. This could indicate a very complex/unsolvable plan. Goal was: {DescribeGoal(goal)}");
                     return null;
                 }
 
-                // Find the node in the openSet with the lowest f(n) = g(n) + h(n) cost.
-                // g(n) is currentNode.Cost
-                // h(n) is the Heuristic()
-                var currentNode = openSet.OrderBy(n => n.Cost + Heuristic(agent, blackboard, n.State, goal)).First();
-                
-                openSet.Remove(currentNode);
-                closedSet.Add(currentNode);
+                // Find the node in the openSet with the lowest (cached) f(n). Linear scan, no sorting/allocation.
+                int bestIndex = 0;
+                for (int i = 1; i < openSet.Count; i++)
+                {
+                    if (openSet[i].F < openSet[bestIndex].F) bestIndex = i;
+                }
+                var currentNode = openSet[bestIndex];
+                openSet[bestIndex] = openSet[openSet.Count - 1];
+                openSet.RemoveAt(openSet.Count - 1);
+
+                // A state already expanded (reached at lower or equal f) is skipped.
+                if (IsClosed(closedSet, currentNode)) continue;
+                AddClosed(closedSet, currentNode);
 
                 // Check if the goal has been met.
-                if (ArePreconditionsMet(agent, blackboard, goal, currentNode.State, isGoalCheck: true))
+                if (ArePreconditionsMet(agent, blackboard, goal, currentNode.State))
                 {
-                    // If the goal is met, reconstruct the plan by tracing back from the current node to the root.
+                    // Reconstruct the plan by tracing back from the current node to the root.
+                    // (Empty when the start state already satisfies the goal.)
                     var plan = new List<GOAPActionNode>();
                     var n = currentNode;
                     while (n.Parent != null)
                     {
-                        plan.Insert(0, n.Action);
+                        plan.Add(n.Action);
                         n = n.Parent;
                     }
-                    Debug.Log($"[Planner] Plan found! Goal: {goalString}");
+                    plan.Reverse();
                     return plan;
                 }
-                
+
                 // Consider viable actions from the current node.
                 foreach (var action in usableActions)
                 {
@@ -99,34 +117,84 @@ namespace ND_BehaviorTree.GOAP
                     if (ArePreconditionsMet(agent, blackboard, action.preconditions, currentNode.State))
                     {
                         var nextState = ApplyEffects(currentNode.State, action.effects);
-                        
-                        // Create a new plan node and add it to the openSet for future consideration.
                         var neighborNode = new PlanNode(currentNode, currentNode.Cost + action.cost, nextState, action);
+                        if (IsClosed(closedSet, neighborNode)) continue;
+
+                        neighborNode.F = neighborNode.Cost + Heuristic(agent, blackboard, nextState, goal);
                         openSet.Add(neighborNode);
                     }
                 }
             }
 
-            Debug.LogWarning($"[Planner] Search finished. No valid plan found because the open set is empty. Goal was: {goalString}");
+            Debug.LogWarning($"[Planner] Search finished. No valid plan found because the open set is empty. Goal was: {DescribeGoal(goal)}");
             return null;
         }
-        
+
+        private static string DescribeGoal(List<IGoapPrecondition> goal)
+        {
+            var parts = new List<string>(goal.Count);
+            foreach (var g in goal) parts.Add(g != null ? g.GetDescription() : "<null>");
+            return $"[ {string.Join(" AND ", parts)} ]";
+        }
+
+        private static bool IsClosed(Dictionary<int, List<Dictionary<string, object>>> closedSet, PlanNode node)
+        {
+            if (!closedSet.TryGetValue(node.StateHash, out var bucket)) return false;
+            for (int i = 0; i < bucket.Count; i++)
+            {
+                if (StatesEqual(bucket[i], node.State)) return true;
+            }
+            return false;
+        }
+
+        private static void AddClosed(Dictionary<int, List<Dictionary<string, object>>> closedSet, PlanNode node)
+        {
+            if (!closedSet.TryGetValue(node.StateHash, out var bucket))
+            {
+                bucket = new List<Dictionary<string, object>>(1);
+                closedSet.Add(node.StateHash, bucket);
+            }
+            bucket.Add(node.State);
+        }
+
+        /// <summary>Order-independent hash of a world state (sum of per-entry hashes).</summary>
+        private static int ComputeStateHash(Dictionary<string, object> state)
+        {
+            unchecked
+            {
+                int hash = 17;
+                foreach (var kv in state)
+                {
+                    int keyHash = kv.Key != null ? kv.Key.GetHashCode() : 0;
+                    int valueHash = kv.Value != null ? kv.Value.GetHashCode() : 0;
+                    hash += (keyHash * 397) ^ valueHash;
+                }
+                return hash;
+            }
+        }
+
+        private static bool StatesEqual(Dictionary<string, object> a, Dictionary<string, object> b)
+        {
+            if (ReferenceEquals(a, b)) return true;
+            if (a.Count != b.Count) return false;
+            foreach (var kv in a)
+            {
+                if (!b.TryGetValue(kv.Key, out var other)) return false;
+                if (!Equals(kv.Value, other)) return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Checks if a set of conditions is met by a specific world state.
         /// </summary>
-        private bool ArePreconditionsMet(GameObject agent, Blackboard blackboard, List<IGoapPrecondition> conditions, Dictionary<string, object> worldState, bool isGoalCheck = false)
+        private bool ArePreconditionsMet(GameObject agent, Blackboard blackboard, List<IGoapPrecondition> conditions, Dictionary<string, object> worldState)
         {
-            string logPrefix = isGoalCheck ? "[Goal Check]" : "[Action Precondition Check]";
-
+            if (conditions == null) return true;
             foreach (var condition in conditions)
             {
-                bool met = condition.IsMet(agent, blackboard, worldState);
-                if (!met)
-                {
-                    // This log is very useful for debugging which specific condition failed.
-                    // Debug.Log($"<color=orange>{logPrefix} NOT MET:</color> {condition.GetDescription()}");
-                    return false;
-                }
+                if (condition == null) continue;
+                if (!condition.IsMet(agent, blackboard, worldState)) return false;
             }
             return true;
         }
@@ -138,22 +206,30 @@ namespace ND_BehaviorTree.GOAP
         {
             // Create a copy of the current state to avoid modifying the original.
             var newState = new Dictionary<string, object>(state);
+            if (effects == null) return newState;
             foreach (var effect in effects)
             {
+                if (effect == null || effect.key == null) continue;
                 // Overwrite or add the new value to the state.
                 newState[effect.key] = effect.GetValue();
             }
             return newState;
         }
-        
+
         /// <summary>
         /// The heuristic function (h-cost) for the A* algorithm.
-        /// It estimates the remaining "distance" from the current state to the goal.
-        /// A simple heuristic is to count the number of goal conditions that are not yet met.
+        /// It estimates the remaining "distance" from the current state to the goal:
+        /// the number of goal conditions that are not yet met.
         /// </summary>
         private float Heuristic(GameObject agent, Blackboard blackboard,  Dictionary<string, object> state, List<IGoapPrecondition> goal)
         {
-            return goal.Count(condition => !condition.IsMet(agent, blackboard, state));
+            int unmet = 0;
+            for (int i = 0; i < goal.Count; i++)
+            {
+                var condition = goal[i];
+                if (condition != null && !condition.IsMet(agent, blackboard, state)) unmet++;
+            }
+            return unmet;
         }
     }
 }

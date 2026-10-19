@@ -21,7 +21,7 @@ namespace ND_BehaviorTree
             // 1. Get the NavMeshAgent from the blackboard.
             if (agentKey != null && blackboard != null)
             {
-                agent = blackboard.GetValue<NavMeshAgent>(agentKey.name);
+                agent = blackboard.GetValue<NavMeshAgent>(agentKey.keyName);
             }
 
             if (agent == null)
@@ -32,13 +32,10 @@ namespace ND_BehaviorTree
             // 2. Get the destination Vector3 from the blackboard.
             if (destinationKey != null && blackboard != null)
             {
-                Vector3 destination = blackboard.GetValue<Vector3>(destinationKey.name);
+                Vector3 destination = blackboard.GetValue<Vector3>(destinationKey.keyName);
                 
                 // 3. Set the destination for the agent.
-                if (agent.SetDestination(destination))
-                {
-                    Debug.Log("Set Destination");
-                }
+                agent.SetDestination(destination);
             }
 
         }

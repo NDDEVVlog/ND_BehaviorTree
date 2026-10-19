@@ -26,20 +26,18 @@ namespace ND_BehaviorTree
             // --- 1. Validate Configuration ---
             if (value == null || compareType == null || targetValue == null)
             {
+                StopChild();
                 return Status.Failure;
             }
 
-            // --- 2. Get the Values ---
-            var blackboardKey1 = !string.IsNullOrEmpty(value.keyName) ? blackboard.keys.Find(a => a.keyName == value.keyName) : null;
-            object val1 = (blackboardKey1 != null) ? blackboardKey1.GetValueObject() : value.GetValueObject();
-
+            // --- 2. Get the Values --- (linked blackboard key if present, otherwise the inline value)
+            Key key1 = ResolveKey(value);
             var op = compareType.GetValue();
+            Key key2 = ResolveKey(targetValue);
 
-            var blackboardKey2 = !string.IsNullOrEmpty(targetValue.keyName) ? blackboard.keys.Find(a => a.keyName == targetValue.keyName) : null;
-            object val2 = (blackboardKey2 != null) ? blackboardKey2.GetValueObject() : targetValue.GetValueObject();
-
-            // --- 3. Perform Comparison ---
-            bool conditionPassed = ComparisonHelper.PerformComparison(val1, val2, op);
+            // --- 3. Perform Comparison --- fast path for float/int/bool (no boxing per tick), same results as ComparisonHelper
+            if (!TryCompareTyped(key1, key2, op, out bool conditionPassed))
+                conditionPassed = ComparisonHelper.PerformComparison(key1.GetValueObject(), key2.GetValueObject(), op);
 
             // --- 4. Apply Inversion ---
             conditionPassed = (conditionPassed != shouldInvert);
@@ -56,9 +54,51 @@ namespace ND_BehaviorTree
             }
             else
             {
-                // Condition failed; do not run the child
+                // Condition failed; do not run the child, and stop it if it was running.
+                StopChild();
                 return Status.Failure;
             }
+        }
+
+        /// <summary>The runtime blackboard key with this name, or the key itself (detached local value).</summary>
+        private Key ResolveKey(Key key)
+        {
+            if (blackboard != null && !string.IsNullOrEmpty(key.keyName) && blackboard.TryGetKey(key.keyName, out var blackboardKey))
+                return blackboardKey;
+            return key;
+        }
+
+        private static bool TryCompareTyped(Key a, Key b, ComparisonType op, out bool result)
+        {
+            switch (a)
+            {
+                case Key<float> fa when b is Key<float> fb: result = Compare(fa.GetValue(), fb.GetValue(), op); return true;
+                case Key<float> fa when b is Key<int> ib: result = Compare(fa.GetValue(), ib.GetValue(), op); return true;
+                case Key<int> ia when b is Key<int> ib: result = Compare(ia.GetValue(), ib.GetValue(), op); return true;
+                case Key<int> ia when b is Key<float> fb: result = Compare(ia.GetValue(), fb.GetValue(), op); return true;
+                case Key<bool> ba when b is Key<bool> bb: result = Compare(ba.GetValue().CompareTo(bb.GetValue()), 0, op); return true;
+                default: result = false; return false;
+            }
+        }
+
+        private static bool Compare(double x, double y, ComparisonType op)
+        {
+            switch (op)
+            {
+                case ComparisonType.Equal: return x == y;
+                case ComparisonType.NotEqual: return x != y;
+                case ComparisonType.Greater: return x > y;
+                case ComparisonType.GreaterEqual: return x >= y;
+                case ComparisonType.Less: return x < y;
+                case ComparisonType.LessEqual: return x <= y;
+                default: return false;
+            }
+        }
+
+        /// <summary>A child left Running would resume later without OnEnter (and never get OnExit): reset it.</summary>
+        private void StopChild()
+        {
+            if (child != null && child.IsRunning()) child.Reset();
         }
     }
 }

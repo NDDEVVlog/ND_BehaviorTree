@@ -16,6 +16,8 @@ namespace ND_BehaviorTree
 
         // --- Runtime variables ---
         private NavMeshAgent agent;
+        // Created once; subscribed in OnEnter and removed in OnExit so InteruptAction never accumulates handlers.
+        [System.NonSerialized] private System.Action m_InterruptHandler;
 
         protected override void OnEnter()
         {
@@ -31,7 +33,9 @@ namespace ND_BehaviorTree
                 return;
             }
 
-            InteruptAction += OnInterupt;
+            if (m_InterruptHandler == null) m_InterruptHandler = OnInterupt;
+            InteruptAction -= m_InterruptHandler; // guard against a double subscription
+            InteruptAction += m_InterruptHandler;
 
             // Find a new random destination and set it.
             if (TrySetNewRandomDestination())
@@ -83,6 +87,7 @@ namespace ND_BehaviorTree
 
         protected override void OnExit()
         {
+            InteruptAction -= m_InterruptHandler;
             if (agent != null && agent.hasPath)
             {
 
@@ -97,7 +102,8 @@ namespace ND_BehaviorTree
 
                 agent.ResetPath();
             }
-            InteruptAction = null;
+            // Only unsubscribe this node (assigning null would also drop handlers added by other systems).
+            InteruptAction -= m_InterruptHandler;
         }
     }
-}
+}

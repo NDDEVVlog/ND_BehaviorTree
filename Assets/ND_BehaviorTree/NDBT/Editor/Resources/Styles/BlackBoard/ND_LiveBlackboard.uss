@@ -1,0 +1,83 @@
+/* Live Debug → runtime blackboard table */
+.nd-livebb {
+    margin-top: 6px;
+    flex-shrink: 1;
+    min-height: 60px;
+}
+
+.nd-livebb__header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.nd-livebb__title {
+    -unity-font-style: bold;
+    color: #D9D9D9;
+    flex-grow: 1;
+}
+
+.nd-livebb__filter {
+    width: 96px;
+    margin: 0;
+}
+
+.nd-livebb__empty {
+    color: #9A9A9A;
+    white-space: normal;
+}
+
+.nd-livebb__rows {
+    flex-shrink: 1;
+    max-height: 320px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.nd-livebb__row {
+    flex-direction: row;
+    align-items: center;
+    padding: 3px 6px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+    transition-property: background-color;
+    transition-duration: 0.25s;
+}
+
+.nd-livebb__row--changed {
+    background-color: rgba(245, 184, 61, 0.28);
+}
+
+.nd-livebb__names {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 80px;
+}
+
+.nd-livebb__name {
+    color: #F0F0F0;
+    font-size: 11px;
+}
+
+.nd-livebb__type {
+    color: #8C8C8C;
+    font-size: 9px;
+}
+
+.nd-livebb__value {
+    color: #E8E8E8;
+    font-size: 11px;
+    -unity-text-align: middle-right;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+}
+
+.nd-livebb__value--true {
+    color: #6FE36F;
+}
+
+.nd-livebb__value--false {
+    color: #E57373;
+}

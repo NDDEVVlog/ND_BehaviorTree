@@ -14,8 +14,6 @@ namespace ND_BehaviorTree
 
         protected override Status OnProcess()
         {
-            // Tick any attached services.
-            TickServices();
 
             if (children.Count == 0) return Status.Failure;
 
@@ -27,15 +25,25 @@ namespace ND_BehaviorTree
                     case Status.Running:
                         return Status.Running;
                     case Status.Success:
-                        Reset();
+                        ResetChildrenForNextRun();
                         return Status.Success;
                     default:
                         currentChildIndex++;
                         return Status.Running;
                 }
             }
-            Reset();
+            ResetChildrenForNextRun();
             return Status.Failure;
+        }
+
+        /// <summary>
+        /// Prepares the children for the next activation without touching this node's own lifecycle.
+        /// (Calling Reset() here would run OnExit, and Node.Process() then runs OnExit a second time.)
+        /// </summary>
+        private void ResetChildrenForNextRun()
+        {
+            currentChildIndex = 0;
+            for (int i = 0; i < children.Count; i++) children[i]?.Reset();
         }
 
         public override void Reset()

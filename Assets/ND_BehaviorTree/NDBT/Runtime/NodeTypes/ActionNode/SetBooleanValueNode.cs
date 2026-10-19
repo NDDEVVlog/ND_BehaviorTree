@@ -26,16 +26,14 @@ public class SetBooleanValueNode : ActionNode
    
     protected override Status OnProcess()
     {   
-         if (conditionKey == null)
+        if (conditionKey == null || blackboard == null)
         {
             return Status.Failure;
         }
 
-        blackboard.SetValue<bool>(conditionKey.keyName,ValueToSet);
-
-        // Return Running while the action is in progress.
-        return Status.Success;
+        // Fail when the write is rejected (missing key or wrong type).
+        return blackboard.SetValue<bool>(conditionKey.keyName, ValueToSet) ? Status.Success : Status.Failure;
 
     }
 
-}
+}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,6 @@ namespace ND_BehaviorTree
     public abstract class CompositeNode : Node
     {
         [HideInInspector] public List<Node> children = new List<Node>();
-        [HideInInspector] public List<ServiceNode> services = new List<ServiceNode>();
 
         public override void AddChild(Node child)
         {
@@ -17,18 +17,10 @@ namespace ND_BehaviorTree
 
         public override List<Node> GetChildren() => children;
 
-        public void AddService(ServiceNode service)
-        {
-            if (!services.Contains(service)) services.Add(service);
-        }
-
-        public void RemoveService(ServiceNode service) => services.Remove(service);
-
         public override Node Clone()
         {
             CompositeNode node = (CompositeNode)base.Clone();
             node.children = new List<Node>();
-            node.services = new List<ServiceNode>();
             return node;
         }
 
@@ -36,15 +28,10 @@ namespace ND_BehaviorTree
         {
             base.Reset();
             foreach (var child in children) child?.Reset();
-            foreach (var service in services) service?.Reset();
         }
 
-        protected void TickServices()
-        {
-            foreach (var service in services)
-            {
-                service?.Process();
-            }
-        }
+        /// <summary>No longer needed: services on every node are ticked by Node.Process().</summary>
+        [Obsolete("Services are ticked automatically by Node.Process(); remove this call.")]
+        protected void TickServices() { }
     }
 }

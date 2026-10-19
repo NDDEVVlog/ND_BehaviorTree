@@ -59,6 +59,11 @@ namespace ND_BehaviorTree
             {
                 SetValue(typedValue);
             }
+            else if (!(newValue is IConvertible) || !typeof(IConvertible).IsAssignableFrom(typeof(T)))
+            {
+                // Convert.ChangeType can only succeed between IConvertible types; fail without throwing.
+                Debug.LogError($"Failed to set key '{keyName}'. Cannot convert type '{newValue.GetType().Name}' to '{typeof(T).Name}'.", this);
+            }
             else
             {
                 try

@@ -24,6 +24,7 @@ public class WanderNode : ActionNode
     // --- Private Runtime Variables ---
     private NavMeshAgent _agent;
     private Vector3 _startPosition; // An anchor point for wandering to prevent drifting too far.
+    [System.NonSerialized] private bool _hasStartPosition;
 
     // --- Lifecycle Methods ---
 
@@ -39,8 +40,13 @@ public class WanderNode : ActionNode
             Debug.LogError("WanderNode requires a NavMeshAgent component on the owner GameObject.", owner);
         }
         
-        // Store the initial position to calculate wander points from.
-        _startPosition = owner.transform.position;
+        // Store the initial position ONCE (first activation) to calculate wander points from.
+        // Re-anchoring on every activation made the wander area drift with the agent.
+        if (!_hasStartPosition)
+        {
+            _startPosition = owner.transform.position;
+            _hasStartPosition = true;
+        }
     }
 
     // OnProcess is called every frame while the node is in a 'Running' state.
@@ -81,4 +87,4 @@ public class WanderNode : ActionNode
             _agent.ResetPath();
         }
     }
-}
+}

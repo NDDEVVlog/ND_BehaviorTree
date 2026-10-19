@@ -23,8 +23,9 @@ namespace ND_BehaviorTree
         {
             // --- 1. Validate Configuration ---
             // A decorator without a condition to check is a configuration error.
-            if (conditionKey == null)
+            if (conditionKey == null || blackboard == null)
             {
+                StopChild();
                 return Status.Failure;
             }
 
@@ -47,10 +48,21 @@ namespace ND_BehaviorTree
             }
             else
             {
-                child.InteruptAction?.Invoke();
-                // The condition failed. Do not run the child. The decorator fails.
+                // The condition failed. Do not run the child; stop it if it was running. The decorator fails.
+                StopChild();
                 return Status.Failure;
             }
+        }
+
+        /// <summary>
+        /// A child left Running when the condition flips would otherwise resume later without OnEnter
+        /// (and never get OnExit). Interrupt it and reset it so it restarts cleanly next time.
+        /// </summary>
+        private void StopChild()
+        {
+            if (child == null || !child.IsRunning()) return;
+            child.InteruptAction?.Invoke();
+            child.Reset();
         }
     }
 }

@@ -1,0 +1,255 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7011403908344036057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: FloatKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.FloatKey
+  keyName: BackstageTime
+  value: 12
+--- !u!114 &-4918350656196826770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: FloatKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.FloatKey
+  keyName: Menace
+  value: 0
+--- !u!114 &-2404829252224783189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ccbfd705f632749b34b7302ec90a9a, type: 3}
+  m_Name: Vector3Key
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Vector3Key
+  keyName: LastKnownPosition
+  value: {x: 0, y: 0, z: 0}
+--- !u!114 &-2375363478196639230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: FloatKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.FloatKey
+  keyName: Detection
+  value: 0
+--- !u!114 &-2300883372429049367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: BoolKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: HasLastKnown
+  value: 0
+--- !u!114 &-1128353405876665246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ccbfd705f632749b34b7302ec90a9a, type: 3}
+  m_Name: Vector3Key
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Vector3Key
+  keyName: SearchCenter
+  value: {x: 0, y: 0, z: 0}
+--- !u!114 &-903994969191262821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: BoolKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: InAttackRange
+  value: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08fb034fe2c07504ea5249566ce4797d, type: 3}
+  m_Name: Xenomorph_Blackboard
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Blackboard
+  keys:
+  - {fileID: 2898636267766363130}
+  - {fileID: 7717698017717060514}
+  - {fileID: 1256234609455932010}
+  - {fileID: 7555954129746516645}
+  - {fileID: -2375363478196639230}
+  - {fileID: -2404829252224783189}
+  - {fileID: -2300883372429049367}
+  - {fileID: 319279438722182961}
+  - {fileID: 7244984488236166769}
+  - {fileID: -903994969191262821}
+  - {fileID: -1128353405876665246}
+  - {fileID: 3923851351363435770}
+  - {fileID: 6534348638020377328}
+  - {fileID: -4918350656196826770}
+  - {fileID: 7208480747853624910}
+  - {fileID: -7011403908344036057}
+--- !u!114 &319279438722182961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: BoolKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: HeardNoise
+  value: 0
+--- !u!114 &1256234609455932010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0016b02fe855ec14880ac49904668f41, type: 3}
+  m_Name: TransformKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.TransformKey
+  keyName: Player
+  value: {fileID: 0}
+--- !u!114 &2898636267766363130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c0ec67c4b8faf4a8a383d0477af380, type: 3}
+  m_Name: NavMeshAgentKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.NavMeshAgentKey
+  keyName: Agent
+  value: {fileID: 0}
+--- !u!114 &3923851351363435770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ccbfd705f632749b34b7302ec90a9a, type: 3}
+  m_Name: Vector3Key
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Vector3Key
+  keyName: DirectorHint
+  value: {x: 0, y: 0, z: 0}
+--- !u!114 &6534348638020377328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: BoolKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: DirectorRetreat
+  value: 0
+--- !u!114 &7208480747853624910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: FloatKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.FloatKey
+  keyName: HideCheckChance
+  value: 0.15
+--- !u!114 &7244984488236166769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ccbfd705f632749b34b7302ec90a9a, type: 3}
+  m_Name: Vector3Key
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Vector3Key
+  keyName: NoisePosition
+  value: {x: 0, y: 0, z: 0}
+--- !u!114 &7555954129746516645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: BoolKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: PlayerVisible
+  value: 0
+--- !u!114 &7717698017717060514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08f35f5f9746e284ebedf2f9617a46a9, type: 3}
+  m_Name: XenoBodyKey
+  m_EditorClassIdentifier: Assembly-CSharp::ND_BehaviorTree.Demo.Xeno.XenoBodyKey
+  keyName: Body
+  value: {fileID: 0}

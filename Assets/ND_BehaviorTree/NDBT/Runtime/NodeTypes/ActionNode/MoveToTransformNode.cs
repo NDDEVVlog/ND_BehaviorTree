@@ -22,9 +22,15 @@ namespace ND_BehaviorTree
         private NavMeshAgent agent;
         private Transform targetTransform;
         private float timeSinceLastUpdate = 0f;
+        // Created once and subscribed per activation (removed in OnExit), so InteruptAction never accumulates handlers.
+        [System.NonSerialized] private System.Action m_InterruptHandler;
 
         protected override void OnEnter()
         {
+            if (m_InterruptHandler == null) m_InterruptHandler = OnInterrupt;
+            InteruptAction -= m_InterruptHandler; // guard against a double subscription
+            InteruptAction += m_InterruptHandler;
+
             // --- 1. Get references from the Blackboard ---
             if (agentKey != null && blackboard != null)
             {
@@ -48,15 +54,6 @@ namespace ND_BehaviorTree
             {
                 return;
             }
-
-            //Stop the agent if this node is aborted or finishes.
-            InteruptAction += () =>
-            {
-                if (agent != null && agent.hasPath)
-                {
-                    agent.ResetPath();
-                }
-            };
 
             // --- 3. Set the first destination immediately ---
             agent.SetDestination(targetTransform.position);
@@ -93,6 +90,16 @@ namespace ND_BehaviorTree
         }
 
         protected override void OnExit()
+        {
+            InteruptAction -= m_InterruptHandler;
+            if (agent != null && agent.hasPath)
+            {
+                agent.ResetPath();
+            }
+        }
+
+        // Stop the agent if this node is interrupted.
+        private void OnInterrupt()
         {
             if (agent != null && agent.hasPath)
             {

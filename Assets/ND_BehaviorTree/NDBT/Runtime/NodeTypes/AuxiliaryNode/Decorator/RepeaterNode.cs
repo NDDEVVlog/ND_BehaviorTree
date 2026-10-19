@@ -7,6 +7,8 @@ namespace ND_BehaviorTree
     [NodeInfo("Repeater", "Decorator/Repeater", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Repeater.png")]
     public class RepeaterNode : DecoratorNode
     {
+        [System.NonSerialized] private bool m_NoChildWarned;
+
         [Tooltip("The number of times to repeat the child. Set to 0 to repeat forever.")]
         
         public int repeatCount = 3;
@@ -22,6 +24,11 @@ namespace ND_BehaviorTree
         {
             if (child == null)
             {
+                if (!m_NoChildWarned)
+                {
+                    m_NoChildWarned = true;
+                    Debug.LogWarning($"[RepeaterNode] '{name}' has no child; it always succeeds. (Logged once.)", this);
+                }
                 return Status.Success;
             }
 

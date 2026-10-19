@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 namespace ND_BehaviorTree.GOAP
-{   
+{
     [NodeInfo("GOAPPlannerNode", "GOAP/GOAPPlannerNode", true, true, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/Brain.png")]
     public class GOAPPlannerNode : CompositeNode
     {
@@ -12,6 +12,8 @@ namespace ND_BehaviorTree.GOAP
         public List<IGoapPrecondition> goal = new List<IGoapPrecondition>();
 
         private Queue<GOAPActionNode> _currentPlan;
+        // True when the planner produced a plan this activation (possibly empty = goal already satisfied).
+        [System.NonSerialized] private bool _hasPlan;
 
         private List<GOAPActionNode> ActionPool => children.OfType<GOAPActionNode>().ToList();
 
@@ -19,10 +21,10 @@ namespace ND_BehaviorTree.GOAP
         {
             base.OnEnter();
             _currentPlan = new Queue<GOAPActionNode>();
+            _hasPlan = false;
 
             var planner = new Planner();
 
-            // === DEBUG: KIỂM TRA WORLD STATE BAN ĐẦU ===
             var worldState = new Dictionary<string, object>();
             if (blackboard != null)
             {
@@ -35,26 +37,28 @@ namespace ND_BehaviorTree.GOAP
                     }
                 }
             }
-            
+
             // Pass the agent's GameObject to the planner for context-aware preconditions.
-            // var plan = planner.FindPlan(GetOwnerTreeGameObject(), worldState, this.goal, ActionPool); // Giả sử GetOwnerTreeGameObject() tồn tại
-            var plan = planner.FindPlan(GetOwnerTreeGameObject(),blackboard, worldState, this.goal, ActionPool);
+            GameObject agent = ownerTree != null && ownerTree.Self != null ? ownerTree.Self : null;
+            var plan = planner.FindPlan(agent, blackboard, worldState, this.goal, ActionPool);
 
-
-            if (plan != null && plan.Count > 0)
+            // null = no plan (Failure). Empty = goal already satisfied (Success on the first tick).
+            if (plan != null)
             {
                 _currentPlan = new Queue<GOAPActionNode>(plan);
-
+                _hasPlan = true;
             }
-
-
         }
 
         protected override Status OnProcess()
         {
-            if (_currentPlan == null || _currentPlan.Count == 0)
+            if (!_hasPlan || _currentPlan == null)
             {
-                return Status.Failure; // No plan exists or plan is finished
+                return Status.Failure; // No plan exists
+            }
+            if (_currentPlan.Count == 0)
+            {
+                return Status.Success; // Goal already satisfied: nothing to do
             }
 
             var currentAction = _currentPlan.Peek();
@@ -71,6 +75,7 @@ namespace ND_BehaviorTree.GOAP
 
                 case Status.Failure:
                     _currentPlan.Clear(); // Action failed, invalidate the entire plan
+                    _hasPlan = false;
                     return Status.Failure;
             }
             return Status.Running;
@@ -84,6 +89,7 @@ namespace ND_BehaviorTree.GOAP
                 foreach (var action in _currentPlan) action.Reset();
                 _currentPlan.Clear();
             }
+            _hasPlan = false;
             children.ForEach(c => c.Reset());
         }
     }

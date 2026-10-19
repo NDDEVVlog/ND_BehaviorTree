@@ -17,7 +17,7 @@ MonoBehaviour:
     customViewScript: {fileID: 0}
     styleSheetKey: GOAP
     uxmlKey: Default
-    nodeTypeFullName: SelectorNode
+    nodeTypeFullName: ND_BehaviorTree.SelectorNode
   _styleSheets:
   - styleKey: GOAP
     styleSheet: {fileID: 7433441132597879392, guid: 56edd9fb931184641b0c2e7fe3d72ef4, type: 3}

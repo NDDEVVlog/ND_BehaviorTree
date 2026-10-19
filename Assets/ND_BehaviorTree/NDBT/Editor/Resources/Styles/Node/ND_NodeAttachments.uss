@@ -1,0 +1,200 @@
+/*
+================================================================================
+=== ND_BehaviorTree — node sections: decorators, key slots, services ===
+Always added to node views (on top of the node's own theme), so it applies to
+every theme. Override these classes in a custom theme USS to restyle.
+Palette: slate base, accents only on bars/dots/pills.
+================================================================================
+*/
+
+/* ---------- Sections (flush, full width, part of the node block) ---------- */
+.nd-section {
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
+}
+.nd-section--decorators {
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0, 0, 0, 0.35);
+}
+.nd-section--services {
+    border-top-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Attachment row ---------- */
+.nd-attachment {
+    flex-direction: column;
+    padding: 5px 8px 5px 0;
+    border-left-width: 3px;
+}
+.nd-attachment--divider {
+    border-top-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0.28);
+}
+.nd-attachment--decorator {
+    background-color: #2B3247;
+    border-left-color: #7C93FF;
+}
+.nd-attachment--service {
+    background-color: #223634;
+    border-left-color: #3CC7B1;
+}
+.nd-attachment:hover {
+    background-color: #343B52;
+}
+.nd-attachment--service:hover {
+    background-color: #29403E;
+}
+
+.nd-attachment__header {
+    flex-direction: row;
+    align-items: center;
+    padding-left: 8px;
+}
+.nd-attachment__glyph {
+    font-size: 10px;
+    width: 12px;
+    color: rgba(255, 255, 255, 0.45);
+    -unity-text-align: middle-center;
+    margin-right: 4px;
+}
+.nd-attachment--decorator .nd-attachment__glyph { color: #9AAAFF; }
+.nd-attachment--service .nd-attachment__glyph { color: #6FDCCB; }
+
+.nd-attachment__icon {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+.nd-attachment__texts {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+.nd-attachment__title {
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: #E6E9F0;
+}
+.nd-attachment__summary {
+    font-size: 9px;
+    color: #9AA3B2;
+    white-space: normal;
+}
+
+/* Status pill (hidden unless live) */
+.nd-attachment__pill {
+    display: none;
+    font-size: 8px;
+    -unity-font-style: bold;
+    color: #15171C;
+    padding: 1px 6px;
+    margin-left: 6px;
+    border-radius: 7px;
+}
+.nd-pill--running { display: flex; background-color: #F5B83D; }
+.nd-pill--done    { display: flex; background-color: #4CC38A; }
+.nd-pill--failed  { display: flex; background-color: #E5534B; }
+
+/* Live tint of the whole row */
+.nd-attachment--running { border-left-color: #F5B83D; background-color: #3A3422; }
+.nd-attachment--done    { border-left-color: #4CC38A; background-color: #20362B; }
+.nd-attachment--failed  { border-left-color: #E5534B; background-color: #3B2424; }
+
+/* Progress (TimeLimit, Cooldown, service tick) */
+.nd-progress {
+    display: none;
+    height: 3px;
+    margin: 4px 0 0 8px;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-radius: 2px;
+}
+.nd-progress--visible { display: flex; }
+.nd-progress__fill {
+    height: 3px;
+    width: 0;
+    border-radius: 2px;
+    background-color: #7C93FF;
+}
+.nd-attachment--service .nd-progress__fill { background-color: #3CC7B1; }
+.nd-progress__fill--running { background-color: #F5B83D; }
+
+/* ---------- Blackboard key slots ---------- */
+.nd-slots {
+    padding: 4px 10px 6px 10px;
+    flex-direction: column;
+}
+.nd-slots--compact {
+    padding: 3px 0 0 30px;
+}
+.nd-slot {
+    flex-direction: row;
+    align-items: center;
+    margin: 1px 0;
+}
+.nd-slot__label {
+    font-size: 10px;
+    color: #8B93A1;
+    width: 84px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.nd-slots--compact .nd-slot__label {
+    font-size: 9px;
+    width: 66px;
+}
+.nd-slot__chip {
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    min-height: 17px;
+    padding: 1px 7px 1px 6px;
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: #3A3F4A;
+    background-color: #1F2228;
+}
+.nd-slot__chip:hover {
+    border-color: #5B6475;
+    background-color: #252930;
+}
+.nd-slots--compact .nd-slot__chip { min-height: 15px; }
+.nd-slot__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+.nd-slot__text {
+    font-size: 10px;
+    color: #E6E9F0;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.nd-slot__chip--linked .nd-slot__text { -unity-font-style: bold; }
+.nd-slot__chip--empty { background-color: rgba(0, 0, 0, 0.12); }
+.nd-slot__chip--empty .nd-slot__text { color: #6B7280; -unity-font-style: italic; }
+.nd-slot__chip--detached .nd-slot__text { color: #C3C9D4; -unity-font-style: italic; }
+.nd-slot__chip--drop-ok  { border-color: #4CC38A; background-color: #1E3529; }
+.nd-slot__chip--drop-bad { border-color: #E5534B; background-color: #3A2121; }
+
+/* ---------- Node progress (nodes with [NodeProgressBar]) ---------- */
+.nd-node-progress {
+    display: none;
+    height: 4px;
+    margin: 0 10px 6px 10px;
+    background-color: rgba(0, 0, 0, 0.35);
+    border-radius: 2px;
+}
+.nd-node-progress--visible { display: flex; }
+.nd-node-progress__fill {
+    height: 4px;
+    width: 0;
+    border-radius: 2px;
+    background-color: #F5B83D;
+}

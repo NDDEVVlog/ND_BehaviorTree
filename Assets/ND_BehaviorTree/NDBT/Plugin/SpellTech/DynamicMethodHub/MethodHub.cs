@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace SpellTech.DynamicMethodEvent
@@ -15,8 +14,17 @@ namespace SpellTech.DynamicMethodEvent
 
         public void TriggerEvent(string eventName)
         {
-            // Find the event in our list that matches the provided name.
-            DynamicEvent eventToTrigger = dynamicEvents.FirstOrDefault(e => e.eventName == eventName);
+            // Find the event in our list that matches the provided name (plain loop: no per-call closure).
+            DynamicEvent eventToTrigger = null;
+            for (int i = 0; i < dynamicEvents.Count; i++)
+            {
+                var e = dynamicEvents[i];
+                if (e != null && e.eventName == eventName)
+                {
+                    eventToTrigger = e;
+                    break;
+                }
+            }
 
             if (eventToTrigger != null)
             {
@@ -32,4 +40,3 @@ namespace SpellTech.DynamicMethodEvent
     }
 
 }
-

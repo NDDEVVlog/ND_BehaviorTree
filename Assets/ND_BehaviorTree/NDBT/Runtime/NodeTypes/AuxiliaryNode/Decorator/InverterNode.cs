@@ -7,6 +7,8 @@ namespace ND_BehaviorTree
     [NodeInfo("Inverter", "Decorator/Inverter", true, true,iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/Inverter.png")]
     public class InverterNode : DecoratorNode
     {
+        [System.NonSerialized] private bool m_NoChildWarned;
+
         /// <summary>
         /// Revert the status of the child node
         /// </summary>
@@ -15,6 +17,11 @@ namespace ND_BehaviorTree
         {
             if (child == null)
             {
+                if (!m_NoChildWarned)
+                {
+                    m_NoChildWarned = true;
+                    Debug.LogWarning($"[InverterNode] '{name}' has no child; it always succeeds. (Logged once.)", this);
+                }
                 return Status.Success;
             }
             

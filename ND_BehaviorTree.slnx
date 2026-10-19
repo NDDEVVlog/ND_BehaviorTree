@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Project Path="ND_BehaviorTree.Runtime.csproj" />
+  <Project Path="ND_BehaviorTreeEditor.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="ND_BehaviorTree.Editor.Tests.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+</Solution>

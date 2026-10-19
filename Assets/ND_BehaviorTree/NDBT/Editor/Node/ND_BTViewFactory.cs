@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ND_BehaviorTree.Editor.CustomGraph
@@ -23,6 +22,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         public static ND_BTNodeView CreateNodeView(Node nodeData)
         {
             Type nodeType = nodeData.GetType();
+            if (nodeData is RerouteNode) return new ND_BTRerouteView(nodeData, new ViewThemeData()); // fixed look, not themed
 
             if (!s_ViewCache.TryGetValue(nodeType, out CacheEntry entry))
             {
@@ -36,11 +36,16 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
             catch (Exception e)
             {
-                Debug.LogError($"Failed to create view for {nodeType.Name}. Using default. Error: {e.Message}");
+                Debug.LogError($"[ND_BTViewFactory] Failed to create view '{entry.ViewType.FullName}' for {nodeType.FullName}. Using the default view. Error: {e}");
                 return new ND_BTNodeView(nodeData, new ViewThemeData());
             }
         }
 
+        /// <summary>
+        /// Finds the mapping for the node type, walking up base classes (most specific wins).
+        /// Mappings match by exact Type (from the MonoScript) and fall back to the stored type name
+        /// (full name, or the legacy short name written by older versions).
+        /// </summary>
         private static CacheEntry ResolveConfigForType(Type nodeType)
         {
             var entry = new CacheEntry
@@ -52,44 +57,41 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             var activeConfig = ND_BehaviorTreeSetting.Instance.activeConfig;
             if (activeConfig == null || activeConfig.mappings == null)
             {
-                Debug.LogWarning($"[ThemeDebug] Factory: Active config is missing. Fallback to default.");
+                Debug.LogWarning("[ND_BTViewFactory] ND_BehaviorTreeSetting.activeConfig is not assigned. Nodes use the default view and theme.");
                 return entry;
             }
 
-            Type currentType = nodeType;
             NodeEditorMapping winningMapping = null;
-
-            while (currentType != null && winningMapping == null)
+            for (Type currentType = nodeType; currentType != null && winningMapping == null; currentType = currentType.BaseType)
             {
-                // SỬA Ở ĐÂY: So sánh m.nodeTypeFullName với currentType.Name
-                winningMapping = activeConfig.mappings.FirstOrDefault(m => m.nodeTypeFullName == currentType.Name);
-                if (winningMapping == null) currentType = currentType.BaseType;
-            }
-
-            if (winningMapping != null)
-            {
-                Debug.Log($"[ThemeDebug] Factory: Found mapping for {nodeType.Name}. UXML Key: '{winningMapping.uxmlKey}', USS Key: '{winningMapping.styleSheetKey}'");
-
-                if (winningMapping.customViewScript != null)
+                foreach (var mapping in activeConfig.mappings)
                 {
-                    Type customViewType = winningMapping.customViewScript.GetClass();
-                    if (customViewType != null && typeof(ND_BTNodeView).IsAssignableFrom(customViewType))
-                    {
-                        entry.ViewType = customViewType;
-                    }
+                    if (Matches(mapping, currentType)) { winningMapping = mapping; break; }
                 }
-
-                entry.ThemeData.CustomStyle = activeConfig.GetStyleSheet(winningMapping.styleSheetKey);
-                entry.ThemeData.CustomUXML = activeConfig.GetUXML(winningMapping.uxmlKey);
-
-                Debug.Log($"[ThemeDebug] Factory: Assets extracted -> UXML Asset: {(entry.ThemeData.CustomUXML != null ? "OK" : "NULL")}, USS Asset: {(entry.ThemeData.CustomStyle != null ? "OK" : "NULL")}");
             }
-            else
+
+            if (winningMapping == null) return entry;
+
+            if (winningMapping.customViewScript != null)
             {
-                Debug.Log($"[ThemeDebug] Factory: NO mapping found for {nodeType.Name}. Using default theme.");
+                Type customViewType = winningMapping.customViewScript.GetClass();
+                if (customViewType != null && typeof(ND_BTNodeView).IsAssignableFrom(customViewType))
+                    entry.ViewType = customViewType;
+                else
+                    Debug.LogError($"[ND_BTViewFactory] Mapping for {nodeType.FullName}: customViewScript '{winningMapping.customViewScript.name}' is not a {nameof(ND_BTNodeView)} subclass. Using the default view.");
             }
 
+            entry.ThemeData.CustomStyle = activeConfig.GetStyleSheet(winningMapping.styleSheetKey);
+            entry.ThemeData.CustomUXML = activeConfig.GetUXML(winningMapping.uxmlKey);
             return entry;
+        }
+
+        private static bool Matches(NodeEditorMapping mapping, Type type)
+        {
+            if (mapping == null) return false;
+            if (mapping.nodeScript != null) return mapping.nodeScript.GetClass() == type;
+            return !string.IsNullOrEmpty(mapping.nodeTypeFullName)
+                && (mapping.nodeTypeFullName == type.FullName || mapping.nodeTypeFullName == type.Name);
         }
     }
 }

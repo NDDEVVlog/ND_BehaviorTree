@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ND_BehaviorTree.sln"
+    "dotnet.defaultSolution": "ND_BehaviorTree.slnx"
 }

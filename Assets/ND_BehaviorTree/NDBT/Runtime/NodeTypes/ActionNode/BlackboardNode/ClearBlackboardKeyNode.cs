@@ -5,6 +5,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+using System;
 using UnityEngine;
 using ND_BehaviorTree;
 
@@ -13,17 +14,32 @@ namespace ND_BehaviorTree
     [NodeInfo("Clear Blackboard Key", "Action/Blackboard/ClearKey", true, false)]
     public class ClearBlackboardKeyNode : ActionNode
     {
-        [Tooltip("The Blackboard key to clear (set to null).")]
+        [Tooltip("The Blackboard key to clear (reference types are set to null, value types to their default).")]
         public Key keyToClear;
+
+        [NonSerialized] private bool m_MissingKeyLogged;
 
         protected override Status OnProcess()
         {
-            if (keyToClear != null && blackboard != null)
+            if (keyToClear == null || blackboard == null) return Status.Failure;
+
+            // Works for every key type (SetValue<object> only matched ObjectKey).
+            if (!blackboard.TryGetKey(keyToClear.keyName, out var key))
             {
-                blackboard.SetValue<object>(keyToClear.keyName, null);
-                return Status.Success;
+                if (!m_MissingKeyLogged)
+                {
+                    m_MissingKeyLogged = true;
+                    Debug.LogWarning($"[ClearBlackboardKeyNode] '{name}': key '{keyToClear.keyName}' not found in the blackboard. (Logged once.)", this);
+                }
+                return Status.Failure;
             }
-            return Status.Failure;
+
+            Type valueType = key.GetValueType();
+            object cleared = valueType != null && valueType.IsValueType && Nullable.GetUnderlyingType(valueType) == null
+                ? Activator.CreateInstance(valueType)
+                : null;
+            key.SetValueObject(cleared);
+            return Status.Success;
         }
     }
 }

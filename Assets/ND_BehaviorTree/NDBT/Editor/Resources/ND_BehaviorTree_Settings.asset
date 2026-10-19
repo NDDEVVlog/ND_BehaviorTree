@@ -20,6 +20,12 @@ MonoBehaviour:
   graphViewStyle: {fileID: 7433441132597879392, guid: 960474170df95f842adf94741758ef3d, type: 3}
   graphBackgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 1}
   gridColor: {r: 0.18, g: 0.18, b: 0.18, a: 1}
+  historyCapacity: 100
+  aiFeaturesEnabled: 1
+  aiAccessLevel: 2
+  aiPasswordSalt: bKk3v1zfF402KfCBCyFqGw==
+  aiPasswordHash: RmmCfkigN6yyLd3pYJW9lVtOcqvz4ivqv/ayOqCltfU=
+  aiBridgePort: 39877
   edgeTheme:
     edgeColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
     edgeThickness: 3

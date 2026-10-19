@@ -14,8 +14,6 @@ namespace ND_BehaviorTree
 
         protected override Status OnProcess()
         {
-            // Tick any attached services.
-            TickServices();
 
             if (children.Count == 0) return Status.Success;
 

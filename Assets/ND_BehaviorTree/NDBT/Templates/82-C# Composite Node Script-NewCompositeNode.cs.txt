@@ -35,8 +35,6 @@ public class #SCRIPTNAME# : CompositeNode
     // This is where you implement the logic for processing child nodes.
     protected override Status OnProcess()
     {
-        // It's good practice to tick any attached services at the start of the process.
-        TickServices();
         
         // This is a basic example of Sequence logic.
         // Modify this loop for your specific composite type (e.g., Selector, Parallel).

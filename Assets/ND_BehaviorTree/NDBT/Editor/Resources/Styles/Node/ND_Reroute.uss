@@ -1,0 +1,45 @@
+/* Reroute ("extended node"): a dot on an edge. Ports sit half outside its top and bottom. */
+.nd-reroute {
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    background-color: #8A8F98;
+    border-width: 2px;
+    border-color: #2A2C30;
+}
+
+.nd-reroute:hover {
+    background-color: #B8BDC6;
+}
+
+.nd-reroute.selected {
+    border-color: #4C8DFF;
+}
+
+.nd-reroute.running {
+    background-color: #F5B83D;
+    border-color: #F5B83D;
+}
+
+.nd-reroute.success {
+    background-color: #59E659;
+}
+
+.nd-reroute.failure {
+    background-color: #F25959;
+}
+
+.nd-reroute__port {
+    position: absolute;
+    left: 0;
+    right: 0;
+    align-items: center;
+}
+
+.nd-reroute__port--top {
+    top: -2px;
+}
+
+.nd-reroute__port--bottom {
+    bottom: -2px;
+}

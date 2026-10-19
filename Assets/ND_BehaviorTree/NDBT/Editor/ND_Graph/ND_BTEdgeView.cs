@@ -12,6 +12,19 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         private Vector2 m_TempEndPosition;
         private Label m_EdgeLabel;
         private EdgeTheme m_Theme;
+        private Graph.LiveState m_LiveState = Graph.LiveState.Inactive;
+
+        private static readonly Color RunningColor = new Color(1f, 0.8f, 0.2f, 1f);
+        private static readonly Color SuccessColor = new Color(0.35f, 0.9f, 0.35f, 1f);
+        private static readonly Color FailureColor = new Color(0.95f, 0.35f, 0.35f, 1f);
+
+        /// <summary>Live debug: colours the edge by the child's state; running edges animate flowing dots.</summary>
+        public void SetLiveState(Graph.LiveState state)
+        {
+            bool changed = state != m_LiveState;
+            m_LiveState = state;
+            if (changed || state == Graph.LiveState.Running) MarkDirtyRepaint();
+        }
 
         public string Text
         {
@@ -72,24 +85,63 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
         }
 
+        /// <summary>Bezier control points in canvas-content space (same curve as drawn).</summary>
+        private bool TryGetCurve(out Vector2 start, out Vector2 p1, out Vector2 p2, out Vector2 end)
+        {
+            start = p1 = p2 = end = default;
+            if (OutputPort == null) return false;
+            var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
+            if (canvas == null) return false;
+
+            start = canvas.ContentContainer.WorldToLocal(OutputPort.GlobalCenter);
+            end = InputPort != null ? canvas.ContentContainer.WorldToLocal(InputPort.GlobalCenter) : m_TempEndPosition;
+            float dist = Mathf.Abs(start.y - end.y) * 0.5f + 25f;
+            p1 = start + Vector2.up * dist;
+            p2 = end - Vector2.up * dist;
+            return true;
+        }
+
+        /// <summary>Approximate distance from <paramref name="contentPoint"/> (canvas-content space) to the drawn curve.</summary>
+        public float DistanceTo(Vector2 contentPoint)
+        {
+            if (InputPort == null || !TryGetCurve(out var start, out var p1, out var p2, out var end)) return float.MaxValue;
+            const int Segments = 24;
+            float best = float.MaxValue;
+            Vector2 previous = start;
+            for (int i = 1; i <= Segments; i++)
+            {
+                float t = i / (float)Segments, u = 1f - t;
+                Vector2 point = u * u * u * start + 3f * u * u * t * p1 + 3f * u * t * t * p2 + t * t * t * end;
+                best = Mathf.Min(best, DistanceToSegment(contentPoint, previous, point));
+                previous = point;
+            }
+            return best;
+        }
+
+        private static float DistanceToSegment(Vector2 p, Vector2 a, Vector2 b)
+        {
+            Vector2 ab = b - a;
+            float lengthSqr = ab.sqrMagnitude;
+            float t = lengthSqr < 0.0001f ? 0f : Mathf.Clamp01(Vector2.Dot(p - a, ab) / lengthSqr);
+            return Vector2.Distance(p, a + ab * t);
+        }
+
         private void DrawEdge(MeshGenerationContext ctx)
         {
-            if (OutputPort == null) return;
-            var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
-            if (canvas == null) return;
-
-            Vector2 start = canvas.ContentContainer.WorldToLocal(OutputPort.GlobalCenter);
-            Vector2 end = InputPort != null ? canvas.ContentContainer.WorldToLocal(InputPort.GlobalCenter) : m_TempEndPosition;
+            if (!TryGetCurve(out var start, out var p1, out var p2, out var end)) return;
 
             var painter = ctx.painter2D;
-            painter.strokeColor = m_Theme.edgeColor;
-            painter.lineWidth = m_Theme.edgeThickness;
+            Color color = m_LiveState switch
+            {
+                Graph.LiveState.Running => RunningColor,
+                Graph.LiveState.Succeeded => SuccessColor,
+                Graph.LiveState.Failed => FailureColor,
+                _ => m_Theme.edgeColor
+            };
+            painter.strokeColor = color;
+            painter.lineWidth = m_LiveState == Graph.LiveState.Inactive ? m_Theme.edgeThickness : m_Theme.edgeThickness * 1.7f;
             painter.lineCap = LineCap.Round;
             painter.lineJoin = LineJoin.Round;
-
-            float dist = Mathf.Abs(start.y - end.y) * 0.5f + 25f;
-            Vector2 p1 = start + Vector2.up * dist;
-            Vector2 p2 = end - Vector2.up * dist;
 
             painter.BeginPath();
             painter.MoveTo(start);
@@ -100,19 +152,35 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             Vector2 dir = (0.75f * (p1 - start) + 1.5f * (p2 - p1) + 0.75f * (end - p2)).normalized;
             if (dir == Vector2.zero) dir = Vector2.down;
 
-            DrawArrow(painter, mid, dir);
+            DrawArrow(painter, mid, dir, color);
+
+            if (m_LiveState == Graph.LiveState.Running)
+            {
+                // Three dots flowing from parent to child.
+                float phase = (float)(EditorApplication.timeSinceStartup * 0.8 % 1.0);
+                painter.fillColor = Color.white;
+                for (int i = 0; i < 3; i++)
+                {
+                    float t = (phase + i / 3f) % 1f;
+                    float u = 1f - t;
+                    Vector2 p = u * u * u * start + 3f * u * u * t * p1 + 3f * u * t * t * p2 + t * t * t * end;
+                    painter.BeginPath();
+                    painter.Arc(p, 3.5f, 0f, 360f);
+                    painter.Fill();
+                }
+            }
             m_EdgeLabel.style.left = mid.x - (m_EdgeLabel.layout.width / 2f);
             m_EdgeLabel.style.top = mid.y - (m_EdgeLabel.layout.height / 2f) - (string.IsNullOrEmpty(Text) ? 0 : 12f);
         }
 
-        private void DrawArrow(Painter2D painter, Vector2 center, Vector2 dir)
+        private void DrawArrow(Painter2D painter, Vector2 center, Vector2 dir, Color color)
         {
             float size = 10f;
             Vector2 perp = new Vector2(-dir.y, dir.x);
             Vector2 tip = center + dir * (size * 0.6f);
             Vector2 bMid = center - dir * (size * 0.6f);
-            
-            painter.fillColor = m_Theme.edgeColor;
+
+            painter.fillColor = color;
             painter.BeginPath();
             painter.MoveTo(tip);
             painter.LineTo(bMid + perp * (size * 0.6f));

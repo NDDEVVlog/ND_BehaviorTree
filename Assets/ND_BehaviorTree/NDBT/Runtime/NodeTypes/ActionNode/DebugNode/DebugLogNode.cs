@@ -16,6 +16,7 @@ namespace ND_BehaviorTree
         public Key keyToLog;
 
 
+        [Tooltip("Status returned after logging. 'None' is treated as Success.")]
         public Status returningStatus = Status.Success;
 
         protected override Status OnProcess()
@@ -24,16 +25,22 @@ namespace ND_BehaviorTree
             string logString = $"{message}";
 
             // If a valid key is provided, fetch its value from the blackboard and append it.
-            // (Assuming Key has a way to check if it's set, e.g., a non-empty name)
             if (keyToLog != null && !string.IsNullOrEmpty(keyToLog.keyName))
             {
-                // The 'blackboard' property comes from the base Node class we set up.
-                // We use GetValue<object> to handle any type of data.
-                object value = blackboard.GetValue<object>(keyToLog.keyName);
+                // Works for every key type (GetValue<object> only matched ObjectKey).
+                string valueText;
+                if (blackboard != null && blackboard.TryGetKey(keyToLog.keyName, out var key))
+                {
+                    object value = key.GetValueObject();
+                    if (value is Object unityObject) valueText = unityObject != null ? unityObject.ToString() : "null";
+                    else valueText = value?.ToString() ?? "null";
+                }
+                else
+                {
+                    valueText = "<key not found>";
+                }
 
-                // Append the key's name and its value to the string.
-                // The '?? "null"' part gracefully handles a null value.
-                logString += $" | Key '{keyToLog.name}': {value ?? "null"}";
+                logString += $" | Key '{keyToLog.keyName}': {valueText}";
             }
 
             // Wrap the entire constructed string in the chosen color using rich text.
@@ -43,8 +50,8 @@ namespace ND_BehaviorTree
             // Log the final, colored string.
             Debug.Log(finalColoredLog);
 
-            // This action is instantaneous, so it always succeeds.
-            return returningStatus;
+            // This action is instantaneous. Status.None is not a valid result for a finished node.
+            return returningStatus == Status.None ? Status.Success : returningStatus;
         }
     }
 }

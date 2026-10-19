@@ -7,6 +7,8 @@ namespace ND_BehaviorTree
     [NodeInfo("Succeeder", "Decorator/Succeeder", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Check.png")]
     public class SucceederNode : DecoratorNode
     {
+        [System.NonSerialized] private bool m_NoChildWarned;
+
         /// <summary>
         /// This decorator ensures that its child branch always returns Success,
         /// unless it is still Running. It's useful for making behaviors optional
@@ -16,6 +18,11 @@ namespace ND_BehaviorTree
         {
             if (child == null)
             {
+                if (!m_NoChildWarned)
+                {
+                    m_NoChildWarned = true;
+                    Debug.LogWarning($"[SucceederNode] '{name}' has no child; it always succeeds. (Logged once.)", this);
+                }
                 return Status.Success;
             }
 

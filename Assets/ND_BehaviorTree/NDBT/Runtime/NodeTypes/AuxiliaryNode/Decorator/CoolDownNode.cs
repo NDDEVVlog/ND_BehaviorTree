@@ -16,8 +16,11 @@ namespace ND_BehaviorTree
         [ExposeProperty]
         private float cooldownRemaining;
 
-        // We track the time when the cooldown will be over.
+        // We track the time when the cooldown will be over. Wall-clock state: it survives Reset()
+        // (a parent Selector/Repeater/tree restart must not make the ability available again early).
         private float cooldownEndTime = -1.0f;
+
+        [System.NonSerialized] private bool m_NoChildWarned;
 
         protected override void OnEnter()
         {
@@ -28,6 +31,11 @@ namespace ND_BehaviorTree
         {
             if (child == null)
             {
+                if (!m_NoChildWarned)
+                {
+                    m_NoChildWarned = true;
+                    Debug.LogWarning($"[CooldownNode] '{name}' has no child; it always fails. (Logged once.)", this);
+                }
                 return Status.Failure;
             }
 
@@ -55,13 +63,6 @@ namespace ND_BehaviorTree
             return status;
         }
 
-        public override void Reset()
-        {
-            base.Reset();
-            // When the tree is fully reset, we should also reset the cooldown
-            // so the ability is available on the next run.
-            cooldownEndTime = -1.0f;
-            cooldownRemaining = 0;
-        }
+        // Reset() is intentionally not overridden: the base resets the child/processing state and the cooldown is kept.
     }
 }

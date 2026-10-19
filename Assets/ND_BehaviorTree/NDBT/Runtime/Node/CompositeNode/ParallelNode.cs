@@ -11,29 +11,34 @@ namespace ND_BehaviorTree
         [Tooltip("Success Policy: How many children need to succeed for the parallel node to succeed.")]
         public Policy successPolicy = Policy.RequireOne;
 
-        [Tooltip("Failure Policy: How many children need to fail for the parallel node to fail.")]
+        [Tooltip("Failure Policy: How many children need to fail for the parallel node to fail.\n" +
+                 "If every child has finished and neither policy is met (e.g. RequireAll/RequireAll with mixed results), the node fails.")]
         public Policy failurePolicy = Policy.RequireAll;
 
         protected override void OnEnter()
         {
             // Reset all children when this node is entered.
-            children.ForEach(c => c.Reset());
+            for (int i = 0; i < children.Count; i++) children[i]?.Reset();
         }
 
         protected override Status OnProcess()
         {
-            TickServices();
 
             if (children.Count == 0)
             {
                 return Status.Success;
             }
 
+            int childCount = 0;
             int successCount = 0;
             int failureCount = 0;
 
-            foreach (var child in children)
+            for (int i = 0; i < children.Count; i++)
             {
+                var child = children[i];
+                if (child == null) continue;
+                childCount++;
+
                 // We only process children that are not already in a finished state.
                 if (child.status != Status.Success && child.status != Status.Failure)
                 {
@@ -41,46 +46,35 @@ namespace ND_BehaviorTree
                 }
 
                 // Count the number of successes and failures.
-                if (child.status == Status.Success)
-                {
-                    successCount++;
-                }
-                if (child.status == Status.Failure)
-                {
-                    failureCount++;
-                }
+                if (child.status == Status.Success) successCount++;
+                else if (child.status == Status.Failure) failureCount++;
             }
 
-            // Check if the success condition is met.
-            if (successPolicy == Policy.RequireOne && successCount > 0)
-            {
-                return Status.Success;
-            }
-            if (successPolicy == Policy.RequireAll && successCount >= children.Count)
-            {   
-                Debug.Log("ParallelNode: All children succeeded.");
-                return Status.Success;
-            }
+            if (childCount == 0) return Status.Success;
 
-            // Check if the failure condition is met.
-            if (failurePolicy == Policy.RequireOne && failureCount > 0)
-            {
-                return Status.Failure;
-            }
-            if (failurePolicy == Policy.RequireAll && failureCount >= children.Count)
-            {
-                return Status.Failure;
-            }
+            Status result;
+            bool successMet = successPolicy == Policy.RequireOne ? successCount > 0 : successCount >= childCount;
+            bool failureMet = failurePolicy == Policy.RequireOne ? failureCount > 0 : failureCount >= childCount;
 
-            // If neither success nor failure conditions are met, the node is still running.
-            return Status.Running;
+            if (successMet) result = Status.Success;
+            else if (failureMet) result = Status.Failure;
+            // Every child finished but no policy is satisfied (e.g. RequireAll/RequireAll with mixed results).
+            else if (successCount + failureCount >= childCount) result = Status.Failure;
+            // Neither success nor failure conditions are met: still running.
+            else return Status.Running;
+
+            // The parallel is done: children that are still running must not keep running.
+            AbortRunningChildren();
+            return result;
         }
 
-        // When the parallel node itself is reset (e.g., by a parent), it must reset all its children.
-        public override void Reset()
+        private void AbortRunningChildren()
         {
-            base.Reset();
-            children.ForEach(c => c.Reset());
+            for (int i = 0; i < children.Count; i++)
+            {
+                var child = children[i];
+                if (child != null && child.IsRunning()) child.Reset();
+            }
         }
     }
 }

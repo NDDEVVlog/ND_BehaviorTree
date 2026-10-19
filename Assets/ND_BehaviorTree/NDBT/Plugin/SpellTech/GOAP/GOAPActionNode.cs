@@ -58,10 +58,9 @@ namespace ND_BehaviorTree.GOAP
         public override Node Clone()
         {
             GOAPActionNode node = base.Clone() as GOAPActionNode;
-            if (child != null)
-            {
-                node.child = child.Clone();
-            }
+            // The child is cloned and re-attached by BehaviorTree.Clone (via GetChildren/AddChild).
+            // Cloning it here created an orphan copy per agent that was never used or destroyed.
+            node.child = null;
             return node;
         }
     }

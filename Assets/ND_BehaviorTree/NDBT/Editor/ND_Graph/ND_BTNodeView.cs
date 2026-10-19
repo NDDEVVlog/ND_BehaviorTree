@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using ND_BehaviorTree.Editor.Graph;
 
 namespace ND_BehaviorTree.Editor.CustomGraph
 {
@@ -14,6 +16,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         {
             public FieldInfo fieldInfo;
             public Label valueLabel;
+            public object lastValue; // last shown value; the label is rewritten only when it changes
         }
 
         public Node NodeData { get; private set; }
@@ -26,9 +29,30 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         protected VisualElement m_DetailsContainer;
         protected VisualElement m_ServiceContainer;
         protected ViewThemeData m_ThemeData;
+        protected Label m_ExecutionIndexBadge;
+        protected VisualElement m_DecoratorContainer;
+        protected readonly List<ND_BTAttachmentView> m_AttachmentViews = new List<ND_BTAttachmentView>();
+        protected ND_BTKeySlotView m_KeySlots;
+        protected VisualElement m_ProgressTrack;
+        protected VisualElement m_ProgressFill;
+        private int m_ShownProgress = -1;
+
+        // Live-debug caches (avoid per-tick allocations).
+        private int m_LiveTick;
+        private Label m_TypeLabel;
+        private readonly List<Node> m_ChainScratch = new List<Node>();
+        private readonly List<Node> m_ShownChain = new List<Node>();
+
+        private static bool SameChain(List<Node> a, List<Node> b)
+        {
+            if (a.Count != b.Count) return false;
+            for (int i = 0; i < a.Count; i++) if (!ReferenceEquals(a[i], b[i])) return false;
+            return true;
+        }
 
         protected readonly List<ExposedPropertyUpdater> m_ExposedPropertyUpdaters = new List<ExposedPropertyUpdater>();
         private bool m_IsDragging;
+        private bool m_HasDragMoved;
         private Vector2 m_DragStartMousePos;
         private Dictionary<ND_BTNodeView, Vector2> m_DragStartNodePositions = new Dictionary<ND_BTNodeView, Vector2>();
 
@@ -42,6 +66,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             ApplyThemeAndLayout();
             SetupContainers();
             PopulateData();
+            CreateExecutionIndexBadge();
 
             RegisterCallback<PointerDownEvent>(OnPointerDown);
             RegisterCallback<PointerMoveEvent>(OnPointerMove);
@@ -58,6 +83,9 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
             StyleSheet styleToApply = m_ThemeData.CustomStyle != null ? m_ThemeData.CustomStyle : settings.defaultNodeStyle;
             if (styleToApply != null) this.styleSheets.Add(styleToApply);
+
+            // Decorator/service/slot sections are styled the same in every theme (themes may override the classes).
+            ND_BTStyles.Apply(this, ND_BTStyles.NodeAttachments);
         }
 
         protected virtual void SetupContainers()
@@ -77,6 +105,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
             if (titleLabel != null) titleLabel.text = string.IsNullOrEmpty(NodeData.typeName) ? NodeData.GetType().Name : NodeData.typeName;
             if (typeLabel != null && info != null) typeLabel.text = info.title ?? "Node";
+            RefreshSubtreeLabel();
 
             if (iconImage != null)
             {
@@ -92,6 +121,9 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             SetPosition(NodeData.position.position);
             InitializePorts(info);
             DrawExposedProperties();
+            DrawProgressBar();
+            DrawKeySlots();
+            DrawDecorators();
             DrawServices();
         }
 
@@ -105,7 +137,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
             if (info.hasFlowOutput && m_BottomPortContainer != null)
             {
-                BTPortCapacity capacity = (NodeData is DecoratorNode) ? BTPortCapacity.Single : BTPortCapacity.Multi;
+                BTPortCapacity capacity = BehaviorTreeGraphService.AcceptsMultipleChildren(NodeData) ? BTPortCapacity.Multi : BTPortCapacity.Single;
                 OutputPort = new ND_BTPortView(this, BTPortDirection.Output, capacity);
                 m_BottomPortContainer.Add(OutputPort);
             }
@@ -116,6 +148,56 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             style.left = position.x;
             style.top = position.y;
             OnNodeMoved?.Invoke();
+        }
+
+        /// <summary>Subtree / Event nodes: shows the referenced asset or event name under the title (kept current every editor tick).</summary>
+        public void RefreshSubtreeLabel()
+        {
+            string text;
+            if (NodeData is SubtreeNode subtreeNode) text = subtreeNode.subtree != null ? $"Subtree: {subtreeNode.subtree.name}" : "Subtree: (none)";
+            else if (NodeData is EventNode eventNode) text = $"Event: {(string.IsNullOrWhiteSpace(eventNode.eventName) ? "(unnamed)" : eventNode.eventName)}";
+            else if (NodeData is InitNode initNode) text = initNode.stopTreeOnFailure ? "Runs once at start · stops tree on failure" : "Runs once at start";
+            else return;
+
+            var typeLabel = this.Q<Label>("type-label");
+            if (typeLabel != null && typeLabel.text != text) typeLabel.text = text;
+        }
+
+        /// <summary>Current on-canvas position (may differ from data while a drag is in progress).</summary>
+        public Vector2 ViewPosition => new Vector2(style.left.value.value, style.top.value.value);
+
+        protected virtual void CreateExecutionIndexBadge()
+        {
+            m_ExecutionIndexBadge = new Label
+            {
+                name = "execution-index-badge",
+                pickingMode = PickingMode.Ignore,
+                tooltip = "Execution order inside the parent composite (left-to-right).",
+                style =
+                {
+                    position = Position.Absolute,
+                    left = -10, top = -10,
+                    minWidth = 20, height = 20,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                    backgroundColor = new Color(0.15f, 0.45f, 0.85f, 1f),
+                    color = Color.white,
+                    fontSize = 11,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    borderTopLeftRadius = 10, borderTopRightRadius = 10,
+                    borderBottomLeftRadius = 10, borderBottomRightRadius = 10,
+                    display = DisplayStyle.None
+                }
+            };
+            hierarchy.Add(m_ExecutionIndexBadge);
+        }
+
+        /// <summary>Shows the 1-based execution index; pass a negative value to hide it.</summary>
+        public virtual void SetExecutionIndex(int zeroBasedIndex)
+        {
+            if (m_ExecutionIndexBadge == null) return;
+            bool visible = zeroBasedIndex >= 0;
+            m_ExecutionIndexBadge.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (visible) m_ExecutionIndexBadge.text = (zeroBasedIndex + 1).ToString();
         }
 
         protected virtual void OnPointerDown(PointerDownEvent evt)
@@ -141,6 +223,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                     }
 
                     m_IsDragging = true;
+                    m_HasDragMoved = false;
                     m_DragStartMousePos = evt.position;
                     m_DragStartNodePositions.Clear();
                     
@@ -165,19 +248,20 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         {
             if (m_IsDragging && this.HasPointerCapture(evt.pointerId))
             {
-                Vector2 parentScale = parent.style.scale.value.value;
+                float scale = parent.resolvedStyle.scale.value.x;
+                if (scale <= 0.0001f) scale = 1f;
                 Vector2 delta = (Vector2)evt.position - m_DragStartMousePos;
-                
+
                 foreach (var kvp in m_DragStartNodePositions)
                 {
                     ND_BTNodeView nodeView = kvp.Key;
                     Vector2 startPos = kvp.Value;
-                    
-                    Vector2 newPos = startPos + (delta / parentScale.x);
+
+                    // View only while dragging; data is committed once on pointer-up (one undo step).
+                    Vector2 newPos = startPos + (delta / scale);
                     nodeView.SetPosition(newPos);
-                    nodeView.NodeData.SetPosition(new Rect(newPos, Vector2.zero));
-                    EditorUtility.SetDirty(nodeView.NodeData);
                 }
+                m_HasDragMoved = true;
                 evt.StopPropagation();
             }
         }
@@ -188,6 +272,10 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             {
                 m_IsDragging = false;
                 this.ReleasePointer(evt.pointerId);
+                if (m_HasDragMoved)
+                {
+                    GetFirstAncestorOfType<ND_BTGraphCanvas>()?.CommitNodeMove(new List<ND_BTNodeView>(m_DragStartNodePositions.Keys));
+                }
                 m_DragStartNodePositions.Clear();
                 evt.StopPropagation();
             }
@@ -213,51 +301,208 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             if (hasProps) m_DetailsContainer.style.display = DisplayStyle.Flex;
         }
 
+        /// <summary>
+        /// Draws attached decorators above the title as cards, top = evaluated first.
+        /// Right-click a card to reorder/remove; double-click to edit its properties.
+        /// </summary>
+        public virtual void DrawDecorators()
+        {
+            if (m_DecoratorContainer == null)
+            {
+                var title = this.Q<VisualElement>("title");
+                if (title?.parent == null) return;
+                m_DecoratorContainer = new VisualElement { name = "decorator-container" };
+                m_DecoratorContainer.AddToClassList("nd-section");
+                m_DecoratorContainer.AddToClassList("nd-section--decorators");
+                title.parent.Insert(title.parent.IndexOf(title), m_DecoratorContainer);
+            }
+
+            m_DecoratorContainer.Clear();
+            m_AttachmentViews.RemoveAll(v => !v.IsService);
+            var decorators = NodeData.decorators;
+            m_DecoratorContainer.style.display = decorators.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+
+            for (int i = 0; i < decorators.Count; i++)
+            {
+                var decorator = decorators[i];
+                if (decorator == null) continue;
+                int index = i;
+
+                var item = CreateAttachmentCard(decorator, isService: false, index);
+                item.AddManipulator(new ContextualMenuManipulator(evt =>
+                {
+                    var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
+                    if (canvas == null) return;
+                    evt.menu.AppendAction("Edit Properties", a => NodePropertyEditorWindow.Open(decorator, this));
+                    evt.menu.AppendAction("Move Up", a => canvas.MoveDecorator(NodeData, decorator, index - 1),
+                        index > 0 ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+                    evt.menu.AppendAction("Move Down", a => canvas.MoveDecorator(NodeData, decorator, index + 1),
+                        index < NodeData.decorators.Count - 1 ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+                    evt.menu.AppendSeparator();
+                    evt.menu.AppendAction("Remove Decorator", a => canvas.RemoveDecorator(NodeData, decorator));
+                    evt.StopPropagation();
+                }));
+
+                m_DecoratorContainer.Add(item);
+            }
+        }
+
         public virtual void DrawServices()
         {
             if (m_ServiceContainer == null) return;
+            m_ServiceContainer.Clear();
+            // The UXML's dashed "child-node-container" box is replaced by a flush section of the node.
+            m_ServiceContainer.RemoveFromClassList("child-node-container");
+            m_ServiceContainer.AddToClassList("nd-section");
+            m_ServiceContainer.AddToClassList("nd-section--services");
+            m_AttachmentViews.RemoveAll(v => v.IsService);
 
-            if (!(NodeData is CompositeNode composite) || composite.services == null || composite.services.Count == 0)
+            var services = NodeData.services;
+            services.RemoveAll(s => s == null);
+            m_ServiceContainer.style.display = services.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+
+            for (int i = 0; i < services.Count; i++)
             {
-                m_ServiceContainer.style.display = DisplayStyle.None;
-                return;
-            }
-
-            composite.services.RemoveAll(s => s == null);
-
-            m_ServiceContainer.style.display = DisplayStyle.Flex;
-            foreach (var service in composite.services)
-            {
-                var item = new VisualElement(); 
-                item.AddToClassList("child-node-item"); 
-                item.AddToClassList("service-child");
-                item.Add(new Label(service.name) { name = "title-label" });
+                var service = services[i];
+                var item = CreateAttachmentCard(service, isService: true, i);
                 item.AddManipulator(new ContextualMenuManipulator(e => {
-                    e.menu.AppendAction("Remove Service", a => GetFirstAncestorOfType<ND_BTGraphCanvas>()?.RemoveService(composite, service));
+                    e.menu.AppendAction("Edit Properties", a => NodePropertyEditorWindow.Open(service, this));
+                    e.menu.AppendAction("Remove Service", a => GetFirstAncestorOfType<ND_BTGraphCanvas>()?.RemoveService(NodeData, service));
+                    e.StopPropagation();
                 }));
                 m_ServiceContainer.Add(item);
             }
         }
 
-        public virtual void UpdateState(BehaviorTree runnerTree)
+        /// <summary>Card for an attached decorator/service; double-click opens its properties.</summary>
+        protected virtual ND_BTAttachmentView CreateAttachmentCard(Node attached, bool isService, int index)
         {
-            RemoveFromClassList("running"); RemoveFromClassList("success"); RemoveFromClassList("failure");
-            Node runtimeNode = runnerTree?.FindNode(NodeData.id);
-            if (runtimeNode == null) return;
-            if (runtimeNode.status == Node.Status.Running) AddToClassList("running");
-            else if (runtimeNode.status == Node.Status.Success) AddToClassList("success");
-            else if (runtimeNode.status == Node.Status.Failure) AddToClassList("failure");
-            foreach (var updater in m_ExposedPropertyUpdaters)
+            var card = new ND_BTAttachmentView(attached, isService, index);
+            card.RegisterCallback<PointerDownEvent>(evt =>
             {
-                var val = updater.fieldInfo.GetValue(runtimeNode);
-                updater.valueLabel.text = val != null ? (val is float f ? f.ToString("F2") : val.ToString()) : "null";
+                if (evt.button == 0 && evt.clickCount == 2)
+                {
+                    NodePropertyEditorWindow.Open(attached, this);
+                    evt.StopPropagation();
+                }
+            });
+            m_AttachmentViews.Add(card);
+            return card;
+        }
+
+        /// <summary>Key fields of the node itself, shown under the title as drop targets for blackboard keys.</summary>
+        protected virtual void DrawKeySlots()
+        {
+            var title = this.Q<VisualElement>("title");
+            if (title?.parent == null) return;
+            m_KeySlots = new ND_BTKeySlotView(NodeData, compact: false);
+            title.parent.Insert(title.parent.IndexOf(title) + 1, m_KeySlots);
+        }
+
+        /// <summary>Live progress bar for nodes that declare [NodeProgressBar(current, max)].</summary>
+        protected virtual void DrawProgressBar()
+        {
+            if (!ProgressReader.HasProgress(NodeData.GetType()) || NodeData is ServiceNode) return;
+            var title = this.Q<VisualElement>("title");
+            if (title?.parent == null) return;
+            m_ProgressTrack = new VisualElement { pickingMode = PickingMode.Ignore };
+            m_ProgressTrack.AddToClassList("nd-node-progress");
+            m_ProgressFill = new VisualElement { pickingMode = PickingMode.Ignore };
+            m_ProgressFill.AddToClassList("nd-node-progress__fill");
+            m_ProgressTrack.Add(m_ProgressFill);
+            title.parent.Insert(title.parent.IndexOf(title) + 1, m_ProgressTrack);
+        }
+
+        /// <summary>Re-reads key slots and attachment summaries (called periodically and after key edits).</summary>
+        public virtual void RefreshKeyInfo()
+        {
+            m_KeySlots?.Refresh();
+            foreach (var card in m_AttachmentViews) card.RefreshInfo();
+        }
+
+        public void RebuildKeySlots()
+        {
+            m_KeySlots?.Rebuild();
+            foreach (var card in m_AttachmentViews) card.RefreshInfo();
+        }
+
+        /// <summary>
+        /// Live debug: shows this node's runtime state (see LiveDebugUtility). <paramref name="lookup"/> resolves runtime nodes by id.
+        /// </summary>
+        public virtual void UpdateLiveState(Func<string, Node> lookup, int frame)
+        {
+            Node runtimeNode = lookup(NodeData.id);
+            var state = LiveDebugUtility.GetState(runtimeNode, frame);
+            EnableInClassList("running", state == LiveState.Running);
+            EnableInClassList("success", state == LiveState.Succeeded);
+            EnableInClassList("failure", state == LiveState.Failed);
+
+            foreach (var card in m_AttachmentViews)
+            {
+                var runtimeAttachment = lookup(card.Attached.id);
+                var cardState = LiveDebugUtility.GetState(runtimeAttachment, frame);
+                // A service has no meaningful result of its own: it is "running" while its node runs.
+                if (card.IsService && cardState != LiveState.Inactive) cardState = state == LiveState.Running ? LiveState.Running : LiveState.Inactive;
+                card.SetLive(cardState, runtimeAttachment);
+            }
+
+            if (m_ProgressTrack != null)
+            {
+                int percent = state == LiveState.Running && ProgressReader.TryGetProgress(runtimeNode, out float progress) ? Mathf.RoundToInt(progress * 100f) : -1;
+                if (percent != m_ShownProgress)
+                {
+                    m_ShownProgress = percent;
+                    m_ProgressTrack.EnableInClassList("nd-node-progress--visible", percent >= 0);
+                    if (percent >= 0) m_ProgressFill.style.width = Length.Percent(percent);
+                }
+            }
+
+            if (runtimeNode == null) return;
+
+            // Exposed values: ~5 Hz (every 6th live tick at 30 Hz), text written only when it changed.
+            if (m_ExposedPropertyUpdaters.Count > 0 && ++m_LiveTick % 6 == 0)
+            {
+                foreach (var updater in m_ExposedPropertyUpdaters)
+                {
+                    var val = updater.fieldInfo.GetValue(runtimeNode);
+                    if (Equals(val, updater.lastValue)) continue;
+                    updater.lastValue = val;
+                    updater.valueLabel.text = val != null ? (val is float f ? f.ToString("F2") : val.ToString()) : "null";
+                }
+            }
+
+            // Subtree: show where execution is inside the subtree's runtime clone. The chain of running nodes is
+            // compared by reference each tick; text is built only when the chain changes.
+            if (runtimeNode is SubtreeNode runtimeSubtree)
+            {
+                m_ChainScratch.Clear();
+                if (runtimeSubtree.RuntimeSubtree != null) LiveDebugUtility.GetActiveChain(runtimeSubtree.RuntimeSubtree, frame, m_ChainScratch);
+                if (!SameChain(m_ChainScratch, m_ShownChain))
+                {
+                    m_ShownChain.Clear();
+                    m_ShownChain.AddRange(m_ChainScratch);
+                    if (m_TypeLabel == null) m_TypeLabel = this.Q<Label>("type-label");
+                    if (m_TypeLabel != null)
+                    {
+                        if (m_ShownChain.Count > 0) m_TypeLabel.text = "▶ " + LiveDebugUtility.DescribeChain(m_ShownChain);
+                        else RefreshSubtreeLabel();
+                    }
+                }
             }
         }
 
         public virtual void ClearState()
         {
             RemoveFromClassList("running"); RemoveFromClassList("success"); RemoveFromClassList("failure");
-            foreach (var u in m_ExposedPropertyUpdaters) u.valueLabel.text = "---";
+            foreach (var u in m_ExposedPropertyUpdaters) { u.valueLabel.text = "---"; u.lastValue = null; }
+            m_ShownChain.Clear();
+            foreach (var card in m_AttachmentViews) card.ClearLive();
+            if (m_ProgressTrack != null)
+            {
+                m_ProgressTrack.RemoveFromClassList("nd-node-progress--visible");
+                m_ShownProgress = -1;
+            }
+            RefreshSubtreeLabel();
         }
 
         protected virtual void BuildContextualMenu(ContextualMenuPopulateEvent evt)
@@ -266,9 +511,36 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             if (canvas == null) return;
             Vector2 screenPos = GUIUtility.GUIToScreenPoint(evt.mousePosition);
 
-            if (NodeData is CompositeNode)
+            if (canvas.Graph.CanAttachDecorator(NodeData, out _))
+            {
+                evt.menu.AppendAction("Add Decorator", a => canvas.OpenDecoratorSearch(this, screenPos));
+            }
+
+            if (NodeData is SubtreeNode subtreeNode)
+            {
+                evt.menu.AppendAction("Open Subtree", a => canvas.OpenSubtree(subtreeNode),
+                    subtreeNode.subtree != null ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+                evt.menu.AppendAction("Step Into (Live)", a => canvas.StepIntoSubtreeLive(subtreeNode),
+                    canvas.IsLiveDebugging ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+                evt.menu.AppendAction("Create New Subtree Asset", a => canvas.CreateSubtreeAsset(subtreeNode));
+                evt.menu.AppendSeparator();
+            }
+
+            if (canvas.Graph.CanAttachService(NodeData, out _))
             {
                 evt.menu.AppendAction("Add Service", a => canvas.OpenServiceSearch(this, screenPos));
+            }
+            evt.menu.AppendSeparator();
+
+            if (NodeData is CompositeNode composite)
+            {
+                evt.menu.AppendAction("Sort Children Left-to-Right", a => canvas.SortChildren(composite));
+                evt.menu.AppendSeparator();
+            }
+
+            if (InputPort != null && InputPort.Connections.Count > 0)
+            {
+                evt.menu.AppendAction("Disconnect From Parent", a => canvas.DisconnectInput(InputPort));
                 evt.menu.AppendSeparator();
             }
 
@@ -281,6 +553,13 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
             evt.menu.AppendAction("Copy", a => canvas.CopySelection());
             evt.menu.AppendAction("Duplicate", a => canvas.DuplicateSelection());
+            if (Bridge.AiAccess.FeatureEnabled)
+            {
+                evt.menu.AppendAction("Copy Node IDs for AI", a =>
+                    EditorGUIUtility.systemCopyBuffer = Bridge.CopyForAi.NodesText(canvas.TreeData, canvas.SelectedNodes.Select(v => v.NodeData)));
+            }
+            evt.menu.AppendAction("Group Selected Nodes", a => canvas.CreateGroup(ViewPosition));
+            evt.menu.AppendAction("Convert Selection to Subtree...", a => canvas.ConvertSelectionToSubtree());
 
             evt.menu.AppendSeparator();
 
@@ -288,7 +567,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             {
                 evt.menu.AppendAction("Delete Selected Nodes", a => canvas.DeleteSelectedNodes());
             }
-            else
+            else if (!(NodeData is RootNode))
             {
                 evt.menu.AppendAction("Delete Node", a => canvas.DeleteNode(this));
             }

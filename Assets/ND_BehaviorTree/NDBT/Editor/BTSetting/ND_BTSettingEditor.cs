@@ -20,6 +20,7 @@ namespace ND_BehaviorTree.Editor
         private SerializedProperty _edgeThemeProp;
         private SerializedProperty _portThemeProp;
         private SerializedProperty _blackboardThemeProp;
+        private SerializedProperty _historyCapacityProp;
 
         private void OnEnable()
         {
@@ -35,6 +36,7 @@ namespace ND_BehaviorTree.Editor
             _edgeThemeProp = serializedObject.FindProperty("edgeTheme");
             _portThemeProp = serializedObject.FindProperty("portTheme");
             _blackboardThemeProp = serializedObject.FindProperty("blackboardTheme");
+            _historyCapacityProp = serializedObject.FindProperty("historyCapacity");
         }
 
         public override void OnInspectorGUI()
@@ -137,6 +139,25 @@ namespace ND_BehaviorTree.Editor
             EditorGUILayout.PropertyField(_edgeThemeProp);
             EditorGUILayout.PropertyField(_portThemeProp);
             EditorGUILayout.PropertyField(_blackboardThemeProp);
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Graph History", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(_historyCapacityProp, new GUIContent("History Capacity (steps)"));
+            if (GUILayout.Button("Clear Graph History (all trees)"))
+            {
+                Graph.GraphHistory.ClearAll();
+            }
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("AI Features", EditorStyles.boldLabel);
+            bool aiEnabled = EditorGUILayout.Toggle(
+                new GUIContent("Enable AI Access (CLI / MCP)", "Shows the AI Access page and 'Copy for AI' actions, and allows the ndbt bridge to run once unlocked with the AI owner password. Off by default."),
+                Bridge.AiAccess.FeatureEnabled);
+            if (aiEnabled != Bridge.AiAccess.FeatureEnabled) Bridge.AiAccess.SetFeatureEnabled(aiEnabled);
+            if (Bridge.AiAccess.FeatureEnabled && GUILayout.Button("Open AI Access settings →"))
+            {
+                Bridge.AiAccessSettingsProvider.Open();
+            }
         }
     }
 }

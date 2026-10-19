@@ -691,8 +691,8 @@ MonoBehaviour:
   m_guid: 5ef8fb06-3221-42ad-94d1-49d7c81322dc
   m_position:
     serializedVersion: 2
-    x: 255.99998
-    y: 521.6
+    x: 226.43477
+    y: 518.9913
     width: 167.20001
     height: 95.20001
   typeName: ChopTree

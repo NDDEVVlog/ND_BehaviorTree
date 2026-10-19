@@ -22,6 +22,8 @@ namespace ND_BehaviorTree.Editor
             if (GUI.changed)
             {
                 ProcessMappings((NodeEditorConfig)target);
+                // Any edit (keys, UXML/USS assets, custom view) can change how nodes look.
+                ND_BTViewFactory.InvalidateCache();
             }
         }
 
@@ -36,8 +38,7 @@ namespace ND_BehaviorTree.Editor
                     Type nodeType = mapping.nodeScript.GetClass();
                     if (nodeType != null)
                     {
-                        // SỬA Ở ĐÂY: Chỉ lấy tên ngắn (Name) thay vì AssemblyQualifiedName hay FullName
-                        string newName = nodeType.Name;
+                        string newName = nodeType.FullName;
 
                         if (mapping.nodeTypeFullName != newName)
                         {

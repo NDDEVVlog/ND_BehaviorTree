@@ -56,57 +56,42 @@ public class FieldOfView : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Runs every 0.2 s. Allocation-free: iterates backwards so destroyed targets are removed in place
+    /// (previously a new List was allocated on every check).
+    /// </summary>
     private void FieldOfViewCheck()
     {
-        // Create a list to store targets to remove
-        List<GameObject> targetsToRemove = new List<GameObject>();
+        Vector3 origin = transform.position;
+        Vector3 forward = transform.forward;
+        float halfAngle = angle * 0.5f;
 
-        
-        // Update visibility for each target
-        foreach (GameObject target in targetObjects)
+        for (int i = targetObjects.Count - 1; i >= 0; i--)
         {
+            GameObject target = targetObjects[i];
             if (target == null)
             {
-                targetsToRemove.Add(target);
+                // Destroyed target: drop it (the dictionary key is the same reference, so Remove still finds it).
+                targetVisibility.Remove(target);
+                targetObjects.RemoveAt(i);
                 continue;
             }
 
-            // Calculate direction to target
-            Vector3 directionToTarget = ((offset + target.transform.position) - transform.position).normalized;
+            Vector3 targetPosition = target.transform.position;
+            Vector3 directionToTarget = ((offset + targetPosition) - origin).normalized;
 
-            // Check if target is within field of view angle
             bool canSee = false;
-            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+            if (Vector3.Angle(forward, directionToTarget) < halfAngle)
             {
-                float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-
-                // Check if the target is within radius and not obstructed
-                if (distanceToTarget <= radius && !Physics.Raycast(transform.position + offset, directionToTarget, distanceToTarget, obstructionMask))
-                {
-                    canSee = true;
-                }
+                float distanceToTarget = Vector3.Distance(origin, targetPosition);
+                canSee = distanceToTarget <= radius && !Physics.Raycast(origin + offset, directionToTarget, distanceToTarget, obstructionMask);
             }
 
-            // Update visibility status and trigger event if changed
-            if (targetVisibility.ContainsKey(target) && targetVisibility[target] != canSee && target != null)
+            // Notify only when the visibility of this target changes.
+            if (targetVisibility.TryGetValue(target, out bool wasVisible) && wasVisible != canSee)
             {
                 targetVisibility[target] = canSee;
                 OnPlayerSee?.OnSawPlayer(target.transform, canSee);
-            }
-        }
-
-        foreach (GameObject target in targetsToRemove)
-        {
-            if (targetObjects.Contains(target))
-            {   
-
-                targetObjects.Remove(target);
-                 
-            }
-            if (targetVisibility.ContainsKey(target))
-            {
-
-                targetVisibility.Remove(target);
             }
         }
     }

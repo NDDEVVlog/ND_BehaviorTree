@@ -15,7 +15,14 @@ public class TestDynamicSelector : IDynamicBranchSelector
     }
 
     public bool TrySelectBranch(GameObject ownerGameObject, Blackboard blackboard, out int selectedIndex)
-    {   
+    {
+        if (healthKey == null)
+        {
+            Debug.LogError("[TestDynamicSelector] healthKey is not assigned; no branch selected.");
+            selectedIndex = -1;
+            return false;
+        }
+
         float health = healthKey.GetValue(blackboard);
 
         if (health > 0f)

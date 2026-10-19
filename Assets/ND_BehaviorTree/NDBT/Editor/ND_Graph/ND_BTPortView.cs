@@ -33,7 +33,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
             RegisterCallback<PointerDownEvent>(evt => {
                 if (evt.button == 0) {
-                    GetFirstAncestorOfType<ND_BTGraphCanvas>()?.ConnectionManager.StartConnection(this, evt.position);
+                    GetFirstAncestorOfType<ND_BTGraphCanvas>()?.ConnectionManager.StartConnection(this, evt.position, evt.pointerId);
                     evt.StopPropagation();
                 }
             });

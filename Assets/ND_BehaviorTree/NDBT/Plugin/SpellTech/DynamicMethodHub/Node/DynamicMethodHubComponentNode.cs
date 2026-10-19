@@ -14,25 +14,40 @@ using SpellTech.DynamicMethodEvent;
 [NodeInfo("Dynamic Method Hub Component Node", "Action/DynamicMethodHubComponentNode", true, false,iconPath:null)]
 public class DynamicMethodHubComponentNode : ActionNode
 {
-    [Tooltip("An example float parameter.")]
+    [Tooltip("The event name to trigger on the MethodHub (used when 'Event ID Key' is not assigned).")]
     public string eventID;
 
     [BlackboardKeyType(typeof(string))]
     public Key eventIDKey;
 
     MethodHub animationEventHub;
+    [System.NonSerialized] private bool _missingHubLogged;
+
     protected override void OnEnter()
-    {   
-        //Simple and quick. Yes sirrrr
-        animationEventHub = SpellTech.SoraExtensions.CustomHelper.GetComp<MethodHub>(GetOwnerTreeGameObject());
+    {
+        // Resolve once per agent (the component lookup searches self, children and parents).
+        if (animationEventHub == null)
+        {
+            GameObject owner = ownerTree != null ? ownerTree.Self : null;
+            if (owner != null) animationEventHub = SpellTech.SoraExtensions.CustomHelper.GetComp<MethodHub>(owner);
+        }
     }
 
     protected override Status OnProcess()
     {
+        if (animationEventHub == null)
+        {
+            if (!_missingHubLogged)
+            {
+                _missingHubLogged = true;
+                Debug.LogError($"[DynamicMethodHubComponentNode] '{name}': no MethodHub found on the runner GameObject (or its children/parents); the node fails. (Logged once.)", this);
+            }
+            return Status.Failure;
+        }
 
         if (eventIDKey != null)
-        {   
-
+        {
+            if (blackboard == null) return Status.Failure;
             string i = blackboard.GetValue<string>(eventIDKey.keyName);
             animationEventHub.TriggerEvent(i);
             return Status.Success;

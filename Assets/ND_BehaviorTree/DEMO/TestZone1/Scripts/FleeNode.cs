@@ -23,15 +23,20 @@ public class FleeNode : ActionNode
 
     [Tooltip("How far the AI will try to run away from the target.")]
     public float fleeDistance = 20f;
-    
+
+    [Tooltip("Minimum seconds between re-path requests (path requests are expensive; 0 = every frame).")]
+    public float repathInterval = 0.25f;
+
     // --- Private Runtime Variables ---
     private NavMeshAgent _agent;
     private Transform _ownerTransform;
+    private float _nextRepathTime;
 
     // --- Lifecycle Methods ---
 
     protected override void OnEnter()
     {
+        _nextRepathTime = 0f; // re-path immediately on activation
         GameObject owner = GetOwnerTreeGameObject();
         if (owner == null) return;
         
@@ -52,13 +57,20 @@ public class FleeNode : ActionNode
         }
 
         // Get the target to flee from out of the blackboard.
-        Transform target = targetKey.GetValue(blackboard);
+        Transform target = targetKey != null ? targetKey.GetValue(blackboard) : null;
 
         // If there is no target, this node cannot function, so it fails.
         if (target == null)
         {
             return Status.Failure;
         }
+
+        // Throttle path requests: keep fleeing along the current path until the interval elapses.
+        if (Time.time < _nextRepathTime)
+        {
+            return Status.Running;
+        }
+        _nextRepathTime = Time.time + repathInterval;
 
         // Calculate the direction vector away from the target.
         Vector3 directionToFlee = (_ownerTransform.position - target.position).normalized;
@@ -84,4 +96,4 @@ public class FleeNode : ActionNode
             _agent.ResetPath();
         }
     }
-}
+}

@@ -26,10 +26,22 @@ public class PlayAudioSourceNode : ActionNode
     private bool _hasStartedPlaying = false;
 
 
+    [System.NonSerialized] private bool _configErrorLogged;
+
     protected override void OnEnter()
     {
-        _runtimeAudioSource = GetOwnerTree().blackboard.GetValue<AudioSource>(audioSourceKey.keyName);
         _hasStartedPlaying = false;
+        _runtimeAudioSource = null;
+        if (audioSourceKey == null || blackboard == null)
+        {
+            if (!_configErrorLogged)
+            {
+                _configErrorLogged = true;
+                Debug.LogError($"[PlayAudioSourceNode] '{name}': {(audioSourceKey == null ? "audioSourceKey is not assigned" : "the tree has no blackboard")}; the node fails. (Logged once.)", this);
+            }
+            return; // OnProcess fails because _runtimeAudioSource is null
+        }
+        _runtimeAudioSource = blackboard.GetValue<AudioSource>(audioSourceKey.keyName);
     }
 
     // OnProcess is called every frame while the node is in a 'Running' state.
@@ -80,4 +92,4 @@ public class PlayAudioSourceNode : ActionNode
     {
         _hasStartedPlaying = false;
     }
-}
+}

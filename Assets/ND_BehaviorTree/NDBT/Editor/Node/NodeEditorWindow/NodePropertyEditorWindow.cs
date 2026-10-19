@@ -92,10 +92,30 @@ namespace ND_BehaviorTree.Editor
 
             EditorGUILayout.EndScrollView();
 
-            if (_serializedNodeObject.ApplyModifiedProperties())
+            if (_serializedNodeObject.hasModifiedProperties)
             {
+                // Recorded in the tree's graph history (Ctrl+Z in the Behavior Tree window); consecutive edits of
+                // this node within a second merge into one step (e.g. dragging a value).
+                var tree = FindOwnerTree(_targetNode);
+                if (tree != null)
+                {
+                    using (new Graph.GraphUndoScope(tree, $"Edit {_targetNode.name}", $"props:{_targetNode.GetInstanceID()}"))
+                        _serializedNodeObject.ApplyModifiedPropertiesWithoutUndo();
+                    ND_BehaviorTreeEditorWindow.NotifyTreeEdited(tree);
+                }
+                else
+                {
+                    _serializedNodeObject.ApplyModifiedProperties();
+                }
                 EditorUtility.SetDirty(_targetNode);
             }
+        }
+
+        /// <summary>The BehaviorTree asset that contains this node (nodes and attachments are sub-assets of their tree).</summary>
+        internal static BehaviorTree FindOwnerTree(Node node)
+        {
+            if (node == null || !EditorUtility.IsPersistent(node)) return null;
+            return AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GetAssetPath(node)) as BehaviorTree;
         }
 
         private void DrawBuiltInProperties()

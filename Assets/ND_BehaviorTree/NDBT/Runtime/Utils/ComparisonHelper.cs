@@ -9,17 +9,20 @@ namespace ND_BehaviorTree
     {
         /// <summary>
         /// A robust helper method to compare two objects of potentially different types.
+        /// Destroyed UnityEngine.Objects count as null (Unity null semantics).
         /// </summary>
         public static bool PerformComparison(object val1, object val2, ComparisonType op)
         {
             // --- A. Handle Nulls ---
-            if (val1 == null || val2 == null)
+            bool null1 = IsNull(val1);
+            bool null2 = IsNull(val2);
+            if (null1 || null2)
             {
                 switch (op)
                 {
-                    case ComparisonType.Equal: return val1 == val2;
-                    case ComparisonType.NotEqual: return val1 != val2;
-                    default: return false; 
+                    case ComparisonType.Equal: return null1 && null2;
+                    case ComparisonType.NotEqual: return null1 != null2;
+                    default: return false;
                 }
             }
 
@@ -28,7 +31,7 @@ namespace ND_BehaviorTree
             {
                 double num1 = Convert.ToDouble(val1);
                 double num2 = Convert.ToDouble(val2);
-                
+
                 switch (op)
                 {
                     case ComparisonType.Equal:       return num1 == num2;
@@ -41,36 +44,36 @@ namespace ND_BehaviorTree
             }
 
             // --- C. Handle General Comparable Types (string, bool, etc.) ---
-            if (val1 is IComparable comparable1)
+            // Only compare same-typed values: IComparable.CompareTo throws ArgumentException on a type mismatch,
+            // and this runs every tick, so mismatched types go to the Equals fallback instead of a caught exception.
+            if (val1 is IComparable comparable1 && val1.GetType() == val2.GetType())
             {
-                try
+                int comparisonResult = comparable1.CompareTo(val2);
+                switch (op)
                 {
-                    int comparisonResult = comparable1.CompareTo(val2);
-                    switch (op)
-                    {
-                        case ComparisonType.Equal:       return comparisonResult == 0;
-                        case ComparisonType.NotEqual:    return comparisonResult != 0;
-                        case ComparisonType.Greater:     return comparisonResult > 0;
-                        case ComparisonType.GreaterEqual:return comparisonResult >= 0;
-                        case ComparisonType.Less:        return comparisonResult < 0;
-                        case ComparisonType.LessEqual:   return comparisonResult <= 0;
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    if (op == ComparisonType.Equal) return val1.Equals(val2);
-                    if (op == ComparisonType.NotEqual) return !val1.Equals(val2);
-                    return false;
+                    case ComparisonType.Equal:       return comparisonResult == 0;
+                    case ComparisonType.NotEqual:    return comparisonResult != 0;
+                    case ComparisonType.Greater:     return comparisonResult > 0;
+                    case ComparisonType.GreaterEqual:return comparisonResult >= 0;
+                    case ComparisonType.Less:        return comparisonResult < 0;
+                    case ComparisonType.LessEqual:   return comparisonResult <= 0;
                 }
             }
-            
-            // --- D. Fallback for non-IComparable types ---
+
+            // --- D. Fallback for non-IComparable or mismatched types ---
             switch (op)
             {
                 case ComparisonType.Equal: return val1.Equals(val2);
                 case ComparisonType.NotEqual: return !val1.Equals(val2);
                 default: return false;
             }
+        }
+
+        /// <summary>True for null and for destroyed UnityEngine.Objects (which are non-null when boxed as object).</summary>
+        private static bool IsNull(object value)
+        {
+            if (value == null) return true;
+            return value is UnityEngine.Object unityObject && unityObject == null;
         }
 
         /// <summary>

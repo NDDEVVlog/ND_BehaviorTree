@@ -37,6 +37,11 @@ namespace ND_BehaviorTree
 
         [NonSerialized] private bool _isProcessing = false;
 
+#if UNITY_EDITOR
+        /// <summary>Editor live-debug only: Time.frameCount of the last Process() call (-1 = never).</summary>
+        [NonSerialized] public int debugLastFrame = -1;
+#endif
+
         #endregion
 
         #region Editor Data
@@ -48,6 +53,31 @@ namespace ND_BehaviorTree
 
         public string id => m_guid;
         public Rect position { get => m_position; set => m_position = value; }
+
+        #endregion
+
+        #region Attached Decorators
+
+        /// <summary>
+        /// Decorators attached to this node, evaluated top (index 0, outermost) to bottom.
+        /// Stored as sub-assets and NOT listed in BehaviorTree.nodes. Their 'child' stays null in the asset;
+        /// BehaviorTree.Clone() builds the runtime chain: parent -> decorators[0] -> ... -> decorators[n-1] -> this node.
+        /// </summary>
+        [HideInInspector] public List<DecoratorNode> decorators = new List<DecoratorNode>();
+
+        /// <summary>
+        /// Services attached to this node. They tick (on their own interval) every frame this node is processed,
+        /// and are reset when this node finishes, so 'runOnEnter' fires again on the next activation.
+        /// Stored as sub-assets and NOT listed in BehaviorTree.nodes.
+        /// </summary>
+        [HideInInspector] public List<ServiceNode> services = new List<ServiceNode>();
+
+        public void AddService(ServiceNode service)
+        {
+            if (!services.Contains(service)) services.Add(service);
+        }
+
+        public void RemoveService(ServiceNode service) => services.Remove(service);
 
         #endregion
 
@@ -67,20 +97,41 @@ namespace ND_BehaviorTree
         /// <returns>The current status of the node after processing.</returns>
         public Status Process()
         {
+#if UNITY_EDITOR
+            debugLastFrame = Time.frameCount;
+#endif
             if (!_isProcessing)
             {
                 OnEnter();
                 _isProcessing = true;
             }
 
+            TickServices();
             status = OnProcess();
 
             if (status != Status.Running)
             {
                 OnExit();
                 _isProcessing = false;
+                ResetServices();
             }
             return status;
+        }
+
+        private void TickServices()
+        {
+            for (int i = 0; i < services.Count; i++)
+            {
+                if (services[i] != null) services[i].Process();
+            }
+        }
+
+        private void ResetServices()
+        {
+            for (int i = 0; i < services.Count; i++)
+            {
+                if (services[i] != null) services[i].Reset();
+            }
         }
 
         /// <summary>
@@ -122,6 +173,7 @@ namespace ND_BehaviorTree
                 _isProcessing = false;
             }
             status = Status.None;
+            ResetServices();
         }
 
         /// <summary>

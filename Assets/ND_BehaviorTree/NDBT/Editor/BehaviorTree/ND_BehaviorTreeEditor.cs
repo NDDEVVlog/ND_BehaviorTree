@@ -3,15 +3,19 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 
 namespace ND_BehaviorTree.Editor
-{   
+{
     [CustomEditor(typeof(BehaviorTree))]
     public class ND_BehaviorTreeEditor : UnityEditor.Editor
     {
         SerializedProperty blackboardProp;
+        SerializedProperty groupsProp;
+        SerializedProperty notesProp;
 
         private void OnEnable()
         {
             blackboardProp = serializedObject.FindProperty("blackboard");
+            groupsProp = serializedObject.FindProperty("groups");
+            notesProp = serializedObject.FindProperty("notes");
         }
 
         [OnOpenAsset]
@@ -37,6 +41,21 @@ namespace ND_BehaviorTree.Editor
             if (GUILayout.Button("Open"))
             {
                 ND_BehaviorTreeEditorWindow.Open((BehaviorTree)target);
+            }
+
+            // Shown only while AI features are enabled in the ND Behavior Tree settings.
+            if (Bridge.AiAccess.FeatureEnabled && GUILayout.Button("Copy for AI"))
+            {
+                EditorGUIUtility.systemCopyBuffer = Bridge.CopyForAi.TreeText((BehaviorTree)target);
+            }
+
+            // Editor annotations are edited in the graph (so the open canvas stays in sync); shown read-only here.
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField($"Editor Annotations — {groupsProp.arraySize} group(s), {notesProp.arraySize} note(s)", EditorStyles.boldLabel);
+            using (new EditorGUI.DisabledScope(true))
+            {
+                EditorGUILayout.PropertyField(groupsProp, true);
+                EditorGUILayout.PropertyField(notesProp, true);
             }
 
             serializedObject.ApplyModifiedProperties();

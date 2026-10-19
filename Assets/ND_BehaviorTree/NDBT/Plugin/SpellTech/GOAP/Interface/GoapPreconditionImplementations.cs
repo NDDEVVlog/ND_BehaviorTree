@@ -145,16 +145,13 @@ namespace ND_BehaviorTree.GOAP
             if (agent == null || target == null) return false;
 
             object targetValue = null;
-            string source = "";
             if (!string.IsNullOrEmpty(target.keyName) && worldState.TryGetValue(target.keyName, out var blackboardTarget))
             {
                 targetValue = blackboardTarget;
-                source = $"WorldState['{target.keyName}']";
             }
             else
             {
                 targetValue = target.GetValueObject();
-                source = "Direct Value";
             }
 
             if (targetValue == null)
@@ -163,8 +160,8 @@ namespace ND_BehaviorTree.GOAP
             }
 
             Vector3 targetPosition;
-            if (targetValue is Transform targetTransform) { targetPosition = targetTransform.position; }
-            else if (targetValue is GameObject targetGo) { targetPosition = targetGo.transform.position; }
+            if (targetValue is Transform targetTransform) { if (targetTransform == null) return false; targetPosition = targetTransform.position; }
+            else if (targetValue is GameObject targetGo) { if (targetGo == null) return false; targetPosition = targetGo.transform.position; }
             else
             {
                 Debug.LogWarning($"[DistancePrecondition] FAILED: Target value is not a Transform or GameObject. It is a {targetValue.GetType().Name}.");
@@ -172,13 +169,8 @@ namespace ND_BehaviorTree.GOAP
             }
 
             float currentDistance = Vector3.Distance(agent.transform.position, targetPosition);
-            bool result = (comparison == CompareOp.LessThan) ? currentDistance < distance : currentDistance > distance;
-
-            // --- The main debug log ---
-            string resultColor = result ? "lime" : "red";
-            Debug.Log($"[DistancePrecondition] Comparing: Distance to '{source}' ({currentDistance:F2}m) {comparison} {distance}m -> <color={resultColor}>{result.ToString().ToUpper()}</color>");
-
-            return result;
+            // Called many times per plan search: no logging here.
+            return (comparison == CompareOp.LessThan) ? currentDistance < distance : currentDistance > distance;
         }
 
         public string GetDescription()
@@ -194,15 +186,15 @@ namespace ND_BehaviorTree.GOAP
     {
         public Animator animator;
 
+        /// <summary>
+        /// Met when the assigned Animator (or, if none is assigned, the agent's Animator) is enabled.
+        /// Side-effect free: the planner calls IsMet many times on hypothetical states, so it must not
+        /// fire triggers or mutate fields.
+        /// </summary>
         public bool IsMet(GameObject agent, Blackboard blackboard, Dictionary<string, object> worldState)
-        {   
-            if(animator == null)
-            {
-                Debug.LogWarning("[SoraCondition] Animator is not set. Cannot perform action.");
-            }
-            animator = agent.GetComponent<Animator>();
-            animator.SetTrigger("SomeTrigger");
-            return animator.enabled;
+        {
+            Animator target = animator != null ? animator : (agent != null ? agent.GetComponent<Animator>() : null);
+            return target != null && target.enabled;
         }
 
         public string GetDescription()

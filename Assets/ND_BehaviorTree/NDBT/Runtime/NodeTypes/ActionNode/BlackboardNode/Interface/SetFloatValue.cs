@@ -17,7 +17,7 @@ namespace ND_BehaviorTree
 
         public bool TrySetValue(GameObject owwnerTree,Blackboard blackboard)
         {
-            if (blackboard == null || string.IsNullOrEmpty(floatKey.keyName))
+            if (blackboard == null || floatKey == null || string.IsNullOrEmpty(floatKey.keyName))
             {
                 return false;
             }
@@ -25,4 +25,4 @@ namespace ND_BehaviorTree
             return blackboard.SetValue<float>(floatKey.keyName, valueToSet);
         }
     }
-}
+}

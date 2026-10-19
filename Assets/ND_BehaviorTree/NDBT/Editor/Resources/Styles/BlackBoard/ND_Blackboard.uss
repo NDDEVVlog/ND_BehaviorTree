@@ -1,0 +1,235 @@
+/*
+================================================================================
+=== ND_BehaviorTree — Blackboard panel ===
+Floating card on the graph: header (drag to move), search, key cards.
+Each key card has two lines so nothing gets squeezed:
+    ⠿ ●  KeyName ........................ Float   ✕
+         [ value editor, full width            ]
+Resize the panel from its right edge. Width / collapsed state are remembered.
+================================================================================
+*/
+
+.nd-bb-panel {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    flex-direction: column;
+    background-color: #1F2228;
+    border-width: 1px;
+    border-color: #2E333C;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* ---------- Header ---------- */
+.nd-bb-header {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 8px 8px 12px;
+    background-color: #252930;
+    border-bottom-width: 1px;
+    border-bottom-color: #2E333C;
+}
+.nd-bb-header__texts {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+.nd-bb-title {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #E8EAED;
+}
+.nd-bb-subtitle {
+    font-size: 10px;
+    color: #8B93A1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.nd-bb-count {
+    font-size: 10px;
+    color: #C3C9D4;
+    background-color: #323843;
+    padding: 1px 7px;
+    margin-right: 6px;
+    border-radius: 8px;
+}
+.nd-bb-iconbtn {
+    width: 24px;
+    height: 22px;
+    margin: 0 0 0 2px;
+    padding: 0;
+    border-width: 0;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #C3C9D4;
+    font-size: 14px;
+    -unity-font-style: bold;
+}
+.nd-bb-iconbtn:hover {
+    background-color: #353B46;
+    color: #FFFFFF;
+}
+.nd-bb-iconbtn--accent {
+    background-color: #3B5BDB;
+    color: #FFFFFF;
+}
+.nd-bb-iconbtn--accent:hover {
+    background-color: #4C6EF5;
+}
+
+/* ---------- Body ---------- */
+.nd-bb-body {
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+.nd-bb-panel--collapsed .nd-bb-body {
+    display: none;
+}
+
+.nd-bb-search {
+    margin: 8px 8px 4px 8px;
+}
+.nd-bb-search > #unity-text-input {
+    background-color: #171A1F;
+    border-color: #2E333C;
+    border-radius: 6px;
+    padding: 3px 8px;
+    color: #E6E9F0;
+}
+
+.nd-bb-list {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+.nd-bb-list > #unity-content-viewport > #unity-content-container {
+    padding: 4px 8px 8px 8px;
+}
+
+/* ---------- Key card ---------- */
+.nd-bb-key {
+    flex-direction: column;
+    margin-bottom: 5px;
+    padding: 6px 6px 7px 4px;
+    border-radius: 7px;
+    background-color: #272B33;
+    border-width: 1px;
+    border-color: transparent;
+}
+.nd-bb-key:hover {
+    background-color: #2D323B;
+    border-color: #3A404C;
+}
+.nd-bb-key__top {
+    flex-direction: row;
+    align-items: center;
+}
+.nd-bb-grip {
+    width: 14px;
+    font-size: 12px;
+    color: #4E5562;
+    -unity-text-align: middle-center;
+}
+.nd-bb-key:hover .nd-bb-grip {
+    color: #9AA3B2;
+}
+.nd-bb-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    margin: 0 6px 0 3px;
+    flex-shrink: 0;
+}
+.nd-bb-name {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 0;
+    min-width: 40px;
+}
+.nd-bb-name > #unity-text-input {
+    background-color: transparent;
+    border-width: 0;
+    color: #E8EAED;
+    -unity-font-style: bold;
+    padding: 1px 2px;
+}
+.nd-bb-name:focus > #unity-text-input {
+    background-color: #171A1F;
+    border-width: 1px;
+    border-color: #4C8DFF;
+}
+.nd-bb-type {
+    flex-shrink: 0;
+    font-size: 10px;
+    -unity-font-style: bold;
+    margin: 0 4px 0 8px;
+}
+.nd-bb-delete {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-radius: 4px;
+    background-color: transparent;
+    color: transparent; /* visible on hover only */
+    font-size: 11px;
+}
+.nd-bb-key:hover .nd-bb-delete {
+    color: #8B93A1;
+}
+.nd-bb-delete:hover {
+    background-color: #E5534B;
+    color: #FFFFFF;
+}
+
+.nd-bb-key__value {
+    margin: 4px 0 0 31px;
+}
+.nd-bb-value {
+    margin: 0;
+}
+.nd-bb-value-note {
+    font-size: 10px;
+    color: #6B7280;
+    -unity-font-style: italic;
+}
+.nd-bb-value-button {
+    margin: 0;
+    height: 20px;
+    border-radius: 5px;
+    background-color: #323843;
+    border-width: 0;
+    color: #C3C9D4;
+    font-size: 10px;
+    -unity-text-align: middle-left;
+    padding-left: 8px;
+}
+.nd-bb-value-button:hover {
+    background-color: #3A414D;
+}
+
+/* ---------- Empty states ---------- */
+.nd-bb-empty {
+    padding: 18px 12px;
+    align-items: center;
+}
+.nd-bb-empty__text {
+    color: #8B93A1;
+    font-size: 11px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+}
+
+/* ---------- Resize handle (right edge) ---------- */
+.nd-bb-resize {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+}
+.nd-bb-resize:hover {
+    background-color: rgba(76, 141, 255, 0.45);
+}

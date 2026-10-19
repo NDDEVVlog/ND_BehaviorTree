@@ -1,101 +1,302 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using ND_BehaviorTree.Editor.CustomGraph;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
-using System.Reflection;
-using UnityEditor.Experimental.GraphView;
 
 namespace ND_BehaviorTree.Editor
 {
+    /// <summary>
+    /// Floating Blackboard panel (styled by ND_Blackboard.uss).
+    ///   Header: title, asset name, key count, [+] add key, [▾] collapse — drag the header to move the panel.
+    ///   Search box filters keys by name or type.
+    ///   Each key is a two-line card:  ⠿ ● Name ........ Type ✕  /  value editor (full width).
+    ///   Drag ⠿ / ● / type onto a node's key slot to link the key. Resize the panel from its right edge.
+    /// Width and collapsed state are remembered per user (EditorPrefs). The theme's custom USS (Settings →
+    /// Blackboard Theme) is applied on top so it can override these classes.
+    /// </summary>
     public class BlackboardView : VisualElement
     {
-        private SerializedObject m_treeSerializer;
-        private BehaviorTree m_BTree;
-        private BlackboardKeySearchProvider m_keySearchProvider;
-        private BlackboardTheme m_Theme;
+        private const float MinWidth = 240f, MaxWidth = 560f, DefaultWidth = 300f;
+        private const string WidthPref = "ND_BehaviorTree.Blackboard.Width";
+        private const string CollapsedPref = "ND_BehaviorTree.Blackboard.Collapsed";
 
-        private bool m_IsDragging;
-        private Vector2 m_DragStartMousePos;
-        private Vector2 m_DragStartPanelPos;
+        private readonly SerializedObject m_treeSerializer;
+        private readonly BehaviorTree m_BTree;
+
+        private readonly Label m_Subtitle;
+        private readonly Label m_Count;
+        private readonly Button m_AddButton;
+        private readonly Button m_CollapseButton;
+        private readonly TextField m_Search;
+        private readonly ScrollView m_List;
 
         public BlackboardView(SerializedObject treeSerializer)
         {
             m_treeSerializer = treeSerializer;
             m_BTree = treeSerializer.targetObject as BehaviorTree;
-            m_Theme = ND_BehaviorTreeSetting.Instance.blackboardTheme;
 
-            style.position = Position.Absolute;
-            style.left = style.top = 20;
-            style.minWidth = 250; style.minHeight = 150; style.maxHeight = 400;
-            style.backgroundColor = m_Theme.backgroundColor;
-            style.borderTopWidth = style.borderBottomWidth = style.borderLeftWidth = style.borderRightWidth = 1;
-            style.borderTopColor = style.borderBottomColor = style.borderLeftColor = style.borderRightColor = new Color(0.1f, 0.1f, 0.1f, 1.0f);
-            style.borderTopLeftRadius = style.borderTopRightRadius = style.borderBottomLeftRadius = style.borderBottomRightRadius = 8;
+            AddToClassList("nd-bb-panel");
+            ND_BTStyles.Apply(this, ND_BTStyles.Blackboard);
+            var themeUss = ND_BehaviorTreeSetting.Instance.blackboardTheme.customUSS;
+            if (themeUss != null) styleSheets.Add(themeUss);
 
-            m_keySearchProvider = ScriptableObject.CreateInstance<BlackboardKeySearchProvider>();
-            m_keySearchProvider.Initialize(this);
+            style.width = Mathf.Clamp(EditorPrefs.GetFloat(WidthPref, DefaultWidth), MinWidth, MaxWidth);
+            style.maxHeight = Length.Percent(85);
 
-            if (m_Theme.customUXML != null) m_Theme.customUXML.CloneTree(this);
-            else CreateFallbackUI();
+            // Header
+            var header = new VisualElement();
+            header.AddToClassList("nd-bb-header");
+            var texts = new VisualElement();
+            texts.AddToClassList("nd-bb-header__texts");
+            var title = new Label("Blackboard");
+            title.AddToClassList("nd-bb-title");
+            m_Subtitle = new Label();
+            m_Subtitle.AddToClassList("nd-bb-subtitle");
+            texts.Add(title);
+            texts.Add(m_Subtitle);
+            m_Count = new Label();
+            m_Count.AddToClassList("nd-bb-count");
+            m_AddButton = new Button(OnAddKeyClicked) { text = "+", tooltip = "Add a key" };
+            m_AddButton.AddToClassList("nd-bb-iconbtn");
+            m_AddButton.AddToClassList("nd-bb-iconbtn--accent");
+            m_CollapseButton = new Button(ToggleCollapsed) { tooltip = "Collapse / expand" };
+            m_CollapseButton.AddToClassList("nd-bb-iconbtn");
+            header.Add(texts);
+            header.Add(m_Count);
+            header.Add(m_AddButton);
+            header.Add(m_CollapseButton);
+            Add(header);
+            SetupHeaderDrag(header);
 
-            if (m_Theme.customUSS != null) styleSheets.Add(m_Theme.customUSS);
+            // Body
+            var body = new VisualElement();
+            body.AddToClassList("nd-bb-body");
+            m_Search = new TextField();
+            m_Search.AddToClassList("nd-bb-search");
+            m_Search.textEdition.placeholder = "Search keys…";
+            m_Search.RegisterValueChangedCallback(e => PopulateView());
+            body.Add(m_Search);
+            m_List = new ScrollView(ScrollViewMode.Vertical) { horizontalScrollerVisibility = ScrollerVisibility.Hidden };
+            m_List.AddToClassList("nd-bb-list");
+            body.Add(m_List);
+            Add(body);
 
-            SetupHeaderDrag();
-            this.Q<Button>("add-key-button")?.RegisterCallback<ClickEvent>(e => OnAddKeyClicked());
-            var title = this.Q<Label>("title-label");
-            if (title != null) title.text = m_BTree.name + " Blackboard";
+            var resize = new VisualElement { tooltip = "Drag to resize" };
+            resize.AddToClassList("nd-bb-resize");
+            hierarchy.Add(resize);
+            SetupResize(resize);
 
+            SetCollapsed(EditorPrefs.GetBool(CollapsedPref, false));
             PopulateView();
         }
 
-        private void SetupHeaderDrag()
+        #region Layout: move, resize, collapse
+
+        private void SetupHeaderDrag(VisualElement header)
         {
-            var header = this.Q<VisualElement>("header");
-            if (header == null) return;
-            header.RegisterCallback<PointerDownEvent>(e => {
-                if (e.button != 0) return;
-                m_IsDragging = true;
-                m_DragStartMousePos = e.position;
-                m_DragStartPanelPos = new Vector2(style.left.value.value, style.top.value.value);
+            bool dragging = false;
+            Vector2 startMouse = default, startPos = default;
+            header.RegisterCallback<PointerDownEvent>(e =>
+            {
+                if (e.button != 0 || e.target is Button) return;
+                dragging = true;
+                startMouse = e.position;
+                startPos = new Vector2(resolvedStyle.left, resolvedStyle.top);
                 header.CapturePointer(e.pointerId);
                 BringToFront();
                 e.StopPropagation();
             });
-            header.RegisterCallback<PointerMoveEvent>(e => {
-                if (!m_IsDragging || !header.HasPointerCapture(e.pointerId)) return;
-                Vector2 d = e.position - (Vector3)m_DragStartMousePos;
-                style.left = m_DragStartPanelPos.x + d.x;
-                style.top = m_DragStartPanelPos.y + d.y;
+            header.RegisterCallback<PointerMoveEvent>(e =>
+            {
+                if (!dragging || !header.HasPointerCapture(e.pointerId)) return;
+                Vector2 d = (Vector2)e.position - startMouse;
+                style.left = Mathf.Max(0, startPos.x + d.x);
+                style.top = Mathf.Max(0, startPos.y + d.y);
                 e.StopPropagation();
             });
-            header.RegisterCallback<PointerUpEvent>(e => {
-                if (m_IsDragging && header.HasPointerCapture(e.pointerId)) {
-                    m_IsDragging = false; header.ReleasePointer(e.pointerId); e.StopPropagation();
-                }
+            header.RegisterCallback<PointerUpEvent>(e =>
+            {
+                if (!dragging || !header.HasPointerCapture(e.pointerId)) return;
+                dragging = false;
+                header.ReleasePointer(e.pointerId);
+                e.StopPropagation();
             });
         }
 
-        private void CreateFallbackUI()
+        private void SetupResize(VisualElement handle)
         {
-            var header = new VisualElement { name = "header", style = { flexDirection = FlexDirection.Row, justifyContent = Justify.SpaceBetween, backgroundColor = new Color(0.1f, 0.1f, 0.1f), paddingBottom = 5, paddingTop = 5 } };
-            header.Add(new Label("Blackboard") { name = "title-label", style = { color = Color.white, unityFontStyleAndWeight = FontStyle.Bold } });
-            header.Add(new Button { name = "add-key-button", text = "+" });
-            Add(header);
-            var scroll = new ScrollView();
-            var foldout = new Foldout { text = "Keys", name = "blackboard-foldout" };
-            foldout.Add(new VisualElement { name = "keys-container" });
-            scroll.Add(foldout); Add(scroll);
+            bool resizing = false;
+            float startMouseX = 0, startWidth = 0;
+            handle.RegisterCallback<PointerDownEvent>(e =>
+            {
+                if (e.button != 0) return;
+                resizing = true;
+                startMouseX = e.position.x;
+                startWidth = resolvedStyle.width;
+                handle.CapturePointer(e.pointerId);
+                e.StopPropagation();
+            });
+            handle.RegisterCallback<PointerMoveEvent>(e =>
+            {
+                if (!resizing || !handle.HasPointerCapture(e.pointerId)) return;
+                style.width = Mathf.Clamp(startWidth + (e.position.x - startMouseX), MinWidth, MaxWidth);
+                e.StopPropagation();
+            });
+            handle.RegisterCallback<PointerUpEvent>(e =>
+            {
+                if (!resizing || !handle.HasPointerCapture(e.pointerId)) return;
+                resizing = false;
+                handle.ReleasePointer(e.pointerId);
+                EditorPrefs.SetFloat(WidthPref, resolvedStyle.width);
+                e.StopPropagation();
+            });
+        }
+
+        private void ToggleCollapsed() => SetCollapsed(!ClassListContains("nd-bb-panel--collapsed"));
+
+        private void SetCollapsed(bool collapsed)
+        {
+            EnableInClassList("nd-bb-panel--collapsed", collapsed);
+            m_CollapseButton.text = collapsed ? "▸" : "▾";
+            EditorPrefs.SetBool(CollapsedPref, collapsed);
+        }
+
+        #endregion
+
+        #region Keys
+
+        public void PopulateView()
+        {
+            m_List.Clear();
+            var blackboard = m_BTree.blackboard;
+            m_Subtitle.text = blackboard != null ? blackboard.name : "No blackboard asset";
+            m_AddButton.SetEnabled(true);
+
+            if (blackboard == null)
+            {
+                m_Count.style.display = DisplayStyle.None;
+                m_Search.style.display = DisplayStyle.None;
+                m_List.Add(EmptyState("This tree has no Blackboard yet.", "Create Blackboard", CreateAndAssignBlackboard));
+                return;
+            }
+
+            var keys = blackboard.keys.Where(k => k != null).ToList();
+            m_Count.text = keys.Count.ToString();
+            m_Count.style.display = DisplayStyle.Flex;
+            m_Search.style.display = keys.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+
+            string filter = m_Search.value?.Trim() ?? string.Empty;
+            var shown = keys.Where(k => filter.Length == 0
+                                        || (k.keyName ?? string.Empty).IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0
+                                        || Graph.KeySlotScanner.FriendlyTypeName(k.GetValueType()).IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0)
+                            .ToList();
+
+            if (keys.Count == 0) m_List.Add(EmptyState("No keys yet. Keys are the shared variables your nodes read and write.", "Add Key", OnAddKeyClicked));
+            else if (shown.Count == 0) m_List.Add(EmptyState($"No key matches \"{filter}\".", null, null));
+
+            foreach (var key in shown) m_List.Add(CreateKeyCard(key));
+        }
+
+        private static VisualElement EmptyState(string text, string buttonText, Action onClick)
+        {
+            var box = new VisualElement();
+            box.AddToClassList("nd-bb-empty");
+            var label = new Label(text);
+            label.AddToClassList("nd-bb-empty__text");
+            box.Add(label);
+            if (buttonText != null) box.Add(new Button(onClick) { text = buttonText });
+            return box;
+        }
+
+        private VisualElement CreateKeyCard(Key key)
+        {
+            Color typeColor = Graph.KeySlotScanner.KeyColor(key.GetType());
+            string typeName = Graph.KeySlotScanner.FriendlyTypeName(key.GetValueType());
+
+            var card = new VisualElement { tooltip = $"'{key.keyName}' · {typeName}\nDrag ⠿ onto a node's key slot to link it." };
+            card.AddToClassList("nd-bb-key");
+
+            var top = new VisualElement();
+            top.AddToClassList("nd-bb-key__top");
+            var grip = new Label("⠿") { tooltip = "Drag onto a node's key slot" };
+            grip.AddToClassList("nd-bb-grip");
+            var dot = new VisualElement { style = { backgroundColor = typeColor } };
+            dot.AddToClassList("nd-bb-dot");
+            var nameField = new TextField { value = key.keyName, isDelayed = true }; // commit on Enter / focus loss
+            nameField.AddToClassList("nd-bb-name");
+            nameField.RegisterValueChangedCallback(e => RenameKey(key, e.newValue));
+            var type = new Label(typeName) { style = { color = typeColor } };
+            type.AddToClassList("nd-bb-type");
+            var delete = new Button(() => DeleteKey(key)) { text = "✕", tooltip = "Delete key" };
+            delete.AddToClassList("nd-bb-delete");
+            top.Add(grip); top.Add(dot); top.Add(nameField); top.Add(type); top.Add(delete);
+            card.Add(top);
+
+            var valueRow = new VisualElement();
+            valueRow.AddToClassList("nd-bb-key__value");
+            valueRow.Add(CreateValueEditor(key));
+            card.Add(valueRow);
+
+            foreach (var handle in new VisualElement[] { grip, dot, type }) RegisterKeyDragSource(handle, key);
+            return card;
+        }
+
+        /// <summary>
+        /// Inline editor for simple values; complex ones (events, lists, structs) get a button that selects the key in
+        /// the Inspector, so a card never grows huge.
+        /// </summary>
+        private static VisualElement CreateValueEditor(Key key)
+        {
+            var keyObject = new SerializedObject(key); // each key is its own ScriptableObject
+            var valueProp = keyObject.FindProperty("value");
+            if (valueProp == null)
+            {
+                var note = new Label("Value is assigned at runtime");
+                note.AddToClassList("nd-bb-value-note");
+                return note;
+            }
+
+            bool simple = valueProp.propertyType switch
+            {
+                SerializedPropertyType.Integer or SerializedPropertyType.Boolean or SerializedPropertyType.Float or
+                SerializedPropertyType.String or SerializedPropertyType.Enum or SerializedPropertyType.ObjectReference or
+                SerializedPropertyType.Color or SerializedPropertyType.Vector2 or SerializedPropertyType.Vector3 or
+                SerializedPropertyType.Vector2Int or SerializedPropertyType.Vector3Int or SerializedPropertyType.LayerMask => true,
+                _ => false
+            };
+            if (!simple || (valueProp.isArray && valueProp.propertyType != SerializedPropertyType.String))
+            {
+                var open = new Button(() => { Selection.activeObject = key; EditorGUIUtility.PingObject(key); })
+                {
+                    text = $"Edit {Graph.KeySlotScanner.FriendlyTypeName(key.GetValueType())} in Inspector…",
+                    tooltip = "This value type is edited in the Inspector."
+                };
+                open.AddToClassList("nd-bb-value-button");
+                return open;
+            }
+
+            var field = new PropertyField(valueProp, "");
+            field.AddToClassList("nd-bb-value");
+            field.Bind(keyObject);
+            return field;
         }
 
         private void OnAddKeyClicked()
         {
-            if (m_BTree.blackboard == null) {
-                if (EditorUtility.DisplayDialog("Create", "No Blackboard found. Create one?", "Yes", "No")) CreateAndAssignBlackboard();
-                return;
+            if (m_BTree.blackboard == null)
+            {
+                CreateAndAssignBlackboard();
+                if (m_BTree.blackboard == null) return;
             }
-            SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), m_keySearchProvider);
+            var window = EditorWindow.focusedWindow;
+            Vector2 screen = window != null
+                ? window.position.position + new Vector2(m_AddButton.worldBound.xMin, m_AddButton.worldBound.yMax)
+                : GUIUtility.GUIToScreenPoint(Vector2.zero);
+            ND_BTSearchPopup.Show(screen, "Add Key", BlackboardKeySearchProvider.BuildEntries(), data => AddKey((Type)data));
         }
 
         private void CreateAndAssignBlackboard()
@@ -104,6 +305,7 @@ namespace ND_BehaviorTree.Editor
             bb.name = $"{m_BTree.name}_Blackboard";
             AssetDatabase.CreateAsset(bb, AssetDatabase.GenerateUniqueAssetPath($"{System.IO.Path.GetDirectoryName(AssetDatabase.GetAssetPath(m_BTree))}/{bb.name}.asset"));
             AssetDatabase.SaveAssets();
+            m_treeSerializer.Update();
             m_treeSerializer.FindProperty("blackboard").objectReferenceValue = bb;
             m_treeSerializer.ApplyModifiedProperties();
             EditorUtility.SetDirty(m_BTree);
@@ -115,54 +317,84 @@ namespace ND_BehaviorTree.Editor
             Undo.RecordObject(m_BTree.blackboard, "Add Key");
             var key = ScriptableObject.CreateInstance(keyType) as Key;
             key.name = keyType.Name;
-            key.keyName = ObjectNames.GetUniqueName(m_BTree.blackboard.keys.Select(k => k.keyName).ToArray(), $"New {keyType.Name.Replace("Key_", "")}");
+            string baseName = $"New {Graph.KeySlotScanner.FriendlyTypeName(key.GetValueType())}";
+            key.keyName = ObjectNames.GetUniqueName(m_BTree.blackboard.keys.Where(k => k != null).Select(k => k.keyName).ToArray(), baseName);
             AssetDatabase.AddObjectToAsset(key, m_BTree.blackboard);
+            Undo.RegisterCreatedObjectUndo(key, "Add Key");
             m_BTree.blackboard.keys.Add(key);
             EditorUtility.SetDirty(m_BTree.blackboard);
-            AssetDatabase.SaveAssets();
+            AssetDatabase.SaveAssetIfDirty(m_BTree.blackboard);
+            m_Search.SetValueWithoutNotify(string.Empty);
             PopulateView();
         }
 
-        public void PopulateView()
+        private void RenameKey(Key key, string newName)
         {
-            var keysContainer = this.Q("keys-container");
-            if (keysContainer == null) return;
-            keysContainer.Clear();
-            var foldout = this.Q<Foldout>("blackboard-foldout");
-
-            if (m_BTree.blackboard == null) {
-                if (foldout != null) foldout.style.display = DisplayStyle.None;
-                keysContainer.Add(new Label("No Blackboard Asset.") { style = { unityTextAlign = TextAnchor.MiddleCenter } });
+            newName = newName?.Trim();
+            if (string.IsNullOrEmpty(newName) || newName == key.keyName) { PopulateView(); return; }
+            if (m_BTree.blackboard.keys.Any(k => k != null && k != key && k.keyName == newName))
+            {
+                EditorUtility.DisplayDialog("Duplicate key name", $"A key named '{newName}' already exists on this blackboard.", "OK");
+                PopulateView();
                 return;
             }
-
-            if (foldout != null) foldout.style.display = DisplayStyle.Flex;
-            var serObj = new SerializedObject(m_BTree.blackboard);
-            var keysProp = serObj.FindProperty("keys");
-
-            for (int i = 0; i < m_BTree.blackboard.keys.Count; i++) {
-                Key key = m_BTree.blackboard.keys[i];
-                if (key == null) continue;
-
-                var row = new VisualElement { style = { flexDirection = FlexDirection.Row, marginTop = 2, marginBottom = 2 } };
-                var colorAttr = key.GetType().GetCustomAttribute<KeyColorAttribute>();
-                
-                row.Add(new VisualElement { style = { width = 10, height = 10, alignSelf = Align.Center, marginRight = 5, borderTopLeftRadius = 5, borderTopRightRadius = 5, borderBottomLeftRadius = 5, borderBottomRightRadius = 5, backgroundColor = colorAttr?.Color ?? Color.grey } });
-                
-                var nameField = new TextField { value = key.keyName, style = { width = 100 } };
-                nameField.RegisterValueChangedCallback(e => { Undo.RecordObject(key, "Rename"); key.keyName = e.newValue; EditorUtility.SetDirty(key); });
-                
-                var propField = new PropertyField(keysProp.GetArrayElementAtIndex(i).FindPropertyRelative("value"), "") { style = { flexGrow = 1 } };
-                propField.Bind(serObj);
-                
-                row.Add(nameField); row.Add(propField);
-                row.Add(new Button(() => {
-                    Undo.RecordObject(m_BTree.blackboard, "Delete Key"); m_BTree.blackboard.keys.Remove(key); Undo.DestroyObjectImmediate(key);
-                    EditorUtility.SetDirty(m_BTree.blackboard); AssetDatabase.SaveAssets(); PopulateView();
-                }) { text = "X", style = { width = 20 } });
-                
-                keysContainer.Add(row);
-            }
+            Undo.RecordObject(key, "Rename Key");
+            key.keyName = newName;
+            EditorUtility.SetDirty(key);
+            AssetDatabase.SaveAssetIfDirty(m_BTree.blackboard);
         }
+
+        private void DeleteKey(Key key)
+        {
+            int uses = m_BTree.nodes.Where(n => n != null)
+                .SelectMany(n => new[] { n }.Concat(n.decorators).Concat<Node>(n.services))
+                .Where(n => n != null)
+                .Sum(n => Graph.KeySlotScanner.Scan(n).Count(s => s.Current == key));
+            if (uses > 0 && !EditorUtility.DisplayDialog("Delete key",
+                    $"'{key.keyName}' is linked to {uses} node field(s) in '{m_BTree.name}'. Those fields will lose their key.", "Delete", "Cancel"))
+                return;
+
+            Undo.RecordObject(m_BTree.blackboard, "Delete Key");
+            m_BTree.blackboard.keys.Remove(key);
+            Undo.DestroyObjectImmediate(key);
+            EditorUtility.SetDirty(m_BTree.blackboard);
+            AssetDatabase.SaveAssetIfDirty(m_BTree.blackboard);
+            PopulateView();
+        }
+
+        #endregion
+
+        #region Drag a key onto node slots
+
+        /// <summary>Starts a Unity drag of the Key asset (accepted by node key slots and Inspector object fields).</summary>
+        private static void RegisterKeyDragSource(VisualElement handle, Key key)
+        {
+            Vector2 downPosition = default;
+            bool pressed = false;
+            handle.RegisterCallback<PointerDownEvent>(e => { if (e.button == 0) { pressed = true; downPosition = e.position; e.StopPropagation(); } });
+            handle.RegisterCallback<PointerUpEvent>(e => pressed = false);
+            handle.RegisterCallback<PointerLeaveEvent>(e =>
+            {
+                if (!pressed) return; // leaving the handle while pressed also starts the drag (fast drags)
+                pressed = false;
+                StartDrag(key);
+            });
+            handle.RegisterCallback<PointerMoveEvent>(e =>
+            {
+                if (!pressed || ((Vector2)e.position - downPosition).sqrMagnitude < 16f) return;
+                pressed = false;
+                StartDrag(key);
+                e.StopPropagation();
+            });
+        }
+
+        private static void StartDrag(Key key)
+        {
+            DragAndDrop.PrepareStartDrag();
+            DragAndDrop.objectReferences = new UnityEngine.Object[] { key };
+            DragAndDrop.StartDrag($"Key: {key.keyName}");
+        }
+
+        #endregion
     }
 }

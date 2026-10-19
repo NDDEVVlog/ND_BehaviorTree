@@ -27,10 +27,22 @@ public class PlayAudioClipFromAudioSourceNode : ActionNode
     private bool _hasStartedPlaying = false;
 
 
+    [System.NonSerialized] private bool _configErrorLogged;
+
     protected override void OnEnter()
     {
-        _runtimeAudioSource = GetOwnerTree().blackboard.GetValue<AudioSource>(audioSourceKey.keyName);
         _hasStartedPlaying = false;
+        _runtimeAudioSource = null;
+        if (audioSourceKey == null || blackboard == null)
+        {
+            if (!_configErrorLogged)
+            {
+                _configErrorLogged = true;
+                Debug.LogError($"[PlayAudioClipFromAudioSourceNode] '{name}': {(audioSourceKey == null ? "audioSourceKey is not assigned" : "the tree has no blackboard")}; the node fails. (Logged once.)", this);
+            }
+            return; // OnProcess fails because _runtimeAudioSource is null
+        }
+        _runtimeAudioSource = blackboard.GetValue<AudioSource>(audioSourceKey.keyName);
     }
 
     // OnProcess is called every frame while the node is in a 'Running' state.
@@ -45,7 +57,8 @@ public class PlayAudioClipFromAudioSourceNode : ActionNode
         if (!_hasStartedPlaying)
         {
 
-            AudioClip clipToPlay = audioClipKey.GetValue(blackboard);
+            // No clip key assigned: fall back to the source's own clip (documented behaviour below).
+            AudioClip clipToPlay = audioClipKey != null ? audioClipKey.GetValue(blackboard) : null;
             if (clipToPlay == null)
             {
                 clipToPlay = _runtimeAudioSource.clip;
@@ -87,4 +100,4 @@ public class PlayAudioClipFromAudioSourceNode : ActionNode
     {
         _hasStartedPlaying = false;
     }
-}
+}
