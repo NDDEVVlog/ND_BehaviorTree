@@ -692,6 +692,12 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         private Node LookupRuntime(string id) => id != null && m_LiveLookup.TryGetValue(id, out var n) ? n : null;
 
+        /// <summary>The runtime node with this id while live debugging (null otherwise). Used by plugins (ND_BTLiveContext).</summary>
+        public Node LookupRuntimeNode(string id) => LookupRuntime(id);
+
+        /// <summary>The agent the window watches, or null.</summary>
+        public BehaviorTreeRunner WatchedAgent => m_Window != null ? m_Window.WatchedRunner : null;
+
         /// <summary>True while the window is showing a runtime tree (Play mode + watched agent).</summary>
         public bool IsLiveDebugging => m_Window != null && m_Window.IsLiveDebugging;
 

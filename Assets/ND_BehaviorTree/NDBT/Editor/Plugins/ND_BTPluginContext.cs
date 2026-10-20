@@ -17,6 +17,9 @@ namespace ND_BehaviorTree.Editor.Plugins
         internal readonly List<ND_BTPluginMenuItem> NodeItems = new List<ND_BTPluginMenuItem>();
         internal readonly List<ND_BTPluginMenuItem> ToolbarItems = new List<ND_BTPluginMenuItem>();
         internal readonly List<ND_BTPluginRule> Rules = new List<ND_BTPluginRule>();
+        internal readonly List<ND_BTLiveSectionEntry> LiveSections = new List<ND_BTLiveSectionEntry>();
+        internal readonly List<Action<ND_BTLiveContext>> LiveUpdates = new List<Action<ND_BTLiveContext>>();
+        internal readonly List<Action> LiveStops = new List<Action>();
 
         public ND_BTPlugin Plugin { get; }
 
@@ -69,6 +72,42 @@ namespace ND_BehaviorTree.Editor.Plugins
         {
             if (rule == null) throw new ArgumentNullException(nameof(rule));
             Rules.Add(new ND_BTPluginRule(Plugin, name, rule));
+        }
+
+        /// <summary>
+        /// Adds a foldout section to the Live Debug panel. <paramref name="create"/> is called once per panel;
+        /// the section then gets <see cref="ND_BTLiveSection.OnLiveUpdate"/> while an agent is watched.
+        /// </summary>
+        public void AddLiveDebugSection(string title, Func<ND_BTLiveSection> create)
+        {
+            if (string.IsNullOrWhiteSpace(title) || create == null) throw new ArgumentException($"[{Plugin.DisplayName}] AddLiveDebugSection needs a title and a factory.");
+            LiveSections.Add(new ND_BTLiveSectionEntry(Plugin, title, create));
+        }
+
+        /// <summary>Runs ~30 times per second while an agent is watched (keep it cheap: no allocations per call).</summary>
+        public void OnLiveUpdate(Action<ND_BTLiveContext> handler)
+        {
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
+            LiveUpdates.Add(handler);
+        }
+
+        /// <summary>Runs when Live Debug stops (Play mode ended, agent cleared).</summary>
+        public void OnLiveStopped(Action handler)
+        {
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
+            LiveStops.Add(handler);
+        }
+    }
+
+    public sealed class ND_BTLiveSectionEntry
+    {
+        public readonly ND_BTPlugin Plugin;
+        public readonly string Title;
+        public readonly Func<ND_BTLiveSection> Create;
+
+        internal ND_BTLiveSectionEntry(ND_BTPlugin plugin, string title, Func<ND_BTLiveSection> create)
+        {
+            Plugin = plugin; Title = title; Create = create;
         }
     }
 

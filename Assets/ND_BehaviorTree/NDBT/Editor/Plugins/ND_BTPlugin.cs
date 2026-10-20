@@ -38,5 +38,9 @@ namespace ND_BehaviorTree.Editor.Plugins
         public Vector2 Position { get; set; }
         /// <summary>Selected nodes at the time of the click.</summary>
         public IReadOnlyList<Node> Selection { get; set; } = new Node[0];
+        /// <summary>During Live Debug: the runtime counterpart of <see cref="Node"/> in the watched agent's tree (else null).</summary>
+        public Node RuntimeNode { get; set; }
+        /// <summary>During Live Debug: the watched agent (else null).</summary>
+        public BehaviorTreeRunner Agent { get; set; }
     }
 }

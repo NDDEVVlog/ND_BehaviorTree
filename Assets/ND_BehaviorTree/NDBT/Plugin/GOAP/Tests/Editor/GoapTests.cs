@@ -6,6 +6,7 @@ using ND_BehaviorTree.GOAP.Editor;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.UIElements;
 
 namespace ND_BehaviorTree.GOAP.Tests
 {
@@ -365,6 +366,52 @@ namespace ND_BehaviorTree.GOAP.Tests
             var stray = Track(ScriptableObject.CreateInstance<IntKey>());
             stray.keyName = "Elsewhere";
             Assert.IsFalse(Cond(stray, ComparisonType.Equal).TryEvaluate(clone.blackboard, out _), "missing key: unknown, not false");
+        }
+
+        // ---------- Live Debug ----------
+
+        [Test]
+        public void History_RecordsWhyThePlannerReplanned()
+        {
+            var planner = Planner(Goal("Axe", 1, Cond(m_HasAxe, ComparisonType.Equal, b: true)));
+            var (_, buyWork) = AddAction(planner, "BuyAxe", 1, new KeyCondition[0], Eff(m_HasAxe, b: true));
+            AddAction(planner, "CraftAxe", 5, new KeyCondition[0], Eff(m_HasAxe, b: true));
+            buyWork.result = Node.Status.Failure;
+            var clone = Clone();
+            var rt = Rt<GOAPPlannerNode>(clone, planner);
+            LogAssert.Expect(LogType.Warning, new Regex("gave up"));
+
+            Run(clone);
+
+            var triggers = rt.History.Select(h => h.Trigger).ToList();
+            Assert.AreEqual("started", triggers[0]);
+            Assert.AreEqual("BuyAxe", rt.History[0].Plan);
+            Assert.That(triggers, Has.Some.Contains("action 'BuyAxe' failed"));
+            Assert.IsTrue(rt.History.Last().Failed, "the last record is the give-up");
+            Assert.Greater(rt.HistoryVersion, 0);
+        }
+
+        [Test]
+        public void LiveSection_ShowsGoalPlanGoalMarksAndHistory()
+        {
+            var planner = Planner(Goal("Logs", 1, Cond(m_Logs, ComparisonType.GreaterEqual, i: 10)), Goal("Healthy", 5, Cond(m_Health, ComparisonType.GreaterEqual, i: 50)));
+            Woodcutter(planner);
+            ((GoapTestAction)planner.children.Select(c => ((GOAPActionNode)c).child).First()).result = Node.Status.Running; // stay on GetAxe
+            var clone = Clone();
+            clone.Update();
+
+            var section = new GoapLiveSection();
+            var live = new ND_BehaviorTree.Editor.Plugins.ND_BTLiveContext(null, clone, m_Tree, 1, id => clone.nodes.FirstOrDefault(n => n.id == id));
+            section.OnLiveUpdate(live);
+
+            var texts = section.Query<Label>().ToList().Select(l => l.text).ToList();
+            Assert.That(texts, Has.Some.StartsWith("▶ Logs: [GetAxe] → Scout → Chop"), string.Join(" | ", texts));
+            Assert.That(texts, Has.Some.Contains("started"), "history line");
+            var marks = section.Query<Label>(className: "goap-row__mark").ToList().Select(l => l.text).ToList();
+            CollectionAssert.AreEqual(new[] { "✗", "✓" }, marks, "Logs not met, Healthy met (runtime Health is 100)");
+
+            section.OnLiveStopped();
+            Assert.AreEqual(0, section.Query<Label>(className: "goap-row__mark").ToList().Count);
         }
 
         // ---------- editor: validation ----------

@@ -110,6 +110,20 @@ namespace ND_BehaviorTree.GOAP
             key == null ? "(no key)" : $"{key.keyName} {(operation == GoapEffectOperation.Add ? "+=" : "=")} {value.ToString(key.GetValueType())}";
     }
 
+    /// <summary>One planning event of a GOAP planner (Editor-only history, shown in Live Debug).</summary>
+    public struct GoapPlanRecord
+    {
+        /// <summary>Time.time when it happened.</summary>
+        public float Time;
+        /// <summary>Goal pursued, or null (no plan / every goal holds).</summary>
+        public string Goal;
+        /// <summary>The plan as "A → B → C", or null.</summary>
+        public string Plan;
+        /// <summary>Why planning happened: "started", "action 'X' failed", "more important goal"…</summary>
+        public string Trigger;
+        public bool Failed;
+    }
+
     /// <summary>A goal: all conditions must hold. The planner pursues the highest-priority goal that is not met and can be planned.</summary>
     [Serializable]
     public class GoapGoal

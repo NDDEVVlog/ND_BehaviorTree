@@ -65,8 +65,54 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             m_Blackboard = new ND_BTLiveBlackboardView();
             Add(m_Blackboard);
 
+            m_PluginArea = new ScrollView { style = { flexShrink = 1, maxHeight = 320, marginTop = 4 } };
+            Add(m_PluginArea);
+            BuildPluginSections();
+            Plugins.ND_BTPluginRegistry.Changed += BuildPluginSections;
+            RegisterCallback<DetachFromPanelEvent>(_ => Plugins.ND_BTPluginRegistry.Changed -= BuildPluginSections);
+
             schedule.Execute(Refresh).Every(RefreshMs);
             Refresh();
+        }
+
+        // ---------- plugin sections (ND_BTPluginContext.AddLiveDebugSection) ----------
+
+        private readonly ScrollView m_PluginArea;
+        private readonly List<(Plugins.ND_BTLiveSectionEntry entry, Plugins.ND_BTLiveSection section, Foldout foldout)> m_PluginSections =
+            new List<(Plugins.ND_BTLiveSectionEntry, Plugins.ND_BTLiveSection, Foldout)>();
+
+        private void BuildPluginSections()
+        {
+            m_PluginArea.Clear();
+            m_PluginSections.Clear();
+            foreach (var entry in Plugins.ND_BTPluginRegistry.LiveSectionEntries)
+            {
+                var section = Plugins.ND_BTPluginRegistry.CreateSection(entry);
+                if (section == null) continue; // logged by CreateSection
+                var foldout = new Foldout { text = entry.Title, value = true };
+                foldout.style.marginTop = 4;
+                foldout.Add(section);
+                m_PluginArea.Add(foldout);
+                m_PluginSections.Add((entry, section, foldout));
+            }
+            m_PluginArea.style.display = m_PluginSections.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        /// <summary>Called by the window with each live update (~30 Hz); collapsed or hidden sections are skipped.</summary>
+        public void UpdatePluginSections(Plugins.ND_BTLiveContext live)
+        {
+            if (resolvedStyle.display == DisplayStyle.None) return;
+            for (int i = 0; i < m_PluginSections.Count; i++)
+            {
+                var (entry, section, foldout) = m_PluginSections[i];
+                if (!foldout.value) continue;
+                Plugins.ND_BTPluginRegistry.RunSectionUpdate(entry, section, live);
+            }
+        }
+
+        public void StopPluginSections()
+        {
+            foreach (var (entry, section, _) in m_PluginSections) Plugins.ND_BTPluginRegistry.RunSectionStopped(entry, section);
         }
 
         private static Label SectionTitle(string text) =>

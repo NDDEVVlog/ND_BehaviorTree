@@ -616,6 +616,24 @@ namespace ND_BehaviorTree.Editor
         private void OnBecameVisible() => m_isVisible = true;
         private void OnBecameInvisible() => m_isVisible = false;
 
+        // Plugin Live Debug: one reused context and one cached lookup delegate (no allocations per tick).
+        private Plugins.ND_BTLiveContext m_pluginLive;
+        private System.Func<string, Node> m_pluginLookup;
+        private ND_BTGraphCanvas m_pluginLookupView;
+
+        private void UpdatePluginLive()
+        {
+            if (m_pluginLookupView != m_currentView)
+            {
+                m_pluginLookupView = m_currentView;
+                m_pluginLookup = m_currentView.LookupRuntimeNode;
+            }
+            if (m_pluginLive == null) m_pluginLive = new Plugins.ND_BTLiveContext(null, null, null, 0, null);
+            m_pluginLive.Set(WatchedRunner, CurrentDebugRuntime, m_currentGraph, Time.frameCount, m_pluginLookup);
+            Plugins.ND_BTPluginRegistry.RunLiveUpdate(m_pluginLive);
+            m_debugPanel?.UpdatePluginSections(m_pluginLive);
+        }
+
         private void OnEditorUpdate()
         {
             if (m_currentView == null || !m_isVisible) return; // hidden tab: no work at all
@@ -627,12 +645,15 @@ namespace ND_BehaviorTree.Editor
                 {
                     m_nextLiveUpdate = now + LiveUpdateInterval;
                     m_currentView.UpdateLiveDebug(CurrentDebugRuntime);
+                    UpdatePluginLive();
                     m_liveWasActive = true;
                 }
             }
             else if (m_liveWasActive)
             {
                 m_currentView.ClearLiveDebug();
+                m_debugPanel?.StopPluginSections();
+                Plugins.ND_BTPluginRegistry.RunLiveStopped();
                 m_liveWasActive = false;
             }
 

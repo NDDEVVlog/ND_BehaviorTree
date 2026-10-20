@@ -363,8 +363,8 @@ MonoBehaviour:
   m_guid: a1d4191e-42ce-4e17-9eb4-9d8dc7ee6550
   m_position:
     serializedVersion: 2
-    x: 1756.6667
-    y: 344
+    x: 1906.763
+    y: 324.67307
     width: 0
     height: 0
   typeName: 
@@ -423,8 +423,8 @@ MonoBehaviour:
   m_guid: 18bd2a02-08b6-4f48-a6ae-722322c71c9f
   m_position:
     serializedVersion: 2
-    x: -174.66386
-    y: 624.20935
+    x: -173.4874
+    y: 634.7976
     width: 0
     height: 0
   typeName: 
@@ -827,7 +827,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  weight: 1
+  weight: 2
   decorators: []
   services: []
   children:

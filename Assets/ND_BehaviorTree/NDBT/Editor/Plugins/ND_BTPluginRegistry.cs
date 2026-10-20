@@ -54,6 +54,7 @@ namespace ND_BehaviorTree.Editor.Plugins
         public static IEnumerable<ND_BTPluginMenuItem> CanvasMenuItems => Active.SelectMany(c => c.CanvasItems);
         public static IEnumerable<ND_BTPluginMenuItem> ToolbarItems => Active.SelectMany(c => c.ToolbarItems);
         public static IEnumerable<ND_BTPluginRule> ValidationRules => Active.SelectMany(c => c.Rules);
+        public static IEnumerable<ND_BTLiveSectionEntry> LiveSectionEntries => Active.SelectMany(c => c.LiveSections);
         public static IEnumerable<ND_BTPluginMenuItem> NodeMenuItems(Node node) =>
             node == null ? Enumerable.Empty<ND_BTPluginMenuItem>() : Active.SelectMany(c => c.NodeItems).Where(i => i.NodeType.IsInstanceOfType(node));
 
@@ -114,6 +115,9 @@ namespace ND_BehaviorTree.Editor.Plugins
             context.NodeItems.Clear();
             context.ToolbarItems.Clear();
             context.Rules.Clear();
+            context.LiveSections.Clear();
+            context.LiveUpdates.Clear();
+            context.LiveStops.Clear();
         }
 
         // ---------- used by core sites ----------
@@ -141,6 +145,8 @@ namespace ND_BehaviorTree.Editor.Plugins
         /// <summary>Builds the args for a canvas-hosted item.</summary>
         public static ND_BTPluginArgs ArgsFor(ND_BTGraphCanvas canvas, Node node = null, Vector2 position = default) => new ND_BTPluginArgs
         {
+            RuntimeNode = canvas != null && node != null && canvas.IsLiveDebugging ? canvas.LookupRuntimeNode(node.id) : null,
+            Agent = canvas != null && canvas.IsLiveDebugging ? canvas.WatchedAgent : null,
             Canvas = canvas,
             Tree = canvas?.TreeData,
             Graph = canvas?.Graph,
@@ -171,6 +177,88 @@ namespace ND_BehaviorTree.Editor.Plugins
                 Debug.LogError($"{LogTag} Enable check of '{item.Path}' (plugin '{item.Plugin.DisplayName}') threw: {e}");
                 return false;
             }
+        }
+
+        // ---------- Live Debug ----------
+
+        /// <summary>A live hook slower than this (ms) is reported once: it runs ~30 times per second.</summary>
+        public const double SlowLiveHookMs = 4.0;
+        private static readonly HashSet<string> s_LiveReported = new HashSet<string>();
+        private static readonly System.Diagnostics.Stopwatch s_LiveWatch = new System.Diagnostics.Stopwatch();
+
+        /// <summary>
+        /// Runs every plugin's OnLiveUpdate hook. Errors and slow hooks are reported once each. No allocations per
+        /// call (no closures, messages built only when reporting): this runs ~30 times per second.
+        /// </summary>
+        public static void RunLiveUpdate(ND_BTLiveContext live)
+        {
+            for (int e = 0; e < s_Entries.Count; e++)
+            {
+                var entry = s_Entries[e];
+                if (!entry.Installed) continue;
+                var hooks = entry.Context.LiveUpdates;
+                for (int i = 0; i < hooks.Count; i++)
+                {
+                    s_LiveWatch.Restart();
+                    try { hooks[i](live); }
+                    catch (Exception ex) { ReportLiveError(entry.Plugin, "OnLiveUpdate", ex); continue; }
+                    CheckSlow(entry.Plugin, "OnLiveUpdate");
+                }
+            }
+        }
+
+        public static void RunLiveStopped()
+        {
+            for (int e = 0; e < s_Entries.Count; e++)
+            {
+                var entry = s_Entries[e];
+                if (!entry.Installed) continue;
+                foreach (var hook in entry.Context.LiveStops)
+                {
+                    try { hook(); }
+                    catch (Exception ex) { ReportLiveError(entry.Plugin, "OnLiveStopped", ex); }
+                }
+            }
+        }
+
+        /// <summary>Updates a plugin section of the Live Debug panel under the same error / time guard.</summary>
+        public static void RunSectionUpdate(ND_BTLiveSectionEntry entry, ND_BTLiveSection section, ND_BTLiveContext live)
+        {
+            s_LiveWatch.Restart();
+            try { section.OnLiveUpdate(live); }
+            catch (Exception ex) { ReportLiveError(entry.Plugin, "section '" + entry.Title + "'", ex); return; }
+            CheckSlow(entry.Plugin, entry.Title);
+        }
+
+        public static void RunSectionStopped(ND_BTLiveSectionEntry entry, ND_BTLiveSection section)
+        {
+            try { section.OnLiveStopped(); }
+            catch (Exception ex) { ReportLiveError(entry.Plugin, "section '" + entry.Title + "'", ex); }
+        }
+
+        /// <summary>Creates a section; null (logged) if the plugin's factory throws.</summary>
+        public static ND_BTLiveSection CreateSection(ND_BTLiveSectionEntry entry)
+        {
+            try { return entry.Create(); }
+            catch (Exception e)
+            {
+                Debug.LogError($"{LogTag} Live Debug section '{entry.Title}' of plugin '{entry.Plugin.DisplayName}' could not be created: {e}");
+                return null;
+            }
+        }
+
+        private static void ReportLiveError(ND_BTPlugin plugin, string what, Exception e)
+        {
+            if (s_LiveReported.Add(plugin.GetType().FullName + "|" + what + "|error"))
+                Debug.LogError($"{LogTag} Live Debug {what} of plugin '{plugin.DisplayName}' threw (reported once): {e}");
+        }
+
+        private static void CheckSlow(ND_BTPlugin plugin, string what)
+        {
+            double ms = s_LiveWatch.Elapsed.TotalMilliseconds;
+            if (ms <= SlowLiveHookMs) return;
+            if (s_LiveReported.Add(plugin.GetType().FullName + "|" + what + "|slow"))
+                Debug.LogWarning($"{LogTag} Live Debug {what} of plugin '{plugin.DisplayName}' took {ms:0.0} ms (budget {SlowLiveHookMs} ms; it runs ~30 times per second). Reported once.");
         }
 
         /// <summary>Runs a menu item; if it changed the graph (new history step), the canvas saves and redraws.</summary>

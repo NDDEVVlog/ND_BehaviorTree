@@ -85,3 +85,71 @@
 .goap-live--failed {
     color: #E05252;
 }
+
+/* ---- Live Debug panel section (GoapLiveSection) ---- */
+.goap-live-section .goap-live {
+    padding: 0 0 2px 0;
+    max-width: 270px;
+}
+
+.goap-live-hint {
+    color: #9AA1AC;
+    font-size: 11px;
+    white-space: normal;
+}
+
+.goap-live-card {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+    padding: 4px 6px 6px 6px;
+    margin: 2px 0 6px 0;
+}
+
+.goap-live-card__header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+
+.goap-live-card__title {
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    font-size: 12px;
+}
+
+.goap-live-card__button {
+    font-size: 10px;
+    margin: 0;
+    padding: 0 6px;
+}
+
+.goap-live-goal__name {
+    flex-grow: 1;
+    flex-shrink: 1;
+    white-space: normal;
+}
+
+.goap-live-goal__priority {
+    color: #F5C842;
+    font-size: 10px;
+    margin-left: 4px;
+}
+
+.goap-live-goal--current {
+    border-right-width: 3px;
+    border-right-color: #F5C842;
+}
+
+.goap-live-history {
+    font-size: 10px;
+    color: #A8B0BD;
+    white-space: normal;
+    max-width: 270px;
+    margin: 0;
+    padding: 0 0 1px 0;
+}
+
+.goap-live-history--failed {
+    color: #E8A09E;
+}

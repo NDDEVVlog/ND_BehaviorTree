@@ -62,6 +62,34 @@ namespace ND_BehaviorTree.GOAP
         /// </summary>
         public void RequestGoalCheck() => m_GoalCheckRequested = true;
 
+        // ---- plan history (Editor only: Live Debug; compiled out of builds) ----
+#if UNITY_EDITOR
+        private const int HistoryCapacity = 30;
+        [NonSerialized] private List<GoapPlanRecord> m_History;
+        /// <summary>Recent planning events, oldest first (Editor only). Read by the GOAP Live Debug section.</summary>
+        public IReadOnlyList<GoapPlanRecord> History => m_History ?? (IReadOnlyList<GoapPlanRecord>)Array.Empty<GoapPlanRecord>();
+        /// <summary>Increases with every new history record (cheap change check for views).</summary>
+        public int HistoryVersion { get; private set; }
+#endif
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        private void Record(string goal, string plan, string trigger, bool failed)
+        {
+#if UNITY_EDITOR
+            m_History ??= new List<GoapPlanRecord>();
+            if (m_History.Count > 0)
+            {
+                var last = m_History[m_History.Count - 1];
+                if (last.Goal == goal && last.Plan == plan && last.Trigger == trigger && last.Failed == failed) return; // same as last: keep the list readable
+            }
+            if (m_History.Count >= HistoryCapacity) m_History.RemoveAt(0);
+            m_History.Add(new GoapPlanRecord { Time = Time.time, Goal = goal, Plan = plan, Trigger = trigger, Failed = failed });
+            HistoryVersion++;
+#endif
+        }
+
+        private string PlanText(List<int> plan) => plan.Count == 0 ? "(already met)" : string.Join(" → ", plan.Select(i => Title(m_Actions[i])));
+
         /// <summary>The title shown on the graph (typeName), else the asset name.</summary>
         public static string Title(Node node) => node == null ? "(none)" : string.IsNullOrEmpty(node.typeName) ? node.name : node.typeName;
 
@@ -106,7 +134,7 @@ namespace ND_BehaviorTree.GOAP
             m_NextGoalCheck = Time.time + goalCheckInterval;
             if (!m_Compiled) Compile(blackboard, log: true);
             if (m_CompileError != null) return;
-            Replan();
+            Replan("started");
         }
 
         protected override Status OnProcess()
@@ -175,11 +203,12 @@ namespace ND_BehaviorTree.GOAP
             if (m_Replans > maxReplans)
             {
                 LastFailure = $"{reason}; gave up after {maxReplans} replan(s)";
+                Record(null, null, LastFailure, failed: true);
                 Warn(LastFailure);
                 m_Plan = null;
                 return Status.Failure;
             }
-            switch (Replan())
+            switch (Replan(reason))
             {
                 case PlanResult.AllGoalsMet: return Status.Success;
                 case PlanResult.Failed: return Status.Failure;
@@ -187,7 +216,7 @@ namespace ND_BehaviorTree.GOAP
             }
         }
 
-        private PlanResult Replan()
+        private PlanResult Replan(string trigger)
         {
             m_Plan = null;
             m_Step = 0;
@@ -196,7 +225,7 @@ namespace ND_BehaviorTree.GOAP
             var state = ReadState();
             if (TryPlan(state, float.NegativeInfinity, out int goal, out var plan, out string reason))
             {
-                Install(goal, plan);
+                Install(goal, plan, trigger);
                 return PlanResult.Planned;
             }
             m_Goal = -1;
@@ -204,9 +233,11 @@ namespace ND_BehaviorTree.GOAP
             {
                 m_AllGoalsMet = true;
                 LastFailure = null;
+                Record(null, null, $"{trigger}: every goal holds", failed: false);
                 return PlanResult.AllGoalsMet;
             }
             LastFailure = reason;
+            Record(null, null, $"{trigger}: no plan: {reason}", failed: true);
             Warn($"no plan: {reason}");
             return PlanResult.Failed;
         }
@@ -215,19 +246,21 @@ namespace ND_BehaviorTree.GOAP
         {
             if (m_Goal < 0) return;
             if (!TryPlan(ReadState(), Priority(m_Goal), out int goal, out var plan, out _) || goal == m_Goal) return;
+            string interrupted = m_Plan != null && m_Step < m_Plan.Count ? Title(m_Actions[m_Plan[m_Step]]) : null;
             AbortCurrentStep();
-            Install(goal, plan);
+            Install(goal, plan, interrupted != null ? $"more important goal (interrupted '{interrupted}')" : "more important goal");
         }
 
-        private void Install(int goal, List<int> plan)
+        private void Install(int goal, List<int> plan, string trigger)
         {
             m_Goal = goal;
             m_Plan = plan;
             m_Step = 0;
             m_StepStarted = false;
             LastFailure = null;
+            Record(goals[goal].name, PlanText(plan), trigger, failed: false);
             if (logPlans)
-                Debug.Log($"{LogTag} '{Title(this)}' goal '{goals[goal].name}': {(plan.Count == 0 ? "(already met)" : string.Join(" → ", plan.Select(i => Title(m_Actions[i]))))}", this);
+                Debug.Log($"{LogTag} '{Title(this)}' goal '{goals[goal].name}' ({trigger}): {PlanText(plan)}", this);
         }
 
         /// <summary>

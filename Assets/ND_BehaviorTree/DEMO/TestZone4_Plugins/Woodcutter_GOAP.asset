@@ -224,8 +224,8 @@ MonoBehaviour:
   m_guid: 0912bc5c-1332-4825-a815-48110596becf
   m_position:
     serializedVersion: 2
-    x: 731
-    y: 859
+    x: 724.6
+    y: 903.8
     width: 0
     height: 0
   typeName: 
@@ -514,8 +514,8 @@ MonoBehaviour:
   m_guid: c518adcf-fc2f-43ef-904c-e3aef0496406
   m_position:
     serializedVersion: 2
-    x: 100
-    y: 860
+    x: 97.5
+    y: 911.25
     width: 0
     height: 0
   typeName: 
@@ -700,8 +700,8 @@ MonoBehaviour:
   m_guid: 5ed34d0b-9996-4e28-a783-b66f98025e5c
   m_position:
     serializedVersion: 2
-    x: 430
-    y: 860
+    x: 413.75
+    y: 908.75
     width: 0
     height: 0
   typeName: 

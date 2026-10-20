@@ -141,6 +141,66 @@ namespace ND_BehaviorTree.Editor.Tests
             Assert.IsFalse(ND_BTPluginRegistry.Install(new ProbePlugin(_ => { })));
         }
 
+        // ---------- live debug door ----------
+
+        private sealed class CountingSection : ND_BTLiveSection
+        {
+            public int updates, stops;
+            public override void OnLiveUpdate(ND_BTLiveContext live) => updates++;
+            public override void OnLiveStopped() => stops++;
+        }
+
+        [Test]
+        public void LiveHooksAndSections_Run_AndAreRemovedOnUninstall()
+        {
+            int updates = 0, stops = 0;
+            ND_BTLiveContext seen = null;
+            var plugin = Install(ctx =>
+            {
+                ctx.OnLiveUpdate(live => { updates++; seen = live; });
+                ctx.OnLiveStopped(() => stops++);
+                ctx.AddLiveDebugSection("Probe Live", () => new CountingSection());
+            });
+            var seq = f.Create<SequenceNode>(0, 100);
+            var live = new ND_BTLiveContext(null, f.Tree, f.Tree, 7, id => id == seq.id ? seq : null);
+
+            ND_BTPluginRegistry.RunLiveUpdate(live);
+            ND_BTPluginRegistry.RunLiveStopped();
+            Assert.AreEqual(1, updates);
+            Assert.AreEqual(1, stops);
+            Assert.AreSame(seq, seen.RuntimeOf<SequenceNode>(seq), "lookup by id reaches the runtime node");
+            Assert.AreEqual(7, seen.Frame);
+
+            var entry = ND_BTPluginRegistry.LiveSectionEntries.Single(e => e.Title == "Probe Live");
+            var section = (CountingSection)ND_BTPluginRegistry.CreateSection(entry);
+            ND_BTPluginRegistry.RunSectionUpdate(entry, section, live);
+            ND_BTPluginRegistry.RunSectionStopped(entry, section);
+            Assert.AreEqual((1, 1), (section.updates, section.stops));
+
+            ND_BTPluginRegistry.Uninstall(plugin);
+            ND_BTPluginRegistry.RunLiveUpdate(live);
+            Assert.AreEqual(1, updates, "hook removed with the plugin");
+            Assert.IsFalse(ND_BTPluginRegistry.LiveSectionEntries.Any(e => e.Title == "Probe Live"));
+        }
+
+        [Test]
+        public void ThrowingLiveHook_IsReportedOnce_AndDoesNotStopOthers()
+        {
+            int healthy = 0;
+            Install(ctx =>
+            {
+                ctx.OnLiveUpdate(_ => throw new InvalidOperationException("live bug"));
+                ctx.OnLiveUpdate(_ => healthy++);
+            });
+            var live = new ND_BTLiveContext(null, f.Tree, f.Tree, 1, _ => null);
+            LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("threw \\(reported once\\).*live bug"));
+
+            ND_BTPluginRegistry.RunLiveUpdate(live);
+            ND_BTPluginRegistry.RunLiveUpdate(live); // second failure is not logged again
+
+            Assert.AreEqual(2, healthy);
+        }
+
         // ---------- scaffold ----------
 
         [TestCase("lowercase")]

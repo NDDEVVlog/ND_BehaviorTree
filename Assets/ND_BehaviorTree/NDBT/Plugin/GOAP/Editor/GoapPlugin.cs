@@ -21,7 +21,11 @@ namespace ND_BehaviorTree.GOAP.Editor
         public override void Register(ND_BTPluginContext context)
         {
             context.AddNodeMenuItem<GOAPPlannerNode>("GOAP/Preview Plan (blackboard values)", PreviewPlan);
+            context.AddNodeMenuItem<GOAPPlannerNode>("GOAP/Check Goals Now (live)",
+                args => ((GOAPPlannerNode)args.RuntimeNode).RequestGoalCheck(),
+                args => args.RuntimeNode is GOAPPlannerNode);
             context.AddValidationRule("GOAP", Check);
+            context.AddLiveDebugSection("GOAP", () => new GoapLiveSection());
         }
 
         private static void PreviewPlan(ND_BTPluginArgs args)
