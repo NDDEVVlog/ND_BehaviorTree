@@ -118,6 +118,9 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 else iconImage.style.display = DisplayStyle.None;
             }
 
+            string summary = WeightGraph.DescriptionOf(NodeData.GetType())?.Summary;
+            tooltip = summary != null ? $"{summary}\n\nDouble-click for details." : "Double-click to edit.";
+
             SetPosition(NodeData.position.position);
             InitializePorts(info);
             DrawExposedProperties();
@@ -189,6 +192,46 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 }
             };
             hierarchy.Add(m_ExecutionIndexBadge);
+        }
+
+        private Label m_WeightBadge;
+        private Label m_FocusBadge;
+
+        /// <summary>Weight pill at the top-right ("w 2 ×Menace"); null hides it. Shown only under weighted parents.</summary>
+        public virtual void SetWeightBadge(string text, string badgeTooltip)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                if (m_WeightBadge != null) m_WeightBadge.style.display = DisplayStyle.None;
+                return;
+            }
+            if (m_WeightBadge == null)
+            {
+                m_WeightBadge = new Label { name = "weight-badge", pickingMode = PickingMode.Position };
+                m_WeightBadge.AddToClassList("nd-weight-badge");
+                hierarchy.Add(m_WeightBadge);
+            }
+            m_WeightBadge.style.display = DisplayStyle.Flex;
+            if (m_WeightBadge.text != text) m_WeightBadge.text = text;
+            m_WeightBadge.tooltip = badgeTooltip;
+        }
+
+        /// <summary>Live Debug: marks a node that frames itself (and pings the agent) whenever it starts running.</summary>
+        public void SetFocusOnRunMarker(bool on)
+        {
+            EnableInClassList("nd-focus-on-run", on);
+            if (!on)
+            {
+                if (m_FocusBadge != null) m_FocusBadge.style.display = DisplayStyle.None;
+                return;
+            }
+            if (m_FocusBadge == null)
+            {
+                m_FocusBadge = new Label("◎") { name = "focus-badge", pickingMode = PickingMode.Position, tooltip = "Focus when running: the graph frames this node and pings the agent each time it starts running." };
+                m_FocusBadge.AddToClassList("nd-focus-badge");
+                hierarchy.Add(m_FocusBadge);
+            }
+            m_FocusBadge.style.display = DisplayStyle.Flex;
         }
 
         /// <summary>Shows the 1-based execution index; pass a negative value to hide it.</summary>
@@ -510,6 +553,16 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
             if (canvas == null) return;
             Vector2 screenPos = GUIUtility.GUIToScreenPoint(evt.mousePosition);
+
+            // Live Debug: can be armed before Play; the agent actions need a watched agent.
+            var liveStatus = canvas.IsLiveDebugging ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
+            evt.menu.AppendAction("Live Debug/Focus When Running", a => canvas.ToggleFocusOnRun(NodeData),
+                canvas.IsFocusOnRun(NodeData) ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+            evt.menu.AppendAction("Live Debug/Focus This Node", a => canvas.FocusNode(this));
+            evt.menu.AppendAction("Live Debug/Ping Agent", a => canvas.PingWatchedAgent(), liveStatus);
+            evt.menu.AppendAction("Live Debug/Clear All Focus Markers", a => canvas.ClearFocusOnRun(),
+                canvas.HasFocusOnRun ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+            evt.menu.AppendSeparator();
 
             if (canvas.Graph.CanAttachDecorator(NodeData, out _))
             {

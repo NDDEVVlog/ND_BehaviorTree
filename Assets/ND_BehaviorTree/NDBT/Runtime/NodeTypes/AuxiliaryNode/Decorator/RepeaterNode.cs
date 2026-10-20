@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Runs its node again and again (Repeat Count times, or forever with 0).", "Running while repeating.")]
     [NodeInfo("Repeater", "Decorator/Repeater", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Repeater.png")]
     public class RepeaterNode : DecoratorNode
     {

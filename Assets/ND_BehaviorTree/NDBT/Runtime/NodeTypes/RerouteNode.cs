@@ -9,6 +9,7 @@ namespace ND_BehaviorTree
     /// the parent straight to the node behind it, so a runner never ticks a reroute. In a composite, the reroute's
     /// position (not the target's) decides the child's left-to-right order.
     /// </summary>
+    [NodeDescription("Bends an edge to tidy the graph; skipped at runtime.", "Created by double-clicking an edge. The runner connects the parent straight to the node behind it. Delete it to reconnect directly.")]
     [NodeInfo("Reroute", "Utility/Reroute", true, true, isChildOnly: true)]
     public class RerouteNode : Node
     {

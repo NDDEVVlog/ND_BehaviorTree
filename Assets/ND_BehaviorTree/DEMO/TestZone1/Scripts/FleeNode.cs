@@ -13,6 +13,7 @@ using ND_BehaviorTree;
 /// An Action Node that makes the AI flee from a target specified on the Blackboard.
 /// It calculates a destination in the opposite direction of the target.
 /// </summary>
+[NodeDescription("Runs away from a Transform on the blackboard.", "Picks a point 'Flee Distance' away, opposite to the target, and moves there with the owner's NavMeshAgent (re-path at most every 'Repath Interval').\nRequires a NavMeshAgent on the owner and a target in the key.")]
 [NodeInfo("Flee", "Action/Movement/Flee", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Flee.png")]
 public class FleeNode : ActionNode
 {

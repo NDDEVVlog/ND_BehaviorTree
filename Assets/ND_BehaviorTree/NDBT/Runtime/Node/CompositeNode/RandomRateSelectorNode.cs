@@ -1,28 +1,41 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ND_BehaviorTree
 {
     /// <summary>
-    /// A composite node that selects one of its children to run based on a weighted random chance.
-    /// The weight can be configured to treat higher or lower priority values as better.
-    /// Children with a priority of 0 or less are never picked (the default priority is 0, so set it on every child).
+    /// A composite node that selects one of its children to run based on a weighted random chance (each child's
+    /// <see cref="Node.weight"/>, adjusted by attached <see cref="IWeightModifier"/>s such as Weight From Key).
+    /// Children with a weight of 0 or less are never picked.
     /// </summary>
+    [NodeDescription(
+        "Picks ONE child at random, weighted by each child's Weight, and returns its result.",
+        "Each activation rolls once: chance = weight / sum of weights (HigherIsBetter), or inverted (LowerIsBetter).\n" +
+        "Children with weight ≤ 0 are never picked. A Running child keeps running until it finishes.\n" +
+        "The edges show each child's chance. Attach 'Weight From Key' to a child to change its weight at runtime.\n" +
+        "Optional anti-repeat: a picked child's weight is reduced for a while (Fatigue) for more varied behavior.")]
     [NodeInfo("Random Rate Selector", "Composite/RandomRateSelector", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/RandomSelector.png", isChildOnly: false)]
-    public class RandomRateSelectorNode : CompositeNode
+    public class RandomRateSelectorNode : CompositeNode, IWeightedComposite
     {
         public enum WeightingMode { LowerIsBetter, HigherIsBetter }
 
         /// <summary>
-        /// Determines how priority values are translated into selection weights.
-        /// LowerIsBetter: A lower priority value means a higher chance of selection. (e.g., Priority 1 > Priority 10)
-        /// HigherIsBetter: A higher priority value means a higher chance of selection. (e.g., Priority 10 > Priority 1)
+        /// LowerIsBetter: a lower weight means a higher chance (inverted: max - weight + 1).
+        /// HigherIsBetter: chance is proportional to the weight.
         /// </summary>
-        [Tooltip("LowerIsBetter: Lower priority value = higher chance.\nHigherIsBetter: Higher priority value = higher chance.\nPriorities must be > 0; children with priority <= 0 are never picked.")]
+        [Tooltip("HigherIsBetter: chance proportional to weight.\nLowerIsBetter: lower weight = higher chance.\nChildren with weight <= 0 are never picked.")]
         public WeightingMode weightingMode = WeightingMode.LowerIsBetter;
+
+        [Tooltip("Anti-repeat: right after a child is picked its weight is multiplied by this (1 = off), recovering linearly over 'Fatigue Recovery'.")]
+        [Range(0f, 1f)] public float fatigue = 1f;
+        [Tooltip("Seconds for a fatigued child to recover its full weight.")]
+        public float fatigueRecovery = 5f;
+
+        public WeightUsage WeightUsage => WeightUsage.Chance;
 
         private Node runningChild = null;
         [System.NonSerialized] private bool m_NoWeightErrorLogged;
+        [System.NonSerialized] private float[] m_Weights;
+        [System.NonSerialized] private float[] m_LastPickTime;
 
         protected override void OnEnter()
         {
@@ -31,149 +44,99 @@ namespace ND_BehaviorTree
 
         protected override Status OnProcess()
         {
-
             Node childToProcess;
 
-            // If a child is already running, continue to process it.
             if (runningChild != null)
             {
                 childToProcess = runningChild;
             }
             else
             {
-                // Otherwise, select a new child based on the configured weighting mode.
-                childToProcess = SelectChildByWeight();
-                if (childToProcess == null)
+                int index = SelectChildByWeight();
+                if (index < 0)
                 {
-                    // Fail if no valid child could be selected.
                     if (children.Count > 0 && !m_NoWeightErrorLogged)
                     {
                         m_NoWeightErrorLogged = true;
-                        Debug.LogError($"[RandomRateSelectorNode] '{name}': no child has a priority > 0, so none can be picked and the node fails. " +
-                                       "Set each child's 'priority' to a positive weight. (Logged once.)", this);
+                        Debug.LogError($"[RandomRateSelectorNode] '{name}': no child has a weight > 0, so none can be picked and the node fails. " +
+                                       "Set each child's 'Weight' to a positive value. (Logged once.)", this);
                     }
                     return Status.Failure;
                 }
+                childToProcess = children[index];
+                if (m_LastPickTime != null) m_LastPickTime[index] = Time.time;
             }
-            
-            // Process the chosen child
+
             var status = childToProcess.Process();
-
-            switch (status)
+            if (status == Status.Running)
             {
-                case Status.Running:
-                    runningChild = childToProcess;
-                    return Status.Running;
-
-                case Status.Success:
-                    runningChild = null;
-                    return Status.Success;
-                
-                default: // Status.Failure
-                    runningChild = null;
-                    return Status.Failure;
+                runningChild = childToProcess;
+                return Status.Running;
             }
+            runningChild = null;
+            return status;
+        }
+
+        private int SelectChildByWeight()
+        {
+            int count = children.Count;
+            if (count == 0) return -1;
+            if (m_Weights == null || m_Weights.Length != count)
+            {
+                m_Weights = new float[count];
+                m_LastPickTime = new float[count];
+                for (int i = 0; i < count; i++) m_LastPickTime[i] = float.NegativeInfinity;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                float w = children[i] != null ? NodeWeight.Evaluate(children[i]) : 0f;
+                if (w > 0f && fatigue < 1f && fatigueRecovery > 0f)
+                {
+                    float recovered = Mathf.Clamp01((Time.time - m_LastPickTime[i]) / fatigueRecovery);
+                    w *= Mathf.Lerp(fatigue, 1f, recovered);
+                }
+                m_Weights[i] = w;
+            }
+
+            ComputeChances(m_Weights, weightingMode);
+            return PickIndex(m_Weights);
         }
 
         /// <summary>
-        /// The priority that weights a child. At runtime a child may be the outermost attached decorator of the real
-        /// node (parent -> decorators[0] -> ... -> node); the weight is the priority set on the real node.
+        /// Converts weights into selection weights in place (≤ 0 stays 0). Shared with the editor, which shows the
+        /// resulting chance on each edge.
         /// </summary>
-        private static int GetPriority(Node child)
+        public static void ComputeChances(float[] weights, WeightingMode mode)
         {
-            Node terminal = child;
-            int guard = 0;
-            while (terminal is DecoratorNode d && d.child != null && guard++ < 64) terminal = d.child;
-            if (terminal != child && terminal.decorators != null && child is DecoratorNode cd && terminal.decorators.Contains(cd))
-                return terminal.priority;
-            return child.priority;
+            if (mode == WeightingMode.HigherIsBetter)
+            {
+                for (int i = 0; i < weights.Length; i++) if (weights[i] < 0f) weights[i] = 0f;
+                return;
+            }
+
+            float max = 0f;
+            for (int i = 0; i < weights.Length; i++) if (weights[i] > max) max = weights[i];
+            for (int i = 0; i < weights.Length; i++) weights[i] = weights[i] > 0f ? max - weights[i] + 1f : 0f;
         }
 
-        private Node SelectChildByWeight()
+        private static int PickIndex(float[] weights)
         {
-            if (children.Count == 0) return null;
+            float total = 0f;
+            for (int i = 0; i < weights.Length; i++) total += weights[i];
+            if (total <= 0f) return -1;
 
-            // Use different weight calculation based on the selected mode
-            if (weightingMode == WeightingMode.HigherIsBetter)
+            // Random.Range(float, float) is max-inclusive: if it returns total, fall back to the last weighted child.
+            float point = Random.Range(0f, total);
+            int last = -1;
+            for (int i = 0; i < weights.Length; i++)
             {
-                return SelectWithHigherIsBetter();
+                if (weights[i] <= 0f) continue;
+                last = i;
+                if (point < weights[i]) return i;
+                point -= weights[i];
             }
-            else
-            {
-                return SelectWithLowerIsBetter();
-            }
-        }
-
-        private Node SelectWithHigherIsBetter()
-        {
-            float totalWeight = 0;
-            for (int i = 0; i < children.Count; i++)
-            {
-                if (children[i] == null) continue;
-                totalWeight += Mathf.Max(0, GetPriority(children[i]));
-            }
-
-            if (totalWeight <= 0) return null;
-
-            // Random.Range(float, float) is max-inclusive: if it returns totalWeight, fall back to the last weighted child.
-            float randomPoint = Random.Range(0, totalWeight);
-            Node lastWeighted = null;
-            for (int i = 0; i < children.Count; i++)
-            {
-                var child = children[i];
-                if (child == null) continue;
-                float weight = Mathf.Max(0, GetPriority(child));
-                if (weight <= 0) continue;
-                lastWeighted = child;
-                if (randomPoint < weight)
-                {
-                    return child;
-                }
-                randomPoint -= weight;
-            }
-            return lastWeighted;
-        }
-
-        private Node SelectWithLowerIsBetter()
-        {
-            // Children with non-positive priority are ignored (they can't be inverted).
-            int maxPriority = 0;
-            for (int i = 0; i < children.Count; i++)
-            {
-                if (children[i] == null) continue;
-                int p = GetPriority(children[i]);
-                if (p > maxPriority) maxPriority = p;
-            }
-            if (maxPriority <= 0) return null;
-
-            float totalWeight = 0;
-            // Calculate inverted weights. The '+1' ensures the child with the max priority still has a weight of 1.
-            for (int i = 0; i < children.Count; i++)
-            {
-                if (children[i] == null) continue;
-                int p = GetPriority(children[i]);
-                if (p > 0) totalWeight += (maxPriority - p) + 1;
-            }
-
-            if (totalWeight <= 0) return null;
-
-            float randomPoint = Random.Range(0, totalWeight);
-            Node lastWeighted = null;
-            for (int i = 0; i < children.Count; i++)
-            {
-                var child = children[i];
-                if (child == null) continue;
-                int p = GetPriority(child);
-                if (p <= 0) continue;
-                float weight = (maxPriority - p) + 1;
-                lastWeighted = child;
-                if (randomPoint < weight)
-                {
-                    return child;
-                }
-                randomPoint -= weight;
-            }
-            return lastWeighted;
+            return last;
         }
 
         public override void Reset()

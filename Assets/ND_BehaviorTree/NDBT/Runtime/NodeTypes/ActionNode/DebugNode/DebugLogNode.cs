@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Logs a message (and optionally a key's value) to the Console.", "Returns the chosen status (Success by default). Remove it from shipping trees.")]
     [NodeInfo("Debug Log", "Action/Debug/DebugLog", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/DebugIcon.png")]
     public class DebugLogNode : ActionNode
     {

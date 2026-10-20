@@ -457,31 +457,31 @@ namespace ND_BehaviorTree.Editor.Tests
         // ---------------------------------------------------------------- #9 RandomRateSelector
 
         [Test]
-        public void RandomRateSelector_AllZeroPriorities_LogsErrorOnce_AndFails()
+        public void RandomRateSelector_AllZeroWeights_LogsErrorOnce_AndFails()
         {
             var rrs = f.Create<RandomRateSelectorNode>(0);
             f.Graph.Connect(f.Root, rrs);
-            f.Graph.Connect(rrs, f.Create<FixedStatusNode>(100));
-            f.Graph.Connect(rrs, f.Create<FixedStatusNode>(300));
+            var z1 = f.Create<FixedStatusNode>(100); z1.weight = 0; f.Graph.Connect(rrs, z1);
+            var z2 = f.Create<FixedStatusNode>(300); z2.weight = 0; f.Graph.Connect(rrs, z2);
 
             var clone = CloneTracked();
-            LogAssert.Expect(LogType.Error, new Regex("priority > 0"));
+            LogAssert.Expect(LogType.Error, new Regex("weight > 0"));
             Assert.AreEqual(Node.Status.Failure, clone.Update());
             Assert.AreEqual(Node.Status.Failure, clone.Update()); // second run: no second error
         }
 
         [TestCase(RandomRateSelectorNode.WeightingMode.LowerIsBetter)]
         [TestCase(RandomRateSelectorNode.WeightingMode.HigherIsBetter)]
-        public void RandomRateSelector_PositivePriorities_AlwaysPicks_EvenThroughAttachedDecorator(RandomRateSelectorNode.WeightingMode mode)
+        public void RandomRateSelector_PositiveWeights_AlwaysPicks_EvenThroughAttachedDecorator(RandomRateSelectorNode.WeightingMode mode)
         {
             var rrs = f.Create<RandomRateSelectorNode>(0);
             rrs.weightingMode = mode;
             f.Graph.Connect(f.Root, rrs);
-            var a = f.Create<FixedStatusNode>(100); a.priority = 1;
-            var b = f.Create<FixedStatusNode>(300); b.priority = 3;
+            var a = f.Create<FixedStatusNode>(100); a.weight = 1;
+            var b = f.Create<FixedStatusNode>(300); b.weight = 3;
             f.Graph.Connect(rrs, a);
             f.Graph.Connect(rrs, b);
-            f.Graph.AddDecorator(b, typeof(SucceederNode)); // runtime child = decorator entry (priority 0 itself)
+            f.Graph.AddDecorator(b, typeof(SucceederNode)); // runtime child = decorator entry (its own weight is ignored)
 
             var clone = CloneTracked();
             for (int i = 0; i < 50; i++) Assert.AreEqual(Node.Status.Success, clone.Update());

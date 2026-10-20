@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Sub-node: smoothly turns the agent toward its target direction while its node runs.", "Rotation speed is frame-rate independent (Slerp with deltaTime x Rotation Speed).")]
     [NodeInfo("Rotate To Target", "Service/RotateToTarget", true, true,isChildOnly:true)]
     public class RotateToTargetService : ServiceNode
     {

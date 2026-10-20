@@ -7,6 +7,7 @@ namespace ND_BehaviorTree.Demo.Xeno
     /// Sub-node: sets the NavMeshAgent's speed while the node it is attached to runs (walk / stalk / sprint), and puts
     /// the previous speed back when that node finishes or is interrupted. Replaces a "Set Agent Speed" action.
     /// </summary>
+    [NodeDescription("Sub-node: sets the NavMeshAgent speed while its node runs, then restores it.", "Set when the node starts; the previous speed is put back when it finishes or is interrupted (Restore On Exit).\nReplaces a separate 'Set Agent Speed' action in a sequence.")]
     [NodeInfo("Agent Speed", "Services/Movement/Agent Speed", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Wander.png", isChildOnly: true)]
     public class AgentSpeedService : ServiceNode
     {

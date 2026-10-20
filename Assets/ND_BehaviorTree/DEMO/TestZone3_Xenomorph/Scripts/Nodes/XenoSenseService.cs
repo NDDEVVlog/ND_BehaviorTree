@@ -12,6 +12,7 @@ namespace ND_BehaviorTree.Demo.Xeno
     /// "Event" keys (HasLastKnown, HeardNoise) are only ever set to true here; the tree clears them when it has dealt
     /// with them. State keys (PlayerVisible, Detection, InAttackRange) are written every tick.
     /// </summary>
+    [NodeDescription("The alien's senses: sight + detection meter, hearing and proximity, written to the blackboard.", "Sight fills Detection (faster when close, slower when the player crouches); at 1 the player is spotted. A glimpse sets a last-known position to check. Noises within range set HeardNoise. Seeing the player enter a locker marks it.")]
     [NodeInfo("Xeno Senses", "Services/Xeno/Senses", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/antivirus.png", isChildOnly: true)]
     public class XenoSenseService : ServiceNode
     {

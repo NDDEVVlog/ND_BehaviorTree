@@ -20,7 +20,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   interval: 1000
@@ -69,12 +69,12 @@ MonoBehaviour:
   m_guid: 4c70199c-36bf-4993-9886-6178d3bb2e61
   m_position:
     serializedVersion: 2
-    x: -500
-    y: 520
+    x: -572.2222
+    y: 618.8889
     width: 0
     height: 0
   typeName: Chase the player
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: -1545870084620675744}
   services:
@@ -102,7 +102,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -128,7 +128,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -154,7 +154,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Xeno Brain (re-checks priorities every tick)
-  priority: 0
+  weight: 0
   decorators: []
   services:
   - {fileID: -121437255153557486}
@@ -186,7 +186,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   interval: 1000
@@ -214,7 +214,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Search around the noise
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: 3249018757985085724}
   services: []
@@ -239,7 +239,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Roam near director hint
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: -8285793828166406708}
   services: []
@@ -264,7 +264,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   interval: 1000
@@ -292,7 +292,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Investigate noise
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: -2004730568670010999}
   - {fileID: -1129033492341766034}
@@ -321,7 +321,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -345,7 +345,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -371,7 +371,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Go to last known
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: -841832841626422581}
   services: []
@@ -399,7 +399,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Flee into the vents
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   bodyKey: {fileID: 7717698017717060514, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
@@ -430,7 +430,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Emerge near director hint
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: 7524064955244589452}
   services: []
@@ -457,7 +457,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -483,7 +483,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -509,7 +509,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   interval: 0.25
@@ -540,7 +540,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -567,7 +567,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -591,7 +591,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -618,7 +618,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   interval: 0.1
@@ -671,10 +671,10 @@ MonoBehaviour:
     title: Spotted
     rect:
       serializedVersion: 2
-      x: -880
-      y: 470
+      x: -952.2222
+      y: 568.8889
       width: 610
-      height: 170
+      height: 316.6667
     color: {r: 0.25, g: 0.45, b: 0.75, a: 0.25}
     nodeIds:
     - 6c6fca14-fa7e-4e4b-87f0-9d3ab52fe60e
@@ -685,8 +685,8 @@ MonoBehaviour:
       serializedVersion: 2
       x: -310
       y: 470
-      width: 1210
-      height: 510
+      width: 1226.2964
+      height: 572.2223
     color: {r: 0.25, g: 0.45, b: 0.75, a: 0.25}
     nodeIds:
     - e51eb856-954f-42db-bd83-9ad0febb9058
@@ -760,7 +760,7 @@ MonoBehaviour:
     width: 150
     height: 100
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: -7821831781062484253}
@@ -784,7 +784,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Go to the noise
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: -4453871040677986600}
   services: []
@@ -807,12 +807,12 @@ MonoBehaviour:
   m_guid: 6c6fca14-fa7e-4e4b-87f0-9d3ab52fe60e
   m_position:
     serializedVersion: 2
-    x: -850
-    y: 520
+    x: -922.2222
+    y: 618.8889
     width: 0
     height: 0
   typeName: Kill
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: -9114638968387198374}
   services: []
@@ -839,7 +839,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Backstage (menace full)
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: -3526956927502593597}
   services: []
@@ -871,7 +871,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 'Init: drop out of a vent'
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   stopTreeOnFailure: 0
@@ -896,7 +896,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 'Event: Burned (flamethrower)'
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   eventName: Burned
@@ -923,7 +923,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -949,7 +949,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Search around last known
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: 8670964084280912254}
   services: []
@@ -969,12 +969,12 @@ MonoBehaviour:
   m_guid: f50eef72-0d6a-48b8-acb5-4175c5ad6794
   m_position:
     serializedVersion: 2
-    x: -588.62964
-    y: 343.12228
+    x: -725.2964
+    y: 410.45563
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 325475837438311171}
@@ -998,7 +998,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}
@@ -1023,7 +1023,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Hunt last known position
-  priority: 0
+  weight: 0
   decorators:
   - {fileID: -7831457414840338959}
   - {fileID: -207406268824627256}
@@ -1052,7 +1052,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 0}

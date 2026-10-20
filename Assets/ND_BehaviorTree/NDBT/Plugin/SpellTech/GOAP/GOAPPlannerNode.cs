@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree.GOAP
 {
+    [NodeDescription("Plans a chain of its GOAP action children that reaches the goal, then runs it.", "Children must be GOAP Action nodes. The plan is the lowest-cost sequence whose effects satisfy the goal from the current world state.")]
     [NodeInfo("GOAPPlannerNode", "GOAP/GOAPPlannerNode", true, true, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/Brain.png")]
     public class GOAPPlannerNode : CompositeNode
     {

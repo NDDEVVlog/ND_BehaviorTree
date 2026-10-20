@@ -3,6 +3,7 @@ using UnityEngine;
 namespace ND_BehaviorTree.Demo.Xeno
 {
     /// <summary>Copies the director's outputs (hint, retreat request, menace, learned values) into the blackboard.</summary>
+    [NodeDescription("Copies the Xeno director's outputs (hint, retreat request, menace, learned values) to the blackboard.", "The director knows where the player is but only exposes a fuzzy hint; the tree still decides from its own senses.")]
     [NodeInfo("Xeno Director Link", "Services/Xeno/Director Link", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/antivirus.png", isChildOnly: true)]
     public class XenoDirectorService : ServiceNode
     {

@@ -78,7 +78,9 @@ namespace ND_BehaviorTree.Editor
             _serializedNodeObject.Update();
 
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
-            
+
+            DrawDescription();
+
             EditorGUILayout.LabelField("Node Settings", EditorStyles.boldLabel);
             DrawBuiltInProperties();
             
@@ -126,10 +128,48 @@ namespace ND_BehaviorTree.Editor
                 EditorGUILayout.PropertyField(typeNameProp, new GUIContent("Display Name"));
             }
 
-            SerializedProperty priorityProp = _serializedNodeObject.FindProperty("priority");
-            if (priorityProp != null)
+            DrawWeight();
+        }
+
+        private static GUIStyle s_DetailsStyle;
+
+        /// <summary>[NodeDescription]: the summary (also the graph tooltip) and the detailed explanation.</summary>
+        private void DrawDescription()
+        {
+            var description = Graph.WeightGraph.DescriptionOf(_targetNode.GetType());
+            if (description == null) return;
+
+            s_DetailsStyle ??= new GUIStyle(EditorStyles.wordWrappedLabel) { richText = true };
+            EditorGUILayout.LabelField("What it does", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox(description.Summary, MessageType.None);
+            if (!string.IsNullOrEmpty(description.Details))
             {
-                EditorGUILayout.PropertyField(priorityProp);
+                using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+                    EditorGUILayout.LabelField(description.Details, s_DetailsStyle);
+            }
+            EditorGUILayout.Space(10);
+        }
+
+        /// <summary>Weight is shown only when the parent picks children by weight; elsewhere it would do nothing.</summary>
+        private void DrawWeight()
+        {
+            SerializedProperty weightProp = _serializedNodeObject.FindProperty("weight");
+            if (weightProp == null) return;
+
+            var tree = FindOwnerTree(_targetNode);
+            var parent = Graph.WeightGraph.FindLogicalParent(tree, _targetNode, out _);
+            if (parent is IWeightedComposite weighted)
+            {
+                string usage = weighted.WeightUsage == WeightUsage.Chance ? "chance to be picked" : "utility score";
+                EditorGUILayout.PropertyField(weightProp, new GUIContent("Weight", $"Base {usage} in '{Graph.WeightGraph.TitleOf(parent)}'. Attach 'Weight From Key' to drive it from the blackboard."));
+                string modifiers = Graph.WeightGraph.ModifierText(_targetNode);
+                if (modifiers != null) EditorGUILayout.LabelField(" ", $"Runtime: weight {modifiers}", EditorStyles.miniLabel);
+            }
+            else if (!Graph.WeightGraph.IsUnsetWeight(weightProp.floatValue))
+            {
+                EditorGUILayout.HelpBox($"Weight {weightProp.floatValue:0.##} is ignored: the parent ('{Graph.WeightGraph.TitleOf(parent)}') runs its children left to right. " +
+                                        "Only Random Rate Selector and Utility Selector use weights.", MessageType.Warning);
+                if (GUILayout.Button("Reset Weight to 1")) weightProp.floatValue = 1f;
             }
         }
 
@@ -144,7 +184,7 @@ namespace ND_BehaviorTree.Editor
                     property.name == "m_guid" ||
                     property.name == "m_position" ||
                     property.name == "typeName" ||
-                    property.name == "priority")
+                    property.name == "weight")
                 {
                     continue;
                 }

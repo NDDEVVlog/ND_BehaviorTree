@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Sub-node: after its node succeeds, blocks it for a cooldown time.", "While cooling down the decorator fails at once (the progress bar shows the remaining time).")]
     [NodeInfo("Cooldown", "Decorator/Cooldown", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Cooldown.png")]
     public class CooldownNode : DecoratorNode
     {

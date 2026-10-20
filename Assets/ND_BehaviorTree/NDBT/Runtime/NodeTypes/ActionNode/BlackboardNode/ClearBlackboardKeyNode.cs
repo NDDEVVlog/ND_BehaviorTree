@@ -11,6 +11,7 @@ using ND_BehaviorTree;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Resets a blackboard key to its default (null / 0 / false).", "Fails if the key is not on the runtime blackboard.")]
     [NodeInfo("Clear Blackboard Key", "Action/Blackboard/ClearKey", true, false)]
     public class ClearBlackboardKeyNode : ActionNode
     {

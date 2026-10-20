@@ -8,6 +8,7 @@ namespace ND_BehaviorTree.Demo.Xeno
     /// The plain Selector keeps running its current child until it finishes, so it cannot react to a new threat;
     /// gate each branch with a condition decorator so the children on the left fail fast when they do not apply.
     /// </summary>
+    [NodeDescription("Priority selector that re-checks every child from the left each tick and interrupts lower branches.", "Left = highest priority. Each tick the first child that is Running or succeeds wins; a lower child that was running is interrupted and reset.\nUnlike Selector (which sticks with its running child) it reacts at once. Gate each branch with a condition decorator so branches that do not apply fail fast.")]
     [NodeInfo("Reactive Selector", "Composite/Reactive Selector", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Selector.png")]
     public class ReactiveSelectorNode : CompositeNode
     {

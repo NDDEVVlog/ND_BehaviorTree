@@ -8,6 +8,7 @@ namespace ND_BehaviorTree.Demo.Xeno
     /// otherwise one is checked only by chance (the learned chance from the director). If the player is inside,
     /// they are dragged out and killed. Always succeeds (nothing to check is not a failure), so it never blocks a search.
     /// </summary>
+    [NodeDescription("Goes to a nearby locker and inspects it; drags the player out if they hide inside.", "A locker the alien saw the player enter is always checked; otherwise one is checked by chance (Chance key, e.g. the director's learned HideCheckChance).\nRecently checked lockers are skipped. Always succeeds, so it never blocks a search.")]
     [NodeInfo("Check Hiding Spot", "Action/Xeno/Check Hiding Spot", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/CheckCondition.png")]
     public class CheckHidingSpotNode : ActionNode
     {

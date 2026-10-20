@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Finds the nearest object with a tag within a radius and stores its Transform in a key.", "Uses a physics overlap on 'Search Layer'.")]
     [NodeInfo("Find Target", "Action/Perception/FindTarget", true, false)]
     public class FindTargetNode : ActionNode
     {

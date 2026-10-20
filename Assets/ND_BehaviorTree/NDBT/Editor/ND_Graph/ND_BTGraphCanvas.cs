@@ -156,6 +156,8 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             DrawEdgesFor(TreeData.nodes);
             RefreshExecutionOrder();
             DrawAnnotations();
+            RefreshWeightLabels();
+            ApplyFocusOnRunMarkers();
         }
 
         /// <summary>Groups go behind everything, notes above groups but behind nodes and edges.</summary>
@@ -434,6 +436,26 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             RefreshExecutionOrder();
         }
 
+        /// <summary>
+        /// While a connection is dragged from <paramref name="start"/>, every port that could receive it glows
+        /// (same rules as the graph service). Null clears the highlight.
+        /// </summary>
+        public void SetConnectionCandidates(ND_BTPortView start)
+        {
+            foreach (var view in m_NodeDictionary.Values)
+            {
+                view.InputPort?.SetCandidate(false);
+                view.OutputPort?.SetCandidate(false);
+                if (start == null || view == start.ParentNodeView) continue;
+
+                var startNode = start.ParentNodeView.NodeData;
+                if (start.Direction == BTPortDirection.Output)
+                    view.InputPort?.SetCandidate(Graph.CanConnect(startNode, view.NodeData, out _));
+                else
+                    view.OutputPort?.SetCandidate(Graph.CanConnect(view.NodeData, startNode, out _));
+            }
+        }
+
         private const float EdgeHitTolerance = 8f;
 
         /// <summary>Double-click on an edge (not on a node or port): insert a reroute ("extended node") there.</summary>
@@ -593,6 +615,8 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 var childData = RerouteNode.Resolve(edge.InputPort?.ParentNodeView?.NodeData);
                 edge.SetLiveState(childData != null ? LiveDebugUtility.GetEdgeState(LookupRuntime(childData.id), frame) : LiveState.Inactive);
             }
+            UpdateLiveScores();
+            UpdateFocusOnRun(frame);
         }
 
         public void ClearLiveDebug()
@@ -602,6 +626,8 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             LiveDebugUtility.ClearCache();
             foreach (var view in m_NodeDictionary.Values) view.ClearState();
             foreach (var edge in m_Edges) edge.SetLiveState(LiveState.Inactive);
+            m_WasRunning.Clear();
+            RefreshWeightLabels(); // live scores back to the static weights
         }
 
         /// <summary>
@@ -626,7 +652,180 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 if (!live) view.RefreshSubtreeLabel();
                 view.RefreshKeyInfo();
             }
+            RefreshWeightLabels();
         }
+
+        #region Weights (badges + edge labels)
+
+        private static readonly List<float> s_WeightScratch = new List<float>();
+
+        /// <summary>
+        /// Under a weighted composite: each child gets a weight badge, and each edge shows the child's chance (Random Rate)
+        /// or weight (Utility). Everything else shows nothing. Called when the graph changes (signature-gated).
+        /// </summary>
+        public void RefreshWeightLabels()
+        {
+            foreach (var view in m_NodeDictionary.Values) view.SetWeightBadge(null, null);
+            foreach (var edge in m_Edges) edge.SetWeightLabel(null, null);
+
+            foreach (var parent in TreeData.nodes)
+            {
+                if (!(parent is IWeightedComposite weighted)) continue;
+                var slots = parent.GetChildren();
+
+                s_WeightScratch.Clear();
+                foreach (var slot in slots) s_WeightScratch.Add(RerouteNode.Resolve(slot)?.weight ?? 0f);
+                float[] chances = null;
+                float total = 0f;
+                if (weighted.WeightUsage == WeightUsage.Chance)
+                {
+                    chances = s_WeightScratch.ToArray();
+                    var mode = parent is RandomRateSelectorNode rrs ? rrs.weightingMode : RandomRateSelectorNode.WeightingMode.HigherIsBetter;
+                    RandomRateSelectorNode.ComputeChances(chances, mode);
+                    foreach (var c in chances) total += c;
+                }
+
+                for (int i = 0; i < slots.Count; i++)
+                {
+                    var target = RerouteNode.Resolve(slots[i]);
+                    if (target == null) continue;
+                    string modifiers = WeightGraph.ModifierText(target);
+                    string weightText = $"w {target.weight:0.##}" + (modifiers != null ? " " + modifiers : string.Empty);
+                    GetNodeView(target.id)?.SetWeightBadge(weightText,
+                        $"Weight in '{WeightGraph.TitleOf(parent)}'" + (modifiers != null ? $" — changed at runtime by {modifiers}." : "."));
+
+                    string edgeText, edgeTooltip;
+                    if (chances != null)
+                    {
+                        edgeText = total > 0f ? $"{chances[i] / total * 100f:0.#}%" : "0%";
+                        if (modifiers != null) edgeText += "*";
+                        edgeTooltip = modifiers != null ? "Chance from the base weights; Weight From Key changes it at runtime." : "Chance to be picked on each activation.";
+                    }
+                    else
+                    {
+                        edgeText = weightText;
+                        edgeTooltip = "Base utility score (Live Debug shows the current score).";
+                    }
+                    FindEdge(parent, slots[i])?.SetWeightLabel(edgeText, edgeTooltip);
+                }
+            }
+        }
+
+        private ND_BTEdgeView FindEdge(Node parent, Node child)
+        {
+            foreach (var edge in m_Edges)
+                if (edge.OutputPort?.ParentNodeView?.NodeData == parent && edge.InputPort?.ParentNodeView?.NodeData == child) return edge;
+            return null;
+        }
+
+        /// <summary>Live: Utility Selector edges show each child's current score (text rebuilt only when it changes).</summary>
+        private void UpdateLiveScores()
+        {
+            foreach (var parent in TreeData.nodes)
+            {
+                if (!(parent is UtilitySelectorNode)) continue;
+                if (!(LookupRuntime(parent.id) is UtilitySelectorNode runtime)) continue;
+                var slots = parent.GetChildren();
+                int runtimeIndex = 0;
+                for (int i = 0; i < slots.Count; i++)
+                {
+                    if (RerouteNode.Resolve(slots[i]) == null) continue; // not part of the runtime tree
+                    float score = runtime.GetLastScore(runtimeIndex);
+                    bool chosen = runtime.RunningIndex == runtimeIndex;
+                    runtimeIndex++;
+                    FindEdge(parent, slots[i])?.SetLiveScore(score, chosen);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Live Debug: focus when running / ping agent
+
+        private readonly HashSet<string> m_FocusOnRun = new HashSet<string>();
+        private readonly HashSet<string> m_WasRunning = new HashSet<string>();
+        private bool m_FocusLoaded;
+        private double m_LastAutoFocus;
+        private const double AutoFocusCooldown = 0.75;
+
+        private string FocusSessionKey => "NDBT.FocusOnRun." + AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(TreeData));
+
+        public bool HasFocusOnRun => m_FocusOnRun.Count > 0;
+        public bool IsFocusOnRun(Node node) => node != null && m_FocusOnRun.Contains(node.id);
+
+        public void ToggleFocusOnRun(Node node)
+        {
+            if (node == null) return;
+            bool on = m_FocusOnRun.Add(node.id);
+            if (!on) m_FocusOnRun.Remove(node.id);
+            GetNodeView(node.id)?.SetFocusOnRunMarker(on);
+            SaveFocusOnRun();
+        }
+
+        public void ClearFocusOnRun()
+        {
+            foreach (var id in m_FocusOnRun) GetNodeView(id)?.SetFocusOnRunMarker(false);
+            m_FocusOnRun.Clear();
+            m_WasRunning.Clear();
+            SaveFocusOnRun();
+        }
+
+        private void SaveFocusOnRun() => SessionState.SetString(FocusSessionKey, string.Join("\n", m_FocusOnRun));
+
+        /// <summary>Restores the markers (kept for the editor session) after the graph is (re)drawn.</summary>
+        private void ApplyFocusOnRunMarkers()
+        {
+            if (!m_FocusLoaded)
+            {
+                m_FocusLoaded = true;
+                foreach (var id in SessionState.GetString(FocusSessionKey, string.Empty).Split('\n'))
+                    if (!string.IsNullOrEmpty(id)) m_FocusOnRun.Add(id);
+            }
+            m_FocusOnRun.RemoveWhere(id => GetNodeView(id) == null); // deleted nodes
+            foreach (var id in m_FocusOnRun) GetNodeView(id).SetFocusOnRunMarker(true);
+        }
+
+        /// <summary>Centres the graph on a node (keeps a readable zoom) and flashes it.</summary>
+        public void FocusNode(ND_BTNodeView view)
+        {
+            if (view == null) return;
+            FrameRect(NodeContentRect(view), Mathf.Clamp(m_ZoomFactor, 0.6f, 1f));
+            view.AddToClassList("nd-flash");
+            view.schedule.Execute(() => view.RemoveFromClassList("nd-flash")).StartingIn(700);
+        }
+
+        /// <summary>Highlights the watched agent in the Hierarchy and moves the Scene view to it (selection is not changed).</summary>
+        public void PingWatchedAgent()
+        {
+            var runner = m_Window != null ? m_Window.WatchedRunner : null;
+            if (runner == null) return;
+            EditorGUIUtility.PingObject(runner.gameObject);
+            var sceneView = SceneView.lastActiveSceneView;
+            if (sceneView != null) sceneView.LookAt(runner.transform.position);
+        }
+
+        /// <summary>Live tick: a marked node that just started running is framed, and the agent pinged (throttled).</summary>
+        private void UpdateFocusOnRun(int frame)
+        {
+            if (m_FocusOnRun.Count == 0) return;
+            foreach (var id in m_FocusOnRun)
+            {
+                bool running = LiveDebugUtility.GetState(LookupRuntime(id), frame) == LiveState.Running;
+                if (!running)
+                {
+                    m_WasRunning.Remove(id);
+                    continue;
+                }
+                if (!m_WasRunning.Add(id)) continue; // still the same run
+                double now = EditorApplication.timeSinceStartup;
+                if (now - m_LastAutoFocus < AutoFocusCooldown) continue;
+                m_LastAutoFocus = now;
+                FocusNode(GetNodeView(id));
+                PingWatchedAgent();
+            }
+        }
+
+        #endregion
 
         /// <summary>Links (or clears, with null) a blackboard key on a node or attachment field, then refreshes the views.</summary>
         public void AssignKey(Node target, string propertyPath, Key key)

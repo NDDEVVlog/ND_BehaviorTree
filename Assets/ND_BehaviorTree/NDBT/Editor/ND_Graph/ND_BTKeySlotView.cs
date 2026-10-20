@@ -156,6 +156,14 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             menu.AddSeparator("");
             if (slot.Current != null) menu.AddItem(new GUIContent("Clear"), false, () => canvas.AssignKey(m_Node, slot.PropertyPath, null));
             else menu.AddDisabledItem(new GUIContent("Clear"));
+            // Track the linked variable in the Live Debug blackboard table (pinned to the top).
+            if (slot.Current != null && blackboard != null && KeySlotScanner.IsLinked(canvas.TreeData, slot.Current))
+            {
+                string keyName = slot.Current.keyName;
+                bool tracked = LiveKeyTracking.IsTracked(blackboard, keyName);
+                menu.AddItem(new GUIContent(tracked ? $"Untrack '{keyName}' in Live Debug" : $"Track '{keyName}' in Live Debug"), tracked,
+                    () => LiveKeyTracking.Toggle(blackboard, keyName));
+            }
             menu.AddItem(new GUIContent("Edit Properties..."), false, () => NodePropertyEditorWindow.Open(m_Node, GetFirstAncestorOfType<ND_BTNodeView>()));
             menu.ShowAsContext();
         }

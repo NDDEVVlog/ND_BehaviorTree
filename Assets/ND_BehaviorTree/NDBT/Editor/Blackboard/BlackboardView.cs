@@ -242,6 +242,16 @@ namespace ND_BehaviorTree.Editor
             card.Add(valueRow);
 
             foreach (var handle in new VisualElement[] { grip, dot, type }) RegisterKeyDragSource(handle, key);
+
+            // Right-click: pin this key to the top of the Live Debug blackboard table.
+            card.AddManipulator(new ContextualMenuManipulator(evt =>
+            {
+                var owner = AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GetAssetPath(key)) as Blackboard;
+                if (owner == null) return;
+                bool tracked = Graph.LiveKeyTracking.IsTracked(owner, key.keyName);
+                evt.menu.AppendAction(tracked ? "Untrack in Live Debug" : "Track in Live Debug", _ => Graph.LiveKeyTracking.Toggle(owner, key.keyName),
+                    tracked ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+            }));
             return card;
         }
 

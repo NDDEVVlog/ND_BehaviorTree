@@ -142,6 +142,9 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             element.Q<Image>("icon").image = row.IsFolder ? EditorGUIUtility.IconContent("Folder Icon").image : m_AllEntries[row.EntryIndex].Icon;
             element.Q<Label>("label").text = row.Label;
             element.Q<Label>("arrow").style.display = row.IsFolder ? DisplayStyle.Flex : DisplayStyle.None;
+            element.tooltip = !row.IsFolder && m_AllEntries[row.EntryIndex].UserData is Type nodeType
+                ? Graph.WeightGraph.DescriptionOf(nodeType)?.Summary ?? string.Empty
+                : string.Empty;
         }
 
         private void RebuildRows()

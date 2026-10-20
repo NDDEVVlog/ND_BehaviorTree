@@ -12,6 +12,7 @@ namespace ND_BehaviorTree
     /// - If the selected child returns Running, the selector will continue to process that same child in subsequent ticks until it completes.
     /// - If it has no children, it will fail.
     /// </summary>
+    [NodeDescription("Picks ONE child at random (equal chance) and returns its result.", "Does not try another child if the picked one fails. Use Random Rate Selector for weighted chances.")]
     [NodeInfo("Random Selector", "Composite/RandomSelector", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/RandomBox.png", isChildOnly: false)]
     public class RandomSelectorNode : CompositeNode
     {

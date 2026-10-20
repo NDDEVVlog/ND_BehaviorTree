@@ -68,6 +68,49 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }));
         }
 
+        private Label m_WeightLabel;
+        private string m_StaticWeightText;
+        private int m_LiveScoreKey = int.MinValue;
+
+        /// <summary>Weight/chance pill near the child end (null hides it). Set by the canvas for weighted parents.</summary>
+        public void SetWeightLabel(string text, string labelTooltip)
+        {
+            m_StaticWeightText = text;
+            m_LiveScoreKey = int.MinValue;
+            if (string.IsNullOrEmpty(text))
+            {
+                if (m_WeightLabel != null) m_WeightLabel.style.display = DisplayStyle.None;
+                return;
+            }
+            EnsureWeightLabel();
+            m_WeightLabel.style.display = DisplayStyle.Flex;
+            m_WeightLabel.text = text;
+            m_WeightLabel.tooltip = labelTooltip;
+            m_WeightLabel.RemoveFromClassList("nd-edge-weight--chosen");
+            MarkDirtyRepaint();
+        }
+
+        /// <summary>Live Utility score; the text is rebuilt only when the rounded score or the chosen state changes.</summary>
+        public void SetLiveScore(float score, bool chosen)
+        {
+            if (m_WeightLabel == null) return;
+            int key = float.IsNaN(score) ? int.MaxValue : Mathf.RoundToInt(score * 100f) * 2 + (chosen ? 1 : 0);
+            if (key == m_LiveScoreKey) return;
+            m_LiveScoreKey = key;
+            m_WeightLabel.text = float.IsNaN(score) ? m_StaticWeightText : (chosen ? "▶ " : string.Empty) + score.ToString("0.##");
+            m_WeightLabel.EnableInClassList("nd-edge-weight--chosen", chosen);
+        }
+
+        private void EnsureWeightLabel()
+        {
+            if (m_WeightLabel != null) return;
+            m_WeightLabel = new Label { pickingMode = PickingMode.Position };
+            m_WeightLabel.AddToClassList("nd-edge-weight");
+            m_WeightLabel.style.position = Position.Absolute;
+            ND_BTStyles.Apply(m_WeightLabel, ND_BTStyles.NodeAttachments);
+            Add(m_WeightLabel);
+        }
+
         public void SetInputPort(ND_BTPortView inputPort)
         {
             InputPort = inputPort;
@@ -169,6 +212,15 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                     painter.Fill();
                 }
             }
+            if (m_WeightLabel != null && m_WeightLabel.resolvedStyle.display != DisplayStyle.None)
+            {
+                const float t = 0.72f;
+                float u = 1f - t;
+                Vector2 at = u * u * u * start + 3f * u * u * t * p1 + 3f * u * t * t * p2 + t * t * t * end;
+                m_WeightLabel.style.left = at.x - m_WeightLabel.layout.width / 2f;
+                m_WeightLabel.style.top = at.y - m_WeightLabel.layout.height / 2f;
+            }
+
             m_EdgeLabel.style.left = mid.x - (m_EdgeLabel.layout.width / 2f);
             m_EdgeLabel.style.top = mid.y - (m_EdgeLabel.layout.height / 2f) - (string.IsNullOrEmpty(Text) ? 0 : 12f);
         }

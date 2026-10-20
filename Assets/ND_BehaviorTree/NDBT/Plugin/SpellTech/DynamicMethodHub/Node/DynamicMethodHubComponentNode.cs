@@ -11,6 +11,7 @@ using ND_BehaviorTree;
 using SpellTech.DynamicMethodEvent;
 
 [RequireComponentInRunner(typeof(MethodHub))]
+[NodeDescription("Fires an event on the owner's MethodHub component by name (or from a key).", "Uses 'Event ID Key' when assigned, otherwise 'Event ID'.")]
 [NodeInfo("Dynamic Method Hub Component Node", "Action/DynamicMethodHubComponentNode", true, false,iconPath:null)]
 public class DynamicMethodHubComponentNode : ActionNode
 {

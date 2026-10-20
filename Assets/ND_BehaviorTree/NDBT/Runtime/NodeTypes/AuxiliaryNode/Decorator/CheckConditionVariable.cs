@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {   
+    [NodeDescription("Gate: runs its node only while a bool key is true (or false with Invert).", "When the bool flips, a running node is interrupted and reset and the decorator fails, so the parent moves on.")]
     [NodeInfo("Check Condition Variable", "Decorator/CheckConditionVariable", true, true, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/CheckCondition.png")]
     public class CheckConditionVariable : DecoratorNode
     {

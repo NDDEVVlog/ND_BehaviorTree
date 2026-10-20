@@ -11,6 +11,7 @@ using ND_BehaviorTree;
 /// <summary>
 /// An Action Node that plays a Particle System retrieved from the Blackboard.
 /// </summary>
+[NodeDescription("Plays a ParticleSystem key.", "'Wait For Completion' keeps it Running until the effect ends (or 'Timeout' elapses).")]
 [NodeInfo("Play Particle", "Action/VFX/PlayParticle", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Effect.png")]
 public class PlayParticleNode : ActionNode
 {

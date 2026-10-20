@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Gate: runs its node only while a comparison between two values is true.", "Compares a key with another key or an inline value (=, !=, >, >=, <, <=); 'Should Invert' negates it.\nWhen the condition turns false, a running node is reset and the decorator fails.")]
     [NodeInfo("Check Condition", "Decorator/CheckCondition", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/CheckCondition.png")]
     public class CheckConditionNode : DecoratorNode
     {

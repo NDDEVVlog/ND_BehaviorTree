@@ -14,6 +14,7 @@ using Key = ND_BehaviorTree.Key;
 /// such as moving, attacking, or playing an animation. They do not have 
 /// children and return a status of Success, Failure, or Running.
 /// </summary>
+[NodeDescription("Sets a bool key to true or false.", "Fails if the key is missing or not a bool.")]
 [NodeInfo("SetBooleanValueNode", "Action/SetBooleanValueNode", true, false,iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/boolean.png")]
 public class SetBooleanValueNode : ActionNode
 {

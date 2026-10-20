@@ -100,9 +100,10 @@ namespace ND_BehaviorTree.Editor.Tests
         }
 
         [Test]
-        public void AddDecorator_RejectsRootAndNonDecoratorTypes()
+        public void AddDecorator_RejectsNonDecoratorTypes()
         {
-            Assert.IsFalse(f.Graph.CanAttachDecorator(f.Root, out _));
+            // Every node except services and decorators may carry decorators, the Root included (its chain wraps the whole tree).
+            Assert.IsTrue(f.Graph.CanAttachDecorator(f.Root, out _));
             var w = f.Create<WaitNode>(0);
             UnityEngine.TestTools.LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("AddDecorator rejected"));
             Assert.IsNull(f.Graph.AddDecorator(w, typeof(WaitNode)));

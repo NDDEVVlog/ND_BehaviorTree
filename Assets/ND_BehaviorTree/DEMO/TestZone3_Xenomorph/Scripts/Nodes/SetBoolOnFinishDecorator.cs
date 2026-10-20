@@ -7,6 +7,7 @@ namespace ND_BehaviorTree.Demo.Xeno
     /// branch, e.g. HeardNoise = false). Not written when the node is interrupted, so an aborted branch resumes later.
     /// Replaces a trailing "Set Bool" action in a sequence. Passes the node's status through.
     /// </summary>
+    [NodeDescription("Sub-node: writes a bool key when its node finishes (e.g. clears the flag that started the branch).", "Not written when the node is interrupted, so an aborted branch resumes later. 'When' picks success, failure or any result.")]
     [NodeInfo("Set Bool On Finish", "Decorator/Set Bool On Finish", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/boolean.png")]
     public class SetBoolOnFinishDecorator : DecoratorNode
     {

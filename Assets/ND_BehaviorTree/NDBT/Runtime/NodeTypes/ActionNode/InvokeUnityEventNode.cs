@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Invokes a UnityEvent stored in a blackboard key.", "Assign the event through a key override on the runner.")]
     [NodeInfo("Invoke Unity Event", "Action/Events/InvokeUnityEvent", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Event.png")]
     public class InvokeUnityEventNode : ActionNode
     {

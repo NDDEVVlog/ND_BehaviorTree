@@ -7,6 +7,7 @@ using ND_BehaviorTree;
 /// to decide which single child to execute. This is useful for creating data-driven
 /// or state-machine-like behaviors within the tree.
 /// </summary>
+[NodeDescription("Lets custom code (IDynamicBranchSelector) pick which single child runs.", "The selector returns a child index; that child runs until it finishes and its result is returned. Fails when nothing is selected.")]
 [NodeInfo("Dynamic Selector", "Composite/DynamicSelector", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/adaptation.png")]
 public class DynamicSelectorNode : CompositeNode
 {

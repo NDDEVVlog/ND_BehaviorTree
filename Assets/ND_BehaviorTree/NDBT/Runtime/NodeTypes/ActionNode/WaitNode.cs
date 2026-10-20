@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Waits a number of seconds, then succeeds.", "Running until 'Duration' has passed since it started.")]
     [NodeInfo("Wait", "Action/Wait", true, false,iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/Wait.png")]
     public class WaitNode : ActionNode
     {   

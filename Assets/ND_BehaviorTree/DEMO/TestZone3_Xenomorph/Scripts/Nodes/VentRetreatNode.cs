@@ -8,6 +8,7 @@ namespace ND_BehaviorTree.Demo.Xeno
     /// If interrupted while hidden (e.g. it heard a noise), it drops out of the vent nearest that noise right away,
     /// so the alien is never left invisible in the vents by an aborted branch.
     /// </summary>
+    [NodeDescription("Runs to the nearest vent, hides inside for a while, then drops out near a target.", "Hide time = Hide Duration key (or field) + crawl time between vents. If interrupted while hidden, it drops out near the latest noise at once, so the alien is never left in the vents.")]
     [NodeInfo("Vent Retreat", "Action/Xeno/Vent Retreat", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Wait.png")]
     public class VentRetreatNode : ActionNode
     {

@@ -49,7 +49,15 @@ namespace ND_BehaviorTree
         [SerializeField] private string m_guid;
         [SerializeField] private Rect m_position;
         public string typeName;
-        public int priority = 0;
+
+        /// <summary>
+        /// Weight of this node inside a parent that chooses by weight (<see cref="IWeightedComposite"/>: Random Rate
+        /// Selector, Utility Selector). Ignored by every other parent, which run children left to right.
+        /// Attached <see cref="IWeightModifier"/> decorators (e.g. Weight From Key) adjust it at runtime.
+        /// </summary>
+        [UnityEngine.Serialization.FormerlySerializedAs("priority")]
+        [Tooltip("Only used when the parent picks children by weight (Random Rate Selector, Utility Selector).")]
+        public float weight = 1f;
 
         public string id => m_guid;
         public Rect position { get => m_position; set => m_position = value; }

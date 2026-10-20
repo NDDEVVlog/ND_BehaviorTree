@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Runs all children at the same time.", "Success Policy / Failure Policy decide whether one or all children must succeed / fail for the node to finish.")]
     [NodeInfo("Parallel", "Composite/Parallel", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Parallel.png")]
     public class ParallelNode : CompositeNode
     {

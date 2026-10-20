@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Always reports Success once its node finishes (ignores failure).", "Use it in a Sequence for optional steps that must not abort the sequence.")]
     [NodeInfo("Succeeder", "Decorator/Succeeder", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Check.png")]
     public class SucceederNode : DecoratorNode
     {

@@ -51,6 +51,9 @@ namespace ND_BehaviorTree.Editor.Graph
         public const string AttachmentListedAsNode = "attachment.listed-as-node";
         public const string InitNoChild = "init.no-child";
         public const string RerouteNoChild = "reroute.no-child";
+        public const string WeightUnused = "weight.unused";
+        public const string WeightModifierUnused = "weight.modifier-unused";
+        public const string WeightNeverPicked = "weight.never-picked";
 
         public static List<GraphIssue> Validate(BehaviorTree tree)
         {
@@ -158,6 +161,8 @@ namespace ND_BehaviorTree.Editor.Graph
             foreach (var reroute in tree.nodes.OfType<RerouteNode>().Where(r => r.child == null))
                 issues.Add(new GraphIssue(GraphIssueSeverity.Warning, RerouteNoChild, $"Reroute '{reroute.name}' has no child; the branch through it does nothing.", reroute));
 
+            ValidateWeights(tree, issues);
+
             if (tree.rootNode != null)
             {
                 // Entry points: the root, every event node and the init node.
@@ -185,6 +190,28 @@ namespace ND_BehaviorTree.Editor.Graph
                 foreach (var s in tree.nodes.OfType<SubtreeNode>()) stack.Push(s.subtree);
             }
             return false;
+        }
+
+        /// <summary>Weights only matter under a weighted composite (Random Rate / Utility Selector).</summary>
+        private static void ValidateWeights(BehaviorTree tree, List<GraphIssue> issues)
+        {
+            foreach (var node in tree.nodes)
+            {
+                if (node == null || node is RerouteNode) continue;
+                var parent = WeightGraph.FindLogicalParent(tree, node, out _);
+                bool weighted = parent is IWeightedComposite;
+                bool hasModifier = node.decorators.Any(d => d is IWeightModifier);
+
+                if (!weighted && !WeightGraph.IsUnsetWeight(node.weight))
+                    issues.Add(new GraphIssue(GraphIssueSeverity.Warning, WeightUnused,
+                        $"'{WeightGraph.TitleOf(node)}' has weight {node.weight:0.##}, but its parent '{WeightGraph.TitleOf(parent)}' runs children left to right and ignores it.", node));
+                if (!weighted && hasModifier)
+                    issues.Add(new GraphIssue(GraphIssueSeverity.Warning, WeightModifierUnused,
+                        $"'{WeightGraph.TitleOf(node)}' has a weight modifier, but its parent '{WeightGraph.TitleOf(parent)}' does not pick children by weight.", node));
+                if (weighted && node.weight <= 0f && !hasModifier)
+                    issues.Add(new GraphIssue(GraphIssueSeverity.Warning, WeightNeverPicked,
+                        $"'{WeightGraph.TitleOf(node)}' has weight {node.weight:0.##} under '{WeightGraph.TitleOf(parent)}', so it is never picked.", node));
+            }
         }
 
         public static HashSet<Node> CollectReachable(Node start)

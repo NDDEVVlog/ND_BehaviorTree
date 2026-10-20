@@ -75,6 +75,7 @@ namespace ND_BehaviorTree.Editor.Tests
         {
             var node = f.Create<SetBlackBoardValue>(0);
             node.setBlackBoardValue = new SetFloatValue();
+            UnityEditor.EditorUtility.SetDirty(node); // edits must mark the object dirty for the incremental history capture
 
             Assert.IsTrue(f.Graph.AssignBlackboardKey(node, "setBlackBoardValue.floatKey", m_Speed, out var reason), reason);
             Assert.AreSame(m_Speed, ((SetFloatValue)node.setBlackBoardValue).floatKey);

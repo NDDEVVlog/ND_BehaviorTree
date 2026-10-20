@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -16,8 +15,9 @@ namespace ND_BehaviorTree.Editor.Graph
     ///     tree (the tree itself, nodes, attachments, other sub-assets) is serialized with EditorJsonUtility.
     ///   - Only the DIFF is stored: objects that changed, were created or were destroyed (before/after JSON).
     ///     Undo/redo restore only those objects, so unrelated edits elsewhere are not reverted.
-    ///   - Destroyed objects are recreated from JSON (and re-added to the .asset). References to them are remapped
-    ///     through an alias table (old instance id → new), so every restored reference points at a live object.
+    ///   - Destroyed objects are recreated from JSON (and re-added to the .asset). Object references are recorded per
+    ///     property path (not taken from the JSON) and re-linked through an alias table (old instance id → new), so every
+    ///     restored reference points at a live object.
     ///   - Capacity: <see cref="Capacity"/> steps (Project Settings → ND Behavior Tree → History Capacity); oldest dropped.
     ///   - Consecutive edits with the same coalesce key within <see cref="CoalesceSeconds"/> merge into one step
     ///     (e.g. dragging a value in the property window).
@@ -33,6 +33,11 @@ namespace ND_BehaviorTree.Editor.Graph
             public Type Type;
             public string Name;
             public string Json; // null = the object does not exist in this state
+            // Object references, recorded separately from Json: EditorJsonUtility writes them as fileID/guid (sub-assets,
+            // which change when an object is recreated) or {"instanceID":0} (in-memory objects), so Json alone cannot
+            // restore them. Ids are alias-resolved original ids; RefSignature makes reference-only edits visible to the diff.
+            public List<(string path, int id)> Refs;
+            public string RefSignature;
         }
 
         private sealed class Entry
@@ -45,7 +50,6 @@ namespace ND_BehaviorTree.Editor.Graph
         }
 
         private static readonly Dictionary<int, GraphHistory> s_Histories = new Dictionary<int, GraphHistory>();
-        private static readonly Regex s_InstanceIdPattern = new Regex("\"instanceID\":(-?\\d+)", RegexOptions.Compiled);
 
         private readonly BehaviorTree m_Tree;
         private readonly LinkedList<Entry> m_Undo = new LinkedList<Entry>();
@@ -149,7 +153,7 @@ namespace ND_BehaviorTree.Editor.Graph
             {
                 before.TryGetValue(id, out var b);
                 after.TryGetValue(id, out var a);
-                if (b != null && a != null && b.Json == a.Json && b.Name == a.Name) continue;
+                if (b != null && a != null && b.Json == a.Json && b.RefSignature == a.RefSignature && b.Name == a.Name) continue;
                 entry.Before[id] = b ?? Missing(a);
                 entry.After[id] = a ?? Missing(b);
             }
@@ -223,11 +227,15 @@ namespace ND_BehaviorTree.Editor.Graph
             }
             foreach (var state in states.Values) m_Cache.Remove(state.Id); // restored objects must be re-captured
 
-            // 2. Overwrite their data, remapping references to recreated objects.
+            // 2. Overwrite their data, then re-link every object reference to the live (possibly recreated) object.
             foreach (var kvp in targets)
             {
-                EditorJsonUtility.FromJsonOverwrite(RemapIds(kvp.Key.Json), kvp.Value);
+                EditorJsonUtility.FromJsonOverwrite(kvp.Key.Json, kvp.Value);
                 kvp.Value.name = kvp.Key.Name;
+            }
+            foreach (var kvp in targets)
+            {
+                RestoreRefs(kvp.Value, kvp.Key.Refs);
                 EditorUtility.SetDirty(kvp.Value);
             }
 
@@ -254,15 +262,45 @@ namespace ND_BehaviorTree.Editor.Graph
         private Object Resolve(int id) => EditorUtility.InstanceIDToObject(CurrentId(id));
 #pragma warning restore CS0618
 
-        private string RemapIds(string json)
+        /// <summary>Sets every recorded reference by property path; anything not recorded stays as the JSON left it (null).</summary>
+        private void RestoreRefs(Object obj, List<(string path, int id)> refs)
         {
-            if (m_Alias.Count == 0) return json;
-            return s_InstanceIdPattern.Replace(json, m =>
+            var so = new SerializedObject(obj);
+            // Clear references the JSON may have left pointing at stale objects, then apply the recorded ones.
+            var it = so.GetIterator();
+            while (it.Next(true))
             {
-                int id = int.Parse(m.Groups[1].Value);
-                int current = CurrentId(id);
-                return current == id ? m.Value : $"\"instanceID\":{current}";
-            });
+                if (it.propertyType == SerializedPropertyType.ObjectReference && it.propertyPath != "m_Script" && it.objectReferenceValue != null)
+                    it.objectReferenceValue = null;
+            }
+            if (refs != null)
+            {
+                foreach (var (path, id) in refs)
+                {
+                    var prop = so.FindProperty(path);
+                    if (prop != null && prop.propertyType == SerializedPropertyType.ObjectReference) prop.objectReferenceValue = Resolve(id);
+                }
+            }
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private List<(string path, int id)> CaptureRefs(Object obj, out string signature)
+        {
+            var refs = new List<(string, int)>();
+            var sb = new System.Text.StringBuilder();
+            var so = new SerializedObject(obj);
+            var it = so.GetIterator();
+            while (it.Next(true))
+            {
+                if (it.propertyType != SerializedPropertyType.ObjectReference || it.propertyPath == "m_Script") continue;
+                var target = it.objectReferenceValue;
+                if (target == null) continue;
+                int id = OriginalId(target.GetInstanceID());
+                refs.Add((it.propertyPath, id));
+                sb.Append(it.propertyPath).Append('=').Append(id).Append(';');
+            }
+            signature = sb.ToString();
+            return refs;
         }
 
         #endregion
@@ -289,6 +327,7 @@ namespace ND_BehaviorTree.Editor.Graph
                 }
 
                 var state = new ObjectState { Id = id, Type = obj.GetType(), Name = obj.name, Json = EditorJsonUtility.ToJson(obj) };
+                state.Refs = CaptureRefs(obj, out state.RefSignature);
                 m_Cache[id] = (dirty, state);
                 result[id] = state;
             }

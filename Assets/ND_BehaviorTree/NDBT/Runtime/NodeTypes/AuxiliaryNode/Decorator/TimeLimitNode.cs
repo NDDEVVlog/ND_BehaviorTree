@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Fails its node if it keeps running longer than the time limit.", "The progress bar shows the elapsed time.")]
     [NodeInfo("Time Limit", "Decorator/TimeLimit", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Timer.png")]
     public class TimeLimitNode : DecoratorNode
     {

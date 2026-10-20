@@ -13,6 +13,7 @@ namespace ND_BehaviorTree
     ///   - interruptMainTree = true: the main tree is reset and paused while the event runs, then restarts from its root.
     ///   - Sent again while running: ignored, unless restartIfRunning = true (branch is reset and restarted).
     /// </summary>
+    [NodeDescription("Entry point that runs only when its event is sent (SendEvent).", "BehaviorTreeRunner.SendEvent(name) starts the branch on the next update. Interrupt Main Tree pauses and resets the main tree while it runs; otherwise it runs alongside.")]
     [NodeInfo("Event", "Event/Event", false, true)]
     public class EventNode : Node
     {

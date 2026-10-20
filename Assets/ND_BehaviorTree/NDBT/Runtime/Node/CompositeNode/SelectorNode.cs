@@ -2,6 +2,7 @@
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Tries children left to right until one succeeds (OR).", "Succeeds as soon as a child succeeds, fails when all fail. A running child keeps running; use Reactive Selector to re-check higher-priority children every tick.")]
     [NodeInfo("Selector", "Composite/Selector", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Selector.png", isChildOnly: false)]
     public class SelectorNode : CompositeNode
     {

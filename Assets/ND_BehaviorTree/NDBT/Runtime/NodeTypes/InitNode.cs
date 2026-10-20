@@ -16,6 +16,7 @@ namespace ND_BehaviorTree
     ///   - Failure: logged as a warning and the main tree starts anyway, unless stopTreeOnFailure is on
     ///     (the tree then stays stopped and Update returns Failure).
     /// </summary>
+    [NodeDescription("Entry point that runs once at start, before the main tree.", "Runs in BehaviorTreeRunner.Start after overrides are applied. While it is Running the main tree waits. It never runs again when the main tree restarts.")]
     [NodeInfo("Init", "Event/Init (runs once at start)", false, true)]
     public class InitNode : Node
     {

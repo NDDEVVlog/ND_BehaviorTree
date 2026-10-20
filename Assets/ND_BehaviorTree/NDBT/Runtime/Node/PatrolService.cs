@@ -5,6 +5,7 @@ using UnityEngine;
 namespace ND_BehaviorTree
 {
     // Example Service (placeholder: no behaviour yet). Kept because assets (e.g. Wolf.asset) reference it.
+    [NodeDescription("Placeholder service with no behaviour (kept so old assets load).", "Logs an error once when it ticks. Remove it, or implement OnTick.")]
     [NodeInfo("Patrol Service", "Services/Patrol", true, true, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/antivirus.png",isChildOnly: true)]
     public class PatrolService : ServiceNode
     {

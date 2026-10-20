@@ -3,6 +3,7 @@ using UnityEngine;
 namespace ND_BehaviorTree.Demo.Xeno
 {
     /// <summary>Sub-node: waits <see cref="delay"/> seconds (Running) before running the decorated node. Replaces a "Wait → X" sequence.</summary>
+    [NodeDescription("Sub-node: waits a number of seconds, then runs its node.", "Running during the delay (progress bar). The delay restarts every time the node is entered.")]
     [NodeInfo("Delay", "Decorator/Delay", true, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Wait.png")]
     public class DelayDecorator : DecoratorNode
     {

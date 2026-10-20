@@ -6,6 +6,7 @@ namespace ND_BehaviorTree.Demo.Xeno
     /// Drops the alien out of the vent nearest the director's hint (or a Vector3 key). Used by the Init branch for the
     /// alien's first appearance. Succeeds immediately if it is not in a vent.
     /// </summary>
+    [NodeDescription("Drops the alien out of the vent nearest the director's hint (or a Vector3 key).", "Never uses a vent closer than 'Min Distance From Player'. Succeeds immediately if the alien is not in a vent.")]
     [NodeInfo("Emerge From Vent", "Action/Xeno/Emerge From Vent", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Wait.png")]
     public class EmergeFromVentNode : ActionNode
     {

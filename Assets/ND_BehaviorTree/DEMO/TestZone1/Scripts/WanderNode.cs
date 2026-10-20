@@ -13,6 +13,7 @@ using ND_BehaviorTree;
 /// An Action Node that makes the AI wander to random points within a specified radius.
 /// This node will continuously return 'Running' and is intended for use as a default or idle state.
 /// </summary>
+[NodeDescription("Wanders to random NavMesh points around where it started (never finishes).", "Each time the agent arrives, a new random point within 'Walk Radius' of its first position is chosen.\nAlways Running: use it as an idle branch and let higher-priority branches interrupt it.\nRequires a NavMeshAgent on the owner.")]
 [NodeInfo("Wander", "Action/Movement/Wander", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Wander.png")]
 public class WanderNode : ActionNode
 {

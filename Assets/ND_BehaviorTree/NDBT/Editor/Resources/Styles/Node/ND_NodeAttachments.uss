@@ -198,3 +198,55 @@ Palette: slate base, accents only on bars/dots/pills.
     border-radius: 2px;
     background-color: #F5B83D;
 }
+
+/* ---------- Weight (children of Random Rate / Utility Selector) ---------- */
+.nd-weight-badge {
+    position: absolute;
+    top: -9px;
+    right: 10px;
+    height: 18px;
+    padding: 0 7px;
+    border-radius: 9px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    color: #F4E7FF;
+    background-color: #6B3FA0;
+    border-width: 1px;
+    border-color: #2A1840;
+}
+
+.nd-edge-weight {
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: #F4E7FF;
+    background-color: rgba(107, 63, 160, 0.92);
+    border-width: 1px;
+    border-color: #2A1840;
+}
+.nd-edge-weight--chosen {
+    background-color: #F5B83D;
+    color: #1E1E1E;
+}
+
+/* ---------- Live Debug: focus when running ---------- */
+.nd-focus-badge {
+    position: absolute;
+    top: -10px;
+    left: 14px;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    -unity-text-align: middle-center;
+    color: #FFFFFF;
+    background-color: #D9534F;
+    border-width: 1px;
+    border-color: #3A1414;
+}
+.nd-flash > .node-border {
+    border-color: #FFFFFF;
+    background-color: #3B4252;
+}

@@ -8,8 +8,9 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 {
     /// <summary>
     /// Live Debug section: the watched agent's RUNTIME blackboard as a table (key, type, value), refreshed 10 times
-    /// per second. A value's text is rebuilt only when it changed (common types are compared without boxing), and a
-    /// changed row flashes briefly so you can see what the tree just wrote.
+    /// per second. Tracked keys (★, or click a row → Track) move to a "Tracked" box at the top with larger values.
+    /// A value's text is rebuilt only when it changed (common types are compared without boxing), and a changed row
+    /// flashes briefly so you can see what the tree just wrote.
     /// </summary>
     public class ND_BTLiveBlackboardView : VisualElement
     {
@@ -21,6 +22,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             public Key key;
             public VisualElement root;
             public Label value;
+            public Button star;
             public bool hasValue;
             public float f; public int i; public bool b; public Vector3 v; public Vector2 v2; public object o;
             public double changedAt = -1;
@@ -28,10 +30,14 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         private readonly Label m_Title;
         private readonly TextField m_Filter;
+        private readonly VisualElement m_TrackedBox;
+        private readonly VisualElement m_TrackedRows;
+        private readonly Label m_AllTitle;
         private readonly ScrollView m_Rows;
         private readonly Label m_Empty;
         private readonly List<Row> m_RowList = new List<Row>();
         private Blackboard m_Bound;
+        private Blackboard m_Asset; // tracking is stored per blackboard asset
         private int m_BoundKeyCount = -1;
 
         public ND_BTLiveBlackboardView()
@@ -54,19 +60,38 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             m_Empty.AddToClassList("nd-livebb__empty");
             Add(m_Empty);
 
+            m_TrackedBox = new VisualElement();
+            m_TrackedBox.AddToClassList("nd-livebb__tracked");
+            var trackedTitle = new Label("★ Tracked");
+            trackedTitle.AddToClassList("nd-livebb__section");
+            m_TrackedBox.Add(trackedTitle);
+            m_TrackedRows = new VisualElement();
+            m_TrackedBox.Add(m_TrackedRows);
+            Add(m_TrackedBox);
+
+            m_AllTitle = new Label("All keys  ·  click a row or ☆ to track");
+            m_AllTitle.AddToClassList("nd-livebb__section");
+            Add(m_AllTitle);
+
             m_Rows = new ScrollView();
             m_Rows.AddToClassList("nd-livebb__rows");
             Add(m_Rows);
 
             schedule.Execute(RefreshValues).Every(RefreshMs);
+            RegisterCallback<AttachToPanelEvent>(_ => { LiveKeyTracking.Changed -= PlaceRows; LiveKeyTracking.Changed += PlaceRows; });
+            RegisterCallback<DetachFromPanelEvent>(_ => LiveKeyTracking.Changed -= PlaceRows);
         }
 
-        /// <summary>Shows <paramref name="blackboard"/> (the runtime clone), or nothing when null.</summary>
-        public void Bind(Blackboard blackboard)
+        /// <summary>
+        /// Shows <paramref name="runtime"/> (the agent's runtime clone); <paramref name="asset"/> is the blackboard asset
+        /// it was cloned from (tracking is stored per asset). Null shows nothing.
+        /// </summary>
+        public void Bind(Blackboard runtime, Blackboard asset)
         {
-            int keyCount = blackboard != null ? blackboard.keys.Count : -1;
-            if (blackboard == m_Bound && keyCount == m_BoundKeyCount) return;
-            m_Bound = blackboard;
+            int keyCount = runtime != null ? runtime.keys.Count : -1;
+            if (runtime == m_Bound && asset == m_Asset && keyCount == m_BoundKeyCount) return;
+            m_Bound = runtime;
+            m_Asset = asset;
             m_BoundKeyCount = keyCount;
             RebuildRows();
         }
@@ -74,16 +99,28 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         private void RebuildRows()
         {
             m_Rows.Clear();
+            m_TrackedRows.Clear();
             m_RowList.Clear();
-            m_Empty.style.display = m_Bound == null ? DisplayStyle.Flex : DisplayStyle.None;
-            m_Title.text = m_Bound == null ? "Blackboard" : $"Blackboard · {m_Bound.keys.Count} keys";
-            if (m_Bound == null) return;
+            bool bound = m_Bound != null;
+            m_Empty.style.display = bound ? DisplayStyle.None : DisplayStyle.Flex;
+            m_AllTitle.style.display = bound ? DisplayStyle.Flex : DisplayStyle.None;
+            m_Title.text = bound ? $"Blackboard · {m_Bound.keys.Count} keys" : "Blackboard";
+            if (!bound)
+            {
+                m_TrackedBox.style.display = DisplayStyle.None;
+                return;
+            }
 
             foreach (var key in m_Bound.keys)
             {
                 if (key == null) continue;
                 var row = new Row { key = key, root = new VisualElement() };
                 row.root.AddToClassList("nd-livebb__row");
+
+                row.star = new Button { tooltip = "Track: pin this key to the top" };
+                row.star.AddToClassList("nd-livebb__star");
+                var captured = row;
+                row.star.clicked += () => LiveKeyTracking.Toggle(m_Asset, captured.key.keyName);
 
                 var names = new VisualElement();
                 names.AddToClassList("nd-livebb__names");
@@ -96,13 +133,49 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
                 row.value = new Label("—");
                 row.value.AddToClassList("nd-livebb__value");
+                row.root.Add(row.star);
                 row.root.Add(names);
                 row.root.Add(row.value);
-                m_Rows.Add(row.root);
+                row.root.RegisterCallback<PointerDownEvent>(evt =>
+                {
+                    if (evt.button != 0 && evt.button != 1) return;
+                    if (evt.target is Button) return; // the star toggles directly
+                    ShowRowMenu(captured);
+                    evt.StopPropagation();
+                });
                 m_RowList.Add(row);
             }
-            ApplyFilter();
+            PlaceRows();
             RefreshValues();
+        }
+
+        /// <summary>Puts each row in the Tracked box or the main list (rows are moved, never rebuilt).</summary>
+        private void PlaceRows()
+        {
+            if (m_Bound == null) return;
+            int tracked = 0;
+            foreach (var row in m_RowList)
+            {
+                bool isTracked = LiveKeyTracking.IsTracked(m_Asset, row.key.keyName);
+                var target = isTracked ? m_TrackedRows : m_Rows.contentContainer;
+                if (row.root.parent != target) target.Add(row.root);
+                row.root.EnableInClassList("nd-livebb__row--tracked", isTracked);
+                row.star.text = isTracked ? "★" : "☆";
+                row.star.tooltip = isTracked ? "Untrack" : "Track: pin this key to the top";
+                if (isTracked) tracked++;
+            }
+            m_TrackedBox.style.display = tracked > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            ApplyFilter();
+        }
+
+        private void ShowRowMenu(Row row)
+        {
+            var menu = new GenericMenu();
+            bool tracked = LiveKeyTracking.IsTracked(m_Asset, row.key.keyName);
+            menu.AddItem(new GUIContent(tracked ? "Untrack Variable" : "Track Variable"), tracked, () => LiveKeyTracking.Toggle(m_Asset, row.key.keyName));
+            menu.AddItem(new GUIContent("Copy Value"), false, () => EditorGUIUtility.systemCopyBuffer = row.value.text);
+            menu.AddItem(new GUIContent("Copy Key Name"), false, () => EditorGUIUtility.systemCopyBuffer = row.key.keyName);
+            menu.ShowAsContext();
         }
 
         private void ApplyFilter()
@@ -110,7 +183,9 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             string filter = m_Filter.value;
             foreach (var row in m_RowList)
             {
-                bool show = string.IsNullOrEmpty(filter) || row.key.keyName.IndexOf(filter, System.StringComparison.OrdinalIgnoreCase) >= 0;
+                // Tracked keys always stay visible: that is the point of tracking them.
+                bool show = string.IsNullOrEmpty(filter) || row.root.parent == m_TrackedRows
+                            || row.key.keyName.IndexOf(filter, System.StringComparison.OrdinalIgnoreCase) >= 0;
                 row.root.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
             }
         }

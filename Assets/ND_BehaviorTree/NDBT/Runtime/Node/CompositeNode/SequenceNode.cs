@@ -2,6 +2,7 @@
 using UnityEngine;
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Runs children left to right while they succeed (AND).", "Fails as soon as a child fails; succeeds when every child succeeded.")]
     [NodeInfo("Sequence", "Composite/Sequence", true, true, iconPath: "Assets/ND_BehaviorTree//NDBT/Icons/ProcessSequence.png", isChildOnly: false)]
     public class SequenceNode : CompositeNode
     {

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree.GOAP
 {   
+    [NodeDescription("A GOAP action: preconditions, effects and cost; its child does the actual work.", "Only meaningful under a GOAP Planner, which chains actions whose effects reach the goal at the lowest total cost.")]
     [NodeInfo("GOAPActionNode", "GOAP/GOAPActionNode", true, true, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/actionable.png")]
     public class GOAPActionNode : ActionNode
     {

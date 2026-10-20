@@ -91,7 +91,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 m_ActivePath.text = "—";
                 m_EventsSection.style.display = DisplayStyle.None;
                 m_EventsBuiltFor = null;
-                m_Blackboard.Bind(null);
+                m_Blackboard.Bind(null, null);
                 return;
             }
 
@@ -124,7 +124,8 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 : "—";
             if (m_ActivePath.text != activePath) m_ActivePath.text = activePath;
             RefreshEvents(watched);
-            m_Blackboard.Bind(watched != null && watched.RuntimeTree != null ? watched.RuntimeTree.blackboard : null);
+            m_Blackboard.Bind(watched != null && watched.RuntimeTree != null ? watched.RuntimeTree.blackboard : null,
+                              watched != null && watched.treeAsset != null ? watched.treeAsset.blackboard : null);
         }
 
         private void ClearRunnerRows()

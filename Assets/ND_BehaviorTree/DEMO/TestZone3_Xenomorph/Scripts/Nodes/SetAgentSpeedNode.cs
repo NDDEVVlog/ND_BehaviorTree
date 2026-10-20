@@ -4,6 +4,7 @@ using UnityEngine.AI;
 namespace ND_BehaviorTree.Demo.Xeno
 {
     /// <summary>Sets the NavMeshAgent's speed (walk / stalk / sprint) for the moves that follow in a sequence.</summary>
+    [NodeDescription("Sets the NavMeshAgent's speed (stand-alone action).", "Prefer the 'Agent Speed' service sub-node, which also restores the previous speed when its node stops.")]
     [NodeInfo("Set Agent Speed", "Action/Movement/Set Agent Speed", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Wander.png")]
     public class SetAgentSpeedNode : ActionNode
     {

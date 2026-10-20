@@ -12,6 +12,7 @@ using ND_BehaviorTree;
 /// An Action Node that stops a Particle System.
 /// It retrieves the ParticleSystem from the Blackboard.
 /// </summary>
+[NodeDescription("Stops a ParticleSystem key.", "Succeeds immediately.")]
 [NodeInfo("Stop Particle", "Action/VFX/StopParticle", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/StopEffect.png")]
 public class StopParticleNode : ActionNode
 {

@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 namespace ND_BehaviorTree
 {
+    [NodeDescription("Moves the NavMeshAgent to a random NavMesh point within a radius.", "A new random point within 'Patrol Radius' of the agent is picked each activation.")]
     [NodeInfo("Random Patrol", "Action/Movement/RandomPatrol", true, false)]
     public class RandomPatrolNode : ActionNode
     {

@@ -44,8 +44,10 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             AddToClassList("nd-attachment");
             AddToClassList(isService ? "nd-attachment--service" : "nd-attachment--decorator");
             if (index > 0) AddToClassList("nd-attachment--divider");
-            tooltip = (isService ? "Service — ticks while its node runs." : $"Decorator #{index + 1} — evaluated top to bottom before its node.") +
-                      "\nDouble-click to edit, right-click for options.";
+            string summary = Graph.WeightGraph.DescriptionOf(attached.GetType())?.Summary;
+            tooltip = (summary != null ? summary + "\n\n" : string.Empty) +
+                      (isService ? "Service — ticks while its node runs." : $"Decorator #{index + 1} — evaluated top to bottom before its node.") +
+                      "\nDouble-click for details and settings, right-click for options.";
 
             var header = new VisualElement { pickingMode = PickingMode.Ignore };
             header.AddToClassList("nd-attachment__header");

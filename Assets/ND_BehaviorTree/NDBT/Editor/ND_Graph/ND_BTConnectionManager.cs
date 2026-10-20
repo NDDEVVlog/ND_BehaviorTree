@@ -13,6 +13,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         private ND_BTPortView m_StartPort;
         private ND_BTEdgeView m_TempEdge;
         private int m_PointerId = -1;
+        private ND_BTPortView m_HoverPort;
 
         public ND_BTConnectionManager(ND_BTGraphCanvas canvas)
         {
@@ -29,6 +30,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             m_Canvas.AddElement(m_TempEdge);
             m_TempEdge.UpdateTempPosition(mousePosition);
             m_Canvas.CapturePointer(pointerId);
+            m_Canvas.SetConnectionCandidates(port);
         }
 
         private void OnPointerMove(PointerMoveEvent evt)
@@ -36,6 +38,13 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             if (m_TempEdge != null)
             {
                 m_TempEdge.UpdateTempPosition(evt.position);
+                var hovered = FindPortUnderMouse(evt.position);
+                if (hovered != m_HoverPort)
+                {
+                    m_HoverPort?.SetDragHover(false);
+                    m_HoverPort = hovered;
+                    m_HoverPort?.SetDragHover(true);
+                }
             }
         }
 
@@ -45,6 +54,9 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
             ND_BTPortView targetPort = FindPortUnderMouse(evt.position);
             m_Canvas.RemoveElement(m_TempEdge);
+            m_Canvas.SetConnectionCandidates(null);
+            m_HoverPort?.SetDragHover(false);
+            m_HoverPort = null;
 
             if (TryGetOrientedPorts(m_StartPort, targetPort, out var output, out var input))
             {

@@ -3,6 +3,7 @@ using UnityEngine;
 namespace ND_BehaviorTree.Demo.Xeno
 {
     /// <summary>Stops, faces the player and strikes after a short wind-up. Success = kill; Failure = the player got away.</summary>
+    [NodeDescription("Faces the player and strikes after a short wind-up; kills them if still in reach.", "Success = kill. Failure = the player got out of reach, hid or is already dead.")]
     [NodeInfo("Xeno Attack", "Action/Xeno/Attack", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/CheckCondition.png")]
     public class XenoAttackNode : ActionNode
     {

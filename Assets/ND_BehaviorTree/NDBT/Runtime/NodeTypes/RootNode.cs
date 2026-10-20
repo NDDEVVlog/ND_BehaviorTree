@@ -7,6 +7,7 @@ namespace ND_BehaviorTree
 {
     // The RootNode is the entry point of the tree. It can only have one child.
     // The NodeInfo attribute seems to be for your editor, which is great.
+    [NodeDescription("The main entry point: ticked every update, restarted after it finishes.", "Has exactly one child.")]
     [NodeInfo("Root",null,false,true, iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/Root.png")]
     public class RootNode : Node
     {

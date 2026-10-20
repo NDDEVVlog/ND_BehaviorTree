@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ND_BehaviorTree
 {   
+    [NodeDescription("Flips its node's result: Success <-> Failure (Running stays Running).", "Useful to negate a check, e.g. 'not in range'.")]
     [NodeInfo("Inverter", "Decorator/Inverter", true, true,iconPath:"Assets/ND_BehaviorTree/NDBT/Icons/Inverter.png")]
     public class InverterNode : DecoratorNode
     {

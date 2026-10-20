@@ -18,6 +18,7 @@ namespace ND_BehaviorTree
     ///   - Missing reference or recursion (A → B → A): no runtime clone is built; the node logs an error once
     ///     and returns Failure.
     /// </summary>
+    [NodeDescription("Runs another Behavior Tree asset as if it were a branch here.", "The subtree uses this tree's blackboard (keys resolved by name). Interrupting this node resets the whole subtree. Right-click -> Open Subtree.")]
     [NodeInfo("Run Subtree", "Subtree/Run Subtree", true, false)]
     public class SubtreeNode : Node
     {
