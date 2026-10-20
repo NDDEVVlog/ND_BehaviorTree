@@ -1,0 +1,27 @@
+/* Light Clear theme — Blackboard panel (overrides ND_Blackboard.uss; applied by the theme switcher). */
+.nd-bb-panel { background-color: #F5F7FA; border-color: #D3D8DF; }
+.nd-bb-header { background-color: #E9ECF1; border-bottom-color: #D3D8DF; }
+.nd-bb-title { color: #1F2937; }
+.nd-bb-subtitle { color: #6B7280; }
+.nd-bb-count { background-color: #DDE2E9; color: #374151; }
+.nd-bb-iconbtn { color: #374151; }
+.nd-bb-iconbtn:hover { background-color: #DCE1E8; color: #1F2937; }
+.nd-bb-iconbtn--accent { background-color: #2563EB; color: #FFFFFF; }
+.nd-bb-iconbtn--accent:hover { background-color: #3B82F6; }
+.nd-bb-search > #unity-text-input { background-color: #FFFFFF; border-color: #D3D8DF; color: #1F2937; }
+.nd-bb-key { background-color: #FFFFFF; }
+.nd-bb-key:hover { background-color: #F0F3F7; border-color: #9CA3AF; }
+.nd-bb-grip { color: #B6BDC8; }
+.nd-bb-key:hover .nd-bb-grip { color: #4B5563; }
+.nd-bb-name > #unity-text-input { color: #1F2937; }
+.nd-bb-name:focus > #unity-text-input { background-color: #FFFFFF; border-color: #2563EB; }
+.nd-bb-key:hover .nd-bb-delete { color: #6B7280; }
+.nd-bb-value-note { color: #9CA3AF; }
+.nd-bb-value-button { background-color: #DDE2E9; color: #374151; }
+.nd-bb-value-button:hover { background-color: #DCE1E8; }
+.nd-bb-empty__text { color: #6B7280; }
+.nd-bb-resize:hover { background-color: rgba(37, 99, 235, 0.35); }
+.nd-bb-key__value .unity-base-text-field__input,
+.nd-bb-key__value .unity-base-popup-field__input,
+.nd-bb-key__value .unity-object-field__input { background-color: #FFFFFF; color: #1F2937; border-color: #CBD2DC; }
+.nd-bb-key__value .unity-label { color: #4B5563; }

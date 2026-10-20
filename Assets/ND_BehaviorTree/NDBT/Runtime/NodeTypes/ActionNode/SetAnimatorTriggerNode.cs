@@ -11,7 +11,7 @@ using ND_BehaviorTree;
 namespace ND_BehaviorTree
 {   [RequireComponentInRunner(typeof(Animator))]
     [NodeDescription("Sets a trigger on an Animator key.", "The trigger name must exist in the Animator Controller.")]
-    [NodeInfo("Set Animator Trigger", "Action/Animation/SetAnimatorTrigger", true, false)]
+    [NodeInfo("Set Animator Trigger", "Action/Animation/SetAnimatorTrigger", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Animator.png")]
     public class SetAnimatorTriggerNode : ActionNode
     {
         [Tooltip("The Blackboard key for the Animator component.")]

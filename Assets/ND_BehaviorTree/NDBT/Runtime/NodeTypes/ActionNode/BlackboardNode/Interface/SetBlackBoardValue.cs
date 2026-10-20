@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ND_BehaviorTree
 {
     [NodeDescription("Writes a value into a blackboard key.", "Choose the operation (value type) in the node's properties; fails if the write is rejected.")]
-    [NodeInfo("SetBlackBoardValue", "Action/SetBlackBoardValue", true, false, iconPath: null)]
+    [NodeInfo("SetBlackBoardValue", "Action/SetBlackBoardValue", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/SetValue.png")]
     public class SetBlackBoardValue : ActionNode
     {   
         [SerializeReference]

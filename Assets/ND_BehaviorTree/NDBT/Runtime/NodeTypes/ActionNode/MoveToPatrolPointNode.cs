@@ -5,7 +5,7 @@ using UnityEngine.AI;
 namespace ND_BehaviorTree
 {
     [NodeDescription("Moves the NavMeshAgent to a Vector3 destination key.", "Interrupting the node stops the agent.")]
-    [NodeInfo("Move To Patrol Point", "Action/Movement/MoveToPatrolPoint", true, false)]
+    [NodeInfo("Move To Patrol Point", "Action/Movement/MoveToPatrolPoint", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/MoveToPoint.png")]
     public class MoveToPatrolPointNode : ActionNode
     {
         [Tooltip("The Blackboard key for the NavMeshAgent component on the AI.")]

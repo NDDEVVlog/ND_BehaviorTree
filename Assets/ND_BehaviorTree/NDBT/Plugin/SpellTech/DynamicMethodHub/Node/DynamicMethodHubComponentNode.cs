@@ -12,7 +12,7 @@ using SpellTech.DynamicMethodEvent;
 
 [RequireComponentInRunner(typeof(MethodHub))]
 [NodeDescription("Fires an event on the owner's MethodHub component by name (or from a key).", "Uses 'Event ID Key' when assigned, otherwise 'Event ID'.")]
-[NodeInfo("Dynamic Method Hub Component Node", "Action/DynamicMethodHubComponentNode", true, false,iconPath:null)]
+[NodeInfo("Dynamic Method Hub Component Node", "Action/DynamicMethodHubComponentNode", true, false,iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/MethodHub.png")]
 public class DynamicMethodHubComponentNode : ActionNode
 {
     [Tooltip("The event name to trigger on the MethodHub (used when 'Event ID Key' is not assigned).")]

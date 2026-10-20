@@ -5,7 +5,7 @@ using UnityEngine.AI;
 namespace ND_BehaviorTree
 {
     [NodeDescription("Moves the NavMeshAgent toward a Transform key, following it as it moves.", "The destination is refreshed every 'Update Interval'. Success within the agent's stopping distance; Failure if the agent or target is missing.")]
-    [NodeInfo("Move To Transform", "Action/MoveToTransform", true, false)]
+    [NodeInfo("Move To Transform", "Action/MoveToTransform", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/MoveToTarget.png")]
     public class MoveToTransformNode : ActionNode
     {
         [Tooltip("The Blackboard key for the NavMeshAgent component on the AI.")]

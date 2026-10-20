@@ -1,6 +1,8 @@
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEditor.TestTools.TestRunner.Api;
 using UnityEngine;
 
@@ -13,7 +15,12 @@ namespace ND_BehaviorTree.Editor.Tests
     public static class TestRunMenu
     {
         public const string ResultPath = "Library/NDBT/test-results.txt";
-        private const string AssemblyName = "ND_BehaviorTree.Editor.Tests";
+        /// <summary>Core and plugin test assemblies: every editor assembly named "ND_BehaviorTree*.Tests" (naming convention, no registration).</summary>
+        public static string[] AssemblyNames() => CompilationPipeline.GetAssemblies(AssembliesType.Editor)
+            .Select(a => a.name)
+            .Where(n => n.StartsWith("ND_BehaviorTree") && n.EndsWith(".Tests"))
+            .OrderBy(n => n)
+            .ToArray();
 
         private static TestRunnerApi s_Api;
         private static Callbacks s_Callbacks;
@@ -30,7 +37,7 @@ namespace ND_BehaviorTree.Editor.Tests
                 s_Callbacks = new Callbacks();
                 s_Api.RegisterCallbacks(s_Callbacks);
             }
-            s_Api.Execute(new ExecutionSettings(new Filter { testMode = TestMode.EditMode, assemblyNames = new[] { AssemblyName } }));
+            s_Api.Execute(new ExecutionSettings(new Filter { testMode = TestMode.EditMode, assemblyNames = AssemblyNames() }));
         }
 
         private sealed class Callbacks : ICallbacks

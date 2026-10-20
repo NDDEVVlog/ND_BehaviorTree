@@ -19,7 +19,7 @@ namespace ND_BehaviorTree
     ///     and returns Failure.
     /// </summary>
     [NodeDescription("Runs another Behavior Tree asset as if it were a branch here.", "The subtree uses this tree's blackboard (keys resolved by name). Interrupting this node resets the whole subtree. Right-click -> Open Subtree.")]
-    [NodeInfo("Run Subtree", "Subtree/Run Subtree", true, false)]
+    [NodeInfo("Run Subtree", "Subtree/Run Subtree", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Subtree.png")]
     public class SubtreeNode : Node
     {
         [Tooltip("Reusable BehaviorTree asset to run. It uses this tree's blackboard; its keys are resolved by name.")]

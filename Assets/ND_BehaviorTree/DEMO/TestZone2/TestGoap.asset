@@ -82,49 +82,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: {fileID: 0}
---- !u!114 &-8327970596240729455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb2de36b0f5fdee4ab2cafd3c11232da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: a705f8a5-87c3-4da7-ae99-4c27ac4f5bfe
-  m_position:
-    serializedVersion: 2
-    x: 1220.7999
-    y: 507.2
-    width: 179.20007
-    height: 106.39996
-  typeName: GetAxe
-  priority: 0
-  preconditions:
-  - rid: 3796477471816679438
-  effects:
-  - key: HasWeapon
-    valueType: 0
-    comparison: 0
-    boolValue: 1
-    intValue: 50
-    floatValue: 0
-    gameObjectValue: {fileID: 0}
-    stringValue: 
-  cost: 1
-  child: {fileID: -4709657569924217779}
-  references:
-    version: 2
-    RefIds:
-    - rid: 3796477471816679438
-      type: {class: KeyComparisonPrecondition, ns: ND_BehaviorTree.GOAP, asm: ND_BehaviorTree.Runtime}
-      data:
-        keyA: {fileID: -8699771959876280481, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-        compareType: {fileID: -1790680292319197465}
-        keyB: {fileID: -7022224974958081226}
 --- !u!114 &-8322409935414777387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,6 +95,32 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
+--- !u!114 &-8117975261936399386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.SequenceNode
+  m_guid: 4bc9e56a-52f9-4bed-a215-a9fc2c8268a4
+  m_position:
+    serializedVersion: 2
+    x: 1150
+    y: 820
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: 3894521373128671292}
+  - {fileID: -157213281013980206}
 --- !u!114 &-7794937984485503492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,7 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
---- !u!114 &-7154159237428318390
+--- !u!114 &-7286051967091587724
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,19 +197,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: f93a9435-daa1-474a-807f-4e40380b0865
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: DebugLogNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.DebugLogNode
+  m_guid: 67223e5d-ed8e-42e2-9612-57c03400454e
   m_position:
     serializedVersion: 2
-    x: 1228
-    y: 819.2
-    width: 120.79993
-    height: 109.599976
-  typeName: Wait
-  priority: 0
-  duration: 1
+    x: 630
+    y: 980
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  message: '[Woodcutter] Found a tree'
+  logColor: {r: 0, g: 1, b: 0, a: 1}
+  keyToLog: {fileID: 0}
+  returningStatus: 0
 --- !u!114 &-7122894682298274168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,9 +235,10 @@ MonoBehaviour:
     width: 147.20001
     height: 96.79993
   typeName: Sequence
-  priority: 0
-  children: []
+  weight: 0
+  decorators: []
   services: []
+  children: []
 --- !u!114 &-7047941919503653803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,9 +300,10 @@ MonoBehaviour:
     width: 147.19998
     height: 96.79999
   typeName: Sequence
-  priority: 0
-  children: []
+  weight: 0
+  decorators: []
   services: []
+  children: []
 --- !u!114 &-6774462502753368986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,7 +318,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
---- !u!114 &-6415080848553409387
+--- !u!114 &-6644178618668272915
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -337,28 +327,82 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5efd9179035b9b347b3a33e236c9ec73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 0e371801-1d08-49ca-9077-52d54d0a0a93
+  m_Script: {fileID: 11500000, guid: 98a469fb5dc2a9244a3509fb8554f066, type: 3}
+  m_Name: Woodcutter Planner
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPPlannerNode
+  m_guid: d183c39f-cfab-4a65-856a-6ef0d53cec98
   m_position:
     serializedVersion: 2
-    x: 205.59999
-    y: 796.8
-    width: 204.80002
-    height: 109.60004
-  typeName: SetBlackBoardValue
-  priority: 0
-  setBlackBoardValue:
-    rid: 3796477482900389889
-  references:
-    version: 2
-    RefIds:
-    - rid: 3796477482900389889
-      type: {class: SetIntValueIncrement, ns: ND_BehaviorTree, asm: ND_BehaviorTree.Runtime}
-      data:
-        intKey: {fileID: -7385322539704590012, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-        incrementAmount: 1
+    x: 700
+    y: 420
+    width: 0
+    height: 0
+  typeName: Woodcutter Planner
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: 3083973820295267950}
+  - {fileID: -2649652693911408916}
+  - {fileID: -5991520180135727402}
+  - {fileID: 3430234061979994964}
+  goals:
+  - name: Stay healthy
+    conditions:
+    - key: {fileID: 2524366029454991468, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+      comparison: 3
+      value:
+        boolValue: 0
+        intValue: 40
+        floatValue: 0
+        stringValue: 
+        vectorValue: {x: 0, y: 0, z: 0}
+        objectValue: {fileID: 0}
+    priority: 10
+    priorityKey: {fileID: 0}
+  - name: Collect logs
+    conditions:
+    - key: {fileID: -7385322539704590012, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+      comparison: 3
+      value:
+        boolValue: 0
+        intValue: 50
+        floatValue: 0
+        stringValue: 
+        vectorValue: {x: 0, y: 0, z: 0}
+        objectValue: {fileID: 0}
+    priority: 1
+    priorityKey: {fileID: 0}
+  goalCheckInterval: 0.5
+  maxReplans: 3
+  maxIterations: 2000
+  logPlans: 1
+--- !u!114 &-6598637388946937979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.SequenceNode
+  m_guid: 78ef83c0-915b-4465-a38f-bcb783cff669
+  m_position:
+    serializedVersion: 2
+    x: 250
+    y: 820
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: 7873763764275198558}
+  - {fileID: 246562493957329673}
 --- !u!114 &-6318553618467912108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,6 +473,89 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: {fileID: 0}
+--- !u!114 &-5991520180135727402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590b86ff9189d1f4fa98b021d5aa6865, type: 3}
+  m_Name: Chop Tree
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPActionNode
+  m_guid: bd21e39d-823c-4320-a392-6c0c769484a5
+  m_position:
+    serializedVersion: 2
+    x: 850
+    y: 620
+    width: 0
+    height: 0
+  typeName: Chop Tree
+  weight: 1
+  decorators: []
+  services: []
+  preconditions:
+  - key: {fileID: -8699771959876280481, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    comparison: 0
+    value:
+      boolValue: 1
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  - key: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    comparison: 0
+    value:
+      boolValue: 1
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  - key: {fileID: 2524366029454991468, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    comparison: 3
+    value:
+      boolValue: 0
+      intValue: 20
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  effects:
+  - key: {fileID: -7385322539704590012, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    operation: 1
+    value:
+      boolValue: 0
+      intValue: 10
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  - key: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    operation: 0
+    value:
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  - key: {fileID: 2524366029454991468, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    operation: 1
+    value:
+      boolValue: 0
+      intValue: -20
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  cost: 1
+  costKey: {fileID: 0}
+  applyEffects: 1
+  child: {fileID: 1660124307611676854}
 --- !u!114 &-5915683799563630807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -549,6 +676,32 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
+--- !u!114 &-5066972651927208447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.SequenceNode
+  m_guid: 292f9a90-8ff8-44b6-81a7-8faec1f33c08
+  m_position:
+    serializedVersion: 2
+    x: 550
+    y: 820
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: -2175156414354426181}
+  - {fileID: -7286051967091587724}
 --- !u!114 &-5058980370679577193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -596,32 +749,10 @@ MonoBehaviour:
     width: 140.79999
     height: 120.80005
   typeName: Repeater
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   child: {fileID: 0}
-  repeatCount: 3
-  currentCount: 0
---- !u!114 &-4734503684602027960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6075e4aa7424d364c90a6009b72a5660, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 163a3748-5da9-486d-9348-88a167764ed9
-  m_position:
-    serializedVersion: 2
-    x: -40
-    y: 775.2
-    width: 156
-    height: 138.39996
-  typeName: Repeater
-  priority: 0
-  child: {fileID: 5258702330272107779}
   repeatCount: 3
   currentCount: 0
 --- !u!114 &-4710312640245247797
@@ -638,31 +769,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 3
---- !u!114 &-4709657569924217779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 31bc2848-3926-4647-8aca-9da4b2c3e72a
-  m_position:
-    serializedVersion: 2
-    x: 1252.7999
-    y: 656.8
-    width: 277.59998
-    height: 109.60004
-  typeName: Scout for Tree Sequence
-  priority: 0
-  children:
-  - {fileID: -7154159237428318390}
-  - {fileID: 4121900773682319423}
-  services: []
 --- !u!114 &-4378800970888084564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,56 +782,6 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
---- !u!114 &-4091013331984308573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb2de36b0f5fdee4ab2cafd3c11232da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 5ef8fb06-3221-42ad-94d1-49d7c81322dc
-  m_position:
-    serializedVersion: 2
-    x: 226.43477
-    y: 518.9913
-    width: 167.20001
-    height: 95.20001
-  typeName: ChopTree
-  priority: 0
-  preconditions:
-  - rid: 3796477471816679428
-  - rid: 3796477471816679437
-  effects:
-  - key: NumberOfLog
-    valueType: 1
-    comparison: 2
-    boolValue: 1
-    intValue: 60
-    floatValue: 0
-    gameObjectValue: {fileID: 0}
-    stringValue: 
-  cost: 1
-  child: {fileID: 6779057175041700634}
-  references:
-    version: 2
-    RefIds:
-    - rid: 3796477471816679428
-      type: {class: KeyComparisonPrecondition, ns: ND_BehaviorTree.GOAP, asm: ND_BehaviorTree.Runtime}
-      data:
-        keyA: {fileID: -8699771959876280481, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-        compareType: {fileID: -6318553618467912108}
-        keyB: {fileID: -1389869690681301572}
-    - rid: 3796477471816679437
-      type: {class: KeyComparisonPrecondition, ns: ND_BehaviorTree.GOAP, asm: ND_BehaviorTree.Runtime}
-      data:
-        keyA: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-        compareType: {fileID: 5752509202543733756}
-        keyB: {fileID: -8589443550505685803}
 --- !u!114 &-4010785601528414234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -812,7 +868,9 @@ MonoBehaviour:
     width: 139.2
     height: 119.19995
   typeName: Repeater
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   child: {fileID: 0}
   repeatCount: 3
   currentCount: 0
@@ -830,6 +888,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
+--- !u!114 &-3095695218152229020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.WaitNode
+  m_guid: 07203f52-81d0-4b41-8943-f247febbe3a8
+  m_position:
+    serializedVersion: 2
+    x: 770
+    y: 980
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  duration: 2
 --- !u!114 &-2972828095666861792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -850,7 +932,9 @@ MonoBehaviour:
     width: 244.00006
     height: 96.80005
   typeName: SetBooleanValueNode
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   ValueToSet: 0
 --- !u!114 &-2952104705388944747
@@ -866,29 +950,6 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
---- !u!114 &-2892594324651682940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 8c4b17f2-1079-4904-9f3d-7b1aa937a7af
-  m_position:
-    serializedVersion: 2
-    x: 472
-    y: 815.2
-    width: 244
-    height: 96.79999
-  typeName: SetBooleanValueNode
-  priority: 0
-  conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-  ValueToSet: 0
 --- !u!114 &-2837396456810970015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -955,6 +1016,53 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
+--- !u!114 &-2649652693911408916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590b86ff9189d1f4fa98b021d5aa6865, type: 3}
+  m_Name: Scout For Tree
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPActionNode
+  m_guid: af1bbb1f-b7d5-44f4-9e90-a479db2ed606
+  m_position:
+    serializedVersion: 2
+    x: 550
+    y: 620
+    width: 0
+    height: 0
+  typeName: Scout For Tree
+  weight: 1
+  decorators: []
+  services: []
+  preconditions:
+  - key: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    comparison: 0
+    value:
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  effects:
+  - key: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    operation: 0
+    value:
+      boolValue: 1
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  cost: 2
+  costKey: {fileID: 0}
+  applyEffects: 1
+  child: {fileID: -5066972651927208447}
 --- !u!114 &-2524494134621451640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,6 +1091,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 10
+--- !u!114 &-2175156414354426181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.WaitNode
+  m_guid: 34ce8a5d-66e7-48bb-9d28-eceaf85d2a57
+  m_position:
+    serializedVersion: 2
+    x: 470
+    y: 980
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  duration: 1.5
 --- !u!114 &-1790680292319197465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1066,43 +1198,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
---- !u!114 &-1165108541859606460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0cfde30bd2a9494ab399998b7f18388, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: d0a39782-171d-4711-8066-b1a845b19551
-  m_position:
-    serializedVersion: 2
-    x: 680.8
-    y: 416.8
-    width: 218.40002
-    height: 95.20001
-  typeName: GOAPPlannerNode
-  priority: 0
-  children:
-  - {fileID: -4091013331984308573}
-  - {fileID: 7249488118851278663}
-  - {fileID: -8327970596240729455}
-  services: []
-  goal:
-  - rid: 3796477519110340610
-  references:
-    version: 2
-    RefIds:
-    - rid: 3796477519110340610
-      type: {class: KeyComparisonPrecondition, ns: ND_BehaviorTree.GOAP, asm: ND_BehaviorTree.Runtime}
-      data:
-        keyA: {fileID: -7385322539704590012, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-        compareType: {fileID: -5246838685328681153}
-        keyB: {fileID: 5649448337395104865}
 --- !u!114 &-1118533337982205906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1164,7 +1259,9 @@ MonoBehaviour:
     width: 244
     height: 96.79999
   typeName: SetBooleanValueNode
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   ValueToSet: 0
 --- !u!114 &-646679374521909183
@@ -1187,7 +1284,9 @@ MonoBehaviour:
     width: 270.40002
     height: 96.79999
   typeName: AnimationHubComponentNode
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   eventID: 
   eventIDKey: {fileID: 0}
 --- !u!114 &-382493522936508669
@@ -1245,6 +1344,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
+--- !u!114 &-157213281013980206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: DebugLogNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.DebugLogNode
+  m_guid: 58e4292d-c17a-4058-b1ed-a4365d81d53d
+  m_position:
+    serializedVersion: 2
+    x: 1230
+    y: 980
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  message: '[Woodcutter] Ate: health restored'
+  logColor: {r: 0, g: 1, b: 0, a: 1}
+  keyToLog: {fileID: 0}
+  returningStatus: 0
 --- !u!114 &-74025702987479197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1272,26 +1398,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_nodes:
   - {fileID: 4009271883461909621}
-  - {fileID: -1165108541859606460}
-  - {fileID: -4091013331984308573}
-  - {fileID: 7249488118851278663}
-  - {fileID: -4734503684602027960}
-  - {fileID: 7527309124941446503}
-  - {fileID: 5258702330272107779}
-  - {fileID: 413836543818922411}
-  - {fileID: 6779057175041700634}
-  - {fileID: 1788124896194734960}
-  - {fileID: 1399468310895655337}
-  - {fileID: 4302018771259354275}
-  - {fileID: -8327970596240729455}
-  - {fileID: -4709657569924217779}
-  - {fileID: -7154159237428318390}
-  - {fileID: 4121900773682319423}
-  - {fileID: -6415080848553409387}
-  - {fileID: -2892594324651682940}
+  - {fileID: -6644178618668272915}
+  - {fileID: 3083973820295267950}
+  - {fileID: -6598637388946937979}
+  - {fileID: 7873763764275198558}
+  - {fileID: 246562493957329673}
+  - {fileID: -2649652693911408916}
+  - {fileID: -5066972651927208447}
+  - {fileID: -2175156414354426181}
+  - {fileID: -7286051967091587724}
+  - {fileID: -5991520180135727402}
+  - {fileID: 1660124307611676854}
+  - {fileID: -3095695218152229020}
+  - {fileID: 485139614330776723}
+  - {fileID: 3430234061979994964}
+  - {fileID: -8117975261936399386}
+  - {fileID: 3894521373128671292}
+  - {fileID: -157213281013980206}
   rootNode: {fileID: 4009271883461909621}
   blackboard: {fileID: 11400000, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   Self: {fileID: 0}
+  m_SchemaVersion: 2
+  groups: []
+  notes: []
 --- !u!114 &9184147381813849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1312,9 +1441,38 @@ MonoBehaviour:
     width: 153.60004
     height: 96.79993
   typeName: Debug Log
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   message: FindingAxe
   logColor: {r: 1, g: 0, b: 0.81254673, a: 1}
+  keyToLog: {fileID: 0}
+  returningStatus: 0
+--- !u!114 &246562493957329673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: DebugLogNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.DebugLogNode
+  m_guid: a379822c-3ca9-47b4-834d-9b399d518613
+  m_position:
+    serializedVersion: 2
+    x: 330
+    y: 980
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  message: '[Woodcutter] Picked up an axe'
+  logColor: {r: 0, g: 1, b: 0, a: 1}
   keyToLog: {fileID: 0}
   returningStatus: 0
 --- !u!114 &354062959317166482
@@ -1343,31 +1501,6 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
---- !u!114 &413836543818922411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: dda8d746-9714-42ad-9d0d-cc798e9614b8
-  m_position:
-    serializedVersion: 2
-    x: 130.4
-    y: 1148.8
-    width: 157.59999
-    height: 90.3999
-  typeName: Debug Log
-  priority: 0
-  message: FindingAxe
-  logColor: {r: 1, g: 0, b: 0.81254673, a: 1}
-  keyToLog: {fileID: 0}
-  returningStatus: 0
 --- !u!114 &480976404037913775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1382,6 +1515,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
+--- !u!114 &485139614330776723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8cf3d10127192f4284a37f4604056d9, type: 3}
+  m_Name: DebugLogNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.DebugLogNode
+  m_guid: 0975703f-152d-44ec-a96a-6459b173e9a0
+  m_position:
+    serializedVersion: 2
+    x: 930
+    y: 980
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  message: '[Woodcutter] Chopped a tree: +10 logs, -20 health'
+  logColor: {r: 0, g: 1, b: 0, a: 1}
+  keyToLog: {fileID: 0}
+  returningStatus: 0
 --- !u!114 &517390476809841080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1416,9 +1576,10 @@ MonoBehaviour:
     width: 145.6
     height: 95.20001
   typeName: Sequence
-  priority: 0
-  children: []
+  weight: 0
+  decorators: []
   services: []
+  children: []
 --- !u!114 &594826926540871031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1486,28 +1647,6 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
---- !u!114 &1399468310895655337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 8ba9f309-6ebf-4f3d-a700-9bb798f3c841
-  m_position:
-    serializedVersion: 2
-    x: 728.8
-    y: 983.2
-    width: 105.60004
-    height: 96.79999
-  typeName: Wait
-  priority: 0
-  duration: 1
 --- !u!114 &1535035698787807667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1528,7 +1667,9 @@ MonoBehaviour:
     width: 105.599976
     height: 96.79993
   typeName: Wait
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   duration: 1
 --- !u!114 &1569376188387820467
 MonoBehaviour:
@@ -1556,7 +1697,7 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
---- !u!114 &1788124896194734960
+--- !u!114 &1660124307611676854
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1566,21 +1707,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 550bd029-5542-4aec-86b2-598050d4d420
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.SequenceNode
+  m_guid: ba33658b-c030-43ae-9063-535cdaec65a2
   m_position:
     serializedVersion: 2
-    x: 777.60004
-    y: 811.2
-    width: 262.40002
-    height: 96.79999
-  typeName: Scout for Tree Sequence
-  priority: 0
-  children:
-  - {fileID: 1399468310895655337}
-  - {fileID: 4302018771259354275}
+    x: 850
+    y: 820
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
   services: []
+  children:
+  - {fileID: -3095695218152229020}
+  - {fileID: 485139614330776723}
 --- !u!114 &2035194374559882698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1601,7 +1743,9 @@ MonoBehaviour:
     width: 152
     height: 95.20007
   typeName: Debug Log
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   message: FindingAxe
   logColor: {r: 1, g: 0, b: 0.81254673, a: 1}
   keyToLog: {fileID: 0}
@@ -1727,6 +1871,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
+--- !u!114 &3083973820295267950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590b86ff9189d1f4fa98b021d5aa6865, type: 3}
+  m_Name: Get Axe
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPActionNode
+  m_guid: f987a9d5-f5eb-4029-8e50-aa3c0a034ddc
+  m_position:
+    serializedVersion: 2
+    x: 250
+    y: 620
+    width: 0
+    height: 0
+  typeName: Get Axe
+  weight: 1
+  decorators: []
+  services: []
+  preconditions:
+  - key: {fileID: -8699771959876280481, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    comparison: 0
+    value:
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  effects:
+  - key: {fileID: -8699771959876280481, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    operation: 0
+    value:
+      boolValue: 1
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  cost: 1
+  costKey: {fileID: 0}
+  applyEffects: 1
+  child: {fileID: -6598637388946937979}
 --- !u!114 &3148039954221648243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1747,8 +1938,48 @@ MonoBehaviour:
     width: 104
     height: 95.20007
   typeName: Wait
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   duration: 1
+--- !u!114 &3430234061979994964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590b86ff9189d1f4fa98b021d5aa6865, type: 3}
+  m_Name: Eat
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPActionNode
+  m_guid: a8672961-74ea-4602-a5f7-e7526b15e204
+  m_position:
+    serializedVersion: 2
+    x: 1150
+    y: 620
+    width: 0
+    height: 0
+  typeName: Eat
+  weight: 1
+  decorators: []
+  services: []
+  preconditions: []
+  effects:
+  - key: {fileID: 2524366029454991468, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
+    operation: 0
+    value:
+      boolValue: 0
+      intValue: 100
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  cost: 1
+  costKey: {fileID: 0}
+  applyEffects: 1
+  child: {fileID: -8117975261936399386}
 --- !u!114 &3764485964995173437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1762,6 +1993,30 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
+--- !u!114 &3894521373128671292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.WaitNode
+  m_guid: bd3df6a6-e2bc-4a11-b58b-eec13b7e3655
+  m_position:
+    serializedVersion: 2
+    x: 1070
+    y: 980
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  duration: 1
 --- !u!114 &4009271883461909621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1782,8 +2037,11 @@ MonoBehaviour:
     width: 105.599976
     height: 96.79999
   typeName: Root
-  priority: 0
-  child: {fileID: -1165108541859606460}
+  weight: 0
+  decorators: []
+  services: []
+  child: {fileID: -6644178618668272915}
+  repeat: 1
 --- !u!114 &4121069897349749137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1798,29 +2056,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
---- !u!114 &4121900773682319423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 0555dc30-b9e8-4647-a8a4-8505639032ea
-  m_position:
-    serializedVersion: 2
-    x: 1355.2
-    y: 812.8
-    width: 259.19995
-    height: 109.60004
-  typeName: SetBooleanValueNode
-  priority: 0
-  conditionKey: {fileID: -8699771959876280481, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-  ValueToSet: 1
 --- !u!114 &4192300110358125389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1862,29 +2097,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyName: 
   value: 0
---- !u!114 &4302018771259354275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d574a3c0e27cb8e4dbb80d9bac66651e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 8af5dcdd-d6fb-4de6-a246-1feb012d4e0b
-  m_position:
-    serializedVersion: 2
-    x: 906.4
-    y: 967.2
-    width: 243.99994
-    height: 96.79999
-  typeName: SetBooleanValueNode
-  priority: 0
-  conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-  ValueToSet: 1
 --- !u!114 &4328961766828845738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1905,7 +2117,9 @@ MonoBehaviour:
     width: 242.4
     height: 95.19995
   typeName: SetBooleanValueNode
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   ValueToSet: 0
 --- !u!114 &4440026101644943178
@@ -2028,31 +2242,6 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
---- !u!114 &5258702330272107779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 0dcc8466-a63d-41fc-bc86-54efc1ef66ff
-  m_position:
-    serializedVersion: 2
-    x: -32
-    y: 957.6
-    width: 160.8
-    height: 106.400024
-  typeName: Sequence
-  priority: 0
-  children:
-  - {fileID: 7527309124941446503}
-  - {fileID: 413836543818922411}
-  services: []
 --- !u!114 &5306062722041915596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2197,7 +2386,9 @@ MonoBehaviour:
     width: 244
     height: 96.79999
   typeName: SetBooleanValueNode
-  priority: 0
+  weight: 0
+  decorators: []
+  services: []
   conditionKey: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
   ValueToSet: 0
 --- !u!114 &6297984286123509971
@@ -2268,32 +2459,6 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
---- !u!114 &6779057175041700634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: 795e95d4-1f18-43ba-8b43-8e3814928982
-  m_position:
-    serializedVersion: 2
-    x: 240
-    y: 635.2
-    width: 162.40001
-    height: 109.599976
-  typeName: Sequence
-  priority: 0
-  children:
-  - {fileID: -4734503684602027960}
-  - {fileID: -6415080848553409387}
-  - {fileID: -2892594324651682940}
-  services: []
 --- !u!114 &6973215699865881392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2307,49 +2472,6 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
---- !u!114 &7249488118851278663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb2de36b0f5fdee4ab2cafd3c11232da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: f3e7c3fc-ca40-439c-a772-5a97780dca3f
-  m_position:
-    serializedVersion: 2
-    x: 808
-    y: 612
-    width: 208
-    height: 95.20001
-  typeName: ScoutForTheTree
-  priority: 0
-  preconditions:
-  - rid: 3796477471816679438
-  effects:
-  - key: IsThereAnyTreeAround
-    valueType: 0
-    comparison: 0
-    boolValue: 1
-    intValue: 50
-    floatValue: 0
-    gameObjectValue: {fileID: 0}
-    stringValue: 
-  cost: 10
-  child: {fileID: 1788124896194734960}
-  references:
-    version: 2
-    RefIds:
-    - rid: 3796477471816679438
-      type: {class: KeyComparisonPrecondition, ns: ND_BehaviorTree.GOAP, asm: ND_BehaviorTree.Runtime}
-      data:
-        keyA: {fileID: 5862101188314091657, guid: ad8089ffdcb8e84418b88819aa385784, type: 2}
-        compareType: {fileID: -1790680292319197465}
-        keyB: {fileID: -7022224974958081226}
 --- !u!114 &7413683369588975348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2403,28 +2525,6 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
---- !u!114 &7527309124941446503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_guid: d859157a-523a-4799-a54c-437f759839b0
-  m_position:
-    serializedVersion: 2
-    x: -133.6
-    y: 1140.8
-    width: 109.600006
-    height: 90.3999
-  typeName: Wait
-  priority: 0
-  duration: 1
 --- !u!114 &7539907017755960743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2478,6 +2578,30 @@ MonoBehaviour:
   m_Name: Object (local)
   m_EditorClassIdentifier: 
   keyName: 
+--- !u!114 &7873763764275198558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b76f932d1845e3e4f970c42b3f6fd1e6, type: 3}
+  m_Name: WaitNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.WaitNode
+  m_guid: 069773a0-c262-4d9c-880a-b13be80c0c36
+  m_position:
+    serializedVersion: 2
+    x: 170
+    y: 980
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  duration: 1
 --- !u!114 &7905069880951381295
 MonoBehaviour:
   m_ObjectHideFlags: 0

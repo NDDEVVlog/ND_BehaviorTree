@@ -1,0 +1,317 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using ND_BehaviorTree.Editor;
+using ND_BehaviorTree.Editor.CustomGraph;
+using ND_BehaviorTree.Editor.Graph;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace ND_BehaviorTree.Story.Editor
+{
+    /// <summary>Story action: the default node layout with its title replaced by the sentence ("Self says [Hello!]").</summary>
+    [CustomNodeView(typeof(StoryActionNode))]
+    public class StoryActionView : ND_BTNodeView
+    {
+        private StorySentenceView m_Sentence;
+
+        public StoryActionView(Node node, ViewThemeData themeData) : base(node, themeData) { }
+
+        protected override void ApplyThemeAndLayout()
+        {
+            base.ApplyThemeAndLayout();
+            ND_BTStyles.Apply(this, StoryEdit.Styles);
+            AddToClassList("story-node");
+        }
+
+        protected override void PopulateData()
+        {
+            base.PopulateData();
+            m_Sentence = new StorySentenceView(NodeData);
+            StoryEdit.ReplaceTitle(this, m_Sentence);
+            if (m_KeySlots != null) m_KeySlots.style.display = DisplayStyle.None; // keys are inline in the sentence
+        }
+
+        public override void RefreshKeyInfo()
+        {
+            base.RefreshKeyInfo();
+            m_Sentence?.Refresh();
+        }
+    }
+
+    /// <summary>Control flow (Random, Switch): a wide coloured bar with the node's sentence or title.</summary>
+    [CustomNodeView(typeof(StoryRandomNode))]
+    [CustomNodeView(typeof(StorySwitchNode))]
+    public class StoryFlowView : ND_BTNodeView
+    {
+        private StorySentenceView m_Sentence;
+        private VisualElement m_SyncWarning;
+
+        public StoryFlowView(Node node, ViewThemeData themeData) : base(node, themeData) { }
+
+        protected override void ApplyThemeAndLayout()
+        {
+            base.ApplyThemeAndLayout();
+            ND_BTStyles.Apply(this, StoryEdit.Styles);
+            AddToClassList("story-flow");
+        }
+
+        protected override void PopulateData()
+        {
+            base.PopulateData();
+            m_Sentence = new StorySentenceView(NodeData);
+            StoryEdit.ReplaceTitle(this, m_Sentence);
+            if (m_KeySlots != null) m_KeySlots.style.display = DisplayStyle.None;
+
+            if (NodeData is StorySwitchNode)
+            {
+                m_SyncWarning = new VisualElement();
+                m_SyncWarning.AddToClassList("story-sync");
+                m_SyncWarning.Add(new Label("Cases out of date"));
+                m_SyncWarning.Add(new Button(SyncCases) { text = "Sync" }.NoDrag());
+                this.Q("title")?.parent?.Add(m_SyncWarning);
+                UpdateSyncWarning();
+
+                var addCase = new Button(AddCase) { text = "+ Case", tooltip = "Add a case (and its Case node). Rename it in the 'Cases' list of the properties (double-click the Switch)." };
+                addCase.AddToClassList("story-add-case");
+                this.Q("title")?.parent?.Add(addCase.NoDrag());
+            }
+        }
+
+        private void AddCase()
+        {
+            var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
+            if (canvas == null) return;
+            StorySwitchCases.AddCase(canvas.Graph, (StorySwitchNode)NodeData);
+            canvas.RequestSave();
+            canvas.Rebuild();
+        }
+
+        public override void RefreshKeyInfo()
+        {
+            base.RefreshKeyInfo();
+            m_Sentence?.Refresh();
+            UpdateSyncWarning();
+        }
+
+        /// <summary>Cases normally follow edits automatically; a Switch changed elsewhere (bridge, script) offers a manual sync.</summary>
+        private void UpdateSyncWarning()
+        {
+            if (m_SyncWarning == null) return;
+            m_SyncWarning.style.display = StorySwitchCases.InSync((StorySwitchNode)NodeData) ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
+        private void SyncCases()
+        {
+            var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
+            if (canvas == null || !StorySwitchCases.Sync(canvas.Graph, (StorySwitchNode)NodeData)) return;
+            canvas.RequestSave();
+            canvas.Rebuild();
+        }
+    }
+
+    /// <summary>Switch case: a compact pill with the case value.</summary>
+    [CustomNodeView(typeof(StoryCaseNode))]
+    public class StoryCaseView : ND_BTNodeView
+    {
+        private Label m_Label;
+
+        public StoryCaseView(Node node, ViewThemeData themeData) : base(node, themeData) { }
+
+        protected override void ApplyThemeAndLayout()
+        {
+            base.ApplyThemeAndLayout();
+            ND_BTStyles.Apply(this, StoryEdit.Styles);
+            AddToClassList("story-case");
+        }
+
+        protected override void PopulateData()
+        {
+            base.PopulateData();
+            m_Label = new Label();
+            m_Label.AddToClassList("story-case__label");
+            StoryEdit.ReplaceTitle(this, m_Label);
+            RefreshLabel();
+            tooltip = "Generated by its Switch: rename or remove it by editing the Switch's 'Cases' list.";
+        }
+
+        public override void RefreshKeyInfo()
+        {
+            base.RefreshKeyInfo();
+            RefreshLabel();
+        }
+
+        private void RefreshLabel()
+        {
+            var caseNode = (StoryCaseNode)NodeData;
+            string text = caseNode.isDefault ? "Default" : $"Case  {caseNode.caseValue}";
+            if (m_Label.text != text) m_Label.text = text;
+            EnableInClassList("story-case--default", caseNode.isDefault);
+        }
+    }
+
+    /// <summary>
+    /// Block: its actions are drawn as rows inside the node (they get no node view of their own). Rows can be added,
+    /// reordered and removed here; double-click a row for its properties. Live debug highlights the running row.
+    /// </summary>
+    [CustomNodeView(typeof(StoryBlockNode))]
+    public class StoryBlockView : ND_BTNodeView
+    {
+        private VisualElement m_Rows;
+        private readonly List<(Node child, VisualElement row, StorySentenceView sentence)> m_RowViews = new List<(Node, VisualElement, StorySentenceView)>();
+        private string m_RowsSignature;
+
+        public StoryBlockView(Node node, ViewThemeData themeData) : base(node, themeData) { }
+
+        private StoryBlockNode Block => (StoryBlockNode)NodeData;
+
+        protected override void ApplyThemeAndLayout()
+        {
+            base.ApplyThemeAndLayout();
+            ND_BTStyles.Apply(this, StoryEdit.Styles);
+            AddToClassList("story-block");
+        }
+
+        protected override void PopulateData()
+        {
+            base.PopulateData();
+            var header = new Label("Block");
+            header.AddToClassList("story-block__header");
+            StoryEdit.ReplaceTitle(this, header);
+            if (m_KeySlots != null) m_KeySlots.style.display = DisplayStyle.None;
+
+            m_Rows = new VisualElement();
+            m_Rows.AddToClassList("story-block__rows");
+            var title = this.Q("title");
+            title?.parent?.Insert(title.parent.IndexOf(title) + 1, m_Rows);
+
+            var add = new Button(OpenAddMenu) { text = "+ Add action", tooltip = "Add an action at the bottom of the block." };
+            add.AddToClassList("story-block__add");
+            title?.parent?.Insert(title.parent.IndexOf(m_Rows) + 1, add.NoDrag());
+            RebuildRows();
+        }
+
+        public override void RefreshKeyInfo()
+        {
+            base.RefreshKeyInfo();
+            string signature = string.Join(",", Block.children.Select(c => c != null ? c.GetInstanceID() : 0));
+            if (signature != m_RowsSignature) RebuildRows();
+            else foreach (var row in m_RowViews) row.sentence?.Refresh();
+        }
+
+        private void RebuildRows()
+        {
+            m_RowsSignature = string.Join(",", Block.children.Select(c => c != null ? c.GetInstanceID() : 0));
+            m_Rows.Clear();
+            m_RowViews.Clear();
+            var children = Block.children;
+            if (children.Count == 0)
+            {
+                var empty = new Label("Empty block: add an action.");
+                empty.AddToClassList("story-block__empty");
+                m_Rows.Add(empty);
+            }
+            for (int i = 0; i < children.Count; i++)
+            {
+                var child = children[i];
+                if (child == null) continue;
+                int index = i;
+
+                var row = new VisualElement();
+                row.AddToClassList("story-row");
+                StorySentenceView sentence = null;
+                if (StorySentenceView.TemplateOf(child.GetType()) != null) row.Add(sentence = new StorySentenceView(child));
+                else row.Add(new Label(StoryEdit.Title(child)) { pickingMode = PickingMode.Ignore });
+                row.tooltip = WeightGraph.DescriptionOf(child.GetType())?.Summary;
+
+                var tools = new VisualElement();
+                tools.AddToClassList("story-row__tools");
+                tools.Add(Tool("▲", "Move up", () => Reorder(child, index - 1), index > 0));
+                tools.Add(Tool("▼", "Move down", () => Reorder(child, index + 1), index < children.Count - 1));
+                tools.Add(Tool("✕", "Remove", () => Remove(child), true));
+                row.Add(tools);
+
+                row.RegisterCallback<PointerDownEvent>(evt =>
+                {
+                    if (evt.button == 0 && evt.clickCount == 2)
+                    {
+                        NodePropertyEditorWindow.Open(child, this);
+                        evt.StopPropagation();
+                    }
+                });
+                m_Rows.Add(row);
+                m_RowViews.Add((child, row, sentence));
+            }
+        }
+
+        private static Button Tool(string text, string tip, Action action, bool enabled)
+        {
+            var button = new Button(action) { text = text, tooltip = tip };
+            button.AddToClassList("story-row__tool");
+            button.SetEnabled(enabled);
+            return button.NoDrag();
+        }
+
+        private void OpenAddMenu()
+        {
+            var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
+            if (canvas == null) return;
+            var entries = ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.GraphNode)
+                .Where(e => e.UserData is Type t && typeof(ActionNode).IsAssignableFrom(t))
+                .OrderBy(e => e.UserData is Type t && typeof(StoryActionNode).IsAssignableFrom(t) ? 0 : 1)
+                .ToList();
+            Vector2 screen = GUIUtility.GUIToScreenPoint(worldBound.center);
+            ND_BTSearchPopup.Show(screen, "Add Action", entries, data => AddAction(canvas, (Type)data));
+        }
+
+        private void AddAction(ND_BTGraphCanvas canvas, Type type)
+        {
+            using (new GraphUndoScope(canvas.TreeData, "Add Block Action"))
+            {
+                var node = canvas.Graph.CreateNode(type, NodeData.position.position + new Vector2(0f, 60f + 40f * Block.children.Count));
+                if (node != null) canvas.Graph.Connect(NodeData, node, allowOwned: true);
+            }
+            canvas.RequestSave();
+            canvas.Rebuild();
+        }
+
+        private void Reorder(Node child, int newIndex)
+        {
+            var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
+            if (canvas == null || !canvas.Graph.MoveChild(Block, child, newIndex)) return;
+            canvas.RequestSave();
+            canvas.Rebuild();
+        }
+
+        private void Remove(Node child)
+        {
+            var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
+            if (canvas == null || canvas.Graph.DeleteNodes(new[] { child }) == 0) return;
+            canvas.RequestSave();
+            canvas.Rebuild();
+        }
+
+        public override void UpdateLiveState(Func<string, Node> lookup, int frame)
+        {
+            base.UpdateLiveState(lookup, frame);
+            foreach (var (child, row, _) in m_RowViews)
+            {
+                var state = LiveDebugUtility.GetState(lookup(child.id), frame);
+                row.EnableInClassList("running", state == LiveState.Running);
+                row.EnableInClassList("success", state == LiveState.Succeeded);
+                row.EnableInClassList("failure", state == LiveState.Failed);
+            }
+        }
+
+        public override void ClearState()
+        {
+            base.ClearState();
+            foreach (var (_, row, _) in m_RowViews)
+            {
+                row.RemoveFromClassList("running");
+                row.RemoveFromClassList("success");
+                row.RemoveFromClassList("failure");
+            }
+        }
+    }
+}

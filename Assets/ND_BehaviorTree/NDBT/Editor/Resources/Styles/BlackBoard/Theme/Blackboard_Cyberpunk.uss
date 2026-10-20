@@ -1,0 +1,23 @@
+/* Cyberpunk theme — Blackboard panel (overrides ND_Blackboard.uss; applied by the theme switcher). */
+.nd-bb-panel { background-color: #0D0D17; border-color: #2A2A4A; }
+.nd-bb-header { background-color: #151528; border-bottom-color: #2A2A4A; }
+.nd-bb-title { color: #F0E6FF; }
+.nd-bb-subtitle { color: #8C86B3; }
+.nd-bb-count { background-color: #1F1F3A; color: #C9C3E8; }
+.nd-bb-iconbtn { color: #C9C3E8; }
+.nd-bb-iconbtn:hover { background-color: #22224A; color: #F0E6FF; }
+.nd-bb-iconbtn--accent { background-color: #FF2BD6; color: #FFFFFF; }
+.nd-bb-iconbtn--accent:hover { background-color: #FF5CE0; }
+.nd-bb-search > #unity-text-input { background-color: #08080F; border-color: #2A2A4A; color: #F0E6FF; }
+.nd-bb-key { background-color: #14142A; }
+.nd-bb-key:hover { background-color: #1B1B38; border-color: #00F0FF; }
+.nd-bb-grip { color: #3E3A66; }
+.nd-bb-key:hover .nd-bb-grip { color: #00F0FF; }
+.nd-bb-name > #unity-text-input { color: #F0E6FF; }
+.nd-bb-name:focus > #unity-text-input { background-color: #08080F; border-color: #FF2BD6; }
+.nd-bb-key:hover .nd-bb-delete { color: #8C86B3; }
+.nd-bb-value-note { color: #6E6996; }
+.nd-bb-value-button { background-color: #1F1F3A; color: #C9C3E8; }
+.nd-bb-value-button:hover { background-color: #22224A; }
+.nd-bb-empty__text { color: #8C86B3; }
+.nd-bb-resize:hover { background-color: rgba(0, 240, 255, 0.45); }

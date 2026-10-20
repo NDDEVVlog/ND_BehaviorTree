@@ -82,6 +82,7 @@ namespace ND_BehaviorTree
             // Reset the main tree (cascades through children, attached decorators and services) before running again.
             if (treeStatus != Node.Status.Running)
             {
+                if (!rootNode.repeat) return treeStatus; // run once: stay on the final status
                 MainEntry.Reset();
             }
 
@@ -336,7 +337,7 @@ namespace ND_BehaviorTree
                 }
 
                 // Reconnect children generically through the node's own child API, in list order.
-                // (Composites append; single-child nodes such as Root, Event, legacy decorators and GOAP actions replace.)
+                // (Composites append; single-child nodes such as Root, Event and legacy decorators replace.)
                 foreach (var child in originalNode.GetChildren())
                 {
                     var entry = child != null ? Entry(child) : null; // null: a reroute that leads nowhere

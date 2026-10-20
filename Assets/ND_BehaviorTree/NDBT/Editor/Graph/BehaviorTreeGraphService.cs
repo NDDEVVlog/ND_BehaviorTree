@@ -55,13 +55,20 @@ namespace ND_BehaviorTree.Editor.Graph
             return null;
         }
 
-        public bool CanConnect(Node parent, Node child, out string reason)
+        public bool CanConnect(Node parent, Node child, out string reason) => CanConnect(parent, child, out reason, allowOwned: false);
+
+        /// <param name="allowOwned">
+        /// True for tools that manage an <see cref="IOwnedChildren"/> composite's children (Switch case generation, Block
+        /// rows, AI import). Users cannot connect children to such composites by hand.
+        /// </param>
+        public bool CanConnect(Node parent, Node child, out string reason, bool allowOwned)
         {
             reason = null;
             if (parent == null || child == null) reason = "parent or child is null";
             else if (parent == child) reason = "a node cannot connect to itself";
             else if (!Tree.nodes.Contains(parent) || !Tree.nodes.Contains(child)) reason = "both nodes must belong to this tree";
-            else if (!HasOutputPort(parent)) reason = $"'{parent.name}' has no output port";
+            else if (parent is IOwnedChildren && !allowOwned) reason = $"'{parent.name}' manages its own children (add them from the node itself)";
+            else if (!HasOutputPort(parent) && !(allowOwned && parent is IOwnedChildren)) reason = $"'{parent.name}' has no output port";
             else if (!HasInputPort(child)) reason = $"'{child.name}' has no input port";
             else if (parent.GetChildren().Contains(child)) reason = "already connected";
             else if (GetParent(child) != null) reason = $"'{child.name}' already has a parent";
@@ -101,9 +108,12 @@ namespace ND_BehaviorTree.Editor.Graph
             }
         }
 
-        public bool Connect(Node parent, Node child)
+        public bool Connect(Node parent, Node child) => Connect(parent, child, allowOwned: false);
+
+        /// <summary>Connects; <paramref name="allowOwned"/> lets owner tools add children to an <see cref="IOwnedChildren"/> composite.</summary>
+        public bool Connect(Node parent, Node child, bool allowOwned)
         {
-            if (!CanConnect(parent, child, out string reason))
+            if (!CanConnect(parent, child, out string reason, allowOwned))
             {
                 Debug.LogWarning($"{LogTag} {nameof(Connect)} rejected: parent={parent?.name}, child={child?.name}, reason={reason}");
                 return false;
@@ -112,7 +122,7 @@ namespace ND_BehaviorTree.Editor.Graph
             using (new GraphUndoScope(Tree, "Connect Nodes"))
             {
                 parent.AddChild(child);
-                if (parent is CompositeNode composite) ExecutionOrder.SortByPosition(composite.children);
+                if (parent is CompositeNode composite) ExecutionOrder.SortChildren(composite);
                 EditorUtility.SetDirty(parent);
             }
             return true;
@@ -127,6 +137,12 @@ namespace ND_BehaviorTree.Editor.Graph
             if (parent == null || child == null || !parent.GetChildren().Contains(child))
             {
                 Debug.LogWarning($"{LogTag} {nameof(InsertReroute)} rejected: parent={parent?.name}, child={child?.name} are not connected.");
+                return null;
+            }
+            if (parent is IOwnedChildren)
+            {
+                // The owner manages this list (e.g. a Switch keeps exactly its Case nodes): a reroute in it would break that.
+                Debug.LogWarning($"{LogTag} {nameof(InsertReroute)} rejected: '{parent.name}' ({parent.GetType().Name}) manages its children; reroutes cannot be inserted under it.");
                 return null;
             }
 
@@ -190,7 +206,7 @@ namespace ND_BehaviorTree.Editor.Graph
                     kvp.Key.SetPosition(rect);
                     UpdateGroupMembership(kvp.Key);
                 }
-                foreach (var parent in parents) ExecutionOrder.SortByPosition(parent.children);
+                foreach (var parent in parents) ExecutionOrder.SortChildren(parent);
                 foreach (var obj in touched) EditorUtility.SetDirty(obj);
             }
         }
@@ -287,7 +303,7 @@ namespace ND_BehaviorTree.Editor.Graph
                     rect.position += delta;
                     node.SetPosition(rect);
                 }
-                foreach (var parent in parents) ExecutionOrder.SortByPosition(parent.children);
+                foreach (var parent in parents) ExecutionOrder.SortChildren(parent);
                 foreach (var obj in touched) EditorUtility.SetDirty(obj);
             }
             return true;
@@ -494,12 +510,31 @@ namespace ND_BehaviorTree.Editor.Graph
 
         #region Mutations (structure, attachments, paste)
 
+        /// <summary>Moves <paramref name="child"/> to <paramref name="newIndex"/> in its composite's children (Block row order, Switch cases).</summary>
+        public bool MoveChild(CompositeNode parent, Node child, int newIndex)
+        {
+            int index = parent != null ? parent.children.IndexOf(child) : -1;
+            if (index < 0 || newIndex < 0 || newIndex >= parent.children.Count)
+            {
+                Debug.LogWarning($"{LogTag} {nameof(MoveChild)} rejected: parent={parent?.name}, child={child?.name}, index={index}, newIndex={newIndex}");
+                return false;
+            }
+            if (index == newIndex) return true;
+            using (new GraphUndoScope(Tree, "Reorder Children"))
+            {
+                parent.children.RemoveAt(index);
+                parent.children.Insert(newIndex, child);
+                EditorUtility.SetDirty(parent);
+            }
+            return true;
+        }
+
         public bool SortChildrenByPosition(CompositeNode composite)
         {
             if (composite == null) return false;
             using (new GraphUndoScope(Tree, "Sort Children Left-to-Right"))
             {
-                bool changed = ExecutionOrder.SortByPosition(composite.children);
+                bool changed = ExecutionOrder.SortChildren(composite);
                 if (changed) EditorUtility.SetDirty(composite);
                 return changed;
             }
@@ -523,6 +558,11 @@ namespace ND_BehaviorTree.Editor.Graph
                 }
                 targets.Add(node);
             }
+            // Children owned by a deleted node (Switch cases, Block rows) go with it.
+            for (int i = 0; i < targets.Count; i++)
+                if (targets[i] is IOwnedChildren)
+                    foreach (var owned in targets[i].GetChildren())
+                        if (owned != null && !targets.Contains(owned) && Tree.nodes.Contains(owned)) targets.Add(owned);
             if (targets.Count == 0) return 0;
 
             var targetSet = new HashSet<Node>(targets);
@@ -592,7 +632,6 @@ namespace ND_BehaviorTree.Editor.Graph
             else if (owner is RerouteNode) reason = "a reroute is skipped at runtime; attach decorators to the node it leads to";
             else if (owner is DecoratorNode) reason = "decorators cannot be attached to a standalone decorator";
             else if (owner is ServiceNode) reason = "services cannot have decorators";
-            else if (owner is GOAP.GOAPActionNode) reason = "GOAP actions are picked by the planner; decorators on them are not supported";
             return reason == null;
         }
 
@@ -756,7 +795,7 @@ namespace ND_BehaviorTree.Editor.Graph
                 if (copy is CompositeNode composite)
                 {
                     composite.children.RemoveAll(c => c == null);
-                    ExecutionOrder.SortByPosition(composite.children);
+                    ExecutionOrder.SortChildren(composite);
                 }
             }
 

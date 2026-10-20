@@ -58,6 +58,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             if (activeConfig == null || activeConfig.mappings == null)
             {
                 Debug.LogWarning("[ND_BTViewFactory] ND_BehaviorTreeSetting.activeConfig is not assigned. Nodes use the default view and theme.");
+                entry.ViewType = FindAttributeView(nodeType) ?? entry.ViewType;
                 return entry;
             }
 
@@ -68,6 +69,12 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 {
                     if (Matches(mapping, currentType)) { winningMapping = mapping; break; }
                 }
+            }
+
+            if (winningMapping == null || winningMapping.customViewScript == null)
+            {
+                var attributeView = FindAttributeView(nodeType);
+                if (attributeView != null) entry.ViewType = attributeView;
             }
 
             if (winningMapping == null) return entry;
@@ -84,6 +91,22 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             entry.ThemeData.CustomStyle = activeConfig.GetStyleSheet(winningMapping.styleSheetKey);
             entry.ThemeData.CustomUXML = activeConfig.GetUXML(winningMapping.uxmlKey);
             return entry;
+        }
+
+        /// <summary>The [CustomNodeView] view registered for the closest type in <paramref name="nodeType"/>'s hierarchy.</summary>
+        private static Type FindAttributeView(Type nodeType)
+        {
+            var views = UnityEditor.TypeCache.GetTypesWithAttribute<CustomNodeViewAttribute>();
+            for (var current = nodeType; current != null && current != typeof(Node); current = current.BaseType)
+            {
+                foreach (var view in views)
+                {
+                    if (view.IsAbstract || !typeof(ND_BTNodeView).IsAssignableFrom(view)) continue;
+                    foreach (var attribute in (CustomNodeViewAttribute[])view.GetCustomAttributes(typeof(CustomNodeViewAttribute), false))
+                        if (attribute.NodeType == current) return view;
+                }
+            }
+            return null;
         }
 
         private static bool Matches(NodeEditorMapping mapping, Type type)

@@ -124,9 +124,23 @@ namespace ND_BehaviorTree.Editor
             EditorGUILayout.PropertyField(_activeConfigProp);
 
             EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Theme", EditorStyles.boldLabel);
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.PrefixLabel(new GUIContent("Active Theme", "Switch the whole look (nodes, canvas, edges, ports) in one click. Values below can be tweaked afterwards."));
+                if (EditorGUILayout.DropdownButton(new GUIContent(Theme.ND_BTThemeCatalog.ActiveName ?? "Custom"), FocusType.Keyboard))
+                {
+                    var menu = new GenericMenu();
+                    Theme.ND_BTThemeCatalog.FillMenu(menu);
+                    menu.ShowAsContext();
+                }
+            }
+
+            EditorGUILayout.Space();
             EditorGUILayout.LabelField("Global UI Templates", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_defaultNodeUXMLProp);
             EditorGUILayout.PropertyField(_defaultNodeStyleProp);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("attachmentStyle"), new GUIContent("Decorator / Service Style", "Stylesheet for decorator / service cards and key slots, applied on top of ND_NodeAttachments.uss. Set by the theme."));
             EditorGUILayout.PropertyField(_graphViewStyleProp);
             
             EditorGUILayout.Space();

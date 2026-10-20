@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using ND_BehaviorTree.GOAP;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -16,23 +15,6 @@ namespace ND_BehaviorTree.Editor.Tests
     {
         public int exits;
         protected override void OnExit() => exits++;
-    }
-
-    /// <summary>GOAP test precondition: met when worldState[key] is the bool 'expected'. Counts evaluations.</summary>
-    [Serializable]
-    public class FlagPrecondition : IGoapPrecondition
-    {
-        public string key;
-        public bool expected = true;
-        [NonSerialized] public int evaluations;
-
-        public bool IsMet(GameObject agent, Blackboard blackboard, Dictionary<string, object> worldState)
-        {
-            evaluations++;
-            return worldState.TryGetValue(key, out var v) && v is bool b && b == expected;
-        }
-
-        public string GetDescription() => $"{key} == {expected}";
     }
 
     /// <summary>Regression tests for the runtime node fixes (see the fix list in the report).</summary>
@@ -485,80 +467,6 @@ namespace ND_BehaviorTree.Editor.Tests
 
             var clone = CloneTracked();
             for (int i = 0; i < 50; i++) Assert.AreEqual(Node.Status.Success, clone.Update());
-        }
-
-        // ---------------------------------------------------------------- #10 GOAP
-
-        private GOAPActionNode MakeAction(string effectKey, bool effectValue)
-        {
-            var action = Track(ScriptableObject.CreateInstance<GOAPActionNode>());
-            action.preconditions = new List<IGoapPrecondition>();
-            action.effects = new List<GOAPState> { new GOAPState { key = effectKey, valueType = GOAPValueType.Bool, boolValue = effectValue } };
-            return action;
-        }
-
-        [Test]
-        public void Planner_GoalAlreadySatisfied_ReturnsEmptyPlan()
-        {
-            var goal = new List<IGoapPrecondition> { new FlagPrecondition { key = "x", expected = true } };
-            var plan = new Planner().FindPlan(null, null, new Dictionary<string, object> { { "x", true } }, goal, new List<GOAPActionNode>());
-            Assert.IsNotNull(plan);
-            Assert.AreEqual(0, plan.Count);
-        }
-
-        [Test]
-        public void Planner_FindsPlan()
-        {
-            var setX = MakeAction("x", true);
-            var goal = new List<IGoapPrecondition> { new FlagPrecondition { key = "x", expected = true } };
-            var plan = new Planner().FindPlan(null, null, new Dictionary<string, object> { { "x", false } }, goal, new List<GOAPActionNode> { setX });
-            CollectionAssert.AreEqual(new[] { setX }, plan);
-        }
-
-        [Test]
-        public void Planner_UnreachableGoal_TerminatesWithoutExhaustingIterations()
-        {
-            var actions = new List<GOAPActionNode> { MakeAction("x", true), MakeAction("x", false) };
-            var unreachable = new FlagPrecondition { key = "y", expected = true };
-
-            LogAssert.Expect(LogType.Warning, new Regex("No valid plan found"));
-            var plan = new Planner().FindPlan(null, null, new Dictionary<string, object> { { "x", false } },
-                new List<IGoapPrecondition> { unreachable }, actions);
-
-            Assert.IsNull(plan);
-            Assert.Less(unreachable.evaluations, 20, "visited states must not be re-expanded");
-        }
-
-        [Test]
-        public void GOAPPlannerNode_GoalAlreadySatisfied_Succeeds()
-        {
-            var x = MakeKey<BoolKey>("x"); x.SetValue(true);
-            MakeBlackboard(x);
-            var planner = f.Create<GOAPPlannerNode>(0);
-            planner.goal = new List<IGoapPrecondition> { new FlagPrecondition { key = "x", expected = true } };
-            f.Graph.Connect(f.Root, planner);
-
-            Assert.AreEqual(Node.Status.Success, CloneTracked().Update());
-        }
-
-        [Test]
-        public void GOAPActionNode_Clone_DoesNotCloneChild_TreeCloneRewiresIt()
-        {
-            var action = Track(ScriptableObject.CreateInstance<GOAPActionNode>());
-            action.child = Track(ScriptableObject.CreateInstance<FixedStatusNode>());
-            var clone = Track((GOAPActionNode)action.Clone());
-            Assert.IsNull(clone.child);
-
-            var planner = f.Create<GOAPPlannerNode>(0);
-            var graphAction = f.Create<GOAPActionNode>(100);
-            var leaf = f.Create<FixedStatusNode>(100, 200);
-            Assert.IsTrue(f.Graph.Connect(f.Root, planner));
-            Assert.IsTrue(f.Graph.Connect(planner, graphAction));
-            Assert.IsTrue(f.Graph.Connect(graphAction, leaf));
-
-            var tree = CloneTracked();
-            var rtAction = Runtime<GOAPActionNode>(tree, graphAction);
-            Assert.AreSame(Runtime<FixedStatusNode>(tree, leaf), rtAction.child);
         }
 
         // ---------------------------------------------------------------- #11 Runner cleanup

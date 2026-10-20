@@ -46,6 +46,12 @@ namespace ND_BehaviorTree.Editor.Bridge
         /// <summary>The bridge serves requests only when access is enabled and unlocked in this session.</summary>
         public static bool IsActive => FeatureEnabled && Level != AiAccessLevel.Off && IsUnlocked;
         public static bool CanWrite => IsActive && Level == AiAccessLevel.ReadWrite;
+
+        /// <summary>
+        /// AI tools in the editor UI (AI menu, Copy for AI, import) are visible only when the feature is enabled AND
+        /// unlocked with the owner password in this session. They work without the bridge (copy/paste).
+        /// </summary>
+        public static bool UiUnlocked => FeatureEnabled && IsUnlocked;
         public static int Port => Mathf.Clamp(Settings.aiBridgePort, 1024, 65535);
 
         /// <summary>Sets the owner password. If one exists, <paramref name="currentPassword"/> must match it.</summary>

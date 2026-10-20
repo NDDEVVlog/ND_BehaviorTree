@@ -1,0 +1,87 @@
+/* GOAP plugin: summary lines under the node title (GoapViews.cs). */
+.goap-summary {
+    padding: 0 10px 6px 10px;
+}
+
+.goap-summary > Label {
+    font-size: 11px;
+    color: #A8B0BD;
+    white-space: normal;
+    max-width: 320px;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---- GOAP action panel: NEEDS / DOES / COST ---- */
+.goap-panel {
+    padding: 2px 8px 8px 8px;
+    min-width: 200px;
+}
+
+.goap-section {
+    font-size: 9px;
+    -unity-font-style: bold;
+    color: #7F8896;
+    margin: 4px 0 1px 0;
+    padding: 0;
+    letter-spacing: 1px;
+}
+
+.goap-row {
+    flex-direction: row;
+    align-items: center;
+    border-radius: 3px;
+    border-left-width: 3px;
+    padding: 1px 4px;
+    margin: 1px 0;
+    background-color: rgba(0, 0, 0, 0.18);
+}
+
+.goap-row > Label {
+    font-size: 11px;
+    color: #DDE2EA;
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+    max-width: 300px;
+}
+
+.goap-row__mark {
+    width: 14px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+}
+
+.goap-row--need { border-left-color: #5B9BD5; }
+.goap-row--effect { border-left-color: #6CC070; }
+.goap-row--none { border-left-color: #555B66; }
+.goap-row--none > Label { color: #8A919C; -unity-font-style: italic; }
+.goap-row--error { border-left-color: #E05252; }
+.goap-row--error > Label { color: #E8A09E; }
+
+/* Live Debug: precondition checked against the agent's runtime blackboard */
+.goap-row--met { border-left-color: #4CAF50; background-color: rgba(76, 175, 80, 0.18); }
+.goap-row--met > .goap-row__mark { color: #6FD474; }
+.goap-row--unmet { border-left-color: #E05252; background-color: rgba(224, 82, 82, 0.18); }
+.goap-row--unmet > .goap-row__mark { color: #FF7B7B; }
+
+.goap-cost {
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: #F5C842;
+    margin-top: 4px;
+    padding: 0;
+}
+
+.goap-live {
+    font-size: 11px;
+    color: #F5C842;
+    -unity-font-style: bold;
+    white-space: normal;
+    max-width: 320px;
+    padding: 0 10px 6px 10px;
+}
+
+.goap-live--failed {
+    color: #E05252;
+}

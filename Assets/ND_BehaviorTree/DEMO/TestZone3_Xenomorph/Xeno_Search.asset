@@ -20,7 +20,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   interval: 1000
@@ -87,7 +87,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Sweep around SearchCenter
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   agentKey: {fileID: 2898636267766363130, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
@@ -116,7 +116,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: Check a locker (learned chance)
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   bodyKey: {fileID: 7717698017717060514, guid: dee9f23b17537c34d909f1ba3b132bbe, type: 2}
@@ -146,7 +146,7 @@ MonoBehaviour:
     width: 150
     height: 100
   typeName: 
-  priority: 0
+  weight: 0
   decorators: []
   services: []
   child: {fileID: 8911887565647358058}
@@ -170,7 +170,7 @@ MonoBehaviour:
     width: 0
     height: 0
   typeName: 'Search: sweep, then a locker'
-  priority: 0
+  weight: 0
   decorators: []
   services:
   - {fileID: -7028941414629931683}

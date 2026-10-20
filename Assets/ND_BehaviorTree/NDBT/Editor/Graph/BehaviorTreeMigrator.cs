@@ -13,7 +13,7 @@ namespace ND_BehaviorTree.Editor.Graph
     /// v0 → v1: standalone decorator nodes (parent → D1 → D2 → node) become decorators attached to the node
     /// they wrap (node.decorators = [D1, D2]). The parent keeps the node at the same list index, so execution
     /// order and runtime behaviour are unchanged: BehaviorTree.Clone() rebuilds the same chain.
-    /// Chains that cannot be attached (no target node, ends in a GOAP action, broken graph) are left
+    /// Chains that cannot be attached (no target node, broken graph) are left
     /// standalone and reported; nothing is deleted.
     ///
     /// Before writing, the original asset file is copied to &lt;project&gt;/NDBT_MigrationBackups/ (outside Assets).
@@ -128,7 +128,6 @@ namespace ND_BehaviorTree.Editor.Graph
                 if (target == null) skipReason = "the chain has no child node to attach to";
                 else if (target is DecoratorNode) skipReason = "the chain loops back on itself";
                 else if (target is RootNode) skipReason = "the chain wraps a RootNode";
-                else if (target is GOAP.GOAPActionNode) skipReason = "decorators on GOAP actions are not supported";
                 else if (!tree.nodes.Contains(target)) skipReason = $"target '{target.name}' is not in this tree";
                 else if (parentCount.TryGetValue(target, out int targetParents) && targetParents > 1) skipReason = $"target '{target.name}' has {targetParents} parents";
                 else if (chain.Skip(1).Any(d => parentCount.TryGetValue(d, out int n) && n > 1)) skipReason = "a decorator inside the chain has several parents";

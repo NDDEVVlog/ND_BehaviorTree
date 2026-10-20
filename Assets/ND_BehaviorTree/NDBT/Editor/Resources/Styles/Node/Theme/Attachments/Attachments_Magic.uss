@@ -1,0 +1,26 @@
+/* Magic theme — decorator / service cards and key slots (overrides ND_NodeAttachments.uss). */
+.nd-section--decorators { border-bottom-color: rgba(180, 140, 255, 0.25); }
+.nd-section--services { border-top-color: rgba(180, 140, 255, 0.25); }
+.nd-attachment--divider { border-top-color: rgba(180, 140, 255, 0.25); }
+
+.nd-attachment--decorator { background-color: #2C2340; border-left-color: #B48CFF; }
+.nd-attachment--decorator:hover { background-color: #362B4E; }
+.nd-attachment--decorator .nd-attachment__glyph { color: #D2B8FF; }
+
+.nd-attachment--service { background-color: #1E2A3A; border-left-color: #FFD166; }
+.nd-attachment--service:hover { background-color: #253447; }
+.nd-attachment--service .nd-attachment__glyph { color: #FFE29A; }
+.nd-attachment--service .nd-progress__fill { background-color: #FFD166; }
+
+.nd-attachment__title { color: #F3EAFF; }
+.nd-attachment__summary { color: #B9A9D6; }
+
+.nd-slot__label { color: #9C8BBE; }
+.nd-slot__chip { background-color: #1A1423; border-color: #3D3058; }
+.nd-slot__chip:hover { background-color: #241C33; border-color: #B48CFF; }
+.nd-slot__text { color: #F3EAFF; }
+
+/* Live Debug states must still win over the theme colours above. */
+.nd-attachment--running { border-left-color: #F5B83D; background-color: #3A3422; }
+.nd-attachment--done    { border-left-color: #4CC38A; background-color: #20362B; }
+.nd-attachment--failed  { border-left-color: #E5534B; background-color: #3B2424; }

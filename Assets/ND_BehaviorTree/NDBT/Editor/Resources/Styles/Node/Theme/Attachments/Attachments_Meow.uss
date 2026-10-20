@@ -1,0 +1,26 @@
+/* Meow theme — decorator / service cards and key slots (overrides ND_NodeAttachments.uss). */
+.nd-section--decorators { border-bottom-color: rgba(247, 168, 196, 0.22); }
+.nd-section--services { border-top-color: rgba(247, 168, 196, 0.22); }
+.nd-attachment--divider { border-top-color: rgba(247, 168, 196, 0.22); }
+
+.nd-attachment--decorator { background-color: #3A2635; border-left-color: #F7A8C4; }
+.nd-attachment--decorator:hover { background-color: #452D3F; }
+.nd-attachment--decorator .nd-attachment__glyph { color: #FFC2D6; }
+
+.nd-attachment--service { background-color: #2D2A3A; border-left-color: #FFD39A; }
+.nd-attachment--service:hover { background-color: #363245; }
+.nd-attachment--service .nd-attachment__glyph { color: #FFE2B8; }
+.nd-attachment--service .nd-progress__fill { background-color: #FFD39A; }
+
+.nd-attachment__title { color: #FFE3EC; }
+.nd-attachment__summary { color: #CDB4C2; }
+
+.nd-slot__label { color: #B49DB0; }
+.nd-slot__chip { background-color: #241F2B; border-color: #4A3F55; }
+.nd-slot__chip:hover { background-color: #2C2634; border-color: #F7A8C4; }
+.nd-slot__text { color: #FFE3EC; }
+
+/* Live Debug states must still win over the theme colours above. */
+.nd-attachment--running { border-left-color: #F5B83D; background-color: #3A3422; }
+.nd-attachment--done    { border-left-color: #4CC38A; background-color: #20362B; }
+.nd-attachment--failed  { border-left-color: #E5534B; background-color: #3B2424; }

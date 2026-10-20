@@ -1,0 +1,304 @@
+/*
+================================================================================
+=== STORY NODES (Unity Behavior style) ===
+Added on top of the active node theme by the Story views (StoryViews.cs).
+Selectors start with the view class (.story-node / .story-flow / ...) so they win over theme stylesheets.
+================================================================================
+*/
+
+/* === Shared card === */
+.story-node > .node-border,
+.story-block > .node-border,
+.story-case > .node-border,
+.story-flow > .node-border {
+    background-color: #3A3A3A;
+    border-color: #4A4A4A;
+    border-radius: 8px;
+    min-width: 120px;
+}
+
+.story-node .main-container,
+.story-block .main-container,
+.story-case .main-container,
+.story-flow .main-container {
+    background-color: transparent;
+}
+
+.story-node .title,
+.story-flow .title,
+.story-case .title {
+    padding: 6px 10px;
+}
+
+/* === Sentence: words + pills === */
+.story-sentence {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.story-word {
+    color: #E6E6E6;
+    font-size: 13px;
+    margin: 1px 3px 1px 0;
+    padding: 0;
+}
+
+.story-pill {
+    flex-direction: row;
+    align-items: center;
+    background-color: #2A2A2A;
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: #555555;
+    margin: 1px 4px 1px 0;
+    padding: 0 2px 0 4px;
+    min-height: 18px;
+}
+
+.story-pill > Label {
+    color: #FFFFFF;
+    font-size: 12px;
+    padding: 0;
+    margin: 0 2px 0 0;
+}
+
+.story-pill--key > Label {
+    -unity-font-style: bold;
+}
+
+.story-pill--empty {
+    border-color: #C0504D;
+}
+
+.story-pill--empty > Label {
+    color: #E8A09E;
+    -unity-font-style: italic;
+}
+
+/* Inline editors: borderless, sized to their text */
+.story-value {
+    margin: 0;
+    padding: 0;
+    min-width: 24px;
+}
+
+.story-value > .unity-base-field__label {
+    display: none;
+}
+
+.story-value #unity-text-input,
+.story-value .unity-base-field__input {
+    background-color: transparent;
+    border-width: 0;
+    color: #FFFFFF;
+    font-size: 12px;
+    padding: 0 2px;
+    margin: 0;
+}
+
+.story-link {
+    width: 16px;
+    height: 16px;
+    margin: 0 0 0 2px;
+    padding: 0;
+    font-size: 10px;
+    color: #9A9A9A;
+    background-color: transparent;
+    border-width: 0;
+    border-radius: 3px;
+    opacity: 0;
+}
+
+.story-pill:hover > .story-link,
+.story-pill--empty > .story-link {
+    opacity: 1;
+}
+
+.story-link:hover {
+    background-color: #505050;
+    color: #FFFFFF;
+}
+
+/* === Control flow (Random / Switch): purple bar === */
+.story-flow > .node-border {
+    background-color: #8E44EC;
+    border-color: #A66CF0;
+    min-width: 260px;
+}
+
+.story-flow .story-word {
+    -unity-font-style: bold;
+    color: #FFFFFF;
+}
+
+.story-flow .story-pill {
+    background-color: #6F2FC4;
+    border-color: #B88AF3;
+}
+
+.story-sync {
+    flex-direction: row;
+    align-items: center;
+    margin-left: 8px;
+}
+
+.story-sync > Label {
+    color: #FFE08A;
+    font-size: 11px;
+}
+
+.story-sync > Button {
+    font-size: 11px;
+    margin: 0 0 0 4px;
+    padding: 0 6px;
+}
+
+.story-add-case {
+    margin: 0 8px 6px 8px;
+    font-size: 11px;
+    color: #FFFFFF;
+    background-color: #6F2FC4;
+    border-width: 1px;
+    border-color: #B88AF3;
+    border-radius: 4px;
+}
+
+.story-add-case:hover {
+    background-color: #7E3FD6;
+}
+
+/* === Case: compact pill under a Switch === */
+.story-case > .node-border {
+    background-color: #4B3570;
+    border-color: #8E44EC;
+    border-radius: 12px;
+    min-width: 100px;
+}
+
+.story-case--default > .node-border {
+    background-color: #3A3A3A;
+    border-color: #6E6E6E;
+}
+
+.story-case__label {
+    color: #FFFFFF;
+    font-size: 12px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+}
+
+/* === Block: stacked action rows === */
+.story-block > .node-border {
+    min-width: 240px;
+}
+
+.story-block .title {
+    padding: 4px 10px 2px 10px;
+}
+
+.story-block__header {
+    color: #9A9A9A;
+    font-size: 10px;
+    -unity-font-style: bold;
+}
+
+.story-block__rows {
+    padding: 0 6px;
+}
+
+.story-block__empty {
+    color: #8A8A8A;
+    font-size: 11px;
+    -unity-font-style: italic;
+    padding: 4px;
+}
+
+.story-row {
+    flex-direction: row;
+    align-items: center;
+    background-color: #2F2F2F;
+    border-radius: 4px;
+    border-left-width: 3px;
+    border-color: #2F2F2F;
+    margin: 2px 0;
+    padding: 4px 4px 4px 6px;
+}
+
+.story-row:hover {
+    background-color: #363636;
+}
+
+.story-row > Label {
+    color: #E6E6E6;
+    font-size: 13px;
+    flex-grow: 1;
+}
+
+.story-row.running { border-left-color: #F5C842; }
+.story-row.success { border-left-color: #4CAF50; }
+.story-row.failure { border-left-color: #E05252; }
+
+.story-row__tools {
+    flex-direction: row;
+    margin-left: auto;
+    opacity: 0;
+}
+
+.story-row:hover > .story-row__tools {
+    opacity: 1;
+}
+
+.story-row__tool {
+    width: 18px;
+    height: 18px;
+    margin: 0 0 0 1px;
+    padding: 0;
+    font-size: 10px;
+    background-color: transparent;
+    border-width: 0;
+    color: #B0B0B0;
+}
+
+.story-row__tool:hover {
+    background-color: #505050;
+    color: #FFFFFF;
+}
+
+.story-block__add {
+    margin: 4px 6px 6px 6px;
+    font-size: 11px;
+    color: #B0B0B0;
+    background-color: transparent;
+    border-width: 1px;
+    border-color: #4A4A4A;
+    border-radius: 4px;
+}
+
+.story-block__add:hover {
+    color: #FFFFFF;
+    border-color: #8A8A8A;
+}
+
+/* === Live states (theme files may override .running etc.; re-declare for story cards) === */
+.story-node.running > .node-border,
+.story-block.running > .node-border,
+.story-case.running > .node-border,
+.story-flow.running > .node-border { border-color: #F5C842; }
+
+.story-node.success > .node-border,
+.story-block.success > .node-border,
+.story-case.success > .node-border,
+.story-flow.success > .node-border { border-color: #4CAF50; }
+
+.story-node.failure > .node-border,
+.story-block.failure > .node-border,
+.story-case.failure > .node-border,
+.story-flow.failure > .node-border { border-color: #E05252; }
+
+.story-node.selected > .node-border,
+.story-block.selected > .node-border,
+.story-case.selected > .node-border,
+.story-flow.selected > .node-border { border-color: #4DA3FF; }

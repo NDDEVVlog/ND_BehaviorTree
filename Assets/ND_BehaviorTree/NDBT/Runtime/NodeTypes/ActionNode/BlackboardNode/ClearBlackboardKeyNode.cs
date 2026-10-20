@@ -12,7 +12,7 @@ using ND_BehaviorTree;
 namespace ND_BehaviorTree
 {
     [NodeDescription("Resets a blackboard key to its default (null / 0 / false).", "Fails if the key is not on the runtime blackboard.")]
-    [NodeInfo("Clear Blackboard Key", "Action/Blackboard/ClearKey", true, false)]
+    [NodeInfo("Clear Blackboard Key", "Action/Blackboard/ClearKey", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/ClearKey.png")]
     public class ClearBlackboardKeyNode : ActionNode
     {
         [Tooltip("The Blackboard key to clear (reference types are set to null, value types to their default).")]

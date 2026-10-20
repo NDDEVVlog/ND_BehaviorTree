@@ -19,6 +19,9 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         public static StyleSheet Reroute => Load("ND_Reroute");
         public static StyleSheet LiveBlackboard => Load("ND_LiveBlackboard");
 
+        /// <summary>A stylesheet found by file name (without .uss) anywhere in the project; null (logged once) if missing.</summary>
+        public static StyleSheet Find(string fileName) => Load(fileName);
+
         public static void Apply(VisualElement element, StyleSheet sheet)
         {
             if (sheet != null && !element.styleSheets.Contains(sheet)) element.styleSheets.Add(sheet);

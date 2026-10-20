@@ -14,7 +14,7 @@ namespace ND_BehaviorTree
     ///   - Sent again while running: ignored, unless restartIfRunning = true (branch is reset and restarted).
     /// </summary>
     [NodeDescription("Entry point that runs only when its event is sent (SendEvent).", "BehaviorTreeRunner.SendEvent(name) starts the branch on the next update. Interrupt Main Tree pauses and resets the main tree while it runs; otherwise it runs alongside.")]
-    [NodeInfo("Event", "Event/Event", false, true)]
+    [NodeInfo("Event", "Event/Event", false, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Event.png")]
     public class EventNode : Node
     {
         [Tooltip("Name passed to SendEvent to run this branch. Must be unique in the tree.")]

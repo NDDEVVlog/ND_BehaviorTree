@@ -14,7 +14,7 @@ using ND_BehaviorTree;
 /// children and return a status of Success, Failure, or Running.
 /// </summary>
 [NodeDescription("Plays an AudioSource key.", "With 'Wait For Completion' it stays Running until playback ends.")]
-[NodeInfo("PlayAudioSourceNode", "Action/PlayAudioSourceNode", true, false,iconPath:null)]
+[NodeInfo("PlayAudioSourceNode", "Action/PlayAudioSourceNode", true, false,iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Audio.png")]
 public class PlayAudioSourceNode : ActionNode
 {
 

@@ -9,7 +9,7 @@ namespace ND_BehaviorTree.Demo.Xeno
     /// Success on arrival; Failure if the agent is not on the NavMesh or no path exists.
     /// </summary>
     [NodeDescription("Moves the NavMeshAgent to a Vector3 key, following it if it changes.", "Re-reads the key every 'Repath Interval'. Success on arrival (within 'Stopping Distance'); Failure if off the NavMesh or no path exists.")]
-    [NodeInfo("Move To Position", "Action/Movement/Move To Position", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Wander.png")]
+    [NodeInfo("Move To Position", "Action/Movement/Move To Position", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/MoveToPoint.png")]
     public class MoveToPositionNode : ActionNode
     {
         [BlackboardKeyType(typeof(NavMeshAgent))]

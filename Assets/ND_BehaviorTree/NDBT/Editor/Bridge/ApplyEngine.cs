@@ -240,8 +240,8 @@ namespace ND_BehaviorTree.Editor.Bridge
 
         private static void Connect(BehaviorTreeGraphService graph, Node parent, Node child)
         {
-            if (!graph.CanConnect(parent, child, out string reason)) throw new BridgeException($"Cannot connect '{parent.name}' → '{child.name}': {reason}.");
-            graph.Connect(parent, child);
+            if (!graph.CanConnect(parent, child, out string reason, allowOwned: true)) throw new BridgeException($"Cannot connect '{parent.name}' → '{child.name}': {reason}.");
+            graph.Connect(parent, child, allowOwned: true); // batches build whole structures, owned children included
         }
 
         private static Dictionary<string, object> Done(string op, Node node) =>

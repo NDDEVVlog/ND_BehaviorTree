@@ -43,8 +43,8 @@ namespace ND_BehaviorTree.Editor
                 ND_BehaviorTreeEditorWindow.Open((BehaviorTree)target);
             }
 
-            // Shown only while AI features are enabled in the ND Behavior Tree settings.
-            if (Bridge.AiAccess.FeatureEnabled && GUILayout.Button("Copy for AI"))
+            // Shown only while AI features are enabled and unlocked with the owner password (this session).
+            if (Bridge.AiAccess.UiUnlocked && GUILayout.Button("Copy for AI"))
             {
                 EditorGUIUtility.systemCopyBuffer = Bridge.CopyForAi.TreeText((BehaviorTree)target);
             }

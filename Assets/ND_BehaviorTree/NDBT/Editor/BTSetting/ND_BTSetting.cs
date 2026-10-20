@@ -41,6 +41,10 @@ namespace ND_BehaviorTree.Editor
         [HideInInspector] public int aiBridgePort = 39877;
 
         [Header("Component Themes")]
+        [Tooltip("Name of the theme last applied from the Theme menu (display only; the values below are what is used).")]
+        public string activeThemeName = "Default Dark";
+        [Tooltip("Decorator / service cards and key slots: stylesheet applied on top of ND_NodeAttachments.uss (set by the theme). Empty = default look.")]
+        public StyleSheet attachmentStyle;
         public EdgeTheme edgeTheme = new EdgeTheme();
         public PortTheme portTheme = new PortTheme();
         public BlackboardTheme blackboardTheme = new BlackboardTheme();

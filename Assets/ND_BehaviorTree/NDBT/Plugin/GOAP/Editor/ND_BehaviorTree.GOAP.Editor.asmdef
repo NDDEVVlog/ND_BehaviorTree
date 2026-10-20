@@ -1,0 +1,20 @@
+{
+    "name": "ND_BehaviorTree.GOAP.Editor",
+    "rootNamespace": "ND_BehaviorTree.GOAP.Editor",
+    "references": [
+        "ND_BehaviorTree.Runtime",
+        "ND_BehaviorTreeEditor",
+        "ND_BehaviorTree.GOAP"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

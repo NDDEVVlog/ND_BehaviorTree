@@ -136,9 +136,12 @@ namespace ND_BehaviorTree.Editor.Bridge
                 }).ToList();
         }
 
-        private static object NodeInfo(Dictionary<string, object> args)
+        private static object NodeInfo(Dictionary<string, object> args) =>
+            DescribeNodeType(BridgeUtil.ResolveNodeType(BridgeUtil.Str(args, "type"), BridgeUtil.TypeKind.Any));
+
+        /// <summary>Fields (type, default, tooltip), key slots, description and how to add it. Shared with "Copy Node Catalog".</summary>
+        internal static Dictionary<string, object> DescribeNodeType(Type type)
         {
-            var type = BridgeUtil.ResolveNodeType(BridgeUtil.Str(args, "type"), BridgeUtil.TypeKind.Any);
             var info = BridgeUtil.Info(type);
             var instance = (Node)ScriptableObject.CreateInstance(type);
             try
@@ -166,6 +169,8 @@ namespace ND_BehaviorTree.Editor.Bridge
                     ["children"] = typeof(CompositeNode).IsAssignableFrom(type) ? "many" : (info?.hasFlowOutput ?? false) ? "one" : "none",
                     ["fields"] = fieldDocs,
                     ["keySlots"] = slots.Select(s => (object)new Dictionary<string, object> { ["path"] = s.PropertyPath, ["label"] = s.Label, ["requires"] = KeySlotScanner.FriendlyTypeName(s.RequiredValueType) }).ToList(),
+                    ["description"] = WeightGraph.DescriptionOf(type)?.Summary,
+                    ["details"] = WeightGraph.DescriptionOf(type)?.Details,
                     ["attach"] = BridgeUtil.KindOf(type) == "decorator" ? "add-decorator" : BridgeUtil.KindOf(type) == "service" ? "add-service" : "create"
                 };
             }
@@ -351,24 +356,8 @@ namespace ND_BehaviorTree.Editor.Bridge
             switch (action)
             {
                 case "add":
-                {
-                    if (blackboard.keys.Any(k => k != null && k.keyName == name)) throw new BridgeException($"Key '{name}' already exists.");
-                    string typeArg = BridgeUtil.Str(args, "type");
-                    var keyType = TypeCache.GetTypesDerivedFrom<Key>().Where(t => !t.IsAbstract).FirstOrDefault(t =>
-                                      string.Equals(t.Name, typeArg, StringComparison.OrdinalIgnoreCase)
-                                      || string.Equals(t.Name, typeArg + "Key", StringComparison.OrdinalIgnoreCase)
-                                      || string.Equals(KeySlotScanner.FriendlyTypeName(((Key)ScriptableObjectCache(t)).GetValueType()), typeArg, StringComparison.OrdinalIgnoreCase))
-                                  ?? throw new BridgeException($"Unknown key type '{typeArg}'. See blackboard_get → keyTypes.");
-                    Undo.RecordObject(blackboard, "Add Key");
-                    var key = (Key)ScriptableObject.CreateInstance(keyType);
-                    key.name = keyType.Name;
-                    key.keyName = name;
-                    AssetDatabase.AddObjectToAsset(key, blackboard);
-                    Undo.RegisterCreatedObjectUndo(key, "Add Key"); // undoing the add also destroys the sub-asset
-                    blackboard.keys.Add(key);
-                    if (args.TryGetValue("value", out var v)) SetKeyValue(key, v);
+                    AddKey(blackboard, name, BridgeUtil.Str(args, "type"), args.TryGetValue("value", out var v), v);
                     break;
-                }
                 case "rename":
                 {
                     string newName = BridgeUtil.Str(args, "newName");
@@ -397,6 +386,30 @@ namespace ND_BehaviorTree.Editor.Bridge
             AssetDatabase.SaveAssetIfDirty(blackboard);
             ND_BehaviorTreeEditorWindow.OnTreeChangedExternally(tree, save: false);
             return TreeExporter.BlackboardJson(blackboard);
+        }
+
+        /// <summary>
+        /// Adds a key to a blackboard asset (type by key class, value type or friendly name, e.g. "Float", "Vector3").
+        /// Shared with the AI text/JSON importer. The caller groups the Unity undo step and saves.
+        /// </summary>
+        internal static Key AddKey(Blackboard blackboard, string name, string typeArg, bool hasValue, object value)
+        {
+            if (blackboard.keys.Any(k => k != null && k.keyName == name)) throw new BridgeException($"Key '{name}' already exists.");
+            var keyType = TypeCache.GetTypesDerivedFrom<Key>().Where(t => !t.IsAbstract).FirstOrDefault(t =>
+                              string.Equals(t.Name, typeArg, StringComparison.OrdinalIgnoreCase)
+                              || string.Equals(t.Name, typeArg + "Key", StringComparison.OrdinalIgnoreCase)
+                              || string.Equals(KeySlotScanner.FriendlyTypeName(((Key)ScriptableObjectCache(t)).GetValueType()), typeArg, StringComparison.OrdinalIgnoreCase))
+                          ?? throw new BridgeException($"Unknown key type '{typeArg}'. See blackboard_get → keyTypes.");
+            Undo.RecordObject(blackboard, "Add Key");
+            var key = (Key)ScriptableObject.CreateInstance(keyType);
+            key.name = keyType.Name;
+            key.keyName = name;
+            AssetDatabase.AddObjectToAsset(key, blackboard);
+            Undo.RegisterCreatedObjectUndo(key, "Add Key"); // undoing the add also destroys the sub-asset
+            blackboard.keys.Add(key);
+            if (hasValue) SetKeyValue(key, value);
+            EditorUtility.SetDirty(blackboard);
+            return key;
         }
 
         private static void SetKeyValue(Key key, object value)

@@ -1,0 +1,23 @@
+/* Meow theme — Blackboard panel (overrides ND_Blackboard.uss; applied by the theme switcher). */
+.nd-bb-panel { background-color: #211D27; border-color: #4A3F55; }
+.nd-bb-header { background-color: #2A2533; border-bottom-color: #4A3F55; }
+.nd-bb-title { color: #FFE3EC; }
+.nd-bb-subtitle { color: #B49DB0; }
+.nd-bb-count { background-color: #3A2F44; color: #EBD3DD; }
+.nd-bb-iconbtn { color: #EBD3DD; }
+.nd-bb-iconbtn:hover { background-color: #43384F; color: #FFE3EC; }
+.nd-bb-iconbtn--accent { background-color: #E86A9A; color: #FFFFFF; }
+.nd-bb-iconbtn--accent:hover { background-color: #F48AB2; }
+.nd-bb-search > #unity-text-input { background-color: #1A171F; border-color: #4A3F55; color: #FFE3EC; }
+.nd-bb-key { background-color: #2B2533; }
+.nd-bb-key:hover { background-color: #352C3E; border-color: #F7A8C4; }
+.nd-bb-grip { color: #5C4E66; }
+.nd-bb-key:hover .nd-bb-grip { color: #D9BFCB; }
+.nd-bb-name > #unity-text-input { color: #FFE3EC; }
+.nd-bb-name:focus > #unity-text-input { background-color: #1A171F; border-color: #F7A8C4; }
+.nd-bb-key:hover .nd-bb-delete { color: #B49DB0; }
+.nd-bb-value-note { color: #93808F; }
+.nd-bb-value-button { background-color: #3A2F44; color: #EBD3DD; }
+.nd-bb-value-button:hover { background-color: #43384F; }
+.nd-bb-empty__text { color: #B49DB0; }
+.nd-bb-resize:hover { background-color: rgba(247, 168, 196, 0.45); }

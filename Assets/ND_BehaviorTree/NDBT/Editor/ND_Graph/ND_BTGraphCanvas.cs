@@ -117,6 +117,14 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         #region Drawing
 
+        /// <summary>Re-reads the theme from the settings (canvas colours, node style, edges, ports) and redraws.</summary>
+        public void ApplyTheme()
+        {
+            style.backgroundColor = ND_BehaviorTreeSetting.Instance.graphBackgroundColor;
+            Rebuild();
+            MarkDirtyRepaint();
+        }
+
         /// <summary>Rebuilds all views from data, keeping pan/zoom and selection.</summary>
         public void Rebuild()
         {
@@ -146,11 +154,13 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             TreeData.EditorInit();
             TreeData.nodes.RemoveAll(n => n == null);
 
+            // Children embedded in their owner's view (Block rows) get no node view and no edge of their own.
+            var embedded = new HashSet<Node>(TreeData.nodes.OfType<IEmbeddedChildren>().SelectMany(owner => ((Node)owner).GetChildren()));
             foreach (var node in TreeData.nodes.ToList())
             {
                 if (node is CompositeNode comp) comp.children.RemoveAll(c => c == null);
                 node.services.RemoveAll(s => s == null);
-                AddNodeVisuals(node);
+                if (!embedded.Contains(node)) AddNodeVisuals(node);
             }
 
             DrawEdgesFor(TreeData.nodes);
@@ -233,7 +243,17 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             output.Connect(edge);
             input.Connect(edge);
             m_Edges.Add(edge);
-            AddElement(edge);
+            if (ND_BehaviorTreeSetting.Instance.edgeTheme.drawBehindNodes) InsertBehindNodes(edge);
+            else AddElement(edge);
+        }
+
+        /// <summary>Places an edge just before the first node view, so nodes and ports draw over it (groups/notes stay behind).</summary>
+        private void InsertBehindNodes(VisualElement edge)
+        {
+            int index = 0;
+            for (; index < ContentContainer.childCount; index++)
+                if (ContentContainer[index] is ND_BTNodeView) break;
+            ContentContainer.Insert(index, edge);
         }
 
         protected virtual ND_BTEdgeView CreateEdgeView(ND_BTPortView output)
@@ -370,7 +390,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         public void CopySelection()
         {
-            var nodes = SelectedNodes.Select(v => v.NodeData).Where(n => n != null && !(n is RootNode)).ToList();
+            var nodes = WithOwnedChildren(SelectedNodes.Select(v => v.NodeData).Where(n => n != null && !(n is RootNode)));
             if (nodes.Count == 0) return;
             s_Clipboard?.Dispose();
             s_Clipboard = GraphClipboard.Capture(TreeData, nodes);
@@ -408,9 +428,39 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         public virtual void DeleteNode(ND_BTNodeView nodeView) => DeleteNodes(new List<ND_BTNodeView> { nodeView });
 
+        /// <summary>The owner (Switch, Block…) that manages <paramref name="node"/> as one of its children, or null.</summary>
+        public Node OwnerOf(Node node)
+        {
+            var parent = node != null ? Graph.GetParent(node) : null;
+            return parent is IOwnedChildren ? parent : null;
+        }
+
+        /// <summary>Selected nodes plus every child owned by them (cases of a Switch, rows of a Block), recursively.</summary>
+        private List<Node> WithOwnedChildren(IEnumerable<Node> nodes)
+        {
+            var result = new List<Node>();
+            var stack = new Stack<Node>(nodes.Where(n => n != null));
+            while (stack.Count > 0)
+            {
+                var node = stack.Pop();
+                if (result.Contains(node)) continue;
+                result.Add(node);
+                if (node is IOwnedChildren) foreach (var child in node.GetChildren()) if (child != null) stack.Push(child);
+            }
+            return result;
+        }
+
         private void DeleteNodes(List<ND_BTNodeView> views)
         {
             ClearSelection();
+            // A managed child (Switch case, Block row) is deleted from its owner, or together with it — not on its own.
+            var selectedNodes = new HashSet<Node>(views.Select(v => v.NodeData));
+            var managed = views.Where(v => OwnerOf(v.NodeData) is Node owner && !selectedNodes.Contains(owner)).ToList();
+            if (managed.Count > 0)
+            {
+                ShowNotification($"'{WeightGraph.TitleOf(managed[0].NodeData)}' is managed by '{WeightGraph.TitleOf(OwnerOf(managed[0].NodeData))}': edit it from there.");
+                views = views.Except(managed).ToList();
+            }
             var deletable = views.Where(v => !(v.NodeData is RootNode)).ToList();
             var ids = deletable.Select(v => v.NodeData.id).ToList();
             bool deletesReroute = deletable.Any(v => v.NodeData is RerouteNode);
@@ -458,25 +508,75 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         private const float EdgeHitTolerance = 8f;
 
-        /// <summary>Double-click on an edge (not on a node or port): insert a reroute ("extended node") there.</summary>
+        /// <summary>
+        /// Clicks on an edge (not on a node or port): double-click inserts a reroute ("extended node");
+        /// Alt+click cuts the edge (as Alt+click on a pin in Unreal). Alt+drag elsewhere still pans.
+        /// </summary>
         private void OnEdgeDoubleClick(PointerDownEvent evt)
         {
-            if (evt.button != 0 || evt.clickCount != 2) return;
+            if (evt.button != 0) return;
+            bool cut = evt.altKey && evt.clickCount == 1;
+            if (!cut && evt.clickCount != 2) return;
             if (evt.target is VisualElement target && (target is ND_BTNodeView || target is ND_BTPortView
                 || target.GetFirstAncestorOfType<ND_BTNodeView>() != null)) return;
 
             Vector2 local = ContentContainer.WorldToLocal(evt.position);
+            var best = EdgeAt(local);
+            if (best == null) return;
+
+            if (cut) DisconnectEdge(best);
+            else InsertReroute(best, local);
+            evt.StopImmediatePropagation();
+        }
+
+        private ND_BTEdgeView EdgeAt(Vector2 contentPoint)
+        {
             ND_BTEdgeView best = null;
             float bestDistance = EdgeHitTolerance / Mathf.Max(0.1f, m_ZoomFactor);
             foreach (var edge in m_Edges)
             {
-                float distance = edge.DistanceTo(local);
+                float distance = edge.DistanceTo(contentPoint);
                 if (distance < bestDistance) { bestDistance = distance; best = edge; }
             }
-            if (best == null) return;
+            return best;
+        }
 
-            InsertReroute(best, local);
-            evt.StopImmediatePropagation();
+        /// <summary>Removes one edge (parent → child).</summary>
+        public void DisconnectEdge(ND_BTEdgeView edge)
+        {
+            var parent = edge.OutputPort?.ParentNodeView?.NodeData;
+            var child = edge.InputPort?.ParentNodeView?.NodeData;
+            if (parent is IOwnedChildren) { ShowNotification($"'{WeightGraph.TitleOf(parent)}' manages this connection."); return; }
+            if (parent == null || child == null || !Graph.Disconnect(parent, child)) return;
+            RequestSave();
+            RemoveEdgeVisuals(edge);
+            RefreshExecutionOrder();
+            RefreshWeightLabels();
+        }
+
+        /// <summary>Alt+click on a port: an input leaves its parent; an output drops all its children (one undo step).</summary>
+        public void DisconnectPort(ND_BTPortView port)
+        {
+            if (port == null || port.Connections.Count == 0) return;
+            var managedBy = port.Direction == BTPortDirection.Input ? OwnerOf(port.ParentNodeView.NodeData) : port.ParentNodeView.NodeData as IOwnedChildren as Node;
+            if (managedBy != null) { ShowNotification($"'{WeightGraph.TitleOf(managedBy)}' manages these connections."); return; }
+            if (port.Direction == BTPortDirection.Input)
+            {
+                DisconnectInput(port);
+                RefreshWeightLabels();
+                return;
+            }
+            using (new GraphUndoScope(TreeData, "Disconnect Children"))
+            {
+                foreach (var edge in port.Connections.ToList())
+                {
+                    var child = edge.InputPort?.ParentNodeView?.NodeData;
+                    if (child != null && Graph.Disconnect(port.ParentNodeView.NodeData, child)) RemoveEdgeVisuals(edge);
+                }
+            }
+            RequestSave();
+            RefreshExecutionOrder();
+            RefreshWeightLabels();
         }
 
         public void InsertReroute(ND_BTEdgeView edge, Vector2 localPosition)
@@ -484,6 +584,11 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             var parent = edge.OutputPort?.ParentNodeView?.NodeData;
             var child = edge.InputPort?.ParentNodeView?.NodeData;
             if (parent == null || child == null) return;
+            if (parent is IOwnedChildren)
+            {
+                ShowNotification($"'{parent.name}' manages its children: no reroute here.");
+                return;
+            }
             if (Graph.InsertReroute(parent, child, localPosition - ND_BTRerouteView.HalfSize) == null) return;
             RequestSave();
             Rebuild();
@@ -503,6 +608,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         {
             var edge = input.Connections.FirstOrDefault();
             if (edge?.OutputPort == null) return;
+            if (edge.OutputPort.ParentNodeView.NodeData is IOwnedChildren) { ShowNotification($"'{WeightGraph.TitleOf(edge.OutputPort.ParentNodeView.NodeData)}' manages this connection."); return; }
             if (!Graph.Disconnect(edge.OutputPort.ParentNodeView.NodeData, input.ParentNodeView.NodeData)) return;
             RequestSave();
             RemoveEdgeVisuals(edge);
@@ -556,7 +662,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         /// <summary>Asks for a folder/name, then moves the selected branch into a new subtree asset.</summary>
         public void ConvertSelectionToSubtree()
         {
-            var selection = SelectedNodes.Select(v => v.NodeData).Where(n => n != null).ToList();
+            var selection = WithOwnedChildren(SelectedNodes.Select(v => v.NodeData).Where(n => n != null));
             if (selection.Count == 0) return;
 
             string treeFolder = System.IO.Path.GetDirectoryName(AssetDatabase.GetAssetPath(TreeData))?.Replace('\\', '/') ?? "Assets";
@@ -839,7 +945,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             foreach (var view in m_NodeDictionary.Values) view.RefreshKeyInfo();
         }
 
-        private void ShowNotification(string message)
+        public void ShowNotification(string message)
         {
             if (m_Window != null) m_Window.ShowNotification(new GUIContent(message), 2.5);
         }
@@ -965,10 +1071,15 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         public virtual void AddNewNodeFromSearch(Type nodeType, Vector2 localPosition)
         {
-            var node = Graph.CreateNode(nodeType, localPosition);
+            Node node;
+            using (new GraphUndoScope(TreeData, $"Create {nodeType.Name}"))
+            {
+                node = Graph.CreateNode(nodeType, localPosition);
+                if (node != null) GraphEditHooks.RaiseNodeCreatedByUser(Graph, node); // plugins add generated children in the same step
+            }
             if (node == null) return;
             RequestSave();
-            AddNodeVisuals(node);
+            Rebuild(); // a hook may have created more nodes (e.g. a Switch's cases)
         }
 
         public virtual void OpenServiceSearch(ND_BTNodeView targetNode, Vector2 screenPosition)
@@ -1027,31 +1138,94 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             // Typing in a note/rename field must not trigger graph shortcuts.
             if ((evt.target as VisualElement)?.GetFirstOfType<TextField>() != null) return;
 
-            if (evt.keyCode == KeyCode.Delete)
+            if (HandleShortcut(evt)) evt.StopPropagation();
+        }
+
+        /// <summary>Graph keyboard shortcuts (see <see cref="ShortcutHelp"/>). Ctrl = Cmd on macOS.</summary>
+        private bool HandleShortcut(KeyDownEvent evt)
+        {
+            Vector2 mouseLocal = ContentContainer.WorldToLocal(m_CurrentMousePosition);
+            bool ctrl = evt.actionKey, shift = evt.shiftKey, alt = evt.altKey;
+            switch (evt.keyCode)
             {
-                DeleteSelectedNodes();
-                evt.StopPropagation();
+                case KeyCode.Delete:
+                case KeyCode.Backspace when !ctrl:
+                    DeleteSelectedNodes(); return true;
+                case KeyCode.C when ctrl:
+                    CopySelection(); return true;
+                case KeyCode.X when ctrl:
+                    CopySelection(); DeleteSelectedNodes(); return true;
+                case KeyCode.V when ctrl:
+                    PasteSelection(mouseLocal); return true;
+                case KeyCode.D when ctrl:
+                    DuplicateSelection(); return true;
+                case KeyCode.A when ctrl:
+                    foreach (var view in m_NodeDictionary.Values) AddToSelection(view);
+                    return true;
+                case KeyCode.Escape:
+                    ClearSelection(); return true;
+                case KeyCode.G when ctrl && shift:
+                    UngroupSelection(); return true;
+                case KeyCode.G when ctrl:
+                    CreateGroup(mouseLocal); return true;
+                case KeyCode.N when !ctrl && !alt:
+                    CreateNote(mouseLocal); return true;
+                case KeyCode.Space when !ctrl && !alt:
+                case KeyCode.Tab when !ctrl && !alt:
+                    OpenCreateNodeSearch(mouseLocal); return true;
+                case KeyCode.F when !ctrl:
+                    FrameSelectionOrRoot(); return true;
+                case KeyCode.Home:
+                case KeyCode.H when !ctrl && !alt:
+                    FocusOnRoot(); return true;
+                case KeyCode.E when ctrl && shift:
+                    if (SelectedNodes.Count > 0) ConvertSelectionToSubtree();
+                    return true;
+                case KeyCode.Slash when shift: // "?"
+                case KeyCode.F1:
+                    ShowShortcutHelp(); return true;
+                default:
+                    return false;
             }
-            else if (evt.actionKey && evt.keyCode == KeyCode.C)
-            {
-                CopySelection();
-                evt.StopPropagation();
-            }
-            else if (evt.actionKey && evt.keyCode == KeyCode.V)
-            {
-                PasteSelection(ContentContainer.WorldToLocal(m_CurrentMousePosition));
-                evt.StopPropagation();
-            }
-            else if (evt.actionKey && evt.keyCode == KeyCode.D)
-            {
-                DuplicateSelection();
-                evt.StopPropagation();
-            }
-            else if (!evt.actionKey && evt.keyCode == KeyCode.F)
-            {
-                FrameSelectionOrRoot();
-                evt.StopPropagation();
-            }
+        }
+
+        public const string ShortcutHelp =
+            "Space / Tab\tCreate node at the mouse\n" +
+            "Ctrl+C / Ctrl+X / Ctrl+V\tCopy / Cut / Paste (at the mouse)\n" +
+            "Ctrl+D\tDuplicate selection\n" +
+            "Delete / Backspace\tDelete selection\n" +
+            "Ctrl+A / Esc\tSelect all / Clear selection\n" +
+            "Ctrl+G\tGroup selection (or new group at the mouse)\n" +
+            "Ctrl+Shift+G\tUngroup selection\n" +
+            "N\tNew note at the mouse\n" +
+            "Ctrl+Shift+E\tConvert selection to subtree\n" +
+            "F\tFrame selection (or Root)\n" +
+            "H / Home\tFocus Root\n" +
+            "Ctrl+S\tSave\n" +
+            "Ctrl+Z / Ctrl+Y (Ctrl+Shift+Z)\tUndo / Redo\n" +
+            "Alt+click a port\tDisconnect (input: from its parent · output: all children)\n" +
+            "Alt+click an edge\tDelete that connection\n" +
+            "Double-click an edge\tInsert a reroute\n" +
+            "Double-click a node\tNode properties & description\n" +
+            "Middle-drag / Alt+drag\tPan · Wheel: zoom\n" +
+            "F1 or ?\tThis list";
+
+        public void ShowShortcutHelp() =>
+            EditorUtility.DisplayDialog("ND Behavior Tree — Shortcuts", ShortcutHelp.Replace("\t", "   —   "), "OK");
+
+        /// <summary>Removes the groups that contain any selected node (the nodes stay).</summary>
+        public void UngroupSelection()
+        {
+            var groups = SelectedNodes.Select(v => Graph.FindGroupOf(v.NodeData)).Where(g => g != null).Distinct().ToList();
+            foreach (var group in groups) DeleteGroup(group);
+        }
+
+        /// <summary>The "Create Node" search popup, placing the node at <paramref name="localPosition"/>.</summary>
+        public void OpenCreateNodeSearch(Vector2 localPosition)
+        {
+            Vector2 screenPos = GUIUtility.GUIToScreenPoint(m_CurrentMousePosition);
+            ND_BTSearchPopup.Show(screenPos, "Create Node", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.GraphNode),
+                data => AddNewNodeFromSearch((Type)data, localPosition));
         }
 
         protected virtual void BuildContextualMenu(ContextualMenuPopulateEvent evt)
@@ -1061,19 +1235,20 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             Vector2 screenPos = GUIUtility.GUIToScreenPoint(evt.mousePosition);
             Vector2 localPos = ContentContainer.WorldToLocal(evt.mousePosition);
 
-            evt.menu.AppendAction("Create Node...", a =>
+            evt.menu.AppendAction("Create Node...   (Space)", a =>
                 ND_BTSearchPopup.Show(screenPos, "Create Node", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.GraphNode),
                     data => AddNewNodeFromSearch((Type)data, localPos)));
 
             evt.menu.AppendAction("Create Event", a => AddNewNodeFromSearch(typeof(EventNode), localPos));
             evt.menu.AppendAction("Create Init Node (runs once at start)", a => AddNewNodeFromSearch(typeof(InitNode), localPos),
                 TreeData.nodes.Any(n => n is InitNode) ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal);
-            evt.menu.AppendAction(SelectedNodes.Count > 0 ? "Group Selected Nodes" : "Create Group", a => CreateGroup(localPos));
-            evt.menu.AppendAction("Create Note", a => CreateNote(localPos));
+            evt.menu.AppendAction(SelectedNodes.Count > 0 ? "Group Selected Nodes   (Ctrl+G)" : "Create Group   (Ctrl+G)", a => CreateGroup(localPos));
+            evt.menu.AppendAction("Create Note   (N)", a => CreateNote(localPos));
             if (SelectedNodes.Count > 0)
-                evt.menu.AppendAction("Convert Selection to Subtree...", a => ConvertSelectionToSubtree());
+                evt.menu.AppendAction("Convert Selection to Subtree...   (Ctrl+Shift+E)", a => ConvertSelectionToSubtree());
             evt.menu.AppendSeparator();
-            evt.menu.AppendAction("Focus Root (F)", a => FocusOnRoot());
+            evt.menu.AppendAction("Focus Root (H)", a => FocusOnRoot());
+            evt.menu.AppendAction("Keyboard Shortcuts...   (F1)", a => ShowShortcutHelp());
 
             evt.menu.AppendSeparator();
 
@@ -1088,6 +1263,8 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             {
                 evt.menu.AppendAction("Paste (Ctrl+V)", a => PasteSelection(localPos));
             }
+
+            Plugins.ND_BTPluginRegistry.AppendTo(evt.menu, Plugins.ND_BTPluginRegistry.CanvasMenuItems, () => Plugins.ND_BTPluginRegistry.ArgsFor(this, null, localPos));
         }
 
         protected virtual void OnWheel(WheelEvent evt)

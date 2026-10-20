@@ -128,33 +128,74 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
         }
 
-        /// <summary>Bezier control points in canvas-content space (same curve as drawn).</summary>
-        private bool TryGetCurve(out Vector2 start, out Vector2 p1, out Vector2 p2, out Vector2 end)
+
+        // ------------------------------------------------------------------ path (shape from EdgeTheme.curve)
+
+        /// <summary>Edge end points in canvas-content space.</summary>
+        private bool TryGetEnds(out Vector2 start, out Vector2 end)
         {
-            start = p1 = p2 = end = default;
+            start = end = default;
             if (OutputPort == null) return false;
             var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
             if (canvas == null) return false;
-
             start = canvas.ContentContainer.WorldToLocal(OutputPort.GlobalCenter);
             end = InputPort != null ? canvas.ContentContainer.WorldToLocal(InputPort.GlobalCenter) : m_TempEndPosition;
-            float dist = Mathf.Abs(start.y - end.y) * 0.5f + 25f;
-            p1 = start + Vector2.up * dist;
-            p2 = end - Vector2.up * dist;
             return true;
         }
 
-        /// <summary>Approximate distance from <paramref name="contentPoint"/> (canvas-content space) to the drawn curve.</summary>
+        private static void BezierControls(Vector2 start, Vector2 end, out Vector2 p1, out Vector2 p2)
+        {
+            float dist = Mathf.Abs(start.y - end.y) * 0.5f + 25f;
+            p1 = start + Vector2.up * dist;
+            p2 = end - Vector2.up * dist;
+        }
+
+        /// <summary>Point at <paramref name="t"/> (0 = parent, 1 = child) along the drawn path.</summary>
+        private Vector2 PointAt(float t, Vector2 start, Vector2 end)
+        {
+            switch (m_Theme.curve)
+            {
+                case EdgeCurve.Straight:
+                    return Vector2.Lerp(start, end, t);
+                case EdgeCurve.Step:
+                {
+                    float midY = (start.y + end.y) * 0.5f;
+                    Vector2 a = new Vector2(start.x, midY), b = new Vector2(end.x, midY);
+                    float l1 = Mathf.Abs(midY - start.y), l2 = Mathf.Abs(end.x - start.x), l3 = Mathf.Abs(end.y - midY);
+                    float total = l1 + l2 + l3;
+                    if (total < 0.001f) return start;
+                    float d = t * total;
+                    if (d <= l1) return Vector2.Lerp(start, a, l1 < 0.001f ? 1f : d / l1);
+                    d -= l1;
+                    if (d <= l2) return Vector2.Lerp(a, b, l2 < 0.001f ? 1f : d / l2);
+                    d -= l2;
+                    return Vector2.Lerp(b, end, l3 < 0.001f ? 1f : d / l3);
+                }
+                default:
+                {
+                    BezierControls(start, end, out var p1, out var p2);
+                    float u = 1f - t;
+                    return u * u * u * start + 3f * u * u * t * p1 + 3f * u * t * t * p2 + t * t * t * end;
+                }
+            }
+        }
+
+        private Vector2 DirectionAt(float t, Vector2 start, Vector2 end)
+        {
+            Vector2 dir = (PointAt(Mathf.Min(1f, t + 0.02f), start, end) - PointAt(Mathf.Max(0f, t - 0.02f), start, end)).normalized;
+            return dir == Vector2.zero ? Vector2.down : dir;
+        }
+
+        /// <summary>Approximate distance from <paramref name="contentPoint"/> (canvas-content space) to the drawn path.</summary>
         public float DistanceTo(Vector2 contentPoint)
         {
-            if (InputPort == null || !TryGetCurve(out var start, out var p1, out var p2, out var end)) return float.MaxValue;
-            const int Segments = 24;
+            if (InputPort == null || !TryGetEnds(out var start, out var end)) return float.MaxValue;
+            const int Segments = 32;
             float best = float.MaxValue;
             Vector2 previous = start;
             for (int i = 1; i <= Segments; i++)
             {
-                float t = i / (float)Segments, u = 1f - t;
-                Vector2 point = u * u * u * start + 3f * u * u * t * p1 + 3f * u * t * t * p2 + t * t * t * end;
+                Vector2 point = PointAt(i / (float)Segments, start, end);
                 best = Mathf.Min(best, DistanceToSegment(contentPoint, previous, point));
                 previous = point;
             }
@@ -171,7 +212,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         private void DrawEdge(MeshGenerationContext ctx)
         {
-            if (!TryGetCurve(out var start, out var p1, out var p2, out var end)) return;
+            if (!TryGetEnds(out var start, out var end)) return;
 
             var painter = ctx.painter2D;
             Color color = m_LiveState switch
@@ -188,14 +229,30 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
             painter.BeginPath();
             painter.MoveTo(start);
-            painter.BezierCurveTo(p1, p2, end);
+            switch (m_Theme.curve)
+            {
+                case EdgeCurve.Straight:
+                    painter.LineTo(end);
+                    break;
+                case EdgeCurve.Step:
+                {
+                    float midY = (start.y + end.y) * 0.5f;
+                    painter.LineTo(new Vector2(start.x, midY));
+                    painter.LineTo(new Vector2(end.x, midY));
+                    painter.LineTo(end);
+                    break;
+                }
+                default:
+                {
+                    BezierControls(start, end, out var p1, out var p2);
+                    painter.BezierCurveTo(p1, p2, end);
+                    break;
+                }
+            }
             painter.Stroke();
 
-            Vector2 mid = 0.125f * start + 0.375f * p1 + 0.375f * p2 + 0.125f * end;
-            Vector2 dir = (0.75f * (p1 - start) + 1.5f * (p2 - p1) + 0.75f * (end - p2)).normalized;
-            if (dir == Vector2.zero) dir = Vector2.down;
-
-            DrawArrow(painter, mid, dir, color);
+            Vector2 mid = PointAt(0.5f, start, end);
+            if (m_Theme.showArrow) DrawArrow(painter, mid, DirectionAt(0.5f, start, end), color);
 
             if (m_LiveState == Graph.LiveState.Running)
             {
@@ -204,9 +261,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 painter.fillColor = Color.white;
                 for (int i = 0; i < 3; i++)
                 {
-                    float t = (phase + i / 3f) % 1f;
-                    float u = 1f - t;
-                    Vector2 p = u * u * u * start + 3f * u * u * t * p1 + 3f * u * t * t * p2 + t * t * t * end;
+                    Vector2 p = PointAt((phase + i / 3f) % 1f, start, end);
                     painter.BeginPath();
                     painter.Arc(p, 3.5f, 0f, 360f);
                     painter.Fill();
@@ -214,9 +269,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
             if (m_WeightLabel != null && m_WeightLabel.resolvedStyle.display != DisplayStyle.None)
             {
-                const float t = 0.72f;
-                float u = 1f - t;
-                Vector2 at = u * u * u * start + 3f * u * u * t * p1 + 3f * u * t * t * p2 + t * t * t * end;
+                Vector2 at = PointAt(0.72f, start, end);
                 m_WeightLabel.style.left = at.x - m_WeightLabel.layout.width / 2f;
                 m_WeightLabel.style.top = at.y - m_WeightLabel.layout.height / 2f;
             }

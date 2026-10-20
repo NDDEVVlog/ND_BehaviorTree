@@ -1,0 +1,26 @@
+/* Cyberpunk theme — decorator / service cards and key slots (overrides ND_NodeAttachments.uss). */
+.nd-section--decorators { border-bottom-color: rgba(0, 240, 255, 0.25); }
+.nd-section--services { border-top-color: rgba(0, 240, 255, 0.25); }
+.nd-attachment--divider { border-top-color: rgba(0, 240, 255, 0.25); }
+
+.nd-attachment--decorator { background-color: #1A1030; border-left-color: #FF2BD6; }
+.nd-attachment--decorator:hover { background-color: #24163F; }
+.nd-attachment--decorator .nd-attachment__glyph { color: #FF6BE3; }
+
+.nd-attachment--service { background-color: #08202A; border-left-color: #00F0FF; }
+.nd-attachment--service:hover { background-color: #0D2C38; }
+.nd-attachment--service .nd-attachment__glyph { color: #5CF6FF; }
+.nd-attachment--service .nd-progress__fill { background-color: #00F0FF; }
+
+.nd-attachment__title { color: #F0E6FF; }
+.nd-attachment__summary { color: #A99BC9; }
+
+.nd-slot__label { color: #8C86B3; }
+.nd-slot__chip { background-color: #0B0B16; border-color: #2A2A4A; }
+.nd-slot__chip:hover { background-color: #14142A; border-color: #FF2BD6; }
+.nd-slot__text { color: #E8F9FF; }
+
+/* Live Debug states must still win over the theme colours above. */
+.nd-attachment--running { border-left-color: #F5B83D; background-color: #3A3422; }
+.nd-attachment--done    { border-left-color: #4CC38A; background-color: #20362B; }
+.nd-attachment--failed  { border-left-color: #E5534B; background-color: #3B2424; }

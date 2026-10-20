@@ -41,8 +41,7 @@ namespace ND_BehaviorTree.Editor
 
             AddToClassList("nd-bb-panel");
             ND_BTStyles.Apply(this, ND_BTStyles.Blackboard);
-            var themeUss = ND_BehaviorTreeSetting.Instance.blackboardTheme.customUSS;
-            if (themeUss != null) styleSheets.Add(themeUss);
+            ApplyTheme();
 
             style.width = Mathf.Clamp(EditorPrefs.GetFloat(WidthPref, DefaultWidth), MinWidth, MaxWidth);
             style.maxHeight = Length.Percent(85);
@@ -210,6 +209,18 @@ namespace ND_BehaviorTree.Editor
             box.Add(label);
             if (buttonText != null) box.Add(new Button(onClick) { text = buttonText });
             return box;
+        }
+
+        private StyleSheet m_ThemeSheet;
+
+        /// <summary>Swaps in the theme's Blackboard stylesheet (ND Behavior Tree settings → Blackboard Theme), on top of the base look.</summary>
+        public void ApplyTheme()
+        {
+            var themeUss = ND_BehaviorTreeSetting.Instance.blackboardTheme.customUSS;
+            if (themeUss == m_ThemeSheet) return;
+            if (m_ThemeSheet != null) styleSheets.Remove(m_ThemeSheet);
+            m_ThemeSheet = themeUss;
+            if (themeUss != null) styleSheets.Add(themeUss);
         }
 
         private VisualElement CreateKeyCard(Key key)

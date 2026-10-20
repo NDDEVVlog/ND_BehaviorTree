@@ -101,15 +101,37 @@ namespace ND_BehaviorTree.Editor
                 var tree = FindOwnerTree(_targetNode);
                 if (tree != null)
                 {
+                    int structureBefore = StructureSignature(tree);
                     using (new Graph.GraphUndoScope(tree, $"Edit {_targetNode.name}", $"props:{_targetNode.GetInstanceID()}"))
+                    {
                         _serializedNodeObject.ApplyModifiedPropertiesWithoutUndo();
-                    ND_BehaviorTreeEditorWindow.NotifyTreeEdited(tree);
+                        EditorUtility.SetDirty(_targetNode);
+                        // Plugins may adjust the graph to match (e.g. Switch cases), in the same undo step.
+                        Graph.GraphEditHooks.RaiseNodePropertiesEdited(new Graph.BehaviorTreeGraphService(tree), _targetNode);
+                    }
+                    if (StructureSignature(tree) != structureBefore) ND_BehaviorTreeEditorWindow.OnTreeChangedExternally(tree, save: true); // redraw new/removed nodes
+                    else ND_BehaviorTreeEditorWindow.NotifyTreeEdited(tree);
                 }
                 else
                 {
                     _serializedNodeObject.ApplyModifiedProperties();
                 }
                 EditorUtility.SetDirty(_targetNode);
+            }
+        }
+
+        /// <summary>Node count + child links: changes when an edit (or a plugin hook) adds, removes or reorders nodes.</summary>
+        private static int StructureSignature(BehaviorTree tree)
+        {
+            unchecked
+            {
+                int h = tree.nodes.Count;
+                foreach (var node in tree.nodes)
+                {
+                    if (node == null) continue;
+                    foreach (var child in node.GetChildren()) h = h * 31 + (child != null ? child.GetInstanceID() : 0);
+                }
+                return h;
             }
         }
 

@@ -1,0 +1,26 @@
+/* Steampunk theme — decorator / service cards and key slots (overrides ND_NodeAttachments.uss). */
+.nd-section--decorators { border-bottom-color: rgba(0, 0, 0, 0.4); }
+.nd-section--services { border-top-color: rgba(0, 0, 0, 0.4); }
+.nd-attachment--divider { border-top-color: rgba(0, 0, 0, 0.4); }
+
+.nd-attachment--decorator { background-color: #3E2F1C; border-left-color: #D9A441; }
+.nd-attachment--decorator:hover { background-color: #4A3822; }
+.nd-attachment--decorator .nd-attachment__glyph { color: #F0C46A; }
+
+.nd-attachment--service { background-color: #2E2A1A; border-left-color: #9C8A4A; }
+.nd-attachment--service:hover { background-color: #383321; }
+.nd-attachment--service .nd-attachment__glyph { color: #CDB874; }
+.nd-attachment--service .nd-progress__fill { background-color: #9C8A4A; }
+
+.nd-attachment__title { color: #F3D9A4; }
+.nd-attachment__summary { color: #C4A87A; }
+
+.nd-slot__label { color: #B09370; }
+.nd-slot__chip { background-color: #2C1F12; border-color: #5A4128; }
+.nd-slot__chip:hover { background-color: #35271A; border-color: #D9A441; }
+.nd-slot__text { color: #F3D9A4; }
+
+/* Live Debug states must still win over the theme colours above. */
+.nd-attachment--running { border-left-color: #F5B83D; background-color: #3A3422; }
+.nd-attachment--done    { border-left-color: #4CC38A; background-color: #20362B; }
+.nd-attachment--failed  { border-left-color: #E5534B; background-color: #3B2424; }

@@ -21,6 +21,13 @@ namespace ND_BehaviorTree.Editor.Graph
     /// </summary>
     public static class ExecutionOrder
     {
+        /// <summary>
+        /// Sorts a composite's children left-to-right, except for <see cref="IOwnedChildren"/> composites (Block rows,
+        /// Switch cases), whose order is authored explicitly. Returns true if the order changed.
+        /// </summary>
+        public static bool SortChildren(CompositeNode composite) =>
+            composite != null && !(composite is IOwnedChildren) && SortByPosition(composite.children);
+
         /// <summary>Sorts in place. Returns true if the order changed. Null entries move to the end.</summary>
         public static bool SortByPosition(List<Node> children)
         {

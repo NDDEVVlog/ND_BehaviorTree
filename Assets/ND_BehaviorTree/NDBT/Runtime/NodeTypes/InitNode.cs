@@ -17,7 +17,7 @@ namespace ND_BehaviorTree
     ///     (the tree then stays stopped and Update returns Failure).
     /// </summary>
     [NodeDescription("Entry point that runs once at start, before the main tree.", "Runs in BehaviorTreeRunner.Start after overrides are applied. While it is Running the main tree waits. It never runs again when the main tree restarts.")]
-    [NodeInfo("Init", "Event/Init (runs once at start)", false, true)]
+    [NodeInfo("Init", "Event/Init (runs once at start)", false, true, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Init.png")]
     public class InitNode : Node
     {
         [Tooltip("If the init branch fails: On = keep the tree stopped (Update returns Failure). Off = log a warning and start the main tree.")]

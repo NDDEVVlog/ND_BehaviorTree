@@ -8,7 +8,7 @@ namespace ND_BehaviorTree.Demo.Xeno
     /// around. Succeeds after the last point (points it cannot reach are skipped), so a search never blocks a sequence.
     /// </summary>
     [NodeDescription("Sweeps an area: walks to a few random points around a center and looks around at each.", "Unreachable points are skipped. Always succeeds after the last point, so it never blocks a sequence. The progress bar shows points done.")]
-    [NodeInfo("Search Area", "Action/Movement/Search Area", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/Wander.png")]
+    [NodeInfo("Search Area", "Action/Movement/Search Area", true, false, iconPath: "Assets/ND_BehaviorTree/NDBT/Icons/RandomPatrol.png")]
     public class SearchAreaNode : ActionNode
     {
         [BlackboardKeyType(typeof(NavMeshAgent))]

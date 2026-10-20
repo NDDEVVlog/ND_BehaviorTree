@@ -41,18 +41,31 @@ namespace ND_BehaviorTree.Editor
 
         private static void CreateScriptFromTemplate(string defaultFileName, string templateFileName)
         {
-            string templatePath = Path.Combine(TEMPLATE_BASE_PATH, templateFileName);
-            
-            // Check if the template file exists
-            if (!File.Exists(Path.Combine(Application.dataPath, templatePath.Substring("Assets/".Length))))
+            string templatePath = FindTemplate(templateFileName);
+            if (templatePath == null)
             {
-                Debug.LogError($"Template file not found at: {templatePath}. Please ensure templates are in the correct folder.");
+                Debug.LogError($"[BehaviorTreeEditorExtensions] Template '{templateFileName}' was not found (expected under {TEMPLATE_BASE_PATH}, or anywhere in the project if the package was moved).");
                 return;
             }
 
             // This is a built-in Unity Editor utility that creates a new script asset from a template,
             // starting the "rename" process for the user in the Project window.
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, defaultFileName);
+        }
+
+        /// <summary>The template's asset path: the default folder first, else searched by file name (package moved / renamed).</summary>
+        private static string FindTemplate(string templateFileName)
+        {
+            string defaultPath = TEMPLATE_BASE_PATH + templateFileName;
+            if (File.Exists(defaultPath)) return defaultPath;
+            string stem = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(templateFileName)); // "...-NewActionNode"
+            stem = stem.Substring(stem.LastIndexOf('-') + 1);
+            foreach (var guid in AssetDatabase.FindAssets(stem))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (Path.GetFileName(path) == templateFileName) return path;
+            }
+            return null;
         }
     }
 }

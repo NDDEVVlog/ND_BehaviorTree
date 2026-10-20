@@ -86,6 +86,8 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
             // Decorator/service/slot sections are styled the same in every theme (themes may override the classes).
             ND_BTStyles.Apply(this, ND_BTStyles.NodeAttachments);
+            // The theme's decorator / service / key-slot colours (added after, so they win over the defaults).
+            if (settings.attachmentStyle != null) ND_BTStyles.Apply(this, settings.attachmentStyle);
         }
 
         protected virtual void SetupContainers()
@@ -593,7 +595,14 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
             if (InputPort != null && InputPort.Connections.Count > 0)
             {
-                evt.menu.AppendAction("Disconnect From Parent", a => canvas.DisconnectInput(InputPort));
+                evt.menu.AppendAction("Disconnect From Parent   (Alt+click input port)", a => canvas.DisconnectInput(InputPort));
+            }
+            if (OutputPort != null && OutputPort.Connections.Count > 0)
+            {
+                evt.menu.AppendAction("Disconnect All Children   (Alt+click output port)", a => canvas.DisconnectPort(OutputPort));
+            }
+            if ((InputPort != null && InputPort.Connections.Count > 0) || (OutputPort != null && OutputPort.Connections.Count > 0))
+            {
                 evt.menu.AppendSeparator();
             }
 
@@ -604,15 +613,17 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 canvas.AddToSelection(this);
             }
 
-            evt.menu.AppendAction("Copy", a => canvas.CopySelection());
-            evt.menu.AppendAction("Duplicate", a => canvas.DuplicateSelection());
-            if (Bridge.AiAccess.FeatureEnabled)
+            evt.menu.AppendAction("Copy   (Ctrl+C)", a => canvas.CopySelection());
+            evt.menu.AppendAction("Duplicate   (Ctrl+D)", a => canvas.DuplicateSelection());
+            if (Bridge.AiAccess.UiUnlocked)
             {
                 evt.menu.AppendAction("Copy Node IDs for AI", a =>
                     EditorGUIUtility.systemCopyBuffer = Bridge.CopyForAi.NodesText(canvas.TreeData, canvas.SelectedNodes.Select(v => v.NodeData)));
             }
-            evt.menu.AppendAction("Group Selected Nodes", a => canvas.CreateGroup(ViewPosition));
-            evt.menu.AppendAction("Convert Selection to Subtree...", a => canvas.ConvertSelectionToSubtree());
+            evt.menu.AppendAction("Group Selected Nodes   (Ctrl+G)", a => canvas.CreateGroup(ViewPosition));
+            evt.menu.AppendAction("Convert Selection to Subtree...   (Ctrl+Shift+E)", a => canvas.ConvertSelectionToSubtree());
+
+            Plugins.ND_BTPluginRegistry.AppendTo(evt.menu, Plugins.ND_BTPluginRegistry.NodeMenuItems(NodeData), () => Plugins.ND_BTPluginRegistry.ArgsFor(canvas, NodeData));
 
             evt.menu.AppendSeparator();
 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BoolKey
   m_EditorClassIdentifier: 
   keyName: HasWeapon
-  value: 1
+  value: 0
 --- !u!114 &-7385322539704590012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Name: IntKey
   m_EditorClassIdentifier: 
   keyName: Health
-  value: 0
+  value: 100
 --- !u!114 &5862101188314091657
 MonoBehaviour:
   m_ObjectHideFlags: 0

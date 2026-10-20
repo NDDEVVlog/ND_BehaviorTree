@@ -58,14 +58,44 @@ namespace ND_BehaviorTree.Editor
         private bool m_isVisible = true;
         private ToolbarButton m_undoButton;
         private ToolbarButton m_redoButton;
-        private ToolbarButton m_copyForAiButton;
+        private ToolbarMenu m_aiMenu;
+        private ToolbarButton m_pluginsButton;
 
-        /// <summary>"Copy for AI" is shown only while AI features are enabled in the ND Behavior Tree settings.</summary>
+        /// <summary>The AI menu is shown only while AI features are enabled AND unlocked with the owner password this session.</summary>
         private void UpdateAiVisibility()
         {
-            if (m_copyForAiButton == null) return;
-            var display = Bridge.AiAccess.FeatureEnabled ? DisplayStyle.Flex : DisplayStyle.None;
-            if (m_copyForAiButton.style.display != display) m_copyForAiButton.style.display = display;
+            if (m_aiMenu == null) return;
+            var display = Bridge.AiAccess.UiUnlocked ? DisplayStyle.Flex : DisplayStyle.None;
+            if (m_aiMenu.style.display != display) m_aiMenu.style.display = display;
+        }
+
+        private void UpdatePluginsButton()
+        {
+            if (m_pluginsButton == null) return;
+            m_pluginsButton.style.display = Plugins.ND_BTPluginRegistry.ToolbarItems.Any() ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void ShowPluginsMenu()
+        {
+            var menu = new GenericMenu();
+            var args = Plugins.ND_BTPluginRegistry.ArgsFor(m_currentView);
+            foreach (var item in Plugins.ND_BTPluginRegistry.ToolbarItems)
+            {
+                var captured = item;
+                if (Plugins.ND_BTPluginRegistry.IsEnabled(captured, args)) menu.AddItem(new GUIContent(captured.Path), false, () => Plugins.ND_BTPluginRegistry.Run(captured, args));
+                else menu.AddDisabledItem(new GUIContent(captured.Path));
+            }
+            menu.DropDown(m_pluginsButton.worldBound);
+        }
+
+        private DropdownMenuAction.Status AiTreeStatus(DropdownMenuAction _) =>
+            m_currentGraph != null ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled;
+
+        private void CopyForAi(string what, System.Func<BehaviorTree, string> build)
+        {
+            if (!Bridge.AiAccess.UiUnlocked) return;
+            EditorGUIUtility.systemCopyBuffer = build(m_currentGraph);
+            ShowNotification(new GUIContent($"Copied {what} for AI"), 1.0);
         }
 
         /// <summary>Subtrees stepped into while live debugging (top = what the canvas shows). Play mode only.</summary>
@@ -171,6 +201,9 @@ namespace ND_BehaviorTree.Editor
             EditorApplication.playModeStateChanged -= OnPlayModeChanged;
             EditorApplication.playModeStateChanged += OnPlayModeChanged;
 
+            Theme.ND_BTThemeCatalog.ThemeChanged -= OnThemeChanged;
+            Theme.ND_BTThemeCatalog.ThemeChanged += OnThemeChanged;
+
             CreateUIStructure();
             OnSelectionChanged();
         }
@@ -183,6 +216,21 @@ namespace ND_BehaviorTree.Editor
             EditorApplication.update -= OnEditorUpdate;
             Selection.selectionChanged -= OnSelectionChanged;
             EditorApplication.playModeStateChanged -= OnPlayModeChanged;
+            Theme.ND_BTThemeCatalog.ThemeChanged -= OnThemeChanged;
+        }
+
+        private ToolbarButton m_themeButton;
+
+        private void UpdateThemeButton()
+        {
+            if (m_themeButton != null) m_themeButton.text = $"Theme: {Theme.ND_BTThemeCatalog.ActiveName ?? "Custom"} ▾";
+        }
+
+        private void OnThemeChanged()
+        {
+            UpdateThemeButton();
+            m_currentView?.ApplyTheme();
+            m_blackboardView?.ApplyTheme();
         }
 
         private void OnPlayModeChanged(PlayModeStateChange change)
@@ -289,18 +337,22 @@ namespace ND_BehaviorTree.Editor
             toolbar.Add(m_undoButton);
             toolbar.Add(m_redoButton);
 
-            m_copyForAiButton = new ToolbarButton(() =>
-            {
-                if (m_currentGraph == null) return;
-                EditorGUIUtility.systemCopyBuffer = Bridge.CopyForAi.TreeText(m_currentGraph);
-                ShowNotification(new GUIContent("Tree reference copied for AI"), 1.0);
-            })
-            {
-                text = "Copy for AI",
-                tooltip = "Copy this tree's path, GUID and the command to read it, to paste into an AI prompt."
-            };
-            toolbar.Add(m_copyForAiButton);
+            // AI prompt kit: only while AI features are enabled AND unlocked this session.
+            m_aiMenu = new ToolbarMenu { text = "AI", tooltip = "Copy the tree / node catalog for an AI prompt, or import what an AI generated." };
+            m_aiMenu.menu.AppendAction("Copy Tree as Text (ndbt-tree)", _ => CopyForAi("tree text", t => Bridge.AiTreeText.ToText(t)), AiTreeStatus);
+            m_aiMenu.menu.AppendAction("Copy Tree as JSON", _ => CopyForAi("tree JSON", t => Bridge.AiTreeText.ToJsonText(t)), AiTreeStatus);
+            m_aiMenu.menu.AppendAction("Copy Node Catalog (all node types)", _ => CopyForAi("node catalog", _ => Bridge.AiTreeText.NodeCatalog()), _ => DropdownMenuAction.Status.Normal);
+            m_aiMenu.menu.AppendAction("Copy Tree Reference (path, bridge commands)", _ => CopyForAi("tree reference", t => Bridge.CopyForAi.TreeText(t)), AiTreeStatus);
+            m_aiMenu.menu.AppendSeparator();
+            m_aiMenu.menu.AppendAction("Import from Text ∕ JSON...", _ => Bridge.AiImportWindow.Open(m_currentGraph), AiTreeStatus);
+            toolbar.Add(m_aiMenu);
             UpdateAiVisibility();
+
+            // Items added by plugins (ND_BTPluginContext.AddToolbarItem); hidden when there are none.
+            m_pluginsButton = new ToolbarButton { text = "Plugins ▾", tooltip = "Commands added by installed plugins." };
+            m_pluginsButton.clicked += ShowPluginsMenu;
+            toolbar.Add(m_pluginsButton);
+            UpdatePluginsButton();
 
             toolbar.Add(new ToolbarButton(() => m_currentView?.FocusOnRoot())
             {
@@ -323,6 +375,16 @@ namespace ND_BehaviorTree.Editor
             toolbar.Add(m_debugBreadcrumb);
 
             toolbar.Add(new ToolbarSpacer { style = { flexGrow = 1 } });
+
+            m_themeButton = new ToolbarButton() { tooltip = "Switch the graph theme (nodes, canvas, edges, ports)." };
+            m_themeButton.clicked += () =>
+            {
+                var menu = new GenericMenu();
+                Theme.ND_BTThemeCatalog.FillMenu(menu);
+                menu.DropDown(m_themeButton.worldBound);
+            };
+            UpdateThemeButton();
+            toolbar.Add(m_themeButton);
 
             m_lockToggle = new ToolbarToggle { text = "Lock" };
             m_lockToggle.tooltip = "Prevents the editor from changing the tree when you select a different object.";

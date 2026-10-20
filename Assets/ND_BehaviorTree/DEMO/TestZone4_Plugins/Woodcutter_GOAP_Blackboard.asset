@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7586491147045497341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: BoolKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: Carrying
+  value: 0
+--- !u!114 &-7443402753520142379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a00aaece8c260a46a21212a5d5e4a2f, type: 3}
+  m_Name: GameObjectKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.GameObjectKey
+  keyName: FoodSpot
+  value: {fileID: 0}
+--- !u!114 &-5156156766459025165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a00aaece8c260a46a21212a5d5e4a2f, type: 3}
+  m_Name: GameObjectKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.GameObjectKey
+  keyName: TreeSpot
+  value: {fileID: 0}
+--- !u!114 &-4566159851949137784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a00aaece8c260a46a21212a5d5e4a2f, type: 3}
+  m_Name: GameObjectKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.GameObjectKey
+  keyName: AxeSpot
+  value: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08fb034fe2c07504ea5249566ce4797d, type: 3}
+  m_Name: Woodcutter_GOAP_Blackboard
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Blackboard
+  keys:
+  - {fileID: 585462241853594605}
+  - {fileID: -7586491147045497341}
+  - {fileID: 466415650488892329}
+  - {fileID: 1367163156800125461}
+  - {fileID: -4566159851949137784}
+  - {fileID: -5156156766459025165}
+  - {fileID: 1798847990668430196}
+  - {fileID: -7443402753520142379}
+--- !u!114 &466415650488892329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: IntKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.IntKey
+  keyName: Health
+  value: 100
+--- !u!114 &585462241853594605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: BoolKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: HasAxe
+  value: 0
+--- !u!114 &1367163156800125461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: IntKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.IntKey
+  keyName: Stockpile
+  value: 0
+--- !u!114 &1798847990668430196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a00aaece8c260a46a21212a5d5e4a2f, type: 3}
+  m_Name: GameObjectKey
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.GameObjectKey
+  keyName: StockpileSpot
+  value: {fileID: 0}

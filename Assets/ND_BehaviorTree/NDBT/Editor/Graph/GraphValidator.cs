@@ -54,6 +54,7 @@ namespace ND_BehaviorTree.Editor.Graph
         public const string WeightUnused = "weight.unused";
         public const string WeightModifierUnused = "weight.modifier-unused";
         public const string WeightNeverPicked = "weight.never-picked";
+        public const string PluginRuleFailed = "plugin.rule-failed";
 
         public static List<GraphIssue> Validate(BehaviorTree tree)
         {
@@ -127,7 +128,7 @@ namespace ND_BehaviorTree.Editor.Graph
                     issues.Add(new GraphIssue(GraphIssueSeverity.Error, AttachmentListedAsNode,
                         $"'{attachment.name}' is attached to '{node.name}' and also listed as a graph node. Reopen the tree to migrate it.", attachment));
 
-                if (node is CompositeNode composite)
+                if (node is CompositeNode composite && !(node is IOwnedChildren) && !(node is IOrderIndependentChildren)) // list order is authored or irrelevant
                 {
                     if (!ExecutionOrder.IsSortedByPosition(composite.children))
                         issues.Add(new GraphIssue(GraphIssueSeverity.Warning, OrderNotByPosition,
@@ -172,6 +173,9 @@ namespace ND_BehaviorTree.Editor.Graph
                 foreach (var node in nodeSet.Where(n => !reachable.Contains(n) && !(n is RootNode)))
                     issues.Add(new GraphIssue(GraphIssueSeverity.Warning, NodeUnreachable, $"'{node.name}' is not reachable from the root or an event and will not run.", node));
             }
+
+            // Rules added by plugins (ND_BTPluginContext.AddValidationRule).
+            issues.AddRange(Plugins.ND_BTPluginRegistry.RunValidationRules(tree));
 
             return issues;
         }

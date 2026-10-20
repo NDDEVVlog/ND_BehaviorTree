@@ -1,0 +1,918 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8934809849778053565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d63d4d0de6971845a2dc0d418b5b630, type: 3}
+  m_Name: SaysNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.SaysNode
+  m_guid: f966e332-caae-4bdb-9801-605c9dda4037
+  m_position:
+    serializedVersion: 2
+    x: 760
+    y: 960
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  message: +10 wood for the village.
+  messageKey: {fileID: 0}
+  duration: 1.5
+  waitUntilDone: 0
+  logToConsole: 0
+--- !u!114 &-6807782461874540430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 861b9c77b766e9244926a52125bb8bcd, type: 3}
+  m_Name: RerouteNode
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.RerouteNode
+  m_guid: ac32252e-f56a-4a6c-8f55-d8312e125feb
+  m_position:
+    serializedVersion: 2
+    x: 1575.9003
+    y: 345.86462
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  child: {fileID: 1393452467756087070}
+--- !u!114 &-5949586511619312964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5d0df5fc920564c963816cabf37d9c, type: 3}
+  m_Name: MoveToNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.MoveToNode
+  m_guid: 143bfe2b-b2f9-4798-a5c3-25df8ae8d40e
+  m_position:
+    serializedVersion: 2
+    x: 1090
+    y: 920
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  targetKey: {fileID: -7443402753520142379, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+  stoppingDistance: 0.6
+  speed: 0
+  repathInterval: 0.25
+--- !u!114 &-3664869518970624935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d63d4d0de6971845a2dc0d418b5b630, type: 3}
+  m_Name: SaysNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.SaysNode
+  m_guid: 917861b7-196d-4b68-b9eb-3e874d782a8c
+  m_position:
+    serializedVersion: 2
+    x: 430
+    y: 960
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  message: Chop! Chop!
+  messageKey: {fileID: 0}
+  duration: 2
+  waitUntilDone: 0
+  logToConsole: 0
+--- !u!114 &-3538629087109667784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449f03866585e2340aef15f61b143aa5, type: 3}
+  m_Name: Work Loop
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.SequenceNode
+  m_guid: dcfa82cf-b763-443a-863e-55a54e0a975b
+  m_position:
+    serializedVersion: 2
+    x: 700
+    y: 260
+    width: 0
+    height: 0
+  typeName: Work Loop
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: -667726838387116707}
+  - {fileID: -6807782461874540430}
+--- !u!114 &-3487242904577254624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590b86ff9189d1f4fa98b021d5aa6865, type: 3}
+  m_Name: Get Axe
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPActionNode
+  m_guid: 06870dd4-5912-44f6-a4ed-33fd00e950c4
+  m_position:
+    serializedVersion: 2
+    x: 142
+    y: 650
+    width: 0
+    height: 0
+  typeName: Get Axe
+  weight: 1
+  decorators: []
+  services: []
+  preconditions:
+  - key: {fileID: 585462241853594605, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    comparison: 0
+    value:
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  effects:
+  - key: {fileID: 585462241853594605, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    operation: 0
+    value:
+      boolValue: 1
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  cost: 1
+  costKey: {fileID: 0}
+  applyEffects: 1
+  child: {fileID: 1915654429238572019}
+--- !u!114 &-2533960653964294952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57592f2c56200274f8c91572ca11f115, type: 3}
+  m_Name: WaitForNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.WaitForNode
+  m_guid: 06118718-9b6f-4a47-9283-f77cc4b7c829
+  m_position:
+    serializedVersion: 2
+    x: 430
+    y: 1000
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  seconds: 2
+  secondsKey: {fileID: 0}
+--- !u!114 &-2441426942880374505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e1461f7ef66ee849b44f34b527082cb, type: 3}
+  m_Name: StoryBlockNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.StoryBlockNode
+  m_guid: 0912bc5c-1332-4825-a815-48110596becf
+  m_position:
+    serializedVersion: 2
+    x: 731
+    y: 859
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: 942468718268707503}
+  - {fileID: -8934809849778053565}
+  - {fileID: 8030055603961279686}
+--- !u!114 &-2381693095480858286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57592f2c56200274f8c91572ca11f115, type: 3}
+  m_Name: WaitForNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.WaitForNode
+  m_guid: f8bec4a0-7886-4162-a7d7-77f482090b66
+  m_position:
+    serializedVersion: 2
+    x: 1090
+    y: 1000
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  seconds: 1.5
+  secondsKey: {fileID: 0}
+--- !u!114 &-2064222887760094771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e11269abd4d414b96e89e1a2ef6079, type: 3}
+  m_Name: Root
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.RootNode
+  m_guid: 4f1fa494-4dd7-4613-b5a1-9499d3adc04d
+  m_position:
+    serializedVersion: 2
+    x: 700
+    y: 112
+    width: 150
+    height: 100
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  child: {fileID: -3538629087109667784}
+  repeat: 1
+--- !u!114 &-667726838387116707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98a469fb5dc2a9244a3509fb8554f066, type: 3}
+  m_Name: Woodcutter Planner
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPPlannerNode
+  m_guid: b3493a55-53e2-4a89-9415-06921d873d30
+  m_position:
+    serializedVersion: 2
+    x: 500
+    y: 440
+    width: 0
+    height: 0
+  typeName: Woodcutter Planner
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: -3487242904577254624}
+  - {fileID: 4213621015645977367}
+  - {fileID: 5843800843867329335}
+  - {fileID: 5946707672793900234}
+  goals:
+  - name: Stay healthy
+    conditions:
+    - key: {fileID: 466415650488892329, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+      comparison: 3
+      value:
+        boolValue: 0
+        intValue: 40
+        floatValue: 0
+        stringValue: 
+        vectorValue: {x: 0, y: 0, z: 0}
+        objectValue: {fileID: 0}
+    priority: 10
+    priorityKey: {fileID: 0}
+  - name: Keep the stockpile full
+    conditions:
+    - key: {fileID: 1367163156800125461, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+      comparison: 3
+      value:
+        boolValue: 0
+        intValue: 30
+        floatValue: 0
+        stringValue: 
+        vectorValue: {x: 0, y: 0, z: 0}
+        objectValue: {fileID: 0}
+    priority: 1
+    priorityKey: {fileID: 0}
+  goalCheckInterval: 0.5
+  maxReplans: 3
+  maxIterations: 2000
+  logPlans: 1
+--- !u!114 &-640528988371519071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57592f2c56200274f8c91572ca11f115, type: 3}
+  m_Name: WaitForNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.WaitForNode
+  m_guid: 1a3aa0d0-f722-4a6c-b74b-a590135a5eae
+  m_position:
+    serializedVersion: 2
+    x: 100
+    y: 1000
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  seconds: 0.5
+  secondsKey: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e30e10dae0a048499a4cc3b0964bcbf, type: 3}
+  m_Name: Woodcutter_GOAP
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BehaviorTree
+  m_nodes:
+  - {fileID: -2064222887760094771}
+  - {fileID: -3538629087109667784}
+  - {fileID: -667726838387116707}
+  - {fileID: -3487242904577254624}
+  - {fileID: 1915654429238572019}
+  - {fileID: 3181036182555948506}
+  - {fileID: 7570200314127534074}
+  - {fileID: -640528988371519071}
+  - {fileID: 4213621015645977367}
+  - {fileID: 5735493205257845558}
+  - {fileID: 2744681556101763391}
+  - {fileID: -3664869518970624935}
+  - {fileID: -2533960653964294952}
+  - {fileID: 5843800843867329335}
+  - {fileID: -2441426942880374505}
+  - {fileID: 942468718268707503}
+  - {fileID: -8934809849778053565}
+  - {fileID: 8030055603961279686}
+  - {fileID: 5946707672793900234}
+  - {fileID: 1061742256450309710}
+  - {fileID: -5949586511619312964}
+  - {fileID: 5458294840582814667}
+  - {fileID: -2381693095480858286}
+  - {fileID: 1393452467756087070}
+  - {fileID: 6985057164045937378}
+  - {fileID: 6765570334096113153}
+  - {fileID: -6807782461874540430}
+  rootNode: {fileID: -2064222887760094771}
+  blackboard: {fileID: 11400000, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+  Self: {fileID: 0}
+  m_SchemaVersion: 2
+  groups: []
+  notes: []
+--- !u!114 &942468718268707503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5d0df5fc920564c963816cabf37d9c, type: 3}
+  m_Name: MoveToNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.MoveToNode
+  m_guid: dad8401c-b440-405e-88c2-a6f13297e190
+  m_position:
+    serializedVersion: 2
+    x: 760
+    y: 920
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  targetKey: {fileID: 1798847990668430196, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+  stoppingDistance: 0.6
+  speed: 0
+  repathInterval: 0.25
+--- !u!114 &1061742256450309710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e1461f7ef66ee849b44f34b527082cb, type: 3}
+  m_Name: StoryBlockNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.StoryBlockNode
+  m_guid: 37aed1b4-9a9a-4f08-aac6-47bf4c576990
+  m_position:
+    serializedVersion: 2
+    x: 1090
+    y: 860
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: -5949586511619312964}
+  - {fileID: 5458294840582814667}
+  - {fileID: -2381693095480858286}
+--- !u!114 &1393452467756087070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e1461f7ef66ee849b44f34b527082cb, type: 3}
+  m_Name: StoryBlockNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.StoryBlockNode
+  m_guid: fef73efc-4df2-47ef-8962-019236d6198d
+  m_position:
+    serializedVersion: 2
+    x: 1402.151
+    y: 427.3684
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: 6985057164045937378}
+  - {fileID: 6765570334096113153}
+--- !u!114 &1915654429238572019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e1461f7ef66ee849b44f34b527082cb, type: 3}
+  m_Name: StoryBlockNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.StoryBlockNode
+  m_guid: c518adcf-fc2f-43ef-904c-e3aef0496406
+  m_position:
+    serializedVersion: 2
+    x: 100
+    y: 860
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: 3181036182555948506}
+  - {fileID: 7570200314127534074}
+  - {fileID: -640528988371519071}
+--- !u!114 &2744681556101763391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5d0df5fc920564c963816cabf37d9c, type: 3}
+  m_Name: MoveToNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.MoveToNode
+  m_guid: 895b6dc0-d96e-43b4-ba3b-b8b7dea6f4f7
+  m_position:
+    serializedVersion: 2
+    x: 430
+    y: 920
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  targetKey: {fileID: -5156156766459025165, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+  stoppingDistance: 0.6
+  speed: 0
+  repathInterval: 0.25
+--- !u!114 &3181036182555948506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5d0df5fc920564c963816cabf37d9c, type: 3}
+  m_Name: MoveToNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.MoveToNode
+  m_guid: 5364bb57-4588-48bc-9e3f-10d2658b4e50
+  m_position:
+    serializedVersion: 2
+    x: 100
+    y: 920
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  targetKey: {fileID: -4566159851949137784, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+  stoppingDistance: 0.6
+  speed: 0
+  repathInterval: 0.25
+--- !u!114 &4213621015645977367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590b86ff9189d1f4fa98b021d5aa6865, type: 3}
+  m_Name: Chop Tree
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPActionNode
+  m_guid: 703bfdd5-640e-4edd-90cb-6715f21bc827
+  m_position:
+    serializedVersion: 2
+    x: 416
+    y: 649
+    width: 0
+    height: 0
+  typeName: Chop Tree
+  weight: 1
+  decorators: []
+  services: []
+  preconditions:
+  - key: {fileID: 585462241853594605, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    comparison: 0
+    value:
+      boolValue: 1
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  - key: {fileID: -7586491147045497341, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    comparison: 0
+    value:
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  - key: {fileID: 466415650488892329, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    comparison: 3
+    value:
+      boolValue: 0
+      intValue: 20
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  effects:
+  - key: {fileID: -7586491147045497341, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    operation: 0
+    value:
+      boolValue: 1
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  - key: {fileID: 466415650488892329, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    operation: 1
+    value:
+      boolValue: 0
+      intValue: -20
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  cost: 1
+  costKey: {fileID: 0}
+  applyEffects: 1
+  child: {fileID: 5735493205257845558}
+--- !u!114 &5458294840582814667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d63d4d0de6971845a2dc0d418b5b630, type: 3}
+  m_Name: SaysNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.SaysNode
+  m_guid: 2019b72e-5f3e-4fce-a2eb-9eebae75baf7
+  m_position:
+    serializedVersion: 2
+    x: 1090
+    y: 960
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  message: Lunch break!
+  messageKey: {fileID: 0}
+  duration: 1.5
+  waitUntilDone: 0
+  logToConsole: 0
+--- !u!114 &5735493205257845558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e1461f7ef66ee849b44f34b527082cb, type: 3}
+  m_Name: StoryBlockNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.StoryBlockNode
+  m_guid: 5ed34d0b-9996-4e28-a783-b66f98025e5c
+  m_position:
+    serializedVersion: 2
+    x: 430
+    y: 860
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  children:
+  - {fileID: 2744681556101763391}
+  - {fileID: -3664869518970624935}
+  - {fileID: -2533960653964294952}
+--- !u!114 &5843800843867329335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590b86ff9189d1f4fa98b021d5aa6865, type: 3}
+  m_Name: Deliver Logs
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPActionNode
+  m_guid: a2fa157a-1d52-4ccd-9610-7233775b1ad8
+  m_position:
+    serializedVersion: 2
+    x: 760
+    y: 640
+    width: 0
+    height: 0
+  typeName: Deliver Logs
+  weight: 1
+  decorators: []
+  services: []
+  preconditions:
+  - key: {fileID: -7586491147045497341, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    comparison: 0
+    value:
+      boolValue: 1
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  effects:
+  - key: {fileID: -7586491147045497341, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    operation: 0
+    value:
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  - key: {fileID: 1367163156800125461, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    operation: 1
+    value:
+      boolValue: 0
+      intValue: 10
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  cost: 1
+  costKey: {fileID: 0}
+  applyEffects: 1
+  child: {fileID: -2441426942880374505}
+--- !u!114 &5946707672793900234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590b86ff9189d1f4fa98b021d5aa6865, type: 3}
+  m_Name: Eat
+  m_EditorClassIdentifier: ND_BehaviorTree.GOAP::ND_BehaviorTree.GOAP.GOAPActionNode
+  m_guid: 1216d44b-355a-4fc4-94fb-50a90a5f14a6
+  m_position:
+    serializedVersion: 2
+    x: 1134
+    y: 642
+    width: 0
+    height: 0
+  typeName: Eat
+  weight: 1
+  decorators: []
+  services: []
+  preconditions: []
+  effects:
+  - key: {fileID: 466415650488892329, guid: 7f63d29dad3de9045a05f8104c464197, type: 2}
+    operation: 0
+    value:
+      boolValue: 0
+      intValue: 100
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0}
+      objectValue: {fileID: 0}
+  cost: 1
+  costKey: {fileID: 0}
+  applyEffects: 1
+  child: {fileID: 1061742256450309710}
+--- !u!114 &6765570334096113153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57592f2c56200274f8c91572ca11f115, type: 3}
+  m_Name: WaitForNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.WaitForNode
+  m_guid: beef7b1e-bc59-4ca1-ad7e-5f77ffb5d524
+  m_position:
+    serializedVersion: 2
+    x: 1000
+    y: 540
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  seconds: 3
+  secondsKey: {fileID: 0}
+--- !u!114 &6985057164045937378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d63d4d0de6971845a2dc0d418b5b630, type: 3}
+  m_Name: SaysNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.SaysNode
+  m_guid: 3e7c49be-33a2-4a22-8ece-6b04a1d37995
+  m_position:
+    serializedVersion: 2
+    x: 1000
+    y: 500
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  message: Stockpile is full. Break time.
+  messageKey: {fileID: 0}
+  duration: 2
+  waitUntilDone: 0
+  logToConsole: 0
+--- !u!114 &7570200314127534074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d63d4d0de6971845a2dc0d418b5b630, type: 3}
+  m_Name: SaysNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.SaysNode
+  m_guid: 3133fe2c-1504-4a99-9daa-66356f6ee1d2
+  m_position:
+    serializedVersion: 2
+    x: 100
+    y: 960
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  message: Got my axe.
+  messageKey: {fileID: 0}
+  duration: 1.5
+  waitUntilDone: 0
+  logToConsole: 0
+--- !u!114 &8030055603961279686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57592f2c56200274f8c91572ca11f115, type: 3}
+  m_Name: WaitForNode
+  m_EditorClassIdentifier: ND_BehaviorTree.StoryNodes::ND_BehaviorTree.Story.WaitForNode
+  m_guid: deeaf945-506f-48d0-9d66-c6a3e56d18f9
+  m_position:
+    serializedVersion: 2
+    x: 760
+    y: 1000
+    width: 0
+    height: 0
+  typeName: 
+  weight: 1
+  decorators: []
+  services: []
+  selfKey: {fileID: 0}
+  seconds: 0.5
+  secondsKey: {fileID: 0}
