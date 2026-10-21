@@ -1,0 +1,36 @@
+/*
+    Styles a Custom port template (Create > ND_BehaviorTree > Port Template).
+    State classes on the port: nd-port--input / --output / --multi / --plugged / --hover / --candidate.
+    The port's size comes from the theme's Port Size; fill it with the template.
+*/
+.nd-port > .port-body {
+    flex-grow: 1;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 999px; /* clamped to a full circle */
+    background-color: #FFB3C7;
+}
+
+.nd-port--output > .port-body {
+    background-color: #FFD39A;
+}
+
+.port-eye {
+    width: 25%;
+    height: 25%;
+    border-radius: 999px; /* clamped to a full circle */
+    background-color: #201A24;
+}
+
+/* Plugged: eyes close into lines */
+.nd-port--plugged .port-eye {
+    height: 8%;
+    border-radius: 2px;
+}
+
+/* A dragged connection can drop here */
+.nd-port--candidate > .port-body {
+    border-width: 2px;
+    border-color: #FFFFFF;
+}

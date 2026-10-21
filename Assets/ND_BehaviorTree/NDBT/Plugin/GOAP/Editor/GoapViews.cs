@@ -22,6 +22,20 @@ namespace ND_BehaviorTree.GOAP.Editor
             return summary;
         }
 
+        /// <summary>
+        /// Adds the project's default node stylesheet. A pack stylesheet replaces it in the base view, so views whose
+        /// pack stylesheet only overrides parts of the default look add it first (the pack's then wins).
+        /// </summary>
+        public static void ApplyDefaultNodeStyle(VisualElement view) =>
+            ND_BTStyles.Apply(view, ND_BehaviorTreeSetting.Instance.defaultNodeStyle);
+
+        /// <summary>Clicks on <paramref name="element"/> do not start a node drag.</summary>
+        public static T NoDrag<T>(T element) where T : VisualElement
+        {
+            element.RegisterCallback<PointerDownEvent>(evt => evt.StopPropagation());
+            return element;
+        }
+
         public static void SetLines(VisualElement summary, string[] lines)
         {
             if (summary.childCount == lines.Length && lines.Select((l, i) => ((Label)summary[i]).text == l).All(x => x)) return;
@@ -44,6 +58,21 @@ namespace ND_BehaviorTree.GOAP.Editor
         public GoapActionView(Node node, ViewThemeData themeData) : base(node, themeData) { }
 
         private GOAPActionNode Action => (GOAPActionNode)NodeData;
+
+        /// <summary>The NEEDS / DOES / COST panel (rebuilt in place when the action changes).</summary>
+        protected VisualElement Panel => m_Panel;
+
+        /// <summary>Preconditions marked met / unmet by the last Live Debug update (no allocation).</summary>
+        protected void CountLiveConditions(out int met, out int unmet)
+        {
+            met = 0;
+            unmet = 0;
+            foreach (var (_, row, _) in m_ConditionRows)
+            {
+                if (row.ClassListContains("goap-row--met")) met++;
+                else if (row.ClassListContains("goap-row--unmet")) unmet++;
+            }
+        }
 
         protected override void ApplyThemeAndLayout()
         {
@@ -153,6 +182,9 @@ namespace ND_BehaviorTree.GOAP.Editor
         private string m_LiveSignature;
 
         public GoapPlannerView(Node node, ViewThemeData themeData) : base(node, themeData) { }
+
+        /// <summary>The Live Debug line (goal and plan), under the goals.</summary>
+        protected Label LiveLabel => m_Live;
 
         protected override void ApplyThemeAndLayout()
         {

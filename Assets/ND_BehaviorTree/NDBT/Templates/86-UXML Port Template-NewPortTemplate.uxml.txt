@@ -1,0 +1,13 @@
+<!--
+    Your own port look, without code. Port Theme → Shape = Custom, then set Custom Template to this file and
+    Custom Style to a stylesheet (Create > ND_BehaviorTree > Port Style).
+    The elements are cloned inside the port and let clicks through to it. The port itself carries:
+      nd-port, nd-port--input / nd-port--output, nd-port--multi (output taking many children),
+      nd-port--plugged, nd-port--hover, nd-port--candidate (a dragged connection can drop here).
+-->
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="port-body" class="port-body">
+        <ui:VisualElement name="port-eye-left" class="port-eye" />
+        <ui:VisualElement name="port-eye-right" class="port-eye" />
+    </ui:VisualElement>
+</ui:UXML>

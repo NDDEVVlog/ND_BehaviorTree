@@ -1,0 +1,69 @@
+////////////////////////////////////////////////////////////////////////////
+//
+// FB: https://www.facebook.com/profile.php?id=100090693452227
+// Github: https://github.com/NDDEVVlog/ND_BehaviorTree
+//
+////////////////////////////////////////////////////////////////////////////
+
+using ND_BehaviorTree.Editor.CustomGraph;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+/// <summary>
+/// Your own port look (like the built-in Cat). Keep this file in an Editor folder.
+/// To use it: Port Theme → Shape = Custom, then drag this script into Custom Painter
+/// (Project Settings → ND Behavior Tree → Port Theme, or a mapping of a Node Appearance Pack with Override Ports).
+/// Draw() runs again whenever the port is plugged / unplugged, hovered, or can receive a dragged connection.
+/// </summary>
+public class #SCRIPTNAME# : ND_BTPortPainter
+{
+    private static readonly Color Ink = new Color(0.12f, 0.1f, 0.14f, 1f);
+
+    // Optional: the port's size (default: a square of the theme's Port Size).
+    public override Vector2 GetSize(float portSize, BTPortDirection direction, BTPortCapacity capacity) =>
+        new Vector2(portSize * 1.2f, portSize);
+
+    public override void Draw(Painter2D p, Rect rect, in ND_BTPortState state)
+    {
+        float r = Mathf.Min(rect.width, rect.height) * 0.45f;
+        Vector2 c = rect.center;
+
+        // Head: the theme colour, lighter while it can receive a connection.
+        p.fillColor = state.IsCandidate ? Color.Lerp(state.Color, Color.white, 0.35f) : state.Color;
+        p.BeginPath();
+        p.Arc(c, r, 0f, 360f);
+        p.Fill();
+
+        // Eyes: open while waiting for a connection, closed lines once plugged.
+        p.strokeColor = Ink;
+        p.fillColor = Ink;
+        p.lineWidth = Mathf.Max(1f, r * 0.14f);
+        p.lineCap = LineCap.Round;
+        for (int side = -1; side <= 1; side += 2)
+        {
+            Vector2 eye = c + new Vector2(side * r * 0.4f, -r * 0.15f);
+            p.BeginPath();
+            if (state.IsPlugged)
+            {
+                p.MoveTo(eye + new Vector2(-r * 0.15f, 0f));
+                p.LineTo(eye + new Vector2(r * 0.15f, 0f));
+                p.Stroke();
+            }
+            else
+            {
+                p.Arc(eye, r * 0.13f, 0f, 360f);
+                p.Fill();
+            }
+        }
+
+        // A ring while hovered.
+        if (state.IsHover)
+        {
+            p.strokeColor = Color.white;
+            p.lineWidth = Mathf.Max(1f, r * 0.1f);
+            p.BeginPath();
+            p.Arc(c, r, 0f, 360f);
+            p.Stroke();
+        }
+    }
+}

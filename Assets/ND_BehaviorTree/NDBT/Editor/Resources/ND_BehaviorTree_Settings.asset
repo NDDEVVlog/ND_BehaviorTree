@@ -16,34 +16,34 @@ MonoBehaviour:
   enableSettingPassword: SubcribeToNDDEVGAMEandSORA
   activeConfig: {fileID: 11400000, guid: 7e9507e1ae79fa9459fbd8dd87f6603d, type: 2}
   defaultNodeUXML: {fileID: 9197481963319205126, guid: 28fb3ed3c12cbbe4da0dd006c6cc7a24, type: 3}
-  defaultNodeStyle: {fileID: 7433441132597879392, guid: e9dff16fe88688f49b3fa4ff2ccbf433, type: 3}
+  defaultNodeStyle: {fileID: 7433441132597879392, guid: 56edd9fb931184641b0c2e7fe3d72ef4, type: 3}
   graphViewStyle: {fileID: 7433441132597879392, guid: 960474170df95f842adf94741758ef3d, type: 3}
-  graphBackgroundColor: {r: 0.9137255, g: 0.9254902, b: 0.94509804, a: 1}
-  gridColor: {r: 0.827451, g: 0.84705883, b: 0.8745098, a: 1}
+  graphBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.12156863, a: 1}
+  gridColor: {r: 0.18039216, g: 0.18039216, b: 0.18039216, a: 1}
   historyCapacity: 100
   aiFeaturesEnabled: 1
   aiAccessLevel: 2
   aiPasswordSalt: bKk3v1zfF402KfCBCyFqGw==
   aiPasswordHash: RmmCfkigN6yyLd3pYJW9lVtOcqvz4ivqv/ayOqCltfU=
   aiBridgePort: 39877
-  activeThemeName: Light Clear
-  attachmentStyle: {fileID: 7433441132597879392, guid: ebb218b60a2121b4ebaecdf278ab89a2, type: 3}
+  activeThemeName: Default Dark
+  attachmentStyle: {fileID: 0}
   edgeTheme:
-    edgeColor: {r: 0.35686275, g: 0.39215687, b: 0.44705883, a: 1}
-    edgeThickness: 2.5
-    labelBackgroundColor: {r: 1, g: 1, b: 1, a: 0.9019608}
-    labelTextColor: {r: 0.12156863, g: 0.16078432, b: 0.21568628, a: 1}
+    edgeColor: {r: 0.7019608, g: 0.7019608, b: 0.7019608, a: 1}
+    edgeThickness: 3
+    labelBackgroundColor: {r: 0.15, g: 0.15, b: 0.15, a: 0.8}
+    labelTextColor: {r: 1, g: 1, b: 1, a: 1}
     curve: 0
     showArrow: 1
     drawBehindNodes: 0
   portTheme:
-    inputPortColor: {r: 0.14509805, g: 0.3882353, b: 0.92156863, a: 1}
-    outputPortColor: {r: 0.9607843, g: 0.61960787, b: 0.043137256, a: 1}
+    inputPortColor: {r: 0.4, g: 0.8, b: 0.4, a: 1}
+    outputPortColor: {r: 0.8, g: 0.6, b: 0.101960786, a: 1}
     portSize: 14
     shape: 0
     unpluggedImage: {fileID: 0}
     pluggedImage: {fileID: 0}
   blackboardTheme:
     customUXML: {fileID: 9197481963319205126, guid: 1d3c559267abb0845aec1e1f0f8e8b53, type: 3}
-    customUSS: {fileID: 7433441132597879392, guid: 4c307d03062960046bea6707c2e64543, type: 3}
+    customUSS: {fileID: 0}
     backgroundColor: {r: 0.15, g: 0.15, b: 0.15, a: 0.95}

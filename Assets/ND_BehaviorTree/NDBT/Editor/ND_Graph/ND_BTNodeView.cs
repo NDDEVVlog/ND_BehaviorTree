@@ -29,6 +29,9 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         protected VisualElement m_DetailsContainer;
         protected VisualElement m_ServiceContainer;
         protected ViewThemeData m_ThemeData;
+
+        /// <summary>The port look of this node: its appearance pack's override, else the project's Port Theme.</summary>
+        public PortTheme PortTheme => m_ThemeData.PortTheme ?? ND_BehaviorTreeSetting.Instance.portTheme;
         protected Label m_ExecutionIndexBadge;
         protected VisualElement m_DecoratorContainer;
         protected readonly List<ND_BTAttachmentView> m_AttachmentViews = new List<ND_BTAttachmentView>();

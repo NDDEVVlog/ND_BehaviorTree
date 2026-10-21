@@ -24,6 +24,13 @@ namespace ND_BehaviorTree.Editor.Plugins
         public abstract void Register(ND_BTPluginContext context);
     }
 
+    /// <summary>
+    /// Put on an <see cref="ND_BTPlugin"/> subclass that is installed only by calling
+    /// <see cref="ND_BTPluginRegistry.Install"/> (test probes, plugins built at runtime): the domain-load scan skips it.
+    /// </summary>
+    [System.AttributeUsage(System.AttributeTargets.Class, Inherited = false)]
+    public sealed class ND_BTManualInstallAttribute : System.Attribute { }
+
     /// <summary>What a plugin menu item / toolbar item / enable check receives.</summary>
     public sealed class ND_BTPluginArgs
     {

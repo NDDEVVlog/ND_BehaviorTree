@@ -1,0 +1,21 @@
+<!-- GOAP "Compact" (GoapActionCompactView): the default node layout, read top to bottom, in a slim pill. -->
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="node-border" class="node-border">
+        <ui:VisualElement name="main-container" class="main-container">
+            <ui:VisualElement name="top-port" class="port-container" />
+            <ui:VisualElement name="title" class="title">
+                <ui:Image name="icon-image" class="icon-image" />
+                <ui:VisualElement name="title-content-container">
+                    <ui:Label name="title-textfield" class="title-textfield" />
+                    <ui:Label name="type-label" class="type-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="details-container" class="details-container" />
+            <ui:VisualElement name="child-node-container" class="child-node-container" />
+            <ui:VisualElement name="task-node-content" class="task-node-content" />
+            <ui:VisualElement name="bottom-port" class="port-container" />
+            <ui:VisualElement name="input" style="display: none;" />
+            <ui:VisualElement name="output" style="display: none;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -11,7 +11,11 @@ namespace ND_BehaviorTree.Editor
         public MonoScript customViewScript;
         public string styleSheetKey;
         public string uxmlKey;
-        
+
+        [Tooltip("Give this node type its own port look instead of the project's Port Theme.")]
+        public bool overridePorts;
+        public PortTheme ports = new PortTheme();
+
         [HideInInspector] 
         public string nodeTypeFullName;
     }

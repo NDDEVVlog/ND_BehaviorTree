@@ -7,7 +7,7 @@ namespace ND_BehaviorTree.Editor
     /// <summary>
     /// Project Settings pages for ND Behavior Tree:
     ///   Project/ND Behavior Tree                  → general settings (graph theme, templates, port/edge/blackboard themes)
-    ///   Project/ND Behavior Tree/Node Appearance  → the active NodeEditorConfig (per-node UXML/USS/custom view mappings)
+    ///   Project/ND Behavior Tree/Node Appearance  → the active NodeEditorConfig (which Node Appearance Packs are used)
     /// Also reachable from the ND_BehaviorTree menu.
     /// </summary>
     public static class ND_BTSettingsProvider
@@ -59,12 +59,12 @@ namespace ND_BehaviorTree.Editor
                     var config = settings.activeConfig;
                     if (config == null)
                     {
-                        EditorGUILayout.HelpBox("No Node Editor Config is assigned in ND Behavior Tree settings ('Active Config'). Nodes use the default UXML/USS.", MessageType.Warning);
+                        EditorGUILayout.HelpBox("No Node Editor Config is assigned in ND Behavior Tree settings ('Active Config'). Every Node Appearance Pack in the project is used and none can be switched off.", MessageType.Warning);
                         if (GUILayout.Button("Open ND Behavior Tree Settings")) OpenGeneral();
                         return;
                     }
 
-                    EditorGUILayout.HelpBox("Map a node script to a UXML/USS key or a custom ND_BTNodeView subclass. The most specific base class mapping wins.", MessageType.Info);
+                    EditorGUILayout.HelpBox("Node looks come from Node Appearance Packs (Create > ND_BehaviorTree > Node Appearance Pack): each maps node scripts to its own UXML/USS keys or a custom ND_BTNodeView subclass. The most specific node type wins, then the higher pack priority.", MessageType.Info);
                     DrawAssetHeader(config);
                     UnityEditor.Editor.CreateCachedEditor(config, null, ref cachedEditor);
                     EditorGUI.BeginChangeCheck();

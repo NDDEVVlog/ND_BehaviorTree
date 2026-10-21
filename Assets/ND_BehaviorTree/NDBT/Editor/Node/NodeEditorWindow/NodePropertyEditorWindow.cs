@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using ND_BehaviorTree.Editor.CustomGraph;
 
 namespace ND_BehaviorTree.Editor
@@ -88,7 +89,8 @@ namespace ND_BehaviorTree.Editor
             
             EditorGUILayout.LabelField("Node-Specific Properties", EditorStyles.boldLabel);
             DrawNodeSpecificProperties();
-            
+            DrawPluginButtons();
+
             EditorGUILayout.Space(20);
             DrawScriptButton();
 
@@ -214,6 +216,30 @@ namespace ND_BehaviorTree.Editor
                 EditorGUILayout.PropertyField(property, true);
 
             } while (property.NextVisible(false));
+        }
+
+        /// <summary>Buttons plugins add for this node type (ND_BTPluginContext.AddNodePropertiesButton).</summary>
+        private void DrawPluginButtons()
+        {
+            var buttons = Plugins.ND_BTPluginRegistry.NodePropertyButtons(_targetNode).ToList();
+            if (buttons.Count == 0) return;
+            var tree = FindOwnerTree(_targetNode);
+            if (tree == null) return; // not saved in a tree asset: there is no graph to change
+
+            var args = new Plugins.ND_BTPluginArgs { Tree = tree, Graph = new Graph.BehaviorTreeGraphService(tree), Node = _targetNode };
+            EditorGUILayout.Space(10);
+            foreach (var button in buttons)
+            {
+                bool clicked;
+                using (new EditorGUI.DisabledScope(!Plugins.ND_BTPluginRegistry.IsEnabled(button, args)))
+                    clicked = GUILayout.Button(button.Path);
+                if (!clicked) continue;
+
+                int version = args.Graph.History.Version;
+                Plugins.ND_BTPluginRegistry.Run(button, args);
+                if (args.Graph.History.Version != version) ND_BehaviorTreeEditorWindow.OnTreeChangedExternally(tree, save: true);
+                _serializedNodeObject.Update();
+            }
         }
 
         private void DrawScriptButton()

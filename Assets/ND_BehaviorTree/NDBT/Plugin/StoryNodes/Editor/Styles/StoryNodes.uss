@@ -169,6 +169,10 @@ Selectors start with the view class (.story-node / .story-flow / ...) so they wi
     background-color: #7E3FD6;
 }
 
+.story-add-case:disabled {
+    opacity: 0.4;
+}
+
 /* === Case: compact pill under a Switch === */
 .story-case > .node-border {
     background-color: #4B3570;

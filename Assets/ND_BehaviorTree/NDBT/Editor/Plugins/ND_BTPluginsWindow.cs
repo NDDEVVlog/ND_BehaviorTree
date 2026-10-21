@@ -68,6 +68,8 @@ namespace ND_BehaviorTree.Editor.Plugins
                 Row("Canvas menu", Paths(ctx.CanvasItems));
                 Row("Node menu", Paths(ctx.NodeItems));
                 Row("Toolbar", Paths(ctx.ToolbarItems));
+                Row("Properties", Paths(ctx.PropertyButtons));
+                Row("Appearance", ctx.AppearancePacks.Count == 0 ? null : string.Join(", ", ctx.AppearancePacks.Select(p => p != null ? p.name : "(missing)")));
                 Row("Validation", ctx.Rules.Count == 0 ? null : string.Join(", ", ctx.Rules.Select(r => r.Name)));
                 Row("Edit hooks", ctx.Unhooks.Count == 0 ? null : ctx.Unhooks.Count.ToString());
                 EditorGUILayout.LabelField("Class", plugin.GetType().FullName, EditorStyles.miniLabel);

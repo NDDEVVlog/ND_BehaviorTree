@@ -36,8 +36,9 @@ namespace ND_BehaviorTree.Editor
     /// <summary>
     /// Port look. Cat: a drawn cat head that opens its mouth while unplugged and closes it once connected.
     /// Image: two pictures (e.g. Pop Cat) — <see cref="PortTheme.unpluggedImage"/> while unplugged, <see cref="PortTheme.pluggedImage"/> once connected.
+    /// Custom: your own port — a <see cref="CustomGraph.ND_BTPortPainter"/> script and/or a UXML template (+ USS).
     /// </summary>
-    public enum PortShape { Circle, Square, Diamond, Cat, Image }
+    public enum PortShape { Circle, Square, Diamond, Cat, Image, Custom }
 
     [Serializable]
     public class PortTheme
@@ -50,6 +51,12 @@ namespace ND_BehaviorTree.Editor
         public Texture2D unpluggedImage;
         [Tooltip("Shape = Image: picture once the port IS connected.")]
         public Texture2D pluggedImage;
+        [Tooltip("Shape = Custom: an ND_BTPortPainter script that draws the port (Create > ND_BehaviorTree > Port Painter).")]
+        public UnityEditor.MonoScript customPainter;
+        [Tooltip("Shape = Custom: UXML cloned into the port. The port carries nd-port--input/--output/--multi/--plugged/--hover/--candidate for your USS.")]
+        public VisualTreeAsset customTemplate;
+        [Tooltip("Shape = Custom: stylesheet added to the port (style the template by the nd-port--* state classes).")]
+        public StyleSheet customStyle;
 
         public PortTheme Copy() => (PortTheme)MemberwiseClone();
     }
@@ -94,5 +101,7 @@ namespace ND_BehaviorTree.Editor
     {
         public StyleSheet CustomStyle { get; set; }
         public VisualTreeAsset CustomUXML { get; set; }
+        /// <summary>Port look for this node type (from its appearance pack mapping); null = the project's port theme.</summary>
+        public PortTheme PortTheme { get; set; }
     }
 }

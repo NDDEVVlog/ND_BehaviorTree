@@ -36,7 +36,7 @@ namespace ND_BehaviorTree.Editor.Plugins
 
         static ND_BTPluginRegistry()
         {
-            foreach (var type in TypeCache.GetTypesDerivedFrom<ND_BTPlugin>().Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition).OrderBy(t => t.FullName))
+            foreach (var type in TypeCache.GetTypesDerivedFrom<ND_BTPlugin>().Where(IsAutoInstalled).OrderBy(t => t.FullName))
             {
                 if (type.GetConstructor(Type.EmptyTypes) == null)
                 {
@@ -46,6 +46,10 @@ namespace ND_BehaviorTree.Editor.Plugins
                 Install((ND_BTPlugin)Activator.CreateInstance(type));
             }
         }
+
+        /// <summary>True for plugin types the domain-load scan installs: concrete, not generic, not [ND_BTManualInstall].</summary>
+        public static bool IsAutoInstalled(Type type) =>
+            !type.IsAbstract && !type.IsGenericTypeDefinition && !type.IsDefined(typeof(ND_BTManualInstallAttribute), false);
 
         public static IReadOnlyList<Entry> Entries => s_Entries;
 
@@ -57,6 +61,10 @@ namespace ND_BehaviorTree.Editor.Plugins
         public static IEnumerable<ND_BTLiveSectionEntry> LiveSectionEntries => Active.SelectMany(c => c.LiveSections);
         public static IEnumerable<ND_BTPluginMenuItem> NodeMenuItems(Node node) =>
             node == null ? Enumerable.Empty<ND_BTPluginMenuItem>() : Active.SelectMany(c => c.NodeItems).Where(i => i.NodeType.IsInstanceOfType(node));
+        public static IEnumerable<(ND_BTPlugin Plugin, NodeAppearancePack Pack)> AppearancePacks =>
+            Active.SelectMany(c => c.AppearancePacks.Select(p => (c.Plugin, p)));
+        public static IEnumerable<ND_BTPluginMenuItem> NodePropertyButtons(Node node) =>
+            node == null ? Enumerable.Empty<ND_BTPluginMenuItem>() : Active.SelectMany(c => c.PropertyButtons).Where(i => i.NodeType.IsInstanceOfType(node));
 
         /// <summary>
         /// Registers a plugin (done automatically for every subclass; call it yourself only for plugins created at
@@ -114,6 +122,8 @@ namespace ND_BehaviorTree.Editor.Plugins
             context.CanvasItems.Clear();
             context.NodeItems.Clear();
             context.ToolbarItems.Clear();
+            context.PropertyButtons.Clear();
+            context.AppearancePacks.Clear();
             context.Rules.Clear();
             context.LiveSections.Clear();
             context.LiveUpdates.Clear();

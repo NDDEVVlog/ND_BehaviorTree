@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a45a1f1c03646379758f4661989bd2f, type: 3}
+  m_Name: GoapAppearancePack
+  m_EditorClassIdentifier:
+  priority: 0
+  ownerPlugin: {fileID: 11500000, guid: a7fa0a491c3f10f428b737c379f769cf, type: 3}
+  mappings:
+  - nodeScript: {fileID: 11500000, guid: 98a469fb5dc2a9244a3509fb8554f066, type: 3}
+    customViewScript: {fileID: 11500000, guid: 9b47f4ac5245464182ce62d9200d8c7f, type: 3}
+    styleSheetKey: Card
+    uxmlKey: Card
+    overridePorts: 1
+    ports:
+      inputPortColor: {r: 0.9607843, g: 0.78431374, b: 0.25882354, a: 1}
+      outputPortColor: {r: 0.9607843, g: 0.78431374, b: 0.25882354, a: 1}
+      portSize: 18
+      shape: 5
+      unpluggedImage: {fileID: 0}
+      pluggedImage: {fileID: 0}
+      customPainter: {fileID: 11500000, guid: 21002a2b777f4e42902bd0b6103e5b80, type: 3}
+      customTemplate: {fileID: 0}
+      customStyle: {fileID: 0}
+    nodeTypeFullName: ND_BehaviorTree.GOAP.GOAPPlannerNode
+  - nodeScript: {fileID: 11500000, guid: 590b86ff9189d1f4fa98b021d5aa6865, type: 3}
+    customViewScript: {fileID: 11500000, guid: ccd95d63c0a4417a9224db2a686dd23a, type: 3}
+    styleSheetKey: Compact
+    uxmlKey: Compact
+    overridePorts: 1
+    ports:
+      inputPortColor: {r: 0.42352942, g: 0.7529412, b: 0.4392157, a: 1}
+      outputPortColor: {r: 0.35686275, g: 0.60784316, b: 0.8352941, a: 1}
+      portSize: 12
+      shape: 5
+      unpluggedImage: {fileID: 0}
+      pluggedImage: {fileID: 0}
+      customPainter: {fileID: 0}
+      customTemplate: {fileID: 9197481963319205126, guid: c55117d625334cf9a646e82749f69151, type: 3}
+      customStyle: {fileID: 7433441132597879392, guid: 665b2533380c4659be41dda20ccfe0a7, type: 3}
+    nodeTypeFullName: ND_BehaviorTree.GOAP.GOAPActionNode
+  _styleSheets:
+  - styleKey: Card
+    styleSheet: {fileID: 7433441132597879392, guid: 12c0680c92ac44079308c6a62ea064eb, type: 3}
+  - styleKey: Compact
+    styleSheet: {fileID: 7433441132597879392, guid: 4b6c12e82ee74610a3a1e27b70500b91, type: 3}
+  _uxmlAssets:
+  - uxmlKey: Card
+    uxmlAsset: {fileID: 9197481963319205126, guid: c923dcb1befd42c2be4ebdeb74a9313b, type: 3}
+  - uxmlKey: Compact
+    uxmlAsset: {fileID: 9197481963319205126, guid: 94159da34378406bab77d3fa6ab6c524, type: 3}

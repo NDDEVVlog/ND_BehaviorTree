@@ -16,6 +16,8 @@ namespace ND_BehaviorTree.Editor.Plugins
         internal readonly List<ND_BTPluginMenuItem> CanvasItems = new List<ND_BTPluginMenuItem>();
         internal readonly List<ND_BTPluginMenuItem> NodeItems = new List<ND_BTPluginMenuItem>();
         internal readonly List<ND_BTPluginMenuItem> ToolbarItems = new List<ND_BTPluginMenuItem>();
+        internal readonly List<ND_BTPluginMenuItem> PropertyButtons = new List<ND_BTPluginMenuItem>();
+        internal readonly List<NodeAppearancePack> AppearancePacks = new List<NodeAppearancePack>();
         internal readonly List<ND_BTPluginRule> Rules = new List<ND_BTPluginRule>();
         internal readonly List<ND_BTLiveSectionEntry> LiveSections = new List<ND_BTLiveSectionEntry>();
         internal readonly List<Action<ND_BTLiveContext>> LiveUpdates = new List<Action<ND_BTLiveContext>>();
@@ -63,6 +65,24 @@ namespace ND_BehaviorTree.Editor.Plugins
         /// <summary>Adds an item to the graph window's "Plugins" toolbar menu (shown only when some plugin adds one).</summary>
         public void AddToolbarItem(string path, Action<ND_BTPluginArgs> action, Func<ND_BTPluginArgs, bool> enabled = null) =>
             ToolbarItems.Add(new ND_BTPluginMenuItem(Plugin, path, action, enabled, typeof(Node)));
+
+        /// <summary>
+        /// Adds a button to the Node Properties window of nodes of type <typeparamref name="T"/> (and subclasses).
+        /// <see cref="ND_BTPluginArgs.Canvas"/> is null there; change the graph through <see cref="ND_BTPluginArgs.Graph"/>.
+        /// </summary>
+        public void AddNodePropertiesButton<T>(string label, Action<ND_BTPluginArgs> action, Func<ND_BTPluginArgs, bool> enabled = null) where T : Node =>
+            PropertyButtons.Add(new ND_BTPluginMenuItem(Plugin, label, action, enabled, typeof(T)));
+
+        /// <summary>
+        /// Uses <paramref name="pack"/>'s node looks while this plugin is installed (it can still be switched off in
+        /// Node Appearance settings). A pack asset is also found by the project scan; set its Owner Plugin to this
+        /// plugin's script so the scan stops using it once the plugin is uninstalled.
+        /// </summary>
+        public void AddAppearancePack(NodeAppearancePack pack)
+        {
+            if (pack == null) throw new ArgumentNullException(nameof(pack), $"[{Plugin.DisplayName}] AddAppearancePack needs a pack (load it with AssetDatabase).");
+            AppearancePacks.Add(pack);
+        }
 
         /// <summary>
         /// Adds a check to <see cref="GraphValidator.Validate"/> (graph window warnings, bridge "validate", tests).

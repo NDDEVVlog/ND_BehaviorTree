@@ -1,0 +1,80 @@
+/* GOAP "Card" look (GoapAppearancePack → GoapPlannerCardView). Layered over the default node style. */
+.goap-card > .node-border {
+    border-radius: 12px;
+    min-width: 240px;
+    background-color: #23262D;
+}
+
+.goap-card > .node-border > .main-container {
+    background-color: #23262D;
+    border-radius: 10px;
+}
+
+.goap-card > .node-border > .main-container > .goap-card-band {
+    height: 4px;
+    background-color: #F5C842;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.goap-card > .node-border > .main-container > .title {
+    background-color: #343A46;
+    padding: 8px 12px;
+}
+
+.goap-card > .node-border > .main-container > .title > .icon-image {
+    width: 34px;
+    height: 34px;
+}
+
+/* Node type as a badge under the title */
+.goap-card > .node-border > .main-container > .title > #title-content-container > .type-label {
+    align-self: flex-start;
+    font-size: 9px;
+    -unity-font-style: bold;
+    color: #1E1E1E;
+    background-color: #F5C842;
+    border-radius: 3px;
+    padding: 0 5px;
+    margin-top: 3px;
+}
+
+/* Goals: one framed row each */
+.goap-card .goap-summary {
+    padding: 6px 10px;
+}
+
+.goap-card .goap-summary > Label {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left-width: 3px;
+    border-left-color: #F5C842;
+    border-radius: 3px;
+    padding: 2px 6px;
+    margin: 2px 0;
+}
+
+/* Live Debug: the plan as step chips */
+.goap-card .goap-steps {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 10px 8px 10px;
+}
+
+.goap-step {
+    font-size: 10px;
+    padding: 1px 6px;
+    margin: 2px 4px 0 0;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #A8B0BD;
+}
+
+.goap-step--done {
+    color: #6FD474;
+}
+
+.goap-step--current {
+    background-color: #F5C842;
+    color: #1E1E1E;
+    -unity-font-style: bold;
+}

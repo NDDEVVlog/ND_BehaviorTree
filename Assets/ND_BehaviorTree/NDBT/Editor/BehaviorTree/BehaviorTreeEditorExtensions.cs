@@ -14,7 +14,10 @@ namespace ND_BehaviorTree.Editor
         private const string COMPOSITE_TEMPLATE = "82-C# Composite Node Script-NewCompositeNode.cs.txt";
         private const string DECORATOR_TEMPLATE = "83-C# Decorator Node Script-NewDecoratorNode.cs.txt";
         private const string SERVICE_TEMPLATE = "84-C# Service Node Script-NewServiceNode.cs.txt";
-        
+        private const string PORT_PAINTER_TEMPLATE = "85-C# Port Painter Script-NewPortPainter.cs.txt";
+        private const string PORT_UXML_TEMPLATE = "86-UXML Port Template-NewPortTemplate.uxml.txt";
+        private const string PORT_USS_TEMPLATE = "87-USS Port Style-NewPortStyle.uss.txt";
+
         [MenuItem("Assets/Create/ND_BehaviorTree/Action Node", false, 81)]
         public static void CreateActionNodeScript()
         {
@@ -37,6 +40,29 @@ namespace ND_BehaviorTree.Editor
         public static void CreateServiceNodeScript()
         {
             CreateScriptFromTemplate("NewServiceNode.cs", SERVICE_TEMPLATE);
+        }
+
+        [MenuItem("Assets/Create/ND_BehaviorTree/Port Painter", false, 85)]
+        public static void CreatePortPainterScript()
+        {
+            // The painter derives from an Editor-only class, so the script compiles only inside an Editor folder.
+            string folder = AssetDatabase.GetAssetPath(Selection.activeObject);
+            if (!string.IsNullOrEmpty(folder) && !AssetDatabase.IsValidFolder(folder)) folder = Path.GetDirectoryName(folder)?.Replace('\\', '/');
+            if (string.IsNullOrEmpty(folder) || !("/" + folder + "/").Contains("/Editor/"))
+                Debug.LogWarning($"[BehaviorTreeEditorExtensions] '{folder}' is not inside an Editor folder: a Port Painter there will not compile. Move it into an Editor folder.");
+            CreateScriptFromTemplate("NewPortPainter.cs", PORT_PAINTER_TEMPLATE);
+        }
+
+        [MenuItem("Assets/Create/ND_BehaviorTree/Port Template (UXML)", false, 86)]
+        public static void CreatePortTemplate()
+        {
+            CreateScriptFromTemplate("NewPortTemplate.uxml", PORT_UXML_TEMPLATE);
+        }
+
+        [MenuItem("Assets/Create/ND_BehaviorTree/Port Style (USS)", false, 87)]
+        public static void CreatePortStyle()
+        {
+            CreateScriptFromTemplate("NewPortStyle.uss", PORT_USS_TEMPLATE);
         }
 
         private static void CreateScriptFromTemplate(string defaultFileName, string templateFileName)

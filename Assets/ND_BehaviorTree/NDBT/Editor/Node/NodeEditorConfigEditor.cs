@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 using ND_BehaviorTree.Editor.CustomGraph;
@@ -10,59 +9,47 @@ namespace ND_BehaviorTree.Editor
     {
         public override void OnInspectorGUI()
         {
+            var config = (NodeEditorConfig)target;
+
+            EditorGUI.BeginChangeCheck();
             DrawDefaultInspector();
+            if (EditorGUI.EndChangeCheck()) ND_BTViewFactory.InvalidateCache();
 
             EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Packs", EditorStyles.boldLabel);
 
-            if (GUILayout.Button("Force Refresh Mappings", GUILayout.Height(30)))
+            if (ND_BehaviorTreeSetting.Instance.activeConfig != config)
             {
-                ProcessMappings((NodeEditorConfig)target);
+                EditorGUILayout.HelpBox("This is not the Active Config in ND Behavior Tree settings; the list below shows what it would use.", MessageType.Info);
             }
 
-            if (GUI.changed)
+            var packs = NodeAppearanceRegistry.Collect(config);
+            if (packs.Count == 0)
             {
-                ProcessMappings((NodeEditorConfig)target);
-                // Any edit (keys, UXML/USS assets, custom view) can change how nodes look.
-                ND_BTViewFactory.InvalidateCache();
+                EditorGUILayout.HelpBox("No Node Appearance Pack found. Create one with Create > ND_BehaviorTree > Node Appearance Pack.", MessageType.None);
+                return;
             }
-        }
 
-        private void ProcessMappings(NodeEditorConfig config)
-        {
-            bool hasChanged = false;
-            
-            foreach (var mapping in config.mappings)
+            foreach (var info in packs)
             {
-                if (mapping.nodeScript != null)
+                using (new EditorGUILayout.HorizontalScope())
                 {
-                    Type nodeType = mapping.nodeScript.GetClass();
-                    if (nodeType != null)
-                    {
-                        string newName = nodeType.FullName;
+                    bool enabled = EditorGUILayout.Toggle(info.Enabled, GUILayout.Width(16));
+                    using (new EditorGUI.DisabledScope(true))
+                        EditorGUILayout.ObjectField(info.Pack, typeof(NodeAppearancePack), false);
+                    string source = info.Source == NodeAppearanceSource.Plugin ? $"Plugin: {info.PluginName}" : info.Source.ToString();
+                    EditorGUILayout.LabelField($"{source} · priority {info.Pack.priority} · {info.Pack.mappings.Count} mappings", EditorStyles.miniLabel, GUILayout.Width(240));
 
-                        if (mapping.nodeTypeFullName != newName)
-                        {
-                            mapping.nodeTypeFullName = newName;
-                            hasChanged = true; 
-                        }
-                    }
-                    else if (mapping.nodeTypeFullName != null)
+                    if (enabled != info.Enabled)
                     {
-                        mapping.nodeTypeFullName = null;
-                        hasChanged = true;
+                        Undo.RecordObject(config, enabled ? "Enable Appearance Pack" : "Disable Appearance Pack");
+                        config.SetEnabled(info.Pack, enabled);
+                        EditorUtility.SetDirty(config);
+                        ND_BTViewFactory.InvalidateCache();
                     }
                 }
-                else if (mapping.nodeTypeFullName != null)
-                {
-                    mapping.nodeTypeFullName = null;
-                    hasChanged = true;
-                }
-            }
-                
-            if (hasChanged)
-            {
-                EditorUtility.SetDirty(config);
-                ND_BTViewFactory.InvalidateCache();
+                if (info.InactiveReason != null)
+                    EditorGUILayout.LabelField(" ", $"Not used: {info.InactiveReason}", EditorStyles.miniLabel);
             }
         }
     }

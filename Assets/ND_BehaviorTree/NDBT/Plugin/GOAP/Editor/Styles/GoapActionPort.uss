@@ -1,0 +1,36 @@
+/* Port of the GOAP Action "Compact" (GoapActionPort.uxml). State classes come from ND_BTPortView (nd-port--*). */
+.nd-port > .goap-port-body {
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    border-width: 2px;
+    border-color: #6CC070;
+    background-color: #1C1F25;
+}
+
+.nd-port--output > .goap-port-body {
+    border-color: #5B9BD5;
+}
+
+/* The pip: a short bar while waiting, a full bar once connected */
+.goap-port-pip {
+    width: 30%;
+    height: 30%;
+    border-radius: 1px;
+    background-color: #6CC070;
+}
+
+.nd-port--output .goap-port-pip {
+    background-color: #5B9BD5;
+}
+
+.nd-port--plugged .goap-port-pip {
+    width: 70%;
+}
+
+/* A dragged connection can drop here */
+.nd-port--candidate > .goap-port-body {
+    border-color: #FFFFFF;
+    background-color: #2A3340;
+}

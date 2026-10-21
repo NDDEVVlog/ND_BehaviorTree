@@ -17,6 +17,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         public static void InvalidateCache()
         {
             s_ViewCache.Clear();
+            NodeAppearanceRegistry.Invalidate();
         }
 
         public static ND_BTNodeView CreateNodeView(Node nodeData)
@@ -42,9 +43,8 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         }
 
         /// <summary>
-        /// Finds the mapping for the node type, walking up base classes (most specific wins).
-        /// Mappings match by exact Type (from the MonoScript) and fall back to the stored type name
-        /// (full name, or the legacy short name written by older versions).
+        /// Finds the mapping for the node type among the active Node Appearance Packs (see
+        /// <see cref="NodeAppearanceRegistry.TryResolve(Type, out NodeAppearancePack, out NodeEditorMapping)"/>).
         /// </summary>
         private static CacheEntry ResolveConfigForType(Type nodeType)
         {
@@ -54,22 +54,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 ThemeData = new ViewThemeData()
             };
 
-            var activeConfig = ND_BehaviorTreeSetting.Instance.activeConfig;
-            if (activeConfig == null || activeConfig.mappings == null)
-            {
-                Debug.LogWarning("[ND_BTViewFactory] ND_BehaviorTreeSetting.activeConfig is not assigned. Nodes use the default view and theme.");
-                entry.ViewType = FindAttributeView(nodeType) ?? entry.ViewType;
-                return entry;
-            }
-
-            NodeEditorMapping winningMapping = null;
-            for (Type currentType = nodeType; currentType != null && winningMapping == null; currentType = currentType.BaseType)
-            {
-                foreach (var mapping in activeConfig.mappings)
-                {
-                    if (Matches(mapping, currentType)) { winningMapping = mapping; break; }
-                }
-            }
+            NodeAppearanceRegistry.TryResolve(nodeType, out var pack, out var winningMapping);
 
             if (winningMapping == null || winningMapping.customViewScript == null)
             {
@@ -88,8 +73,13 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                     Debug.LogError($"[ND_BTViewFactory] Mapping for {nodeType.FullName}: customViewScript '{winningMapping.customViewScript.name}' is not a {nameof(ND_BTNodeView)} subclass. Using the default view.");
             }
 
-            entry.ThemeData.CustomStyle = activeConfig.GetStyleSheet(winningMapping.styleSheetKey);
-            entry.ThemeData.CustomUXML = activeConfig.GetUXML(winningMapping.uxmlKey);
+            entry.ThemeData.CustomStyle = pack.GetStyleSheet(winningMapping.styleSheetKey);
+            entry.ThemeData.CustomUXML = pack.GetUXML(winningMapping.uxmlKey);
+            if (winningMapping.overridePorts) entry.ThemeData.PortTheme = winningMapping.ports;
+            if (!string.IsNullOrEmpty(winningMapping.styleSheetKey) && entry.ThemeData.CustomStyle == null)
+                Debug.LogError($"[ND_BTViewFactory] Pack '{pack.name}': the mapping for {nodeType.FullName} uses stylesheet key '{winningMapping.styleSheetKey}', which the pack does not define. Using the default style.", pack);
+            if (!string.IsNullOrEmpty(winningMapping.uxmlKey) && entry.ThemeData.CustomUXML == null)
+                Debug.LogError($"[ND_BTViewFactory] Pack '{pack.name}': the mapping for {nodeType.FullName} uses UXML key '{winningMapping.uxmlKey}', which the pack does not define. Using the default UXML.", pack);
             return entry;
         }
 
@@ -107,14 +97,6 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 }
             }
             return null;
-        }
-
-        private static bool Matches(NodeEditorMapping mapping, Type type)
-        {
-            if (mapping == null) return false;
-            if (mapping.nodeScript != null) return mapping.nodeScript.GetClass() == type;
-            return !string.IsNullOrEmpty(mapping.nodeTypeFullName)
-                && (mapping.nodeTypeFullName == type.FullName || mapping.nodeTypeFullName == type.Name);
         }
     }
 }

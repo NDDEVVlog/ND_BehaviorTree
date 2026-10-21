@@ -302,8 +302,8 @@ MonoBehaviour:
   m_guid: b3493a55-53e2-4a89-9415-06921d873d30
   m_position:
     serializedVersion: 2
-    x: 500
-    y: 440
+    x: 496
+    y: 398.66666
     width: 0
     height: 0
   typeName: Woodcutter Planner

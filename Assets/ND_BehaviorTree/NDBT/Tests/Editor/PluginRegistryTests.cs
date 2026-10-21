@@ -11,7 +11,8 @@ using UnityEngine.TestTools;
 
 namespace ND_BehaviorTree.Editor.Tests
 {
-    /// <summary>Configurable plugin for tests (not auto-installed: it has no parameterless constructor).</summary>
+    /// <summary>Configurable plugin for tests; installed by each test, never by the domain-load scan.</summary>
+    [ND_BTManualInstall]
     public sealed class ProbePlugin : ND_BTPlugin
     {
         private readonly Action<ND_BTPluginContext> m_Register;
@@ -54,6 +55,7 @@ namespace ND_BehaviorTree.Editor.Tests
                 ctx.AddCanvasMenuItem("Probe/Canvas", _ => { });
                 ctx.AddNodeMenuItem<SequenceNode>("Probe/Sequence Only", _ => { });
                 ctx.AddToolbarItem("Probe/Toolbar", _ => { });
+                ctx.AddNodePropertiesButton<SequenceNode>("Probe Button", _ => { });
                 ctx.AddValidationRule("probe", _ => new[] { new GraphIssue(GraphIssueSeverity.Warning, "probe.issue", "probe") });
             });
 
@@ -64,13 +66,22 @@ namespace ND_BehaviorTree.Editor.Tests
             var sel = f.Create<SelectorNode>(0, 200);
             Assert.IsTrue(ND_BTPluginRegistry.NodeMenuItems(seq).Any(i => i.Path == "Probe/Sequence Only"));
             Assert.IsFalse(ND_BTPluginRegistry.NodeMenuItems(sel).Any(i => i.Plugin == plugin), "node items are filtered by node type");
+            Assert.IsTrue(ND_BTPluginRegistry.NodePropertyButtons(seq).Any(i => i.Path == "Probe Button"));
+            Assert.IsFalse(ND_BTPluginRegistry.NodePropertyButtons(sel).Any(i => i.Plugin == plugin), "property buttons are filtered by node type");
             Assert.IsTrue(GraphValidator.Validate(f.Tree).Any(i => i.Code == "probe.issue"));
 
             Assert.IsTrue(ND_BTPluginRegistry.Uninstall(plugin));
 
             Assert.IsFalse(ND_BTThemeCatalog.All().Any(e => e.Name == "Probe Theme"));
             Assert.IsFalse(ND_BTPluginRegistry.CanvasMenuItems.Concat(ND_BTPluginRegistry.ToolbarItems).Any(i => i.Plugin == plugin));
+            Assert.IsFalse(ND_BTPluginRegistry.NodePropertyButtons(seq).Any(i => i.Plugin == plugin));
             Assert.IsFalse(GraphValidator.Validate(f.Tree).Any(i => i.Code == "probe.issue"));
+        }
+
+        [Test]
+        public void ManualInstallPlugin_IsSkippedByTheDomainLoadScan()
+        {
+            Assert.IsFalse(ND_BTPluginRegistry.IsAutoInstalled(typeof(ProbePlugin)), "the scan would log 'needs a public parameterless constructor' for it");
         }
 
         [Test]

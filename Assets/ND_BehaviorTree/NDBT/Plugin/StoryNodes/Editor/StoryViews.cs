@@ -46,6 +46,7 @@ namespace ND_BehaviorTree.Story.Editor
     {
         private StorySentenceView m_Sentence;
         private VisualElement m_SyncWarning;
+        private Button m_SyncButton;
 
         public StoryFlowView(Node node, ViewThemeData themeData) : base(node, themeData) { }
 
@@ -68,13 +69,16 @@ namespace ND_BehaviorTree.Story.Editor
                 m_SyncWarning = new VisualElement();
                 m_SyncWarning.AddToClassList("story-sync");
                 m_SyncWarning.Add(new Label("Cases out of date"));
-                m_SyncWarning.Add(new Button(SyncCases) { text = "Sync" }.NoDrag());
                 this.Q("title")?.parent?.Add(m_SyncWarning);
-                UpdateSyncWarning();
 
                 var addCase = new Button(AddCase) { text = "+ Case", tooltip = "Add a case (and its Case node). Rename it in the 'Cases' list of the properties (double-click the Switch)." };
                 addCase.AddToClassList("story-add-case");
-                this.Q("title")?.parent?.Add(addCase.NoDrag());
+                this.Q("title")?.Add(addCase.NoDrag());
+
+                m_SyncButton = new Button(SyncCases) { text = "Sync", tooltip = "Rebuild the Case nodes from the 'Cases' list (enabled when they differ)." };
+                m_SyncButton.AddToClassList("story-add-case");
+                this.Q("title")?.Add(m_SyncButton.NoDrag());
+                UpdateSyncWarning();
             }
         }
 
@@ -98,7 +102,9 @@ namespace ND_BehaviorTree.Story.Editor
         private void UpdateSyncWarning()
         {
             if (m_SyncWarning == null) return;
-            m_SyncWarning.style.display = StorySwitchCases.InSync((StorySwitchNode)NodeData) ? DisplayStyle.None : DisplayStyle.Flex;
+            bool inSync = StorySwitchCases.InSync((StorySwitchNode)NodeData);
+            m_SyncWarning.style.display = inSync ? DisplayStyle.None : DisplayStyle.Flex;
+            m_SyncButton?.SetEnabled(!inSync);
         }
 
         private void SyncCases()

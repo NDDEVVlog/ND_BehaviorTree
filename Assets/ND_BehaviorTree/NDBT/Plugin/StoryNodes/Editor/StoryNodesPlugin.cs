@@ -26,6 +26,10 @@ namespace ND_BehaviorTree.Story.Editor
                 args => StorySwitchCases.Sync(args.Graph, (StorySwitchNode)args.Node),
                 args => !StorySwitchCases.InSync((StorySwitchNode)args.Node));
 
+            context.AddNodePropertiesButton<StorySwitchNode>("Sync Cases",
+                args => StorySwitchCases.Sync(args.Graph, (StorySwitchNode)args.Node),
+                args => !StorySwitchCases.InSync((StorySwitchNode)args.Node));
+
             context.AddNodeMenuItem<StorySwitchNode>("Story/Add Case",
                 args => StorySwitchCases.AddCase(args.Graph, (StorySwitchNode)args.Node));
 

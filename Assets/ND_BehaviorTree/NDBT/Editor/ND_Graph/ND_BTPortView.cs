@@ -34,6 +34,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         private readonly PortShape m_Shape;
         private readonly Texture2D m_UnpluggedImage;
         private readonly Texture2D m_PluggedImage;
+        private ND_BTPortPainter m_Painter;
         private bool m_Hover;
         private bool m_Candidate;
 
@@ -43,7 +44,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             Direction = direction;
             Capacity = capacity;
 
-            var theme = ND_BehaviorTreeSetting.Instance.portTheme;
+            var theme = parentNodeView.PortTheme;
             m_Color = direction == BTPortDirection.Input ? theme.inputPortColor : theme.outputPortColor;
             m_Size = theme.portSize;
             m_Shape = theme.shape;
@@ -54,12 +55,24 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 Debug.LogWarning("[ND_BTPortView] Port shape is Image but the port theme has no unplugged/plugged image; drawing circles instead. Assign both in Project Settings → ND Behavior Tree → Port Theme.");
                 m_Shape = PortShape.Circle;
             }
-            bool picture = m_Shape == PortShape.Cat || m_Shape == PortShape.Image;
-            float height = m_Shape == PortShape.Image ? m_Size * 1.5f : m_Size; // the picture has transparent margins
+            if (m_Shape == PortShape.Custom)
+            {
+                if (theme.customPainter != null) m_Painter = ND_BTPortPainter.Create(theme.customPainter.GetClass(), theme.customPainter.name);
+                if (m_Painter == null && theme.customTemplate == null)
+                {
+                    Debug.LogWarning("[ND_BTPortView] Port shape is Custom but the port theme has no usable Custom Painter or Custom Template; drawing circles instead.");
+                    m_Shape = PortShape.Circle;
+                }
+            }
+            bool custom = m_Shape == PortShape.Custom;
+            bool picture = m_Shape == PortShape.Cat || m_Shape == PortShape.Image || custom;
+            Vector2 customSize = m_Painter?.GetSize(m_Size, direction, capacity) ?? new Vector2(m_Size, m_Size);
+            float height = m_Shape == PortShape.Image ? m_Size * 1.5f : custom ? customSize.y : m_Size; // the picture has transparent margins
 
             style.alignSelf = Align.Center;
             style.height = height;
-            style.width = m_Shape == PortShape.Cat ? m_Size * 1.25f
+            style.width = custom ? customSize.x
+                        : m_Shape == PortShape.Cat ? m_Size * 1.25f
                         : m_Shape == PortShape.Image ? height
                         : capacity == BTPortCapacity.Multi && m_Shape != PortShape.Diamond ? m_Size * 1.8f
                         : m_Size;
@@ -80,6 +93,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             style.transitionProperty = new List<StylePropertyName> { new StylePropertyName("scale"), new StylePropertyName("background-color") };
             style.transitionDuration = new List<TimeValue> { new TimeValue(0.08f, TimeUnit.Second) };
             if (m_Shape == PortShape.Cat) generateVisualContent += DrawCat;
+            if (custom) SetupCustom(theme);
 
             RegisterCallback<PointerEnterEvent>(_ => { m_Hover = true; UpdateVisual(); });
             RegisterCallback<PointerLeaveEvent>(_ => { m_Hover = false; UpdateVisual(); });
@@ -122,6 +136,14 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 style.backgroundColor = Color.clear;
                 MarkDirtyRepaint(); // the mouth follows the plugged state
             }
+            else if (m_Shape == PortShape.Custom)
+            {
+                style.backgroundColor = Color.clear;
+                EnableInClassList("nd-port--plugged", plugged);
+                EnableInClassList("nd-port--hover", m_Hover);
+                EnableInClassList("nd-port--candidate", m_Candidate);
+                if (m_Painter != null) MarkDirtyRepaint();
+            }
             else if (m_Shape == PortShape.Image)
             {
                 // Mouth open while waiting for a connection, closed once connected; a soft halo when it can receive one.
@@ -146,6 +168,43 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 : Capacity == BTPortCapacity.Multi
                     ? (plugged ? $"Output — {Connections.Count} child(ren). Drag to add more; order = left to right. Alt+click to disconnect all children." : "Output — takes many children: drag to a node's input.")
                     : (plugged ? "Output — connected (single child). Alt+click to disconnect." : "Output — single child: drag to a node's input.")) + catNote;
+        }
+
+        /// <summary>The painter drawing this port (Shape = Custom with a Custom Painter), else null.</summary>
+        public ND_BTPortPainter Painter => m_Painter;
+
+        /// <summary>
+        /// Shape = Custom: clones the template (its elements let clicks through to the port), adds the stylesheet and
+        /// the fixed nd-port classes; the state classes follow in <see cref="UpdateVisual"/>.
+        /// </summary>
+        private void SetupCustom(PortTheme theme)
+        {
+            AddToClassList("nd-port");
+            AddToClassList(Direction == BTPortDirection.Input ? "nd-port--input" : "nd-port--output");
+            EnableInClassList("nd-port--multi", Capacity == BTPortCapacity.Multi);
+            if (theme.customStyle != null) styleSheets.Add(theme.customStyle);
+            if (theme.customTemplate != null)
+            {
+                theme.customTemplate.CloneTree(this);
+                this.Query<VisualElement>().ForEach(e => { if (e != this) e.pickingMode = PickingMode.Ignore; });
+            }
+            if (m_Painter != null) generateVisualContent += DrawCustom;
+        }
+
+        private void DrawCustom(MeshGenerationContext ctx)
+        {
+            var rect = contentRect;
+            if (m_Painter == null || rect.width < 1f || rect.height < 1f) return;
+            try
+            {
+                m_Painter.Draw(ctx.painter2D, rect, new ND_BTPortState(Direction, Capacity, m_Color, Connections.Count, m_Hover, m_Candidate));
+            }
+            catch (System.Exception e)
+            {
+                // Stop drawing it: a throwing painter would otherwise log on every repaint.
+                Debug.LogError($"[ND_BTPortView] Custom Painter '{m_Painter.GetType().FullName}' threw and was turned off for this port: {e}");
+                m_Painter = null;
+            }
         }
 
         /// <summary>Cat head: ears, face, eyes; mouth open while unplugged, a closed "ω" once connected.</summary>

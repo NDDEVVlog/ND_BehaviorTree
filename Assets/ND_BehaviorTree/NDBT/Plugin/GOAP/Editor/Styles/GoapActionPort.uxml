@@ -1,0 +1,6 @@
+<!-- Port of the GOAP Action "Compact" (GoapAppearancePack, styled by GoapActionPort.uss): a rounded step tag. -->
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="goap-port-body" class="goap-port-body">
+        <ui:VisualElement name="goap-port-pip" class="goap-port-pip" />
+    </ui:VisualElement>
+</ui:UXML>
