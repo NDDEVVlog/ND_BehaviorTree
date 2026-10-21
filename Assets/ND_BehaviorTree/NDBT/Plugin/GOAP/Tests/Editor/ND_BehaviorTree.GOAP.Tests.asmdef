@@ -2,6 +2,7 @@
     "name": "ND_BehaviorTree.GOAP.Tests",
     "rootNamespace": "ND_BehaviorTree.GOAP.Tests",
     "references": [
+        "ND.GraphUI",
         "ND_BehaviorTree.Runtime",
         "ND_BehaviorTreeEditor",
         "ND_BehaviorTree.GOAP",

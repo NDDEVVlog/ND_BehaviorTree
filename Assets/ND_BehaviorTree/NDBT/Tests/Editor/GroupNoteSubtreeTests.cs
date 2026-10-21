@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ND.GraphUI;
 using ND_BehaviorTree.Editor.CustomGraph;
 using ND_BehaviorTree.Editor.Graph;
 using NUnit.Framework;
@@ -18,7 +19,7 @@ namespace ND_BehaviorTree.Editor.Tests
         [Test]
         public void Root_ShowsFoldersThenLeaves()
         {
-            var level = ND_BTSearchPopup.GetLevel(Paths, "");
+            var level = GraphSearchPopup.GetLevel(Paths, "");
             CollectionAssert.AreEqual(new[] { "Action", "Composite", "Root Thing" }, level.Select(r => r.Label).ToArray());
             CollectionAssert.AreEqual(new[] { true, true, false }, level.Select(r => r.IsFolder).ToArray());
         }
@@ -26,7 +27,7 @@ namespace ND_BehaviorTree.Editor.Tests
         [Test]
         public void Subfolder_ShowsNestedFolderAndLeaf()
         {
-            var level = ND_BTSearchPopup.GetLevel(Paths, "Action");
+            var level = GraphSearchPopup.GetLevel(Paths, "Action");
             Assert.AreEqual("Movement", level[0].Label);
             Assert.IsTrue(level[0].IsFolder);
             Assert.AreEqual("Action/Movement", level[0].Path);
@@ -37,7 +38,7 @@ namespace ND_BehaviorTree.Editor.Tests
         [Test]
         public void DeepestFolder_ShowsSortedLeaves()
         {
-            var level = ND_BTSearchPopup.GetLevel(Paths, "Action/Movement");
+            var level = GraphSearchPopup.GetLevel(Paths, "Action/Movement");
             CollectionAssert.AreEqual(new[] { "Flee", "Wander" }, level.Select(r => r.Label).ToArray());
             Assert.IsTrue(level.All(r => !r.IsFolder));
         }

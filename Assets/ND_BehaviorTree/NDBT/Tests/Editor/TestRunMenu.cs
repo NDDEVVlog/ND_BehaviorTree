@@ -15,10 +15,13 @@ namespace ND_BehaviorTree.Editor.Tests
     public static class TestRunMenu
     {
         public const string ResultPath = "Library/NDBT/test-results.txt";
-        /// <summary>Core and plugin test assemblies: every editor assembly named "ND_BehaviorTree*.Tests" (naming convention, no registration).</summary>
+        /// <summary>
+        /// Core and plugin test assemblies: every editor assembly named "ND_BehaviorTree*.Tests", plus the standalone
+        /// "ND.*.Tests" modules (Localization, Dialogue…) — naming convention, no registration.
+        /// </summary>
         public static string[] AssemblyNames() => CompilationPipeline.GetAssemblies(AssembliesType.Editor)
             .Select(a => a.name)
-            .Where(n => n.StartsWith("ND_BehaviorTree") && n.EndsWith(".Tests"))
+            .Where(n => (n.StartsWith("ND_BehaviorTree") || n.StartsWith("ND.")) && n.EndsWith(".Tests"))
             .OrderBy(n => n)
             .ToArray();
 

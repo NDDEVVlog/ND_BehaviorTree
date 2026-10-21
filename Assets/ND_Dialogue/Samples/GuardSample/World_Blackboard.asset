@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8695363689129752244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: quest.key
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.IntKey
+  keyName: quest.key
+  value: 0
+--- !u!114 &-8188251403171507142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: Merchant.mood
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.IntKey
+  keyName: Merchant.mood
+  value: 0
+--- !u!114 &-3168817386937096826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: player.gold
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.IntKey
+  keyName: player.gold
+  value: 10
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08fb034fe2c07504ea5249566ce4797d, type: 3}
+  m_Name: World_Blackboard
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Blackboard
+  keys:
+  - {fileID: 21888840079257755}
+  - {fileID: -3168817386937096826}
+  - {fileID: 2427339276163889588}
+  - {fileID: -8695363689129752244}
+  - {fileID: 1383892320339363625}
+  - {fileID: -8188251403171507142}
+  parent: {fileID: 0}
+--- !u!114 &21888840079257755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: player.has_old_key
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: player.has_old_key
+  value: 0
+--- !u!114 &1383892320339363625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ccbfd705f632749b34b7302ec90a9a, type: 3}
+  m_Name: world.gate_position
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Vector3Key
+  keyName: world.gate_position
+  value: {x: 0, y: 0, z: 5}
+--- !u!114 &2427339276163889588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: world.time_of_day
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.FloatKey
+  keyName: world.time_of_day
+  value: 8

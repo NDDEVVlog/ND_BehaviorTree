@@ -83,7 +83,7 @@ namespace {ns}
     }}
 }}
 ",
-                [$"Editor/{asm}.Editor.asmdef"] = Asmdef(asm + ".Editor", ns + ".Editor", new[] { "ND_BehaviorTree.Runtime", "ND_BehaviorTreeEditor", asm }, editorOnly: true),
+                [$"Editor/{asm}.Editor.asmdef"] = Asmdef(asm + ".Editor", ns + ".Editor", new[] { "ND.GraphUI", "ND_BehaviorTree.Runtime", "ND_BehaviorTreeEditor", asm }, editorOnly: true),
                 [$"Editor/{name}Plugin.cs"] =
 $@"using ND_BehaviorTree.Editor.Plugins;
 using UnityEngine;
@@ -156,6 +156,7 @@ $@"{{
     ""name"": ""{asm}.Tests"",
     ""rootNamespace"": ""{ns}.Tests"",
     ""references"": [
+        ""ND.GraphUI"",
         ""ND_BehaviorTree.Runtime"",
         ""ND_BehaviorTreeEditor"",
         ""{asm}"",

@@ -1,4 +1,4 @@
-using ND_BehaviorTree.Editor.CustomGraph;
+using ND.GraphUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,11 +9,11 @@ namespace ND_BehaviorTree.GOAP.Editor
     /// "goal locked" centre once connected, crosshair ticks while hovered, lighter with a white rim while a dragged
     /// connection can drop on it.
     /// </summary>
-    public class GoapPlannerPortPainter : ND_BTPortPainter
+    public class GoapPlannerPortPainter : PortPainter
     {
         private static readonly Color Hollow = new Color(0.11f, 0.12f, 0.15f, 1f);
 
-        public override void Draw(Painter2D p, Rect rect, in ND_BTPortState state)
+        public override void Draw(Painter2D p, Rect rect, in PortState state)
         {
             Vector2 c = rect.center;
             float r = Mathf.Min(rect.width, rect.height) * 0.42f;

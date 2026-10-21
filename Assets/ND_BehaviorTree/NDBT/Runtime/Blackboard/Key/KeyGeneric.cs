@@ -36,6 +36,7 @@ namespace ND_BehaviorTree
             {
                 this.value = newValue;
                 ValueChanged?.Invoke();
+                RaiseChanged();
             }
         }
 

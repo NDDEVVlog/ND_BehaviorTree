@@ -57,7 +57,7 @@ namespace ND_BehaviorTree.GOAP.Editor
                 EditorGUI.LabelField(position, "(tree has no blackboard)");
                 return;
             }
-            var keys = blackboard.keys.Where(k => k != null && (numbersOnly ? GoapEditorUtil.IsNumber(k.GetValueType()) : GoapValue.IsSupported(k.GetValueType())))
+            var keys = blackboard.AllKeys.Where(k => k != null && (numbersOnly ? GoapEditorUtil.IsNumber(k.GetValueType()) : GoapValue.IsSupported(k.GetValueType())))
                 .OrderBy(k => k.keyName).ToList();
             var current = property.objectReferenceValue as Key;
             int index = current == null ? 0 : keys.FindIndex(k => k.keyName == current.keyName) + 1;

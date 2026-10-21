@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ND.GraphUI;
 using ND_BehaviorTree.Editor.CustomGraph;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -317,7 +318,7 @@ namespace ND_BehaviorTree.Editor
             Vector2 screen = window != null
                 ? window.position.position + new Vector2(m_AddButton.worldBound.xMin, m_AddButton.worldBound.yMax)
                 : GUIUtility.GUIToScreenPoint(Vector2.zero);
-            ND_BTSearchPopup.Show(screen, "Add Key", BlackboardKeySearchProvider.BuildEntries(), data => AddKey((Type)data));
+            GraphSearchPopup.Show(screen, "Add Key", BlackboardKeySearchProvider.BuildEntries(), data => AddKey((Type)data));
         }
 
         private void CreateAndAssignBlackboard()

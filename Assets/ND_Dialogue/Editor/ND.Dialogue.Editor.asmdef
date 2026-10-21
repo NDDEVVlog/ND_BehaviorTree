@@ -1,0 +1,22 @@
+{
+    "name": "ND.Dialogue.Editor",
+    "rootNamespace": "ND.Dialogue.Editor",
+    "references": [
+        "ND.Dialogue",
+        "ND.Localization",
+        "ND.Localization.Editor",
+        "ND.GraphUI",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

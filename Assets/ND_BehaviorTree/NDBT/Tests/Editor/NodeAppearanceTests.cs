@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ND.GraphUI;
 using ND_BehaviorTree.Editor.Plugins;
 using NUnit.Framework;
 using UnityEngine;
@@ -177,9 +178,9 @@ namespace ND_BehaviorTree.Editor.Tests
         [Test]
         public void PortPainterCreate_RejectsTypesThatAreNotPainters()
         {
-            LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("not a concrete ND_BTPortPainter"));
-            Assert.IsNull(CustomGraph.ND_BTPortPainter.Create(typeof(string), "NotAPainter"));
-            Assert.IsInstanceOf<TestPortPainter>(CustomGraph.ND_BTPortPainter.Create(typeof(TestPortPainter), "TestPortPainter"));
+            LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("not a concrete PortPainter"));
+            Assert.IsNull(PortPainter.Create(typeof(string), "NotAPainter"));
+            Assert.IsInstanceOf<TestPortPainter>(PortPainter.Create(typeof(TestPortPainter), "TestPortPainter"));
         }
 
         [Test]

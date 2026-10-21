@@ -1,0 +1,22 @@
+{
+    "name": "ND.Dialogue.NDBT.Editor",
+    "rootNamespace": "ND.Dialogue.NDBT.Editor",
+    "references": [
+        "ND.Dialogue",
+        "ND.Dialogue.Editor",
+        "ND.Dialogue.NDBT",
+        "ND.Localization",
+        "ND_BehaviorTree.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

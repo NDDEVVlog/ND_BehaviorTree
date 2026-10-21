@@ -25,7 +25,7 @@ MonoBehaviour:
   aiAccessLevel: 2
   aiPasswordSalt: bKk3v1zfF402KfCBCyFqGw==
   aiPasswordHash: RmmCfkigN6yyLd3pYJW9lVtOcqvz4ivqv/ayOqCltfU=
-  aiBridgePort: 39877
+  aiBridgePort: 9998
   activeThemeName: Default Dark
   attachmentStyle: {fileID: 0}
   edgeTheme:
@@ -43,6 +43,9 @@ MonoBehaviour:
     shape: 0
     unpluggedImage: {fileID: 0}
     pluggedImage: {fileID: 0}
+    customPainter: {fileID: 0}
+    customTemplate: {fileID: 0}
+    customStyle: {fileID: 0}
   blackboardTheme:
     customUXML: {fileID: 9197481963319205126, guid: 1d3c559267abb0845aec1e1f0f8e8b53, type: 3}
     customUSS: {fileID: 0}

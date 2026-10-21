@@ -36,6 +36,11 @@ namespace ND_BehaviorTree.Editor.Bridge
         private static Thread s_Thread;
         private static string s_Token;
         private static int s_RunningPort;
+        /// <summary>The configured port the running server was started for (the actual port may be a fallback).</summary>
+        private static int s_ConfiguredPort;
+
+        /// <summary>After a domain reload the previous listener can keep the port for a while: try the next ones.</summary>
+        private const int PortFallbacks = 10;
         private static readonly ConcurrentQueue<PendingRequest> s_Queue = new ConcurrentQueue<PendingRequest>();
 
         public static bool IsRunning => s_Listener != null && s_Listener.IsListening;
@@ -56,31 +61,43 @@ namespace ND_BehaviorTree.Editor.Bridge
         public static void Sync()
         {
             bool shouldRun = AiAccess.IsActive;
-            if (shouldRun && (!IsRunning || s_RunningPort != AiAccess.Port)) { Stop(); Start(); }
+            if (shouldRun && (!IsRunning || s_ConfiguredPort != AiAccess.Port)) { Stop(); Start(); }
             else if (!shouldRun && IsRunning) Stop();
         }
 
         private static void Start()
         {
-            try
+            s_ConfiguredPort = AiAccess.Port;
+            string firstError = null;
+            for (int offset = 0; offset <= PortFallbacks; offset++)
             {
-                s_Token = Guid.NewGuid().ToString("N");
-                s_RunningPort = AiAccess.Port;
-                s_Listener = new HttpListener();
-                s_Listener.Prefixes.Add($"http://127.0.0.1:{s_RunningPort}/");
-                s_Listener.Start();
-                s_Thread = new Thread(ListenLoop) { IsBackground = true, Name = "NDBT Bridge" };
-                s_Thread.Start();
-                WriteInfoFile();
-                LastError = null;
-                Debug.Log($"{LogTag} Listening on 127.0.0.1:{s_RunningPort} ({AiAccess.Level}). Connection info: {InfoFilePath}");
+                int port = s_ConfiguredPort + offset;
+                if (port > 65535) break;
+                try
+                {
+                    s_Token = Guid.NewGuid().ToString("N");
+                    s_RunningPort = port;
+                    s_Listener = new HttpListener();
+                    s_Listener.Prefixes.Add($"http://127.0.0.1:{s_RunningPort}/");
+                    s_Listener.Start();
+                    s_Thread = new Thread(ListenLoop) { IsBackground = true, Name = "NDBT Bridge" };
+                    s_Thread.Start();
+                    WriteInfoFile(); // ndbt reads the actual port from here
+                    LastError = offset == 0 ? null : $"Port {s_ConfiguredPort} was busy ({firstError}); using {s_RunningPort}.";
+                    Debug.Log($"{LogTag} Listening on 127.0.0.1:{s_RunningPort} ({AiAccess.Level})" +
+                              (offset == 0 ? string.Empty : $" — configured port {s_ConfiguredPort} was busy") + $". Connection info: {InfoFilePath}");
+                    return;
+                }
+                catch (Exception e)
+                {
+                    firstError ??= e.Message;
+                    try { s_Listener?.Close(); } catch (Exception) { /* never started */ }
+                    s_Listener = null;
+                }
             }
-            catch (Exception e)
-            {
-                LastError = e.Message;
-                Debug.LogError($"{LogTag} Could not start on port {s_RunningPort}: {e.Message}. Change the port in Project Settings → ND Behavior Tree → AI Access.");
-                Stop();
-            }
+            LastError = firstError;
+            Debug.LogError($"{LogTag} Could not start on ports {s_ConfiguredPort}–{s_ConfiguredPort + PortFallbacks}: {firstError}. Change the port in Project Settings → ND Behavior Tree → AI Access.");
+            Stop();
         }
 
         public static void Stop()

@@ -145,7 +145,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
             else
             {
-                var compatible = blackboard.keys.Where(k => k != null && KeySlotScanner.IsCompatible(slot, k, out _)).OrderBy(k => k.keyName).ToList();
+                var compatible = blackboard.AllKeys.Where(k => k != null && KeySlotScanner.IsCompatible(slot, k, out _)).OrderBy(k => k.keyName).ToList();
                 if (compatible.Count == 0) menu.AddDisabledItem(new GUIContent($"No {KeySlotScanner.FriendlyTypeName(slot.RequiredValueType)} keys on the Blackboard"));
                 foreach (var key in compatible)
                 {

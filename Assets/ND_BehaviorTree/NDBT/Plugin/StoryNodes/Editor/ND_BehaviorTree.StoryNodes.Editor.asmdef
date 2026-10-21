@@ -2,6 +2,7 @@
     "name": "ND_BehaviorTree.StoryNodes.Editor",
     "rootNamespace": "ND_BehaviorTree.Story.Editor",
     "references": [
+        "ND.GraphUI",
         "ND_BehaviorTree.Runtime",
         "ND_BehaviorTreeEditor",
         "ND_BehaviorTree.StoryNodes"

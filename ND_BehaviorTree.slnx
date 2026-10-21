@@ -1,13 +1,25 @@
 ﻿<Solution>
+  <Project Path="ND.Dialogue.csproj" />
+  <Project Path="ND.Dialogue.Editor.csproj" />
   <Project Path="ND_BehaviorTree.Runtime.csproj" />
   <Project Path="ND_BehaviorTree.GOAP.csproj" />
   <Project Path="ND_BehaviorTreeEditor.csproj" />
+  <Project Path="ND.Dialogue.Tests.csproj" />
   <Project Path="ND_BehaviorTree.GOAP.Editor.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="ND_BehaviorTree.Editor.Tests.csproj" />
+  <Project Path="ND.GraphUI.Tests.csproj" />
   <Project Path="ND_BehaviorTree.StoryNodes.csproj" />
+  <Project Path="ND.Dialogue.Editor.Tests.csproj" />
+  <Project Path="ND.Dialogue.NDBT.Editor.csproj" />
+  <Project Path="ND.Localization.Editor.csproj" />
+  <Project Path="ND.GraphUI.csproj" />
+  <Project Path="ND.Localization.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="ND.Dialogue.NDBT.csproj" />
+  <Project Path="ND.Dialogue.NDBT.Tests.csproj" />
   <Project Path="ND_BehaviorTree.StoryNodes.Editor.csproj" />
+  <Project Path="ND.Localization.Tests.csproj" />
   <Project Path="ND_BehaviorTree.GOAP.Tests.csproj" />
   <Project Path="ND_BehaviorTree.StoryNodes.Tests.csproj" />
 </Solution>

@@ -1,0 +1,17 @@
+{
+    "name": "ND.Dialogue.NDBT",
+    "rootNamespace": "ND.Dialogue.NDBT",
+    "references": [
+        "ND.Dialogue",
+        "ND_BehaviorTree.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

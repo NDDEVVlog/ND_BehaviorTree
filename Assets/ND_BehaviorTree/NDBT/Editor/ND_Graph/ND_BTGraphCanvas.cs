@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ND.GraphUI;
 using ND_BehaviorTree.Editor.Graph;
 using UnityEditor;
 using UnityEngine;
@@ -9,34 +10,20 @@ using UnityEngine.UIElements;
 namespace ND_BehaviorTree.Editor.CustomGraph
 {
     /// <summary>
-    /// The graph view: pan/zoom, selection, and input. It never mutates graph data directly;
-    /// every change goes through <see cref="BehaviorTreeGraphService"/> and the view redraws after Undo/Redo.
+    /// The behavior-tree graph view. Pan/zoom, selection, connection drags and input come from <see cref="GraphCanvas"/>;
+    /// this class draws a <see cref="BehaviorTree"/> and routes every change through <see cref="BehaviorTreeGraphService"/>.
+    /// It never mutates graph data directly, and redraws after Undo/Redo.
     /// </summary>
-    public class ND_BTGraphCanvas : VisualElement
+    public class ND_BTGraphCanvas : GraphCanvas<ND_BTNodeView, ND_BTEdgeView>
     {
         public BehaviorTree TreeData { get; private set; }
         public SerializedObject SerializedTree { get; private set; }
         public BehaviorTreeGraphService Graph { get; private set; }
-        public VisualElement ContentContainer { get; private set; }
-        public ND_BTConnectionManager ConnectionManager { get; private set; }
 
-        protected Dictionary<string, ND_BTNodeView> m_NodeDictionary = new Dictionary<string, ND_BTNodeView>();
-        protected List<ND_BTEdgeView> m_Edges = new List<ND_BTEdgeView>();
         protected List<ND_BTGroupView> m_GroupViews = new List<ND_BTGroupView>();
         protected List<ND_BTNoteView> m_NoteViews = new List<ND_BTNoteView>();
 
-        protected Vector2 m_PanOffset = Vector2.zero;
-        protected float m_ZoomFactor = 1.0f;
-        protected bool m_IsPanning;
-        protected Vector2 m_LastMousePosition;
-        protected Vector2 m_CurrentMousePosition;
-
         protected ND_BehaviorTreeEditorWindow m_Window;
-
-        public List<ND_BTNodeView> SelectedNodes { get; private set; } = new List<ND_BTNodeView>();
-        private VisualElement m_SelectionBox;
-        private bool m_IsBoxSelecting;
-        private Vector2 m_BoxSelectStartPos;
 
         // Detached snapshot shared across canvases so copy/paste works between trees.
         private static GraphClipboard s_Clipboard;
@@ -47,97 +34,38 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             SerializedTree = serializedObject;
             Graph = new BehaviorTreeGraphService(TreeData);
             m_Window = window;
+            HostWindow = window;
 
-            focusable = true;
-            tabIndex = 0;
-            style.flexGrow = 1;
-            style.overflow = Overflow.Hidden;
-            style.backgroundColor = ND_BehaviorTreeSetting.Instance.graphBackgroundColor;
-
-            ContentContainer = new VisualElement { style = { transformOrigin = new TransformOrigin(0, 0) } };
-            hierarchy.Add(ContentContainer);
-
-            m_SelectionBox = new VisualElement();
-            m_SelectionBox.style.position = Position.Absolute;
-            m_SelectionBox.style.backgroundColor = new Color(0.1f, 0.5f, 1f, 0.2f);
-            m_SelectionBox.style.borderLeftColor = m_SelectionBox.style.borderRightColor =
-            m_SelectionBox.style.borderTopColor = m_SelectionBox.style.borderBottomColor = new Color(0.1f, 0.5f, 1f, 1f);
-            m_SelectionBox.style.borderLeftWidth = m_SelectionBox.style.borderRightWidth =
-            m_SelectionBox.style.borderTopWidth = m_SelectionBox.style.borderBottomWidth = 1f;
-            m_SelectionBox.style.display = DisplayStyle.None;
-            ContentContainer.Add(m_SelectionBox);
-
-            ConnectionManager = new ND_BTConnectionManager(this);
-
-            RegisterCallback<WheelEvent>(OnWheel);
-            RegisterCallback<PointerDownEvent>(OnPointerDown);
-            RegisterCallback<PointerDownEvent>(OnEdgeDoubleClick, TrickleDown.TrickleDown); // before groups/notes under the edge
-            RegisterCallback<PointerMoveEvent>(OnPointerMove);
-            RegisterCallback<PointerUpEvent>(OnPointerUp);
-            RegisterCallback<PointerCaptureOutEvent>(evt => { m_IsPanning = false; m_IsBoxSelecting = false; });
-            RegisterCallback<KeyDownEvent>(OnKeyDown, TrickleDown.TrickleDown);
             RegisterCallback<AttachToPanelEvent>(evt => { Undo.undoRedoPerformed -= OnUndoRedo; Undo.undoRedoPerformed += OnUndoRedo; });
             RegisterCallback<DetachFromPanelEvent>(evt => Undo.undoRedoPerformed -= OnUndoRedo);
-
-            this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
-            generateVisualContent += DrawGrid;
 
             DrawExistingData();
             ReportValidationIssues();
         }
 
-        #region Selection
+        protected override Color BackgroundColor => ND_BehaviorTreeSetting.Instance.graphBackgroundColor;
+        protected override Color GridColor => ND_BehaviorTreeSetting.Instance.gridColor;
 
-        public void ClearSelection()
-        {
-            foreach (var node in SelectedNodes) node.RemoveFromClassList("selected");
-            SelectedNodes.Clear();
-        }
-
-        public void AddToSelection(ND_BTNodeView node)
-        {
-            if (!SelectedNodes.Contains(node))
-            {
-                node.AddToClassList("selected");
-                SelectedNodes.Add(node);
-            }
-        }
-
-        public void ToggleSelection(ND_BTNodeView node)
-        {
-            if (SelectedNodes.Contains(node))
-            {
-                node.RemoveFromClassList("selected");
-                SelectedNodes.Remove(node);
-            }
-            else AddToSelection(node);
-        }
-
-        #endregion
+        private static Node NodeOf(GraphPortView port) => (port?.ParentNodeView as ND_BTNodeView)?.NodeData;
 
         #region Drawing
 
         /// <summary>Re-reads the theme from the settings (canvas colours, node style, edges, ports) and redraws.</summary>
         public void ApplyTheme()
         {
-            style.backgroundColor = ND_BehaviorTreeSetting.Instance.graphBackgroundColor;
+            RefreshCanvasLook();
             Rebuild();
-            MarkDirtyRepaint();
         }
 
         /// <summary>Rebuilds all views from data, keeping pan/zoom and selection.</summary>
         public void Rebuild()
         {
             var selectedIds = new HashSet<string>(SelectedNodes.Where(v => v.NodeData != null).Select(v => v.NodeData.id));
-            foreach (var edge in m_Edges) RemoveElement(edge);
-            foreach (var view in m_NodeDictionary.Values) RemoveElement(view);
+            ClearViews();
             foreach (var view in m_GroupViews) RemoveElement(view);
             foreach (var view in m_NoteViews) RemoveElement(view);
-            m_Edges.Clear();
-            m_NodeDictionary.Clear();
             m_GroupViews.Clear();
             m_NoteViews.Clear();
-            SelectedNodes.Clear();
 
             DrawExistingData();
 
@@ -225,55 +153,19 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
         }
 
-        public void AddElement(VisualElement element) => ContentContainer.Add(element);
-        public void RemoveElement(VisualElement element) { if (ContentContainer.Contains(element)) ContentContainer.Remove(element); }
-
         public virtual void AddNodeVisuals(Node nodeData)
         {
-            if (m_NodeDictionary.ContainsKey(nodeData.id)) return;
-            var nodeView = ND_BTViewFactory.CreateNodeView(nodeData);
-            m_NodeDictionary.Add(nodeData.id, nodeView);
-            AddElement(nodeView);
+            if (GetNodeView(nodeData.id) != null) return;
+            RegisterNodeView(ND_BTViewFactory.CreateNodeView(nodeData));
         }
 
-        public virtual void AddEdgeVisuals(ND_BTPortView output, ND_BTPortView input)
-        {
-            var edge = CreateEdgeView(output);
-            edge.SetInputPort(input);
-            output.Connect(edge);
-            input.Connect(edge);
-            m_Edges.Add(edge);
-            if (ND_BehaviorTreeSetting.Instance.edgeTheme.drawBehindNodes) InsertBehindNodes(edge);
-            else AddElement(edge);
-        }
+        /// <summary>Draws a parent → child edge (groups/notes stay behind it; with drawBehindNodes, so do nodes).</summary>
+        public virtual void AddEdgeVisuals(ND_BTPortView output, ND_BTPortView input) =>
+            ConnectViews(output, input, ND_BehaviorTreeSetting.Instance.edgeTheme.drawBehindNodes);
 
-        /// <summary>Places an edge just before the first node view, so nodes and ports draw over it (groups/notes stay behind).</summary>
-        private void InsertBehindNodes(VisualElement edge)
-        {
-            int index = 0;
-            for (; index < ContentContainer.childCount; index++)
-                if (ContentContainer[index] is ND_BTNodeView) break;
-            ContentContainer.Insert(index, edge);
-        }
+        protected override ND_BTEdgeView CreateEdge(GraphPortView output) => new ND_BTEdgeView(output);
 
-        protected virtual ND_BTEdgeView CreateEdgeView(ND_BTPortView output)
-        {
-            return new ND_BTEdgeView(output);
-        }
-
-        private void RemoveEdgeVisuals(ND_BTEdgeView edge)
-        {
-            edge.InputPort?.Disconnect(edge);
-            edge.OutputPort?.Disconnect(edge);
-            m_Edges.Remove(edge);
-            RemoveElement(edge);
-        }
-
-        public ND_BTNodeView GetNodeView(string id)
-        {
-            m_NodeDictionary.TryGetValue(id, out var view);
-            return view;
-        }
+        private void RemoveEdgeVisuals(ND_BTEdgeView edge) => RemoveEdgeView(edge);
 
         /// <summary>Unity Undo/Redo anywhere in the editor (scene, other assets): rebuild only if it touched this tree.</summary>
         private void OnUndoRedo()
@@ -475,70 +367,28 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
 
             foreach (var id in ids)
-            {
-                var view = GetNodeView(id);
-                if (view == null) continue;
-                foreach (var edge in m_Edges.Where(e => e.InputPort == view.InputPort || e.OutputPort == view.OutputPort).ToList())
-                    RemoveEdgeVisuals(edge);
-                m_NodeDictionary.Remove(id);
-                RemoveElement(view);
-            }
+                UnregisterNodeView(GetNodeView(id));
             RefreshExecutionOrder();
         }
 
-        /// <summary>
-        /// While a connection is dragged from <paramref name="start"/>, every port that could receive it glows
-        /// (same rules as the graph service). Null clears the highlight.
-        /// </summary>
-        public void SetConnectionCandidates(ND_BTPortView start)
+        /// <summary>Candidate glow while dragging a connection: same rules as the graph service.</summary>
+        public override bool CanConnect(GraphPortView output, GraphPortView input)
         {
-            foreach (var view in m_NodeDictionary.Values)
-            {
-                view.InputPort?.SetCandidate(false);
-                view.OutputPort?.SetCandidate(false);
-                if (start == null || view == start.ParentNodeView) continue;
-
-                var startNode = start.ParentNodeView.NodeData;
-                if (start.Direction == BTPortDirection.Output)
-                    view.InputPort?.SetCandidate(Graph.CanConnect(startNode, view.NodeData, out _));
-                else
-                    view.OutputPort?.SetCandidate(Graph.CanConnect(view.NodeData, startNode, out _));
-            }
+            var parent = NodeOf(output);
+            var child = NodeOf(input);
+            return parent != null && child != null && Graph.CanConnect(parent, child, out _);
         }
-
-        private const float EdgeHitTolerance = 8f;
 
         /// <summary>
         /// Clicks on an edge (not on a node or port): double-click inserts a reroute ("extended node");
         /// Alt+click cuts the edge (as Alt+click on a pin in Unreal). Alt+drag elsewhere still pans.
         /// </summary>
-        private void OnEdgeDoubleClick(PointerDownEvent evt)
+        protected override bool OnEdgeClicked(GraphEdgeView edge, Vector2 contentPosition, bool cut)
         {
-            if (evt.button != 0) return;
-            bool cut = evt.altKey && evt.clickCount == 1;
-            if (!cut && evt.clickCount != 2) return;
-            if (evt.target is VisualElement target && (target is ND_BTNodeView || target is ND_BTPortView
-                || target.GetFirstAncestorOfType<ND_BTNodeView>() != null)) return;
-
-            Vector2 local = ContentContainer.WorldToLocal(evt.position);
-            var best = EdgeAt(local);
-            if (best == null) return;
-
-            if (cut) DisconnectEdge(best);
-            else InsertReroute(best, local);
-            evt.StopImmediatePropagation();
-        }
-
-        private ND_BTEdgeView EdgeAt(Vector2 contentPoint)
-        {
-            ND_BTEdgeView best = null;
-            float bestDistance = EdgeHitTolerance / Mathf.Max(0.1f, m_ZoomFactor);
-            foreach (var edge in m_Edges)
-            {
-                float distance = edge.DistanceTo(contentPoint);
-                if (distance < bestDistance) { bestDistance = distance; best = edge; }
-            }
-            return best;
+            if (!(edge is ND_BTEdgeView btEdge)) return false;
+            if (cut) DisconnectEdge(btEdge);
+            else InsertReroute(btEdge, contentPosition);
+            return true;
         }
 
         /// <summary>Removes one edge (parent → child).</summary>
@@ -555,12 +405,12 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         }
 
         /// <summary>Alt+click on a port: an input leaves its parent; an output drops all its children (one undo step).</summary>
-        public void DisconnectPort(ND_BTPortView port)
+        public override void DisconnectPort(GraphPortView graphPort)
         {
-            if (port == null || port.Connections.Count == 0) return;
-            var managedBy = port.Direction == BTPortDirection.Input ? OwnerOf(port.ParentNodeView.NodeData) : port.ParentNodeView.NodeData as IOwnedChildren as Node;
+            if (!(graphPort is ND_BTPortView port) || port.Connections.Count == 0) return;
+            var managedBy = port.Direction == PortDirection.Input ? OwnerOf(port.ParentNodeView.NodeData) : port.ParentNodeView.NodeData as IOwnedChildren as Node;
             if (managedBy != null) { ShowNotification($"'{WeightGraph.TitleOf(managedBy)}' manages these connections."); return; }
-            if (port.Direction == BTPortDirection.Input)
+            if (port.Direction == PortDirection.Input)
             {
                 DisconnectInput(port);
                 RefreshWeightLabels();
@@ -568,7 +418,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
             using (new GraphUndoScope(TreeData, "Disconnect Children"))
             {
-                foreach (var edge in port.Connections.ToList())
+                foreach (var edge in port.Connections.OfType<ND_BTEdgeView>().ToList())
                 {
                     var child = edge.InputPort?.ParentNodeView?.NodeData;
                     if (child != null && Graph.Disconnect(port.ParentNodeView.NodeData, child)) RemoveEdgeVisuals(edge);
@@ -594,11 +444,12 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             Rebuild();
         }
 
-        public bool TryConnect(ND_BTPortView output, ND_BTPortView input)
+        public override bool TryConnect(GraphPortView output, GraphPortView input)
         {
-            if (!Graph.Connect(output.ParentNodeView.NodeData, input.ParentNodeView.NodeData)) return false;
+            if (!(output is ND_BTPortView btOutput) || !(input is ND_BTPortView btInput)) return false;
+            if (!Graph.Connect(btOutput.ParentNodeView.NodeData, btInput.ParentNodeView.NodeData)) return false;
             RequestSave();
-            AddEdgeVisuals(output, input);
+            AddEdgeVisuals(btOutput, btInput);
             RefreshExecutionOrder();
             return true;
         }
@@ -606,7 +457,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         /// <summary>Removes the edge entering <paramref name="input"/>.</summary>
         public void DisconnectInput(ND_BTPortView input)
         {
-            var edge = input.Connections.FirstOrDefault();
+            var edge = input.Connections.FirstOrDefault() as ND_BTEdgeView;
             if (edge?.OutputPort == null) return;
             if (edge.OutputPort.ParentNodeView.NodeData is IOwnedChildren) { ShowNotification($"'{WeightGraph.TitleOf(edge.OutputPort.ParentNodeView.NodeData)}' manages this connection."); return; }
             if (!Graph.Disconnect(edge.OutputPort.ParentNodeView.NodeData, input.ParentNodeView.NodeData)) return;
@@ -614,6 +465,8 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             RemoveEdgeVisuals(edge);
             RefreshExecutionOrder();
         }
+
+        public override void CommitNodeMove(IReadOnlyList<GraphNodeView> movedViews) => CommitNodeMove(movedViews.OfType<ND_BTNodeView>());
 
         /// <summary>Called by node views when a drag ends: one undo step, parents re-sorted left-to-right.</summary>
         public void CommitNodeMove(IEnumerable<ND_BTNodeView> movedViews)
@@ -634,30 +487,10 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         }
 
         /// <summary>F key: frame the selected nodes (zoom to fit, max 100%), or the Root when nothing is selected.</summary>
-        public void FrameSelectionOrRoot()
-        {
-            if (SelectedNodes.Count == 0) { FocusOnRoot(); return; }
-            var bounds = SelectedNodes.Select(NodeContentRect).Aggregate((a, b) => Rect.MinMaxRect(
-                Mathf.Min(a.xMin, b.xMin), Mathf.Min(a.yMin, b.yMin), Mathf.Max(a.xMax, b.xMax), Mathf.Max(a.yMax, b.yMax)));
-            float padding = 80f;
-            float zoom = Mathf.Min(1f, layout.width / (bounds.width + padding), layout.height / (bounds.height + padding));
-            FrameRect(bounds, Mathf.Clamp(zoom, 0.2f, 1f));
-        }
+        public void FrameSelectionOrRoot() => FrameSelection();
 
-        private static Rect NodeContentRect(ND_BTNodeView view)
-        {
-            var r = view.layout;
-            if (float.IsNaN(r.width) || r.width <= 0) r = new Rect(view.ViewPosition, new Vector2(200, 80));
-            return r;
-        }
-
-        private void FrameRect(Rect contentRect, float zoom)
-        {
-            m_ZoomFactor = zoom;
-            Vector2 viewCenter = new Vector2(layout.width, layout.height) * 0.5f;
-            m_PanOffset = viewCenter - contentRect.center * m_ZoomFactor;
-            ApplyTransform();
-        }
+        /// <summary>Nothing selected: F frames the Root.</summary>
+        public override void FrameDefault() => FocusOnRoot();
 
         /// <summary>Asks for a folder/name, then moves the selected branch into a new subtree asset.</summary>
         public void ConvertSelectionToSubtree()
@@ -897,15 +730,6 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             foreach (var id in m_FocusOnRun) GetNodeView(id).SetFocusOnRunMarker(true);
         }
 
-        /// <summary>Centres the graph on a node (keeps a readable zoom) and flashes it.</summary>
-        public void FocusNode(ND_BTNodeView view)
-        {
-            if (view == null) return;
-            FrameRect(NodeContentRect(view), Mathf.Clamp(m_ZoomFactor, 0.6f, 1f));
-            view.AddToClassList("nd-flash");
-            view.schedule.Execute(() => view.RemoveFromClassList("nd-flash")).StartingIn(700);
-        }
-
         /// <summary>Highlights the watched agent in the Hierarchy and moves the Scene view to it (selection is not changed).</summary>
         public void PingWatchedAgent()
         {
@@ -949,11 +773,6 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
             RequestSave();
             foreach (var view in m_NodeDictionary.Values) view.RefreshKeyInfo();
-        }
-
-        public void ShowNotification(string message)
-        {
-            if (m_Window != null) m_Window.ShowNotification(new GUIContent(message), 2.5);
         }
 
         public void StepIntoSubtreeLive(SubtreeNode assetNode)
@@ -1090,13 +909,13 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         public virtual void OpenServiceSearch(ND_BTNodeView targetNode, Vector2 screenPosition)
         {
-            ND_BTSearchPopup.Show(screenPosition, "Add Service", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.Service),
+            GraphSearchPopup.Show(screenPosition, "Add Service", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.Service),
                 data => AddServiceToNode((Type)data, targetNode));
         }
 
         public virtual void OpenDecoratorSearch(ND_BTNodeView targetNode, Vector2 screenPosition)
         {
-            ND_BTSearchPopup.Show(screenPosition, "Add Decorator", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.Decorator),
+            GraphSearchPopup.Show(screenPosition, "Add Decorator", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.Decorator),
                 data => AddDecoratorToNode((Type)data, targetNode));
         }
 
@@ -1139,18 +958,10 @@ namespace ND_BehaviorTree.Editor.CustomGraph
 
         #region Input
 
-        private void OnKeyDown(KeyDownEvent evt)
+        /// <summary>Graph keyboard shortcuts (see <see cref="ShortcutHelp"/>); Ctrl+A, Esc and F come from the base canvas. Ctrl = Cmd on macOS.</summary>
+        protected override bool HandleShortcut(KeyDownEvent evt)
         {
-            // Typing in a note/rename field must not trigger graph shortcuts.
-            if ((evt.target as VisualElement)?.GetFirstOfType<TextField>() != null) return;
-
-            if (HandleShortcut(evt)) evt.StopPropagation();
-        }
-
-        /// <summary>Graph keyboard shortcuts (see <see cref="ShortcutHelp"/>). Ctrl = Cmd on macOS.</summary>
-        private bool HandleShortcut(KeyDownEvent evt)
-        {
-            Vector2 mouseLocal = ContentContainer.WorldToLocal(m_CurrentMousePosition);
+            Vector2 mouseLocal = MouseContentPosition;
             bool ctrl = evt.actionKey, shift = evt.shiftKey, alt = evt.altKey;
             switch (evt.keyCode)
             {
@@ -1165,11 +976,6 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                     PasteSelection(mouseLocal); return true;
                 case KeyCode.D when ctrl:
                     DuplicateSelection(); return true;
-                case KeyCode.A when ctrl:
-                    foreach (var view in m_NodeDictionary.Values) AddToSelection(view);
-                    return true;
-                case KeyCode.Escape:
-                    ClearSelection(); return true;
                 case KeyCode.G when ctrl && shift:
                     UngroupSelection(); return true;
                 case KeyCode.G when ctrl:
@@ -1179,8 +985,6 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 case KeyCode.Space when !ctrl && !alt:
                 case KeyCode.Tab when !ctrl && !alt:
                     OpenCreateNodeSearch(mouseLocal); return true;
-                case KeyCode.F when !ctrl:
-                    FrameSelectionOrRoot(); return true;
                 case KeyCode.Home:
                 case KeyCode.H when !ctrl && !alt:
                     FocusOnRoot(); return true;
@@ -1191,7 +995,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
                 case KeyCode.F1:
                     ShowShortcutHelp(); return true;
                 default:
-                    return false;
+                    return base.HandleShortcut(evt);
             }
         }
 
@@ -1230,11 +1034,11 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         public void OpenCreateNodeSearch(Vector2 localPosition)
         {
             Vector2 screenPos = GUIUtility.GUIToScreenPoint(m_CurrentMousePosition);
-            ND_BTSearchPopup.Show(screenPos, "Create Node", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.GraphNode),
+            GraphSearchPopup.Show(screenPos, "Create Node", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.GraphNode),
                 data => AddNewNodeFromSearch((Type)data, localPosition));
         }
 
-        protected virtual void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        protected override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             if (evt.target != this) return;
 
@@ -1242,7 +1046,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             Vector2 localPos = ContentContainer.WorldToLocal(evt.mousePosition);
 
             evt.menu.AppendAction("Create Node...   (Space)", a =>
-                ND_BTSearchPopup.Show(screenPos, "Create Node", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.GraphNode),
+                GraphSearchPopup.Show(screenPos, "Create Node", ND_BTSearchProvider.BuildNodeEntries(NodeSearchKind.GraphNode),
                     data => AddNewNodeFromSearch((Type)data, localPos)));
 
             evt.menu.AppendAction("Create Event", a => AddNewNodeFromSearch(typeof(EventNode), localPos));
@@ -1271,124 +1075,6 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             }
 
             Plugins.ND_BTPluginRegistry.AppendTo(evt.menu, Plugins.ND_BTPluginRegistry.CanvasMenuItems, () => Plugins.ND_BTPluginRegistry.ArgsFor(this, null, localPos));
-        }
-
-        protected virtual void OnWheel(WheelEvent evt)
-        {
-            float zoomDelta = evt.delta.y > 0 ? -0.05f : 0.05f;
-            float newZoom = Mathf.Clamp(m_ZoomFactor + zoomDelta, 0.2f, 3.0f);
-            m_PanOffset = evt.localMousePosition - (evt.localMousePosition - m_PanOffset) * (newZoom / m_ZoomFactor);
-            m_ZoomFactor = newZoom;
-            ApplyTransform();
-            evt.StopPropagation();
-        }
-
-        protected virtual void OnPointerDown(PointerDownEvent evt)
-        {
-            Focus();
-
-            if (evt.button == 2 || (evt.button == 0 && evt.altKey))
-            {
-                m_IsPanning = true;
-                m_LastMousePosition = evt.position;
-                this.CapturePointer(evt.pointerId);
-                evt.StopPropagation();
-            }
-            else if (evt.button == 0 && evt.target == this)
-            {
-                if (!evt.actionKey && !evt.shiftKey) ClearSelection();
-
-                m_IsBoxSelecting = true;
-                m_BoxSelectStartPos = ContentContainer.WorldToLocal(evt.position);
-
-                m_SelectionBox.style.display = DisplayStyle.Flex;
-                m_SelectionBox.style.left = m_BoxSelectStartPos.x;
-                m_SelectionBox.style.top = m_BoxSelectStartPos.y;
-                m_SelectionBox.style.width = 0;
-                m_SelectionBox.style.height = 0;
-
-                this.CapturePointer(evt.pointerId);
-                evt.StopPropagation();
-            }
-        }
-
-        protected virtual void OnPointerMove(PointerMoveEvent evt)
-        {
-            m_CurrentMousePosition = evt.position;
-
-            if (m_IsPanning && this.HasPointerCapture(evt.pointerId))
-            {
-                m_PanOffset += (Vector2)evt.position - m_LastMousePosition;
-                m_LastMousePosition = evt.position;
-                ApplyTransform();
-                evt.StopPropagation();
-            }
-            else if (m_IsBoxSelecting && this.HasPointerCapture(evt.pointerId))
-            {
-                Vector2 currentPos = ContentContainer.WorldToLocal(evt.position);
-                Vector2 min = Vector2.Min(m_BoxSelectStartPos, currentPos);
-                Vector2 max = Vector2.Max(m_BoxSelectStartPos, currentPos);
-
-                m_SelectionBox.style.left = min.x;
-                m_SelectionBox.style.top = min.y;
-                m_SelectionBox.style.width = max.x - min.x;
-                m_SelectionBox.style.height = max.y - min.y;
-                evt.StopPropagation();
-            }
-        }
-
-        protected virtual void OnPointerUp(PointerUpEvent evt)
-        {
-            if (m_IsPanning && this.HasPointerCapture(evt.pointerId))
-            {
-                m_IsPanning = false;
-                this.ReleasePointer(evt.pointerId);
-                evt.StopPropagation();
-            }
-            else if (m_IsBoxSelecting && this.HasPointerCapture(evt.pointerId))
-            {
-                m_IsBoxSelecting = false;
-                m_SelectionBox.style.display = DisplayStyle.None;
-                this.ReleasePointer(evt.pointerId);
-
-                Rect selectionRect = new Rect(
-                    m_SelectionBox.style.left.value.value,
-                    m_SelectionBox.style.top.value.value,
-                    m_SelectionBox.style.width.value.value,
-                    m_SelectionBox.style.height.value.value
-                );
-
-                foreach (var kvp in m_NodeDictionary)
-                {
-                    if (selectionRect.Overlaps(kvp.Value.layout))
-                    {
-                        AddToSelection(kvp.Value);
-                    }
-                }
-                evt.StopPropagation();
-            }
-        }
-
-        protected void ApplyTransform()
-        {
-            ContentContainer.style.translate = new Translate(m_PanOffset.x, m_PanOffset.y, 0);
-            ContentContainer.style.scale = new Scale(new Vector3(m_ZoomFactor, m_ZoomFactor, 1));
-            MarkDirtyRepaint();
-        }
-
-        protected virtual void DrawGrid(MeshGenerationContext ctx)
-        {
-            var painter = ctx.painter2D;
-            painter.strokeColor = ND_BehaviorTreeSetting.Instance.gridColor;
-            painter.lineWidth = 1.0f;
-            float gs = 25f * m_ZoomFactor;
-            float ox = m_PanOffset.x % gs;
-            float oy = m_PanOffset.y % gs;
-
-            painter.BeginPath();
-            for (float x = ox; x < layout.width; x += gs) { painter.MoveTo(new Vector2(x, 0)); painter.LineTo(new Vector2(x, layout.height)); }
-            for (float y = oy; y < layout.height; y += gs) { painter.MoveTo(new Vector2(0, y)); painter.LineTo(new Vector2(layout.width, y)); }
-            painter.Stroke();
         }
 
         #endregion

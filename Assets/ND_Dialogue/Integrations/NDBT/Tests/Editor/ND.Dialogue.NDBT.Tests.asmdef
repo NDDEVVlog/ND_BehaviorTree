@@ -1,0 +1,29 @@
+{
+    "name": "ND.Dialogue.NDBT.Tests",
+    "rootNamespace": "ND.Dialogue.NDBT.Tests",
+    "references": [
+        "ND.Dialogue",
+        "ND.Dialogue.NDBT",
+        "ND.Dialogue.Editor",
+        "ND.Dialogue.NDBT.Editor",
+        "ND.Localization",
+        "ND_BehaviorTree.Runtime",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

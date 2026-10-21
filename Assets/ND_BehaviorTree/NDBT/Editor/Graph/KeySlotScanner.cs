@@ -153,7 +153,7 @@ namespace ND_BehaviorTree.Editor.Graph
 
         /// <summary>True when the key is one of the tree's blackboard keys (linked), false for a detached local value.</summary>
         public static bool IsLinked(BehaviorTree tree, Key key) =>
-            key != null && tree != null && tree.blackboard != null && tree.blackboard.keys.Contains(key);
+            key != null && tree != null && tree.blackboard != null && tree.blackboard.ContainsInChain(key);
 
         public static string FriendlyTypeName(Type type)
         {

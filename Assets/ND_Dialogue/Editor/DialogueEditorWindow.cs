@@ -1,0 +1,299 @@
+using System.Linq;
+using ND.Dialogue.Editor.Plugins;
+using ND.Localization.Editor;
+using UnityEditor;
+using UnityEditor.Callbacks;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace ND.Dialogue.Editor
+{
+    /// <summary>
+    /// ND Dialogue editor — everything is set up here: the database sidebar (conversations, characters, variables,
+    /// quests, events, settings, plugin tabs), the conversation graph, and the entry inspector.
+    /// Double-click a Dialogue Database asset to open it.
+    /// </summary>
+    public class DialogueEditorWindow : EditorWindow
+    {
+        [SerializeField] private DialogueDatabase m_Database;
+        [SerializeField] private int m_ConversationId;
+        [SerializeField] private string m_Locale;
+        [SerializeField] private bool m_SidebarVisible = true;
+
+        private DialogueGraphCanvas m_Canvas;
+        private DialogueEntryInspector m_Inspector;
+        private DialogueDatabasePanel m_Sidebar;
+        private VisualElement m_SidebarPane;
+        private TwoPaneSplitView m_Outer;
+        private ObjectField m_DatabaseField;
+        private ToolbarMenu m_PluginMenu;
+        private Label m_Status;
+
+        public DialogueDatabase Database => m_Database;
+        public DialogueGraphCanvas Canvas => m_Canvas;
+        public string Locale => m_Locale;
+
+        [MenuItem("Window/ND Dialogue/Dialogue Editor")]
+        public static DialogueEditorWindow ShowWindow()
+        {
+            var window = GetWindow<DialogueEditorWindow>();
+            window.titleContent = new GUIContent("Dialogue Editor");
+            window.minSize = new Vector2(900, 420);
+            return window;
+        }
+
+        public static DialogueEditorWindow Open(DialogueDatabase database)
+        {
+            var window = ShowWindow();
+            window.SetDatabase(database);
+            return window;
+        }
+
+        [OnOpenAsset]
+        private static bool OnOpenAsset(int instanceId, int line)
+        {
+            if (!(EditorUtility.InstanceIDToObject(instanceId) is DialogueDatabase database)) return false;
+            Open(database);
+            return true;
+        }
+
+        private void OnEnable()
+        {
+            Undo.undoRedoPerformed += OnUndoRedo;
+            DialoguePluginRegistry.Changed += OnPluginsChanged;
+        }
+
+        private void OnDisable()
+        {
+            Undo.undoRedoPerformed -= OnUndoRedo;
+            DialoguePluginRegistry.Changed -= OnPluginsChanged;
+        }
+
+        /// <summary>Args for plugin callbacks, describing the window's current state.</summary>
+        public DialoguePluginArgs PluginArgs(DialogueEntry entry = null, Vector2 position = default) => new DialoguePluginArgs
+        {
+            Window = this,
+            Canvas = m_Canvas,
+            Database = m_Database,
+            Conversation = m_Canvas?.Conversation,
+            Entry = entry,
+            Position = position,
+            Selection = m_Canvas != null ? m_Canvas.SelectedNodes.Select(v => v.Entry).ToList() : new System.Collections.Generic.List<DialogueEntry>(),
+            Locale = m_Locale,
+        };
+
+        private void CreateGUI()
+        {
+            if (string.IsNullOrEmpty(m_Locale)) m_Locale = LocaleCodes.Project.FirstOrDefault() ?? "en";
+            var root = rootVisualElement;
+            root.Add(BuildToolbar());
+
+            m_Sidebar = new DialogueDatabasePanel { PluginArgs = () => PluginArgs() };
+            m_Sidebar.ConversationSelected += id =>
+            {
+                m_ConversationId = id;
+                LoadConversation();
+            };
+            m_Sidebar.DatabaseChanged += OnSidebarChanged;
+
+            m_Canvas = new DialogueGraphCanvas { HostWindow = this, PluginArgs = (entry, position) => PluginArgs(entry, position) };
+            m_Canvas.SelectionChanged += OnSelectionChanged;
+            m_Canvas.DataChanged += () => SetStatus(string.Empty);
+
+            m_Inspector = new DialogueEntryInspector { PluginArgs = entry => PluginArgs(entry), PanelToScreen = p => position.position + p };
+            m_Inspector.EntryChanged += entry => m_Canvas.RefreshNode(entry);
+            m_Inspector.LinksChanged += () => m_Canvas.Reload();
+            var inspectorScroll = new ScrollView(ScrollViewMode.Vertical);
+            inspectorScroll.Add(m_Inspector);
+
+            var right = new TwoPaneSplitView(1, 340, TwoPaneSplitViewOrientation.Horizontal);
+            right.Add(m_Canvas);
+            right.Add(inspectorScroll);
+
+            var outer = m_Outer = new TwoPaneSplitView(0, 290, TwoPaneSplitViewOrientation.Horizontal) { style = { flexGrow = 1 } };
+            m_SidebarPane = new VisualElement { style = { flexGrow = 1 } };
+            m_SidebarPane.Add(m_Sidebar);
+            outer.Add(m_SidebarPane);
+            outer.Add(right);
+            root.Add(outer);
+            ApplySidebarVisibility(outer);
+
+            Refresh();
+        }
+
+        #region Toolbar
+
+        private VisualElement BuildToolbar()
+        {
+            var bar = new Toolbar();
+            var sidebarToggle = new ToolbarToggle { text = "Database", value = m_SidebarVisible, tooltip = "Show the database sidebar (characters, variables, events, settings…)" };
+            sidebarToggle.RegisterValueChangedCallback(evt =>
+            {
+                m_SidebarVisible = evt.newValue;
+                ApplySidebarVisibility(m_Outer);
+            });
+            bar.Add(sidebarToggle);
+
+            m_DatabaseField = new ObjectField { objectType = typeof(DialogueDatabase), allowSceneObjects = false, value = m_Database, style = { width = 220 } };
+            m_DatabaseField.RegisterValueChangedCallback(evt => SetDatabase(evt.newValue as DialogueDatabase));
+            bar.Add(m_DatabaseField);
+            bar.Add(new ToolbarButton(CreateDatabase) { text = "New…", tooltip = "Create a new Dialogue Database (with its text table)" });
+
+            bar.Add(new ToolbarSpacer { flex = true });
+
+            var locales = LocaleCodes.Project.ToList();
+            if (locales.Count == 0) locales.Add("en");
+            if (!locales.Contains(m_Locale)) locales.Add(m_Locale);
+            var localeField = new PopupField<string>(locales, m_Locale) { tooltip = "Language shown and edited", style = { width = 70 } };
+            localeField.RegisterValueChangedCallback(evt =>
+            {
+                m_Locale = evt.newValue;
+                m_Canvas.SetPreviewLocale(m_Locale);
+                OnSelectionChanged();
+            });
+            bar.Add(localeField);
+
+            m_PluginMenu = new ToolbarMenu { text = "Plugins" };
+            bar.Add(m_PluginMenu);
+            RebuildPluginMenu();
+
+            bar.Add(new ToolbarButton(Validate) { text = "Validate" });
+            bar.Add(new ToolbarButton(Save) { text = "Save" });
+            m_Status = new Label { style = { unityTextAlign = TextAnchor.MiddleLeft, marginLeft = 6, color = new Color(1f, 0.75f, 0.4f) } };
+            bar.Add(m_Status);
+            return bar;
+        }
+
+        private void RebuildPluginMenu()
+        {
+            if (m_PluginMenu == null) return;
+            var items = DialoguePluginRegistry.ToolbarItems.ToList();
+            m_PluginMenu.style.display = items.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            m_PluginMenu.menu.ClearItems();
+            foreach (var item in items)
+            {
+                var i = item;
+                m_PluginMenu.menu.AppendAction(i.Path, _ => DialoguePluginRegistry.Run(i, PluginArgs()),
+                    _ => DialoguePluginRegistry.IsEnabled(i, PluginArgs()) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+            }
+        }
+
+        private void ApplySidebarVisibility(TwoPaneSplitView outer)
+        {
+            if (outer == null) return;
+            if (m_SidebarVisible) outer.UnCollapse();
+            else outer.CollapseChild(0);
+        }
+
+        #endregion
+
+        public void SetDatabase(DialogueDatabase database)
+        {
+            m_Database = database;
+            m_ConversationId = database != null ? database.conversations.FirstOrDefault(c => c != null)?.id ?? 0 : 0;
+            Refresh();
+        }
+
+        private void Refresh()
+        {
+            if (m_Canvas == null) return; // before CreateGUI
+            m_DatabaseField?.SetValueWithoutNotify(m_Database);
+            if (m_Database != null && m_Database.FindConversation(m_ConversationId) == null)
+                m_ConversationId = m_Database.conversations.FirstOrDefault(c => c != null)?.id ?? 0;
+            m_Sidebar.Bind(m_Database, m_ConversationId);
+            LoadConversation();
+            titleContent = new GUIContent(m_Database != null ? $"Dialogue: {m_Database.name}" : "Dialogue Editor");
+        }
+
+        private void LoadConversation()
+        {
+            var conversation = m_Database != null ? m_Database.FindConversation(m_ConversationId) : null;
+            m_Canvas.Load(m_Database, conversation, m_Locale);
+            if (conversation != null) m_Canvas.schedule.Execute(() => m_Canvas.FrameDefault()).StartingIn(50); // after layout
+        }
+
+        /// <summary>Redraws graph, inspector and sidebar after a change made outside them (plugins, tools).</summary>
+        public void NotifyDatabaseChanged()
+        {
+            if (m_Canvas == null) return;
+            m_Canvas.Reload();
+            m_Sidebar.Rebuild();
+            SetStatus(string.Empty);
+        }
+
+        private void OnSidebarChanged()
+        {
+            // Characters/emotions/events changed: node labels and the inspector's pickers depend on them.
+            m_Canvas.Reload();
+        }
+
+        private void OnSelectionChanged()
+        {
+            if (m_Inspector == null) return;
+            var entry = m_Canvas.SingleSelectedEntry;
+            if (entry == null) m_Inspector.Unbind(m_Canvas.SelectionCount > 1 ? "Several entries selected." : "Select one entry to edit it.");
+            else m_Inspector.Bind(m_Database, m_Canvas.Conversation, entry, m_Locale); // also refreshes the same entry (locale, undo)
+        }
+
+        private void OnUndoRedo()
+        {
+            if (m_Database == null || m_Canvas == null) return;
+            foreach (var c in m_Database.conversations) c?.InvalidateCache();
+            if (m_Database.textTable != null) m_Database.textTable.InvalidateCache();
+            Refresh();
+        }
+
+        private void OnPluginsChanged()
+        {
+            RebuildPluginMenu();
+            m_Sidebar?.Rebuild();
+            OnSelectionChanged();
+        }
+
+        private void CreateDatabase()
+        {
+            string path = EditorUtility.SaveFilePanelInProject("New Dialogue Database", "DialogueDatabase", "asset", "Where to save the database (its text table goes next to it).");
+            if (string.IsNullOrEmpty(path)) return;
+            var database = CreateInstance<DialogueDatabase>();
+            AssetDatabase.CreateAsset(database, path);
+            var table = CreateInstance<ND.Localization.StringTable>();
+            table.tableName = database.name;
+            AssetDatabase.CreateAsset(table, AssetDatabase.GenerateUniqueAssetPath(path.Replace(".asset", "_Text.asset")));
+            database.textTable = table;
+            database.AddActor("Player", isPlayer: true);
+            database.AddActor("NPC");
+            database.AddConversation("First Conversation");
+            EditorUtility.SetDirty(database);
+            AssetDatabase.SaveAssets();
+            SetDatabase(database);
+        }
+
+        private void Validate()
+        {
+            if (m_Database == null) return;
+            var issues = DialoguePluginRegistry.Validate(m_Database);
+            if (issues.Count == 0)
+            {
+                SetStatus(string.Empty);
+                ShowNotification(new GUIContent("No problems found."));
+                return;
+            }
+            SetStatus($"{issues.Count} problem(s) — see Console");
+            Debug.LogWarning($"[Dialogue Editor] '{m_Database.name}' has {issues.Count} problem(s):\n  - " + string.Join("\n  - ", issues), m_Database);
+        }
+
+        private void Save()
+        {
+            if (m_Database == null) return;
+            AssetDatabase.SaveAssetIfDirty(m_Database);
+            if (m_Database.textTable != null) AssetDatabase.SaveAssetIfDirty(m_Database.textTable);
+            ShowNotification(new GUIContent("Saved."));
+        }
+
+        private void SetStatus(string text)
+        {
+            if (m_Status != null) m_Status.text = text;
+        }
+    }
+}

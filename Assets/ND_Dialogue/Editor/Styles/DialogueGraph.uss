@@ -1,0 +1,90 @@
+/* Dialogue graph: nodes are port-less cards; links are node-anchored edges. */
+
+.dlg-node {
+    width: 240px;
+    min-height: 56px;
+    padding: 6px 8px 6px 8px;
+    background-color: rgb(46, 48, 54);
+    border-width: 2px;
+    border-color: rgb(30, 31, 35);
+    border-radius: 6px;
+}
+
+.dlg-node--npc { border-left-color: rgb(92, 160, 255); border-left-width: 5px; }
+.dlg-node--player { border-left-color: rgb(255, 184, 77); border-left-width: 5px; background-color: rgb(54, 50, 42); }
+.dlg-node--passthrough { background-color: rgb(40, 40, 44); border-color: rgb(80, 80, 88); min-height: 34px; width: 180px; }
+.dlg-node--start { background-color: rgb(38, 110, 64); border-color: rgb(28, 80, 46); min-height: 30px; width: 110px; border-radius: 16px; padding: 4px 10px 4px 10px; }
+
+.dlg-node.selected { border-color: rgb(77, 163, 255); }
+.dlg-node.nd-link-candidate { border-color: rgb(124, 220, 90); }
+.dlg-node.nd-flash { border-color: rgb(255, 230, 120); }
+
+.dlg-node__speaker {
+    -unity-font-style: bold;
+    font-size: 12px;
+    color: rgb(225, 228, 235);
+    margin-bottom: 3px;
+}
+.dlg-node--start .dlg-node__speaker { -unity-text-align: middle-center; }
+
+.dlg-node__text {
+    white-space: normal;
+    font-size: 12px;
+    color: rgb(200, 203, 210);
+}
+.dlg-node__text--missing { color: rgb(150, 110, 110); -unity-font-style: italic; }
+
+/* Header row: initial · speaker · emotion tag */
+.dlg-node__header { flex-direction: row; align-items: center; margin-bottom: 4px; }
+.dlg-node__avatar {
+    width: 20px; height: 20px; margin-right: 6px;
+    border-radius: 10px;
+    -unity-text-align: middle-center; -unity-font-style: bold; font-size: 11px;
+    color: rgb(255, 255, 255);
+}
+.dlg-node__header > .dlg-node__speaker { margin-bottom: 0; flex-shrink: 1; overflow: hidden; }
+.dlg-node__emotion {
+    margin-left: 6px; padding: 0 6px 0 6px;
+    border-radius: 8px; font-size: 10px;
+    background-color: rgba(255, 255, 255, 0.10); color: rgb(205, 210, 220);
+}
+
+/* Chips under the text */
+.dlg-node__chips { flex-direction: row; flex-wrap: wrap; margin-top: 6px; }
+.dlg-chip {
+    font-size: 10px; margin: 0 4px 2px 0; padding: 1px 6px 1px 6px;
+    border-radius: 8px; border-width: 1px;
+}
+.dlg-chip--cond { background-color: rgb(70, 55, 20); border-color: rgb(170, 125, 40); color: rgb(255, 214, 120); }
+.dlg-chip--act { background-color: rgb(55, 40, 80); border-color: rgb(125, 95, 180); color: rgb(210, 190, 255); }
+.dlg-chip--event { background-color: rgb(20, 65, 65); border-color: rgb(50, 150, 150); color: rgb(150, 235, 230); }
+.dlg-chip--external { background-color: rgb(25, 50, 85); border-color: rgb(70, 120, 190); color: rgb(160, 200, 255); }
+
+/* Inspector */
+.dlg-inspector { padding: 6px; }
+.dlg-inspector__header { -unity-font-style: bold; font-size: 13px; margin-bottom: 6px; }
+.dlg-inspector__section {
+    -unity-font-style: bold; margin-top: 12px; margin-bottom: 4px; padding: 3px 8px 3px 8px;
+    border-radius: 4px; border-left-width: 3px; border-left-color: rgb(92, 160, 255);
+    background-color: rgba(255, 255, 255, 0.06); color: rgb(220, 225, 235);
+}
+.dlg-inspector__row { flex-direction: row; align-items: flex-start; }
+.dlg-inspector__row > .unity-property-field, .dlg-inspector__row > .unity-base-field { flex-grow: 1; }
+.dlg-inspector__remove { width: 22px; }
+
+/* Database sidebar */
+.dlg-panel { padding: 4px; min-width: 240px; }
+.dlg-panel__tabs { flex-direction: row; flex-wrap: wrap; margin-bottom: 4px; }
+.dlg-panel__tab { margin: 1px; padding: 2px 6px 2px 6px; }
+.dlg-panel__tab--active { background-color: rgb(58, 98, 158); color: rgb(255, 255, 255); }
+.dlg-panel__content { padding: 2px; }
+
+/* Speaker portrait: sits on the node's top edge, like a head over a card. */
+.dlg-node__portrait {
+    position: absolute;
+    left: 14px;
+    top: -60px;
+    width: 64px;
+    height: 64px;
+    -unity-background-scale-mode: scale-to-fit;
+}

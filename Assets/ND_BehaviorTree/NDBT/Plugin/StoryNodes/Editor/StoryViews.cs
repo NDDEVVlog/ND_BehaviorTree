@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ND.GraphUI;
 using ND_BehaviorTree.Editor;
 using ND_BehaviorTree.Editor.CustomGraph;
 using ND_BehaviorTree.Editor.Graph;
@@ -267,7 +268,7 @@ namespace ND_BehaviorTree.Story.Editor
                 .OrderBy(e => e.UserData is Type t && typeof(StoryActionNode).IsAssignableFrom(t) ? 0 : 1)
                 .ToList();
             Vector2 screen = GUIUtility.GUIToScreenPoint(worldBound.center);
-            ND_BTSearchPopup.Show(screen, "Add Action", entries, data => AddAction(canvas, (Type)data));
+            GraphSearchPopup.Show(screen, "Add Action", entries, data => AddAction(canvas, (Type)data));
         }
 
         private void AddAction(ND_BTGraphCanvas canvas, Type type)

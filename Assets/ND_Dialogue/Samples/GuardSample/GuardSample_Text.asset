@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e571d3495a4a3c4f9b985da682107a8, type: 3}
+  m_Name: GuardSample_Text
+  m_EditorClassIdentifier: ND.Localization::ND.Localization.StringTable
+  tableName: GuardSample
+  m_Entries:
+  - id: 1
+    key: gate.1
+    comment: 
+    values:
+    - locale: en
+      value: Halt! Nobody passes this gate.
+    - locale: vi
+      value: "\u0110\u1EE9ng l\u1EA1i! Kh\xF4ng ai \u0111\u01B0\u1EE3c qua c\u1ED5ng
+        n\xE0y."
+  - id: 2
+    key: gate.2
+    comment: 
+    values:
+    - locale: en
+      value: You again. Looking for work or not?
+    - locale: vi
+      value: "L\u1EA1i l\xE0 c\u1EADu. C\xF3 t\xECm vi\u1EC7c kh\xF4ng?"
+  - id: 3
+    key: gate.3
+    comment: 
+    values:
+    - locale: en
+      value: I'm looking for work.
+    - locale: vi
+      value: "T\xF4i \u0111ang t\xECm vi\u1EC7c."
+  - id: 4
+    key: gate.4
+    comment: 
+    values:
+    - locale: en
+      value: Out of my way!
+    - locale: vi
+      value: "Tr\xE1nh ra!"
+  - id: 5
+    key: gate.5
+    comment: 
+    values:
+    - locale: en
+      value: Find my old key in the market and I'll let you through.
+    - locale: vi
+      value: "T\xECm gi\xFAp t\xF4i chi\u1EBFc ch\xECa kh\xF3a c\u0169 \u1EDF ch\u1EE3,
+        t\xF4i s\u1EBD cho c\u1EADu qua."
+  - id: 6
+    key: gate.6
+    comment: 
+    values:
+    - locale: en
+      value: Watch your tone, stranger.
+    - locale: vi
+      value: "\u0102n n\xF3i cho c\u1EA9n th\u1EADn."
+  - id: 7
+    key: gate.7
+    comment: 
+    values:
+    - locale: en
+      value: Still no key? Try the merchant.
+    - locale: vi
+      value: "V\u1EABn ch\u01B0a c\xF3 ch\xECa \xE0? Th\u1EED h\u1ECFi \xF4ng l\xE1i
+        bu\xF4n xem."
+  - id: 8
+    key: gate.8
+    comment: 
+    values:
+    - locale: en
+      value: My key! Thank you. The gate is yours.
+    - locale: vi
+      value: "Ch\xECa kh\xF3a c\u1EE7a t\xF4i! C\u1EA3m \u01A1n. C\u1EADu qua \u0111i."
+  - id: 9
+    key: gate.9
+    comment: 
+    values:
+    - locale: en
+      value: Welcome back, friend. (trust [var=Guard.trust])
+    - locale: vi
+      value: "Ch\xE0o m\u1EEBng tr\u1EDF l\u1EA1i, b\u1EA1n t\xF4i. (tin t\u01B0\u1EDFng
+        [var=Guard.trust])"
+  m_NextId: 10

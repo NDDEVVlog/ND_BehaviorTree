@@ -2,6 +2,7 @@
     "name": "ND_BehaviorTreeEditor",
     "rootNamespace": "ND_BehaviorTree.Editor",
     "references": [
+        "ND.GraphUI",
         "GUID:c3359f1f587792047b8766b8670f3f7a"
     ],
     "includePlatforms": [

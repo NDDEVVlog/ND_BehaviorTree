@@ -7,10 +7,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using ND_BehaviorTree.Editor.Graph;
+using ND.GraphUI;
 
 namespace ND_BehaviorTree.Editor.CustomGraph
 {
-    public class ND_BTNodeView : VisualElement
+    public class ND_BTNodeView : GraphNodeView
     {
         protected class ExposedPropertyUpdater
         {
@@ -22,7 +23,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         public Node NodeData { get; private set; }
         public ND_BTPortView InputPort { get; private set; }
         public ND_BTPortView OutputPort { get; private set; }
-        public event Action OnNodeMoved;
+        public override string Id => NodeData.id;
 
         protected VisualElement m_TopPortContainer;
         protected VisualElement m_BottomPortContainer;
@@ -31,7 +32,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         protected ViewThemeData m_ThemeData;
 
         /// <summary>The port look of this node: its appearance pack's override, else the project's Port Theme.</summary>
-        public PortTheme PortTheme => m_ThemeData.PortTheme ?? ND_BehaviorTreeSetting.Instance.portTheme;
+        public override PortTheme PortTheme => m_ThemeData.PortTheme ?? ND_BehaviorTreeSetting.Instance.portTheme;
         protected Label m_ExecutionIndexBadge;
         protected VisualElement m_DecoratorContainer;
         protected readonly List<ND_BTAttachmentView> m_AttachmentViews = new List<ND_BTAttachmentView>();
@@ -54,27 +55,18 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         }
 
         protected readonly List<ExposedPropertyUpdater> m_ExposedPropertyUpdaters = new List<ExposedPropertyUpdater>();
-        private bool m_IsDragging;
-        private bool m_HasDragMoved;
-        private Vector2 m_DragStartMousePos;
-        private Dictionary<ND_BTNodeView, Vector2> m_DragStartNodePositions = new Dictionary<ND_BTNodeView, Vector2>();
 
         public ND_BTNodeView(Node node, ViewThemeData themeData)
         {
             NodeData = node;
             m_ThemeData = themeData ?? new ViewThemeData();
             viewDataKey = node.id;
-            style.position = Position.Absolute;
 
             ApplyThemeAndLayout();
             SetupContainers();
             PopulateData();
             CreateExecutionIndexBadge();
 
-            RegisterCallback<PointerDownEvent>(OnPointerDown);
-            RegisterCallback<PointerMoveEvent>(OnPointerMove);
-            RegisterCallback<PointerUpEvent>(OnPointerUp);
-            RegisterCallback<PointerCaptureOutEvent>(evt => m_IsDragging = false);
             this.AddManipulator(new ContextualMenuManipulator(BuildContextualMenu));
         }
 
@@ -140,22 +132,15 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             if (info == null) return;
             if (info.hasFlowInput && m_TopPortContainer != null)
             {
-                InputPort = new ND_BTPortView(this, BTPortDirection.Input, BTPortCapacity.Single);
+                InputPort = AddPort(new ND_BTPortView(this, PortDirection.Input, PortCapacity.Single));
                 m_TopPortContainer.Add(InputPort);
             }
             if (info.hasFlowOutput && m_BottomPortContainer != null)
             {
-                BTPortCapacity capacity = BehaviorTreeGraphService.AcceptsMultipleChildren(NodeData) ? BTPortCapacity.Multi : BTPortCapacity.Single;
-                OutputPort = new ND_BTPortView(this, BTPortDirection.Output, capacity);
+                PortCapacity capacity = BehaviorTreeGraphService.AcceptsMultipleChildren(NodeData) ? PortCapacity.Multi : PortCapacity.Single;
+                OutputPort = AddPort(new ND_BTPortView(this, PortDirection.Output, capacity));
                 m_BottomPortContainer.Add(OutputPort);
             }
-        }
-
-        public void SetPosition(Vector2 position)
-        {
-            style.left = position.x;
-            style.top = position.y;
-            OnNodeMoved?.Invoke();
         }
 
         /// <summary>Subtree / Event nodes: shows the referenced asset or event name under the title (kept current every editor tick).</summary>
@@ -170,9 +155,6 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             var typeLabel = this.Q<Label>("type-label");
             if (typeLabel != null && typeLabel.text != text) typeLabel.text = text;
         }
-
-        /// <summary>Current on-canvas position (may differ from data while a drag is in progress).</summary>
-        public Vector2 ViewPosition => new Vector2(style.left.value.value, style.top.value.value);
 
         protected virtual void CreateExecutionIndexBadge()
         {
@@ -248,86 +230,7 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             if (visible) m_ExecutionIndexBadge.text = (zeroBasedIndex + 1).ToString();
         }
 
-        protected virtual void OnPointerDown(PointerDownEvent evt)
-        {
-            if (evt.button == 0)
-            {
-                var canvas = GetFirstAncestorOfType<ND_BTGraphCanvas>();
-                if (canvas != null)
-                {
-                    canvas.Focus(); // Bắt buộc nhận Event bàn phím
-
-                    if (evt.actionKey || evt.shiftKey)
-                    {
-                        canvas.ToggleSelection(this);
-                    }
-                    else
-                    {
-                        if (!canvas.SelectedNodes.Contains(this))
-                        {
-                            canvas.ClearSelection();
-                            canvas.AddToSelection(this);
-                        }
-                    }
-
-                    m_IsDragging = true;
-                    m_HasDragMoved = false;
-                    m_DragStartMousePos = evt.position;
-                    m_DragStartNodePositions.Clear();
-                    
-                    foreach (var nodeView in canvas.SelectedNodes)
-                    {
-                        m_DragStartNodePositions[nodeView] = new Vector2(nodeView.style.left.value.value, nodeView.style.top.value.value);
-                        nodeView.BringToFront();
-                    }
-                }
-
-                this.CapturePointer(evt.pointerId);
-                evt.StopPropagation();
-
-                if (evt.clickCount == 2) 
-                {
-                    NodePropertyEditorWindow.Open(NodeData, this);
-                }
-            }
-        }
-
-        protected virtual void OnPointerMove(PointerMoveEvent evt)
-        {
-            if (m_IsDragging && this.HasPointerCapture(evt.pointerId))
-            {
-                float scale = parent.resolvedStyle.scale.value.x;
-                if (scale <= 0.0001f) scale = 1f;
-                Vector2 delta = (Vector2)evt.position - m_DragStartMousePos;
-
-                foreach (var kvp in m_DragStartNodePositions)
-                {
-                    ND_BTNodeView nodeView = kvp.Key;
-                    Vector2 startPos = kvp.Value;
-
-                    // View only while dragging; data is committed once on pointer-up (one undo step).
-                    Vector2 newPos = startPos + (delta / scale);
-                    nodeView.SetPosition(newPos);
-                }
-                m_HasDragMoved = true;
-                evt.StopPropagation();
-            }
-        }
-
-        protected virtual void OnPointerUp(PointerUpEvent evt)
-        {
-            if (m_IsDragging && this.HasPointerCapture(evt.pointerId))
-            {
-                m_IsDragging = false;
-                this.ReleasePointer(evt.pointerId);
-                if (m_HasDragMoved)
-                {
-                    GetFirstAncestorOfType<ND_BTGraphCanvas>()?.CommitNodeMove(new List<ND_BTNodeView>(m_DragStartNodePositions.Keys));
-                }
-                m_DragStartNodePositions.Clear();
-                evt.StopPropagation();
-            }
-        }
+        protected override void OnDoubleClick() => NodePropertyEditorWindow.Open(NodeData, this);
 
         protected virtual void DrawExposedProperties()
         {

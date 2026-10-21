@@ -186,7 +186,7 @@ namespace ND_BehaviorTree.Editor
             {
                 menu.AddSeparator("");
                 Type valueType = GetValueTypeForField(property);
-                var validKeys = tree.blackboard.keys
+                var validKeys = tree.blackboard.AllKeys
                     .Where(k => k != null && !string.IsNullOrEmpty(k.keyName) && (valueType == typeof(object) || valueType.IsAssignableFrom(k.GetValueType())))
                     .ToList();
                 if (validKeys.Any())
