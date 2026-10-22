@@ -46,7 +46,7 @@ namespace ND.Dialogue
             foreach (var q in database.quests)
                 if (q != null && !string.IsNullOrEmpty(q.name)) m_Quests[q.name] = q.initialState;
             // Character attributes are variables named "Actor.attribute" (they win over a same-named world variable).
-            foreach (var actor in database.actors)
+            foreach (var actor in database.AllActors)
             {
                 if (actor == null || string.IsNullOrEmpty(actor.name)) continue;
                 foreach (var a in actor.AttributeDefinitions)

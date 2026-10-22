@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ND.Localization;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ND.Dialogue
 {
@@ -23,10 +24,24 @@ namespace ND.Dialogue
         [SerializeReference] public List<DialogueCondition> conditions = new List<DialogueCondition>();
     }
 
+    /// <summary>One more line of the same speaker inside an entry, with its own emotion (shown after the previous one on Continue).</summary>
+    [Serializable]
+    public class DialoguePage
+    {
+        [Tooltip("The line. Plain text, or connected to a table to translate it.")]
+        public LocalizableString text = new LocalizableString();
+        [Tooltip("Emotion for this line. Empty = the entry's emotion.")]
+        public string emotion;
+    }
+
     /// <summary>
-    /// One node of a conversation: a single line spoken by <see cref="actorId"/>. A line of the player actor is shown
-    /// as a choice (<see cref="menuText"/>, or <see cref="text"/> when empty). A passthrough entry shows nothing and
-    /// only routes: its conditions pick a branch and its actions run.
+    /// One node of a conversation: what <see cref="actorId"/> says — <see cref="text"/>, then each of
+    /// <see cref="moreLines"/> in turn (Continue steps through them) — before the links are followed. A line of the
+    /// player actor is shown as a choice (<see cref="menuText"/>, or <see cref="text"/> when empty). A passthrough
+    /// entry shows nothing and only routes: its conditions pick a branch and its actions run.
+    /// <para>Derive from it for kinds of entries with their own data or behaviour (<c>class ShopEntry : DialogueEntry</c>):
+    /// conversations store entries polymorphically, the editor's "New…" menu lists every subclass, and
+    /// <see cref="OnEnter"/> runs after the actions. Keep subclasses [Serializable] with a parameterless constructor.</para>
     /// </summary>
     [Serializable]
     public class DialogueEntry
@@ -35,12 +50,14 @@ namespace ND.Dialogue
         [Tooltip("Label in the editor only.")]
         public string title;
         public int actorId;
-        [Tooltip("The line. Plain text, or connected to a table to translate it.")]
+        [Tooltip("The (first) line. Plain text, or connected to a table to translate it.")]
         public LocalizableString text = new LocalizableString();
         [Tooltip("Choice label when this is a player response. Empty = use Text.")]
         public LocalizableString menuText = new LocalizableString();
         [Tooltip("Emotion of the speaker for this line. Empty = the actor's default emotion.")]
         public string emotion;
+        [Tooltip("More lines the same speaker says here, one after another, each with its own emotion.")]
+        public List<DialoguePage> moreLines = new List<DialoguePage>();
         [Tooltip("No line is shown: the entry only runs its actions and continues.")]
         public bool isPassthrough;
 
@@ -52,20 +69,58 @@ namespace ND.Dialogue
 
         [Tooltip("Graph editor position.")]
         public Vector2 position;
+
+        /// <summary>How many lines are shown: 0 for passthrough, else the first line plus <see cref="moreLines"/>.</summary>
+        public int LineCount => isPassthrough ? 0 : 1 + (moreLines?.Count ?? 0);
+
+        /// <summary>Text of line <paramref name="index"/> (0 = <see cref="text"/>).</summary>
+        public LocalizableString LineText(int index) => index == 0 ? text : moreLines[index - 1]?.text;
+
+        /// <summary>Emotion of line <paramref name="index"/>: its own, else the entry's.</summary>
+        public string LineEmotion(int index)
+        {
+            if (index == 0) return emotion;
+            var page = moreLines[index - 1];
+            return page != null && !string.IsNullOrEmpty(page.emotion) ? page.emotion : emotion;
+        }
+
+        /// <summary>Shown at the top of the entry inspector for subclasses that work differently.</summary>
+        public virtual string EditorNote => null;
+
+        /// <summary>Called when the runner enters this entry, after its actions. Override in subclasses.</summary>
+        public virtual void OnEnter(IDialogueContext context) { }
     }
 
     [Serializable]
-    public class Conversation
+    public class Conversation : ISerializationCallbackReceiver
     {
         public const int StartEntryId = 0;
+        /// <summary>Serialized name of the entry list (for SerializedProperty paths).</summary>
+        public const string EntriesField = nameof(m_Entries);
 
         public int id;
         public string title;
         [TextArea] public string description;
-        public List<DialogueEntry> entries = new List<DialogueEntry>();
+        [SerializeReference] private List<DialogueEntry> m_Entries = new List<DialogueEntry>();
+        // Databases saved before entries could be subclassed stored them by value under "entries"; moved on load.
+        [SerializeField, HideInInspector, FormerlySerializedAs("entries")] private List<DialogueEntry> m_LegacyEntries = new List<DialogueEntry>();
         [SerializeField] private int m_NextEntryId = 1;
 
         [NonSerialized] private Dictionary<int, DialogueEntry> m_ById;
+
+        /// <summary>Every entry (START first). Entries may be subclasses of <see cref="DialogueEntry"/>.</summary>
+        public List<DialogueEntry> entries => m_Entries;
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
+            if (m_LegacyEntries == null || m_LegacyEntries.Count == 0) return;
+            if (m_Entries == null) m_Entries = new List<DialogueEntry>();
+            if (m_Entries.Count == 0) m_Entries.AddRange(m_LegacyEntries);
+            m_LegacyEntries.Clear();
+            m_ById = null;
+        }
 
         public DialogueEntry StartEntry => FindEntry(StartEntryId);
 
@@ -92,9 +147,23 @@ namespace ND.Dialogue
             return start;
         }
 
-        public DialogueEntry AddEntry(int actorId, string entryTitle = null)
+        public DialogueEntry AddEntry(int actorId, string entryTitle = null) => AddEntry(typeof(DialogueEntry), actorId, entryTitle);
+
+        /// <summary>Adds an entry of a subclass (<c>AddEntry&lt;ShopEntry&gt;(merchant.id)</c>) with the next id.</summary>
+        public T AddEntry<T>(int actorId, string entryTitle = null) where T : DialogueEntry, new() => (T)AddEntry(typeof(T), actorId, entryTitle);
+
+        /// <summary>Adds an entry of <paramref name="entryType"/> (a <see cref="DialogueEntry"/> with a parameterless constructor) with the next id.</summary>
+        public DialogueEntry AddEntry(Type entryType, int actorId, string entryTitle = null)
         {
-            var entry = new DialogueEntry { id = m_NextEntryId++, actorId = actorId, title = entryTitle };
+            if (entryType == null || !typeof(DialogueEntry).IsAssignableFrom(entryType) || entryType.IsAbstract || entryType.GetConstructor(Type.EmptyTypes) == null)
+            {
+                Debug.LogError($"[Dialogue] Conversation '{title}': '{entryType?.FullName}' is not a concrete DialogueEntry with a parameterless constructor.");
+                return null;
+            }
+            var entry = (DialogueEntry)Activator.CreateInstance(entryType);
+            entry.id = m_NextEntryId++;
+            entry.actorId = actorId;
+            entry.title = entryTitle;
             entries.Add(entry);
             InvalidateCache();
             return entry;

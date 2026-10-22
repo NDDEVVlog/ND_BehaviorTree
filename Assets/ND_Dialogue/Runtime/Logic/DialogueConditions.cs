@@ -117,6 +117,47 @@ namespace ND.Dialogue
         public override string Describe() => $"quest {quest} {Symbol(op)} {state}";
     }
 
+    /// <summary>
+    /// Whether a line was already seen (shown, or chosen by the player) — "the first time / again" without a variable.
+    /// Only meaningful while a conversation runs (the runner knows what was seen; it is saved with the game).
+    /// </summary>
+    [Serializable]
+    public class EntrySeenCondition : DialogueCondition
+    {
+        [Tooltip("Conversation of the entry. Empty = the conversation being played.")]
+        [DialogueConversation] public string conversation;
+        public int entryId;
+        [Tooltip("True: holds once the entry was seen. False: holds until it is seen.")]
+        public bool seen = true;
+
+        public override bool Evaluate(IDialogueContext context)
+        {
+            if (!(context is IDialogueMemory memory))
+            {
+                Debug.LogWarning($"[EntrySeenCondition] '{Describe()}' evaluated outside a conversation (no runner memory): false.");
+                return false;
+            }
+            int conversationId = memory.CurrentConversationId;
+            if (!string.IsNullOrEmpty(conversation))
+            {
+                if (!(context is IDialogueConversationLookup lookup) || !lookup.TryGetConversationId(conversation, out conversationId))
+                {
+                    Debug.LogError($"[EntrySeenCondition] No conversation titled '{conversation}'.");
+                    return false;
+                }
+            }
+            return memory.WasSeen(conversationId, entryId) == seen;
+        }
+
+        public override string Describe() => $"{(seen ? "seen" : "not seen")} {(string.IsNullOrEmpty(conversation) ? string.Empty : conversation)}#{entryId}";
+    }
+
+    /// <summary>Lets conditions turn a conversation title into its id (the runner's context implements it).</summary>
+    public interface IDialogueConversationLookup
+    {
+        bool TryGetConversationId(string title, out int conversationId);
+    }
+
     /// <summary>True when at least one nested condition is true (an entry's own list is AND).</summary>
     [Serializable]
     public class AnyCondition : DialogueCondition

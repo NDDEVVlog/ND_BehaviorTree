@@ -109,6 +109,14 @@ namespace ND.Dialogue
                 }
             }
             GUILayout.FlexibleSpace();
+            if (m_Manager != null)
+            {
+                const string Slot = "debug";
+                if (GUILayout.Button("Save", GUILayout.Width(48))) m_Manager.Save(Slot);
+                GUI.enabled = m_Manager.HasSave(Slot);
+                if (GUILayout.Button("Load", GUILayout.Width(48))) m_Manager.Load(Slot);
+                GUI.enabled = true;
+            }
             if (LocalizationService.IsReady)
             {
                 foreach (var locale in LocalizationService.Settings.locales.Where(l => l != null))
@@ -132,7 +140,7 @@ namespace ND.Dialogue
                     var previous = GUI.color;
                     GUI.color = line.Emotion != null ? line.Emotion.ResolveTint() : Color.white;
                     string emotion = line.Emotion != null ? $"  ({line.Emotion.id})" : string.Empty;
-                    GUILayout.Label($"<b>{line.Speaker.ResolveDisplayName()}</b>{emotion}", RichLabel());
+                    GUILayout.Label($"<b>{line.SpeakerName}</b>{emotion}", RichLabel());
                     GUI.color = previous;
                     GUILayout.Label(line.Text, RichLabel());
                     if (GUILayout.Button("Continue ▶")) m_Runner.Continue();

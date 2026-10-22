@@ -101,8 +101,12 @@ namespace ND.Dialogue
         [Tooltip("Defaults for runners created without options.")]
         public DialogueRunnerOptions runnerOptions = new DialogueRunnerOptions();
 
-        [Tooltip("Characters. Polymorphic: subclasses of Actor keep their own fields.")]
+        [Tooltip("Characters kept in this database only. Polymorphic: subclasses of Actor keep their own fields. Shared characters live in Character Databases.")]
         [SerializeReference] public List<Actor> actors = new List<Actor>();
+        [Tooltip("Character Databases whose characters this database uses (same ids everywhere).")]
+        public List<CharacterDatabase> characterDatabases = new List<CharacterDatabase>();
+        [Tooltip("How shared characters look in this database (other portraits per emotion, another display name).")]
+        public List<ActorLook> looks = new List<ActorLook>();
         public List<VariableDefinition> variables = new List<VariableDefinition>();
         public List<QuestDefinition> quests = new List<QuestDefinition>();
         public List<EventDefinition> events = new List<EventDefinition>();
@@ -117,7 +121,7 @@ namespace ND.Dialogue
             public bool TryGetVariableType(string variableName, out VariableType type) =>
                 m_Database.TryGetAttributeType(variableName, out type) || m_Source.TryGetVariableType(variableName, out type);
             public bool HasQuest(string questName) => m_Source.HasQuest(questName);
-            public IEnumerable<string> VariableNames => m_Source.VariableNames.Concat(m_Database.AttributeVariableNames);
+            public IEnumerable<string> VariableNames => m_Source.VariableNames.Concat(m_Database.AttributeVariableNames).Distinct();
             public IEnumerable<string> QuestNames => m_Source.QuestNames;
             public IEnumerable<string> EventNames => ((IDialogueSchema)m_Database).EventNames;
         }
@@ -127,14 +131,64 @@ namespace ND.Dialogue
 
         public Actor FindActor(int actorId)
         {
-            foreach (var a in actors) if (a != null && a.id == actorId) return a;
+            foreach (var a in AllActors) if (a != null && a.id == actorId) return a;
             return null;
         }
 
         public Actor FindActor(string actorName)
         {
-            foreach (var a in actors) if (a != null && a.name == actorName) return a;
+            foreach (var a in AllActors) if (a != null && a.name == actorName) return a;
             return null;
+        }
+
+        /// <summary>Every character this database can use: its own <see cref="actors"/>, then each Character Database's.</summary>
+        public IEnumerable<Actor> AllActors
+        {
+            get
+            {
+                foreach (var a in actors) yield return a;
+                var visited = new HashSet<CharacterDatabase>();
+                foreach (var db in characterDatabases)
+                {
+                    if (db == null || !visited.Add(db)) continue;
+                    foreach (var c in db.characters) yield return c;
+                }
+            }
+        }
+
+        /// <summary>The Character Database a character comes from, or null when it is one of this database's own actors.</summary>
+        public CharacterDatabase SourceOf(Actor actor)
+        {
+            if (actor == null || actors.Contains(actor)) return null;
+            foreach (var db in characterDatabases)
+                if (db != null && db.characters.Contains(actor)) return db;
+            return null;
+        }
+
+        public ActorLook FindLook(int actorId)
+        {
+            foreach (var l in looks) if (l != null && l.actorId == actorId) return l;
+            return null;
+        }
+
+        /// <summary>
+        /// The emotion as it looks in THIS database: this database's look of the character first (<see cref="looks"/>),
+        /// else the character's own (<see cref="Actor.FindEmotion"/>, which logs when it does not exist).
+        /// </summary>
+        public ActorEmotion FindEmotion(Actor actor, string emotionId)
+        {
+            if (actor == null) return null;
+            string wanted = string.IsNullOrEmpty(emotionId) ? actor.defaultEmotion : emotionId;
+            var overridden = FindLook(actor.id)?.FindEmotion(wanted);
+            return overridden ?? actor.FindEmotion(emotionId);
+        }
+
+        /// <summary>The character's name as shown in this database (its look's display name, else its own).</summary>
+        public string DisplayNameOf(Actor actor)
+        {
+            if (actor == null) return string.Empty;
+            var look = FindLook(actor.id);
+            return look != null && look.displayName != null && look.displayName.HasContent ? look.displayName.GetText() : actor.ResolveDisplayName();
         }
 
         public Conversation FindConversation(int conversationId)
@@ -176,8 +230,9 @@ namespace ND.Dialogue
         {
             get
             {
-                foreach (var v in variables) if (v != null && !string.IsNullOrEmpty(v.name)) yield return v.name;
-                foreach (var n in AttributeVariableNames) yield return n;
+                var seen = new HashSet<string>();
+                foreach (var v in variables) if (v != null && !string.IsNullOrEmpty(v.name) && seen.Add(v.name)) yield return v.name;
+                foreach (var n in AttributeVariableNames) if (seen.Add(n)) yield return n;
             }
         }
 
@@ -212,7 +267,7 @@ namespace ND.Dialogue
         {
             get
             {
-                foreach (var actor in actors)
+                foreach (var actor in AllActors)
                 {
                     if (actor == null || string.IsNullOrEmpty(actor.name)) continue;
                     foreach (var attribute in actor.AttributeDefinitions)
@@ -340,7 +395,7 @@ namespace ND.Dialogue
             var issues = new List<string>();
             var actorIds = new HashSet<int>();
             var actorNames = new HashSet<string>();
-            foreach (var a in actors)
+            foreach (var a in AllActors)
             {
                 if (a == null) { issues.Add("Null actor in list."); continue; }
                 if (!actorIds.Add(a.id)) issues.Add($"Duplicate actor id {a.id} ('{a.name}').");
@@ -355,6 +410,32 @@ namespace ND.Dialogue
                     else if (FindVariable(a.AttributeVariable(attribute.name)) != null)
                         issues.Add($"Actor '{a.name}': attribute '{attribute.name}' hides the variable '{a.AttributeVariable(attribute.name)}'.");
                 }
+                foreach (var own in a.attributes)
+                    if (own != null && a.IsTemplateAttribute(own.name))
+                        issues.Add($"Actor '{a.name}': its attribute '{own.name}' is already given by the template '{a.template.name}' (the template's wins; remove it).");
+                foreach (var value in a.templateValues)
+                {
+                    if (value == null) continue;
+                    var declared = a.template != null ? a.template.FindTemplateAttribute(value.name) : null;
+                    if (declared == null)
+                        issues.Add($"Actor '{a.name}': it sets '{value.name}', which its template no longer declares (the value is ignored).");
+                    else if (declared.initialValue.type != value.initialValue.type)
+                        issues.Add($"Actor '{a.name}': its value of '{value.name}' is {value.initialValue.type}, the template now says {declared.initialValue.type} (the template's value is used).");
+                }
+            }
+            for (int i = 0; i < characterDatabases.Count; i++)
+            {
+                if (characterDatabases[i] == null) { issues.Add($"Character Databases: empty slot {i}."); continue; }
+                issues.AddRange(characterDatabases[i].Validate());
+            }
+            foreach (var look in looks)
+            {
+                if (look == null) continue;
+                var actor = FindActor(look.actorId);
+                if (actor == null) { issues.Add($"Look for unknown character id {look.actorId}."); continue; }
+                foreach (var emotion in look.emotions)
+                    if (emotion != null && actor.emotions.TrueForAll(e => e == null || e.id != emotion.id))
+                        issues.Add($"Look of '{actor.name}': emotion '{emotion.id}' does not exist on the character (looks only change existing emotions).");
             }
             CheckNames(variables, v => v.name, "variable", issues);
             CheckNames(quests, q => q.name, "quest", issues);

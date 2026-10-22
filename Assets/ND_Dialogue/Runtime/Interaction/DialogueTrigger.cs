@@ -68,7 +68,7 @@ namespace ND.Dialogue
             get
             {
                 var actor = Database != null && !string.IsNullOrEmpty(m_Actor) ? Database.FindActor(m_Actor) : null;
-                return $"{m_PromptVerb} {(actor != null ? actor.ResolveDisplayName() : name)}".Trim();
+                return $"{m_PromptVerb} {(actor != null ? Database.DisplayNameOf(actor) : name)}".Trim();
             }
         }
 

@@ -29,6 +29,24 @@ namespace ND.Dialogue
         [SerializeField] private UnityEvent m_OnConversationStarted = new UnityEvent();
         [SerializeField] private UnityEvent m_OnConversationEnded = new UnityEvent();
 
+        [Header("Save")]
+        [Tooltip("Where Save/Load keep slots: JSON files in persistentDataPath, or PlayerPrefs. Code can set Storage instead.")]
+        [SerializeField] private DialogueSaveLocation m_SaveLocation = DialogueSaveLocation.File;
+
+        private IDialogueSaveStorage m_Storage;
+
+        /// <summary>Where slots are kept (from the Save Location field unless code sets another, e.g. your game's save system).</summary>
+        public IDialogueSaveStorage Storage
+        {
+            get => m_Storage ??= m_SaveLocation == DialogueSaveLocation.PlayerPrefs ? new PlayerPrefsSaveStorage() : (IDialogueSaveStorage)new FileSaveStorage();
+            set => m_Storage = value;
+        }
+
+        /// <summary>(slot) After a successful Save.</summary>
+        public event Action<string> Saved;
+        /// <summary>(slot) After a successful Load (values applied, conversation resumed if one was saved).</summary>
+        public event Action<string> Loaded;
+
         public DialogueManagerState State { get; private set; } = DialogueManagerState.NotReady;
         public bool IsReady => State == DialogueManagerState.Ready;
         public DialogueDatabase Database => m_Database;
@@ -114,6 +132,78 @@ namespace ND.Dialogue
             OnRunnerEnded(conversation);
             return false;
         }
+
+        #region Save / load
+
+        /// <summary>The current state as save data (variables, quests, seen lines, the running conversation's position).</summary>
+        public DialogueSaveData CaptureSave()
+        {
+            if (!IsReady)
+            {
+                Debug.LogWarning($"{LogTag} {nameof(CaptureSave)} rejected: state={State}.", this);
+                return null;
+            }
+            return DialogueSaveSystem.Capture(m_Database, Context, Runner.Memory, Runner);
+        }
+
+        /// <summary>
+        /// Applies save data: a running conversation is stopped, values and seen lines are restored, and a conversation
+        /// that was running when saved resumes at the same line (its actions are not run again).
+        /// </summary>
+        public bool ApplySave(DialogueSaveData data)
+        {
+            if (!IsReady || data == null)
+            {
+                Debug.LogWarning($"{LogTag} {nameof(ApplySave)} rejected: state={State}, data={(data != null)}.", this);
+                return false;
+            }
+            StopConversation();
+            DialogueSaveSystem.Apply(m_Database, Context, Runner.Memory, data);
+            if (data.position != null && data.position.active) Resume(data.position);
+            return true;
+        }
+
+        public bool Save(string slot)
+        {
+            var data = CaptureSave();
+            if (data == null) return false;
+            if (!Storage.Write(slot, DialogueSaveSystem.ToJson(data))) return false; // the storage logged why
+            Saved?.Invoke(slot);
+            return true;
+        }
+
+        public bool Load(string slot)
+        {
+            if (!IsReady)
+            {
+                Debug.LogWarning($"{LogTag} {nameof(Load)}('{slot}') rejected: state={State}.", this);
+                return false;
+            }
+            if (!Storage.TryRead(slot, out string json))
+            {
+                Debug.LogWarning($"{LogTag} {nameof(Load)}('{slot}') rejected: no such save.", this);
+                return false;
+            }
+            var data = DialogueSaveSystem.FromJson(json);
+            if (data == null || !ApplySave(data)) return false;
+            Loaded?.Invoke(slot);
+            return true;
+        }
+
+        public bool HasSave(string slot) => Storage.Exists(slot);
+
+        public bool DeleteSave(string slot) => Storage.Delete(slot);
+
+        private void Resume(DialoguePosition position)
+        {
+            var conversation = m_Database.FindConversation(position.conversationId);
+            if (m_View != null) m_View.Attach(Runner);
+            ConversationStarted?.Invoke(conversation);
+            m_OnConversationStarted.Invoke();
+            if (!Runner.Resume(position)) OnRunnerEnded(conversation); // logged by the runner
+        }
+
+        #endregion
 
         /// <summary>Ends the current conversation now.</summary>
         public void StopConversation()

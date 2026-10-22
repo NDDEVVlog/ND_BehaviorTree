@@ -79,7 +79,7 @@ namespace ND.Dialogue
             Show(m_ResponsePanel, false);
 
             Color tint = line.Emotion != null ? line.Emotion.ResolveTint() : Color.white;
-            SetText(m_SpeakerName, line.Speaker.ResolveDisplayName());
+            SetText(m_SpeakerName, line.SpeakerName);
             if (m_SpeakerName != null) m_SpeakerName.color = tint;
 
             if (m_Portrait != null)

@@ -52,11 +52,56 @@ namespace ND.Dialogue
         [Tooltip("Emotion used by lines that do not name one.")]
         public string defaultEmotion = "Neutral";
 
+        [Tooltip("Optional: a Character Database used as template. Its template attributes are this character's too (cannot be removed here; the value can be changed).")]
+        public CharacterDatabase template;
+
+        [Tooltip("This character's own starting values for some template attributes (by name). The others use the template's value.")]
+        [HideInInspector] public List<VariableDefinition> templateValues = new List<VariableDefinition>();
+
         [Tooltip("State of this character that changes during play (trust, mood, met…). Conditions/actions use them as '<name>.<attribute>'.")]
         public List<VariableDefinition> attributes = new List<VariableDefinition>();
 
-        /// <summary>This character's attributes with their initial values. Default: <see cref="attributes"/>.</summary>
-        public virtual IEnumerable<VariableDefinition> AttributeDefinitions => attributes;
+        /// <summary>
+        /// This character's attributes with their initial values: the <see cref="template"/>'s attributes first (they
+        /// win over an own attribute of the same name, which Validate reports), then <see cref="attributes"/>.
+        /// </summary>
+        public virtual IEnumerable<VariableDefinition> AttributeDefinitions
+        {
+            get
+            {
+                var seen = new HashSet<string>();
+                if (template != null)
+                    foreach (var a in template.templateAttributes)
+                    {
+                        if (a == null || string.IsNullOrEmpty(a.name) || !seen.Add(a.name)) continue;
+                        var own = FindTemplateValue(a.name);
+                        // The character's value when it set one of the same type; else the template's.
+                        yield return own != null && own.initialValue.type == a.initialValue.type
+                            ? new VariableDefinition { name = a.name, initialValue = own.initialValue, description = a.description }
+                            : a;
+                    }
+                // Own duplicates stay visible (Validate reports them); only a clash with the template is hidden.
+                foreach (var a in attributes)
+                    if (a != null && (string.IsNullOrEmpty(a.name) || !seen.Contains(a.name))) yield return a;
+            }
+        }
+
+        /// <summary>True when <paramref name="attribute"/> comes from the <see cref="template"/> (cannot be removed on this character).</summary>
+        public bool IsTemplateAttribute(string attribute) => template != null && template.FindTemplateAttribute(attribute) != null;
+
+        /// <summary>This character's own value for a template attribute, or null when it uses the template's.</summary>
+        public VariableDefinition FindTemplateValue(string attribute)
+        {
+            foreach (var v in templateValues) if (v != null && v.name == attribute) return v;
+            return null;
+        }
+
+        /// <summary>Sets this character's own starting value for a template attribute (null = back to the template's).</summary>
+        public void SetTemplateValue(string attribute, VariableValue? value)
+        {
+            templateValues.RemoveAll(v => v == null || v.name == attribute);
+            if (value.HasValue) templateValues.Add(new VariableDefinition { name = attribute, initialValue = value.Value });
+        }
 
         /// <summary>Shown above the character in the editor when the subclass works differently (e.g. where attributes come from).</summary>
         public virtual string EditorNote => null;

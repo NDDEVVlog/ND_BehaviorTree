@@ -7,7 +7,7 @@ namespace ND.Dialogue
 {
     public enum DialogueRunnerState { Idle, ShowingLine, WaitingForChoice, Ended }
 
-    /// <summary>A line to display: who says what, with which emotion.</summary>
+    /// <summary>A line to display: who says what, with which emotion, and where it is in its entry (line 2 of 3…).</summary>
     public readonly struct DialogueLine
     {
         public readonly Conversation Conversation;
@@ -15,15 +15,29 @@ namespace ND.Dialogue
         public readonly Actor Speaker;
         public readonly ActorEmotion Emotion;
         public readonly string Text;
+        /// <summary>0-based index of this line in its entry.</summary>
+        public readonly int LineIndex;
+        /// <summary>How many lines the entry shows.</summary>
+        public readonly int LineCount;
+        private readonly string m_SpeakerName;
 
-        public DialogueLine(Conversation conversation, DialogueEntry entry, Actor speaker, ActorEmotion emotion, string text)
+        public DialogueLine(Conversation conversation, DialogueEntry entry, Actor speaker, ActorEmotion emotion, string text, int lineIndex = 0, int lineCount = 1, string speakerName = null)
         {
             Conversation = conversation;
             Entry = entry;
             Speaker = speaker;
             Emotion = emotion;
             Text = text;
+            LineIndex = lineIndex;
+            LineCount = lineCount;
+            m_SpeakerName = speakerName;
         }
+
+        /// <summary>The speaker's name as shown in this database (its look's name, else the character's display name).</summary>
+        public string SpeakerName => m_SpeakerName ?? Speaker?.ResolveDisplayName() ?? string.Empty;
+
+        /// <summary>More lines of the same entry follow this one.</summary>
+        public bool HasMoreLines => LineIndex + 1 < LineCount;
     }
 
     /// <summary>A player response offered in the choice menu.</summary>
@@ -86,12 +100,29 @@ namespace ND.Dialogue
         public event Action<DialogueLine> LineStarted;
         public event Action<IReadOnlyList<DialogueChoice>> ChoicesPresented;
         public event Action<Conversation> ConversationEnded;
+        /// <summary>(conversation, entry) An entry was entered, before its actions run — also silent ones (START, passthrough, chosen lines).</summary>
+        public event Action<Conversation, DialogueEntry> EntryEntered;
+
+        /// <summary>
+        /// Optional: how texts are read (default: <c>GetText()</c>, i.e. the running localization). Tools that run
+        /// dialogue without it (the editor's test chat) read the table directly for one locale.
+        /// </summary>
+        public Func<ND.Localization.LocalizableString, string> TextResolver { get; set; }
+
+        /// <summary>Entries seen so far (shown, or chosen by the player). Part of a save.</summary>
+        public DialogueMemory Memory { get; }
+
+        /// <summary>What conditions and actions get: the context, plus <see cref="IDialogueMemory"/>.</summary>
+        private readonly RunnerContext m_Eval;
 
         /// <param name="options">Null = the database's <see cref="DialogueDatabase.runnerOptions"/>.</param>
-        public DialogueRunner(DialogueDatabase database, IDialogueContext context, DialogueRunnerOptions options = null)
+        /// <param name="memory">Null = a new, empty memory.</param>
+        public DialogueRunner(DialogueDatabase database, IDialogueContext context, DialogueRunnerOptions options = null, DialogueMemory memory = null)
         {
             m_Database = database;
             m_Context = context;
+            Memory = memory ?? new DialogueMemory();
+            m_Eval = new RunnerContext(this);
             m_Options = options ?? (database != null ? database.runnerOptions : null) ?? new DialogueRunnerOptions();
             if (database == null) Debug.LogError($"{LogTag} Created without a database.");
             if (context == null) Debug.LogError($"{LogTag} Created without a context: conditions and actions cannot run.");
@@ -133,13 +164,18 @@ namespace ND.Dialogue
             return true;
         }
 
-        /// <summary>Moves past the shown line.</summary>
+        /// <summary>Shows the entry's next line, or moves past the entry after its last line.</summary>
         public bool Continue()
         {
             if (State != DialogueRunnerState.ShowingLine)
             {
                 Debug.LogWarning($"{LogTag} {nameof(Continue)} rejected: state={State}.");
                 return false;
+            }
+            if (CurrentLine.HasMoreLines && CurrentLine.Entry == m_Entry)
+            {
+                ShowLine(m_Conversation, m_Entry, CurrentLine.Speaker, CurrentLine.LineIndex + 1);
+                return true;
             }
             Advance(m_Conversation, m_Entry, 0);
             return true;
@@ -163,6 +199,79 @@ namespace ND.Dialogue
             return true;
         }
 
+        /// <summary>Where the runner is, for a save (inactive when no conversation runs).</summary>
+        public DialoguePosition CapturePosition() => new DialoguePosition
+        {
+            active = IsRunning,
+            conversationId = IsRunning ? m_Conversation.id : 0,
+            entryId = IsRunning ? m_Entry.id : 0,
+            lineIndex = State == DialogueRunnerState.ShowingLine ? CurrentLine.LineIndex : 0,
+            waitingForChoice = State == DialogueRunnerState.WaitingForChoice,
+        };
+
+        /// <summary>
+        /// Puts the runner back where a save left it WITHOUT running the entry's actions again: shows that line of the
+        /// entry, or (<see cref="DialoguePosition.waitingForChoice"/>) offers the choices after it again.
+        /// </summary>
+        public bool Resume(DialoguePosition position)
+        {
+            if (m_Database == null || m_Context == null || position == null || !position.active)
+            {
+                Debug.LogError($"{LogTag} {nameof(Resume)} rejected: database={(m_Database != null)}, context={(m_Context != null)}, position={(position == null ? "null" : position.active ? "active" : "inactive")}.");
+                return false;
+            }
+            if (IsRunning)
+            {
+                Debug.LogWarning($"{LogTag} {nameof(Resume)} rejected: state={State} in '{m_Conversation?.title}'. Call Stop first.");
+                return false;
+            }
+            var conversation = m_Database.FindConversation(position.conversationId);
+            var entry = conversation?.FindEntry(position.entryId);
+            if (entry == null)
+            {
+                Debug.LogError($"{LogTag} {nameof(Resume)} rejected: conversation {position.conversationId} / entry {position.entryId} not found (the database changed since the save?).");
+                return false;
+            }
+            m_Choices.Clear();
+            m_Conversation = conversation;
+            m_Entry = entry;
+            if (position.waitingForChoice)
+            {
+                Advance(conversation, entry, 0);
+                return IsRunning;
+            }
+            var speaker = m_Database.FindActor(entry.actorId);
+            if (speaker == null || entry.LineCount == 0)
+            {
+                Debug.LogError($"{LogTag} {nameof(Resume)} rejected: entry {entry.id} of '{conversation.title}' shows no line (speaker={(speaker != null ? speaker.name : "unknown")}, lines={entry.LineCount}).");
+                return false;
+            }
+            ShowLine(conversation, entry, speaker, Mathf.Clamp(position.lineIndex, 0, entry.LineCount - 1));
+            return true;
+        }
+
+        /// <summary>The runner's context for conditions/actions: the world, plus what the runner remembers.</summary>
+        private sealed class RunnerContext : IDialogueContext, IDialogueMemory, IDialogueConversationLookup
+        {
+            private readonly DialogueRunner m_Runner;
+            public RunnerContext(DialogueRunner runner) { m_Runner = runner; }
+
+            public bool TryGetVariable(string variableName, out VariableValue value) => m_Runner.m_Context.TryGetVariable(variableName, out value);
+            public bool SetVariable(string variableName, VariableValue value) => m_Runner.m_Context.SetVariable(variableName, value);
+            public bool TryGetQuestState(string questName, out QuestState state) => m_Runner.m_Context.TryGetQuestState(questName, out state);
+            public bool SetQuestState(string questName, QuestState state) => m_Runner.m_Context.SetQuestState(questName, state);
+            public void RaiseEvent(string eventName, string argument) => m_Runner.m_Context.RaiseEvent(eventName, argument);
+            public bool WasSeen(int conversationId, int entryId) => m_Runner.Memory.WasSeen(conversationId, entryId);
+            public int CurrentConversationId => m_Runner.m_Conversation != null ? m_Runner.m_Conversation.id : 0;
+
+            public bool TryGetConversationId(string title, out int conversationId)
+            {
+                var found = m_Runner.m_Database != null ? m_Runner.m_Database.FindConversation(title) : null;
+                conversationId = found != null ? found.id : 0;
+                return found != null;
+            }
+        }
+
         /// <summary>Ends the conversation now (raises <see cref="ConversationEnded"/> if one was running).</summary>
         public void Stop()
         {
@@ -174,15 +283,18 @@ namespace ND.Dialogue
         {
             m_Conversation = conversation;
             m_Entry = entry;
+            EntryEntered?.Invoke(conversation, entry);
             foreach (var action in entry.actions)
             {
                 if (action == null) { Debug.LogError($"{LogTag} '{conversation.title}' entry {entry.id}: empty action slot skipped."); continue; }
-                action.Execute(m_Context);
+                action.Execute(m_Eval);
             }
+            entry.OnEnter(m_Eval);
 
             var speaker = m_Database.FindActor(entry.actorId);
             bool silent = entry.id == Conversation.StartEntryId || entry.isPassthrough
                 || (chosenByPlayer && !m_Options.showPlayerLines);
+            if (chosenByPlayer || (!silent && speaker != null)) Memory.MarkSeen(conversation.id, entry.id);
             if (silent)
             {
                 Advance(conversation, entry, silentSteps + 1);
@@ -195,7 +307,13 @@ namespace ND.Dialogue
                 return;
             }
 
-            var line = new DialogueLine(conversation, entry, speaker, speaker.FindEmotion(entry.emotion), ResolveText(entry.text, conversation, entry));
+            ShowLine(conversation, entry, speaker, 0);
+        }
+
+        private void ShowLine(Conversation conversation, DialogueEntry entry, Actor speaker, int index)
+        {
+            var line = new DialogueLine(conversation, entry, speaker, m_Database.FindEmotion(speaker, entry.LineEmotion(index)),
+                ResolveText(entry.LineText(index), conversation, entry), index, entry.LineCount, m_Database.DisplayNameOf(speaker));
             CurrentLine = line;
             State = DialogueRunnerState.ShowingLine;
             LineStarted?.Invoke(line);
@@ -278,7 +396,7 @@ namespace ND.Dialogue
             foreach (var condition in conditions)
             {
                 if (condition == null) continue;
-                if (!condition.Evaluate(m_Context)) return false;
+                if (!condition.Evaluate(m_Eval)) return false;
             }
             return true;
         }
@@ -290,7 +408,7 @@ namespace ND.Dialogue
                 Debug.LogWarning($"{LogTag} '{conversation.title}' entry {entry.id} has no text.");
                 return string.Empty;
             }
-            string raw = text.GetText(); // plain text, or the translation once connected to a table
+            string raw = TextResolver != null ? TextResolver(text) : text.GetText(); // plain text, or the translation once connected to a table
             return raw == null ? string.Empty : SubstituteVariables(raw);
         }
 
@@ -298,7 +416,7 @@ namespace ND.Dialogue
         public string SubstituteVariables(string text)
         {
             if (string.IsNullOrEmpty(text) || text.IndexOf("[var=", StringComparison.Ordinal) < 0) return text;
-            return s_VariableTag.Replace(text, m => m_Context.TryGetVariable(m.Groups[1].Value.Trim(), out var v) ? v.ToString() : m.Value);
+            return s_VariableTag.Replace(text, m => m_Eval.TryGetVariable(m.Groups[1].Value.Trim(), out var v) ? v.ToString() : m.Value);
         }
 
         private void End()
