@@ -13,21 +13,21 @@ MonoBehaviour:
   m_Name: Hogwarts_Characters
   m_EditorClassIdentifier: ND.Dialogue::ND.Dialogue.CharacterDatabase
   characters:
-  - rid: 3058894633377726553
-  - rid: 3058894633377726554
-  - rid: 3058894633377726555
-  - rid: 3058894633377726556
-  - rid: 3058894633377726557
-  - rid: 3058894633377726558
-  - rid: 3058894633377726559
+  - rid: 3058894633377727246
+  - rid: 3058894633377727247
+  - rid: 3058894633377727248
+  - rid: 3058894633377727249
+  - rid: 3058894633377727250
+  - rid: 3058894633377727251
+  - rid: 3058894633377727252
   templateAttributes: []
   references:
     version: 2
     RefIds:
-    - rid: 3058894633377726553
+    - rid: 3058894633377727246
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 275846393
+        id: 300837243
         name: Harry
         displayName:
           m_EntryId: 0
@@ -84,10 +84,10 @@ MonoBehaviour:
         template: {fileID: 11400000, guid: a8a37d86cf33d524981a600d9936d5ed, type: 2}
         templateValues: []
         attributes: []
-    - rid: 3058894633377726554
+    - rid: 3058894633377727247
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 507349979
+        id: 433743447
         name: Malfoy
         displayName:
           m_EntryId: 0
@@ -265,10 +265,10 @@ MonoBehaviour:
             colorValue: {r: 0, g: 0, b: 0, a: 0}
             objectValue: {fileID: 0}
           description: Her own attribute, next to the template's.
-    - rid: 3058894633377726555
+    - rid: 3058894633377727248
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 512555997
+        id: 488088358
         name: McGonagall
         displayName:
           m_EntryId: 0
@@ -289,10 +289,10 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894633377726556
+    - rid: 3058894633377727249
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 491289632
+        id: 351161079
         name: Voldemort
         displayName:
           m_EntryId: 0
@@ -313,10 +313,10 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894633377726557
+    - rid: 3058894633377727250
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 461178946
+        id: 397882213
         name: Wormtail
         displayName:
           m_EntryId: 0
@@ -337,10 +337,10 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894633377726558
+    - rid: 3058894633377727251
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 323058324
+        id: 416748813
         name: Rita
         displayName:
           m_EntryId: 0
@@ -361,10 +361,10 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894633377726559
+    - rid: 3058894633377727252
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 293476815
+        id: 382325359
         name: Dumbledore
         displayName:
           m_EntryId: 0

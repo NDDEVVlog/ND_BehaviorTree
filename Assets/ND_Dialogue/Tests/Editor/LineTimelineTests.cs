@@ -127,6 +127,14 @@ namespace ND.Dialogue.Tests
         }
 
         [Test]
+        public void LegacyText_KeepsOnlyTheTagsUIText_Draws()
+        {
+            string rich = LineTimeline.Final("<b>Hi</b> <err id=\"a\">bad</err><fix id=\"a\" text=\"good\"> <whisper>psst</whisper><br posX=\"40\">end");
+            Assert.AreEqual("<b>Hi</b> <color=#7CFFB2>good</color> <color=#9AA3B2>psst</color>\nend", UIText.ForLegacyText(rich));
+            Assert.AreEqual("a < b", UIText.ForLegacyText("a < b"), "a lone '<' is text");
+        }
+
+        [Test]
         public void Validate_ReportsLineMarkupErrors()
         {
             var db = ScriptableObject.CreateInstance<DialogueDatabase>();

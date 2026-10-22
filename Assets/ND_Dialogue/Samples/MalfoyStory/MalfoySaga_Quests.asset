@@ -37,65 +37,65 @@ MonoBehaviour:
         m_Table: {fileID: 0}
         m_Text: 'Diagon Alley: meet the girl at Madam Malkin''s'
       visibleWhen:
-      - rid: 3058894633377726560
+      - rid: 3058894633377727253
       doneWhen:
-      - rid: 3058894633377726561
+      - rid: 3058894633377727254
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: 'Quidditch Pitch: the first flying lesson'
       visibleWhen:
-      - rid: 3058894633377726562
+      - rid: 3058894633377727255
       doneWhen:
-      - rid: 3058894633377726563
+      - rid: 3058894633377727256
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: 'Forbidden Forest: detention, at night'
       visibleWhen:
-      - rid: 3058894633377726564
+      - rid: 3058894633377727257
       doneWhen:
-      - rid: 3058894633377726565
+      - rid: 3058894633377727258
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: 'Library: someone wants to study with you'
       visibleWhen:
-      - rid: 3058894633377726566
+      - rid: 3058894633377727259
       doneWhen:
-      - rid: 3058894633377726567
+      - rid: 3058894633377727260
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: 'The Yule Ball: find a partner (see its quest)'
       visibleWhen:
-      - rid: 3058894633377726568
+      - rid: 3058894633377727261
       doneWhen:
-      - rid: 3058894633377726569
+      - rid: 3058894633377727262
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: 'Hogsmeade: read the Daily Prophet'
       visibleWhen:
-      - rid: 3058894633377726570
+      - rid: 3058894633377727263
       doneWhen:
-      - rid: 3058894633377726571
+      - rid: 3058894633377727264
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: 'Years later, Malfoy Manor: knock on her door'
       visibleWhen:
-      - rid: 3058894633377726572
+      - rid: 3058894633377727265
       doneWhen:
-      - rid: 3058894633377726573
+      - rid: 3058894633377727266
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: 'Malfoy Manor: the morning after'
       visibleWhen:
-      - rid: 3058894633377726574
+      - rid: 3058894633377727267
       doneWhen:
-      - rid: 3058894633377726575
+      - rid: 3058894633377727268
   - name: yule_ball
     title:
       m_EntryId: 0
@@ -121,37 +121,37 @@ MonoBehaviour:
         m_Text: Ask Malfoy to the Yule Ball
       visibleWhen: []
       doneWhen:
-      - rid: 3058894633377726576
+      - rid: 3058894633377727269
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: Answer the paper crane
       visibleWhen:
-      - rid: 3058894633377726577
+      - rid: 3058894633377727270
       doneWhen:
-      - rid: 3058894633377726578
+      - rid: 3058894633377727271
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: Make it up to her (the ferret incident)
       visibleWhen:
-      - rid: 3058894633377726579
+      - rid: 3058894633377727272
       doneWhen:
-      - rid: 3058894633377726580
+      - rid: 3058894633377727273
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: Meet her at the Great Hall
       visibleWhen:
-      - rid: 3058894633377726581
+      - rid: 3058894633377727274
       doneWhen:
-      - rid: 3058894633377726582
+      - rid: 3058894633377727275
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: Share the dance
       visibleWhen:
-      - rid: 3058894633377726583
+      - rid: 3058894633377727276
       doneWhen: []
   - name: chocolate_frog
     title:
@@ -178,195 +178,195 @@ MonoBehaviour:
         m_Text: Find out who left it
       visibleWhen: []
       doneWhen:
-      - rid: 3058894633377726584
+      - rid: 3058894633377727277
     - text:
         m_EntryId: 0
         m_Table: {fileID: 0}
         m_Text: Decide what to do with it
       visibleWhen:
-      - rid: 3058894633377726585
+      - rid: 3058894633377727278
       doneWhen: []
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 3058894633377726560
+    - rid: 3058894633377727253
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 5
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726561
+    - rid: 3058894633377727254
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 4
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726562
+    - rid: 3058894633377727255
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 5
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726563
+    - rid: 3058894633377727256
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 4
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726564
+    - rid: 3058894633377727257
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 5
         value: 3
         objectValue: {fileID: 0}
-    - rid: 3058894633377726565
+    - rid: 3058894633377727258
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 4
         value: 3
         objectValue: {fileID: 0}
-    - rid: 3058894633377726566
+    - rid: 3058894633377727259
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 5
         value: 4
         objectValue: {fileID: 0}
-    - rid: 3058894633377726567
+    - rid: 3058894633377727260
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 4
         value: 4
         objectValue: {fileID: 0}
-    - rid: 3058894633377726568
+    - rid: 3058894633377727261
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 5
         value: 5
         objectValue: {fileID: 0}
-    - rid: 3058894633377726569
+    - rid: 3058894633377727262
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 4
         value: 5
         objectValue: {fileID: 0}
-    - rid: 3058894633377726570
+    - rid: 3058894633377727263
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 5
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726571
+    - rid: 3058894633377727264
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 4
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726572
+    - rid: 3058894633377727265
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 5
         value: 7
         objectValue: {fileID: 0}
-    - rid: 3058894633377726573
+    - rid: 3058894633377727266
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 4
         value: 7
         objectValue: {fileID: 0}
-    - rid: 3058894633377726574
+    - rid: 3058894633377727267
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 5
         value: 8
         objectValue: {fileID: 0}
-    - rid: 3058894633377726575
+    - rid: 3058894633377727268
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         op: 4
         value: 8
         objectValue: {fileID: 0}
-    - rid: 3058894633377726576
+    - rid: 3058894633377727269
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.asked
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726577
+    - rid: 3058894633377727270
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.asked
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726578
+    - rid: 3058894633377727271
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.crane_answered
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726579
+    - rid: 3058894633377727272
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.ferret
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726580
+    - rid: 3058894633377727273
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.forgiven
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726581
+    - rid: 3058894633377727274
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.partner
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726582
+    - rid: 3058894633377727275
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.danced
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726583
+    - rid: 3058894633377727276
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.partner
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726584
+    - rid: 3058894633377727277
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: frog.found
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726585
+    - rid: 3058894633377727278
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: frog.found

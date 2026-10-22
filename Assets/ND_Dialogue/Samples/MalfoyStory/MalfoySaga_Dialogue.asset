@@ -19,10 +19,10 @@ MonoBehaviour:
     alwaysShowChoiceMenu: 1
     maxSilentSteps: 100
   actors:
-  - rid: 3058894633377726586
-  - rid: 3058894633377726587
-  - rid: 3058894633377726588
-  - rid: 3058894633377726589
+  - rid: 3058894633377727279
+  - rid: 3058894633377727280
+  - rid: 3058894633377727281
+  - rid: 3058894633377727282
   characterDatabases:
   - {fileID: 11400000, guid: c7e8dce0e663e2245b311593e075e219, type: 2}
   looks: []
@@ -128,9 +128,19 @@ MonoBehaviour:
   - name: yule_dance
     argumentHint: 
     description: 'The dance starts: music, lights.'
+  - name: monster
+    argumentHint: 
+    description: 'Raised inside the line (<event> markup) when the scream is typed:
+      e.g. a camera shake.'
+  - name: crucio
+    argumentHint: 
+    description: Raised inside the line (<event> markup) after the pause.
   - name: ending_hostile
     argumentHint: 
     description: She means it. This time.
+  - name: fireworks
+    argumentHint: 
+    description: Raised at the end of Dumbledore's line (<event> markup, arg = office).
   conversations:
   - id: 1
     title: 1. First Meet
@@ -138,24 +148,24 @@ MonoBehaviour:
       time?
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726590
-    - rid: 3058894633377726591
-    - rid: 3058894633377726592
-    - rid: 3058894633377726593
-    - rid: 3058894633377726594
-    - rid: 3058894633377726595
-    - rid: 3058894633377726596
-    - rid: 3058894633377726597
-    - rid: 3058894633377726598
-    - rid: 3058894633377726599
-    - rid: 3058894633377726600
-    - rid: 3058894633377726601
-    - rid: 3058894633377726602
-    - rid: 3058894633377726603
-    - rid: 3058894633377726604
-    - rid: 3058894633377726605
-    - rid: 3058894633377726606
-    - rid: 3058894633377726607
+    - rid: 3058894633377727283
+    - rid: 3058894633377727284
+    - rid: 3058894633377727285
+    - rid: 3058894633377727286
+    - rid: 3058894633377727287
+    - rid: 3058894633377727288
+    - rid: 3058894633377727289
+    - rid: 3058894633377727290
+    - rid: 3058894633377727291
+    - rid: 3058894633377727292
+    - rid: 3058894633377727293
+    - rid: 3058894633377727294
+    - rid: 3058894633377727295
+    - rid: 3058894633377727296
+    - rid: 3058894633377727297
+    - rid: 3058894633377727298
+    - rid: 3058894633377727299
+    - rid: 3058894633377727300
     m_LegacyEntries: []
     m_NextEntryId: 18
   - id: 2
@@ -163,18 +173,18 @@ MonoBehaviour:
     description: Harry is a natural on a broom. Malfoy is... not taking it well.
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726608
-    - rid: 3058894633377726609
-    - rid: 3058894633377726610
-    - rid: 3058894633377726611
-    - rid: 3058894633377726612
-    - rid: 3058894633377726613
-    - rid: 3058894633377726614
-    - rid: 3058894633377726615
-    - rid: 3058894633377726616
-    - rid: 3058894633377726617
-    - rid: 3058894633377726618
-    - rid: 3058894633377726619
+    - rid: 3058894633377727301
+    - rid: 3058894633377727302
+    - rid: 3058894633377727303
+    - rid: 3058894633377727304
+    - rid: 3058894633377727305
+    - rid: 3058894633377727306
+    - rid: 3058894633377727307
+    - rid: 3058894633377727308
+    - rid: 3058894633377727309
+    - rid: 3058894633377727310
+    - rid: 3058894633377727311
+    - rid: 3058894633377727312
     m_LegacyEntries: []
     m_NextEntryId: 12
   - id: 3
@@ -182,12 +192,12 @@ MonoBehaviour:
     description: Detention in the Forbidden Forest. Someone is very brave. Out loud.
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726620
-    - rid: 3058894633377726621
-    - rid: 3058894633377726622
-    - rid: 3058894633377726623
-    - rid: 3058894633377726624
-    - rid: 3058894633377726625
+    - rid: 3058894633377727313
+    - rid: 3058894633377727314
+    - rid: 3058894633377727315
+    - rid: 3058894633377727316
+    - rid: 3058894633377727317
+    - rid: 3058894633377727318
     m_LegacyEntries: []
     m_NextEntryId: 6
   - id: 4
@@ -196,18 +206,18 @@ MonoBehaviour:
       surveillance.
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726626
-    - rid: 3058894633377726627
-    - rid: 3058894633377726628
-    - rid: 3058894633377726629
-    - rid: 3058894633377726630
-    - rid: 3058894633377726631
-    - rid: 3058894633377726632
-    - rid: 3058894633377726633
-    - rid: 3058894633377726634
-    - rid: 3058894633377726635
-    - rid: 3058894633377726636
-    - rid: 3058894633377726637
+    - rid: 3058894633377727319
+    - rid: 3058894633377727320
+    - rid: 3058894633377727321
+    - rid: 3058894633377727322
+    - rid: 3058894633377727323
+    - rid: 3058894633377727324
+    - rid: 3058894633377727325
+    - rid: 3058894633377727326
+    - rid: 3058894633377727327
+    - rid: 3058894633377727328
+    - rid: 3058894633377727329
+    - rid: 3058894633377727330
     m_LegacyEntries: []
     m_NextEntryId: 12
   - id: 5
@@ -215,13 +225,13 @@ MonoBehaviour:
     description: Harry asks; Malfoy refuses (after @lattekoi5252). Starts the quest.
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726638
-    - rid: 3058894633377726639
-    - rid: 3058894633377726640
-    - rid: 3058894633377726641
-    - rid: 3058894633377726642
-    - rid: 3058894633377726643
-    - rid: 3058894633377726644
+    - rid: 3058894633377727331
+    - rid: 3058894633377727332
+    - rid: 3058894633377727333
+    - rid: 3058894633377727334
+    - rid: 3058894633377727335
+    - rid: 3058894633377727336
+    - rid: 3058894633377727337
     m_LegacyEntries: []
     m_NextEntryId: 7
   - id: 6
@@ -230,15 +240,15 @@ MonoBehaviour:
       her answer after @lattekoi5252).
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726645
-    - rid: 3058894633377726646
-    - rid: 3058894633377726647
-    - rid: 3058894633377726648
-    - rid: 3058894633377726649
-    - rid: 3058894633377726650
-    - rid: 3058894633377726651
-    - rid: 3058894633377726652
-    - rid: 3058894633377726653
+    - rid: 3058894633377727338
+    - rid: 3058894633377727339
+    - rid: 3058894633377727340
+    - rid: 3058894633377727341
+    - rid: 3058894633377727342
+    - rid: 3058894633377727343
+    - rid: 3058894633377727344
+    - rid: 3058894633377727345
+    - rid: 3058894633377727346
     m_LegacyEntries: []
     m_NextEntryId: 9
   - id: 7
@@ -247,15 +257,15 @@ MonoBehaviour:
       the Myrtle answer.
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726654
-    - rid: 3058894633377726655
-    - rid: 3058894633377726656
-    - rid: 3058894633377726657
-    - rid: 3058894633377726658
-    - rid: 3058894633377726659
-    - rid: 3058894633377726660
-    - rid: 3058894633377726661
-    - rid: 3058894633377726662
+    - rid: 3058894633377727347
+    - rid: 3058894633377727348
+    - rid: 3058894633377727349
+    - rid: 3058894633377727350
+    - rid: 3058894633377727351
+    - rid: 3058894633377727352
+    - rid: 3058894633377727353
+    - rid: 3058894633377727354
+    - rid: 3058894633377727355
     m_LegacyEntries: []
     m_NextEntryId: 9
   - id: 8
@@ -265,21 +275,21 @@ MonoBehaviour:
       appears (sequence).
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726663
-    - rid: 3058894633377726664
-    - rid: 3058894633377726665
-    - rid: 3058894633377726666
-    - rid: 3058894633377726667
-    - rid: 3058894633377726668
-    - rid: 3058894633377726669
-    - rid: 3058894633377726670
-    - rid: 3058894633377726671
-    - rid: 3058894633377726672
-    - rid: 3058894633377726673
-    - rid: 3058894633377726674
-    - rid: 3058894633377726675
-    - rid: 3058894633377726676
-    - rid: 3058894633377726677
+    - rid: 3058894633377727356
+    - rid: 3058894633377727357
+    - rid: 3058894633377727358
+    - rid: 3058894633377727359
+    - rid: 3058894633377727360
+    - rid: 3058894633377727361
+    - rid: 3058894633377727362
+    - rid: 3058894633377727363
+    - rid: 3058894633377727364
+    - rid: 3058894633377727365
+    - rid: 3058894633377727366
+    - rid: 3058894633377727367
+    - rid: 3058894633377727368
+    - rid: 3058894633377727369
+    - rid: 3058894633377727370
     m_LegacyEntries: []
     m_NextEntryId: 15
   - id: 9
@@ -288,25 +298,25 @@ MonoBehaviour:
       depends on Malfoy.affection.
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726678
-    - rid: 3058894633377726679
-    - rid: 3058894633377726680
-    - rid: 3058894633377726681
-    - rid: 3058894633377726682
-    - rid: 3058894633377726683
-    - rid: 3058894633377726684
-    - rid: 3058894633377726685
-    - rid: 3058894633377726686
-    - rid: 3058894633377726687
-    - rid: 3058894633377726688
-    - rid: 3058894633377726689
-    - rid: 3058894633377726690
-    - rid: 3058894633377726691
-    - rid: 3058894633377726692
-    - rid: 3058894633377726693
-    - rid: 3058894633377726694
-    - rid: 3058894633377726695
-    - rid: 3058894633377726696
+    - rid: 3058894633377727371
+    - rid: 3058894633377727372
+    - rid: 3058894633377727373
+    - rid: 3058894633377727374
+    - rid: 3058894633377727375
+    - rid: 3058894633377727376
+    - rid: 3058894633377727377
+    - rid: 3058894633377727378
+    - rid: 3058894633377727379
+    - rid: 3058894633377727380
+    - rid: 3058894633377727381
+    - rid: 3058894633377727382
+    - rid: 3058894633377727383
+    - rid: 3058894633377727384
+    - rid: 3058894633377727385
+    - rid: 3058894633377727386
+    - rid: 3058894633377727387
+    - rid: 3058894633377727388
+    - rid: 3058894633377727389
     m_LegacyEntries: []
     m_NextEntryId: 19
   - id: 10
@@ -315,18 +325,18 @@ MonoBehaviour:
       talking.
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726697
-    - rid: 3058894633377726698
-    - rid: 3058894633377726699
-    - rid: 3058894633377726700
-    - rid: 3058894633377726701
-    - rid: 3058894633377726702
-    - rid: 3058894633377726703
-    - rid: 3058894633377726704
-    - rid: 3058894633377726705
-    - rid: 3058894633377726706
-    - rid: 3058894633377726707
-    - rid: 3058894633377726708
+    - rid: 3058894633377727390
+    - rid: 3058894633377727391
+    - rid: 3058894633377727392
+    - rid: 3058894633377727393
+    - rid: 3058894633377727394
+    - rid: 3058894633377727395
+    - rid: 3058894633377727396
+    - rid: 3058894633377727397
+    - rid: 3058894633377727398
+    - rid: 3058894633377727399
+    - rid: 3058894633377727400
+    - rid: 3058894633377727401
     m_LegacyEntries: []
     m_NextEntryId: 12
   - id: 11
@@ -335,13 +345,13 @@ MonoBehaviour:
       and something Malfoy finally admits.
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726709
-    - rid: 3058894633377726710
-    - rid: 3058894633377726711
-    - rid: 3058894633377726712
-    - rid: 3058894633377726713
-    - rid: 3058894633377726714
-    - rid: 3058894633377726715
+    - rid: 3058894633377727402
+    - rid: 3058894633377727403
+    - rid: 3058894633377727404
+    - rid: 3058894633377727405
+    - rid: 3058894633377727406
+    - rid: 3058894633377727407
+    - rid: 3058894633377727408
     m_LegacyEntries: []
     m_NextEntryId: 7
   - id: 12
@@ -350,27 +360,27 @@ MonoBehaviour:
       .affection and .pride \u2014 and changes them."
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726716
-    - rid: 3058894633377726717
-    - rid: 3058894633377726718
-    - rid: 3058894633377726719
-    - rid: 3058894633377726720
-    - rid: 3058894633377726721
-    - rid: 3058894633377726722
-    - rid: 3058894633377726723
-    - rid: 3058894633377726724
-    - rid: 3058894633377726725
-    - rid: 3058894633377726726
-    - rid: 3058894633377726727
-    - rid: 3058894633377726728
-    - rid: 3058894633377726729
-    - rid: 3058894633377726730
-    - rid: 3058894633377726731
-    - rid: 3058894633377726732
-    - rid: 3058894633377726733
-    - rid: 3058894633377726734
-    - rid: 3058894633377726735
-    - rid: 3058894633377726736
+    - rid: 3058894633377727409
+    - rid: 3058894633377727410
+    - rid: 3058894633377727411
+    - rid: 3058894633377727412
+    - rid: 3058894633377727413
+    - rid: 3058894633377727414
+    - rid: 3058894633377727415
+    - rid: 3058894633377727416
+    - rid: 3058894633377727417
+    - rid: 3058894633377727418
+    - rid: 3058894633377727419
+    - rid: 3058894633377727420
+    - rid: 3058894633377727421
+    - rid: 3058894633377727422
+    - rid: 3058894633377727423
+    - rid: 3058894633377727424
+    - rid: 3058894633377727425
+    - rid: 3058894633377727426
+    - rid: 3058894633377727427
+    - rid: 3058894633377727428
+    - rid: 3058894633377727429
     m_LegacyEntries: []
     m_NextEntryId: 21
   - id: 13
@@ -378,14 +388,14 @@ MonoBehaviour:
     description: Before the match (after @Nef_Arius). A side quest.
     isBark: 0
     m_Entries:
-    - rid: 3058894633377726737
-    - rid: 3058894633377726738
-    - rid: 3058894633377726739
-    - rid: 3058894633377726740
-    - rid: 3058894633377726741
-    - rid: 3058894633377726742
-    - rid: 3058894633377726743
-    - rid: 3058894633377726744
+    - rid: 3058894633377727430
+    - rid: 3058894633377727431
+    - rid: 3058894633377727432
+    - rid: 3058894633377727433
+    - rid: 3058894633377727434
+    - rid: 3058894633377727435
+    - rid: 3058894633377727436
+    - rid: 3058894633377727437
     m_LegacyEntries: []
     m_NextEntryId: 8
   - id: 14
@@ -394,13 +404,13 @@ MonoBehaviour:
       Follows the quest.'
     isBark: 1
     m_Entries:
-    - rid: 3058894633377726745
-    - rid: 3058894633377726746
-    - rid: 3058894633377726747
-    - rid: 3058894633377726748
-    - rid: 3058894633377726749
-    - rid: 3058894633377726750
-    - rid: 3058894633377726751
+    - rid: 3058894633377727438
+    - rid: 3058894633377727439
+    - rid: 3058894633377727440
+    - rid: 3058894633377727441
+    - rid: 3058894633377727442
+    - rid: 3058894633377727443
+    - rid: 3058894633377727444
     m_LegacyEntries: []
     m_NextEntryId: 7
   - id: 15
@@ -408,11 +418,11 @@ MonoBehaviour:
     description: Barks after a talk ends (a second Dialogue Barker on the same Malfoy).
     isBark: 1
     m_Entries:
-    - rid: 3058894633377726752
-    - rid: 3058894633377726753
-    - rid: 3058894633377726754
-    - rid: 3058894633377726755
-    - rid: 3058894633377726756
+    - rid: 3058894633377727445
+    - rid: 3058894633377727446
+    - rid: 3058894633377727447
+    - rid: 3058894633377727448
+    - rid: 3058894633377727449
     m_LegacyEntries: []
     m_NextEntryId: 5
   m_NextActorId: 5
@@ -420,7 +430,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3058894633377726586
+    - rid: 3058894633377727279
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
@@ -444,7 +454,7 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894633377726587
+    - rid: 3058894633377727280
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
@@ -468,7 +478,7 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894633377726588
+    - rid: 3058894633377727281
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
@@ -492,7 +502,7 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894633377726589
+    - rid: 3058894633377727282
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
@@ -516,7 +526,7 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894633377726590
+    - rid: 3058894633377727283
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -546,21 +556,21 @@ MonoBehaviour:
           entryId: 1
           priority: 2
           conditions:
-          - rid: 3058894633377726757
+          - rid: 3058894633377727450
           bends: []
         - conversationId: 1
           entryId: 12
           priority: 2
           conditions:
-          - rid: 3058894633377726758
+          - rid: 3058894633377727451
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726591
+    - rid: 3058894633377727284
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -587,12 +597,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726592
+    - rid: 3058894633377727285
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -619,12 +629,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726593
+    - rid: 3058894633377727286
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -676,12 +686,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726594
+    - rid: 3058894633377727287
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -708,12 +718,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726595
+    - rid: 3058894633377727288
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -740,12 +750,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 190}
-    - rid: 3058894633377726596
+    - rid: 3058894633377727289
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -781,12 +791,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1500, y: 190}
-    - rid: 3058894633377726597
+    - rid: 3058894633377727290
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -846,12 +856,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1800, y: 0}
-    - rid: 3058894633377726598
+    - rid: 3058894633377727291
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -871,7 +881,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726759
+        - rid: 3058894633377727452
         links:
         - conversationId: 1
           entryId: 10
@@ -879,12 +889,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2100, y: 0}
-    - rid: 3058894633377726599
+    - rid: 3058894633377727292
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 9
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -911,12 +921,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2100, y: 190}
-    - rid: 3058894633377726600
+    - rid: 3058894633377727293
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 10
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -952,12 +962,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2400, y: 0}
-    - rid: 3058894633377726601
+    - rid: 3058894633377727294
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 11
         title: Great Hall, after the Sorting
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -984,12 +994,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2700, y: 0}
-    - rid: 3058894633377726602
+    - rid: 3058894633377727295
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 12
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1025,12 +1035,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 380}
-    - rid: 3058894633377726603
+    - rid: 3058894633377727296
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 13
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1072,12 +1082,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 3000, y: 0}
-    - rid: 3058894633377726604
+    - rid: 3058894633377727297
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 14
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1097,7 +1107,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726760
+        - rid: 3058894633377727453
         links:
         - conversationId: 1
           entryId: 16
@@ -1105,12 +1115,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 3300, y: 0}
-    - rid: 3058894633377726605
+    - rid: 3058894633377727298
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 15
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1130,7 +1140,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726761
+        - rid: 3058894633377727454
         links:
         - conversationId: 1
           entryId: 17
@@ -1138,12 +1148,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 3300, y: 190}
-    - rid: 3058894633377726606
+    - rid: 3058894633377727299
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 16
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1181,15 +1191,15 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726762
+        - rid: 3058894633377727455
         links: []
         position: {x: 3600, y: 0}
-    - rid: 3058894633377726607
+    - rid: 3058894633377727300
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 17
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1227,10 +1237,10 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726763
+        - rid: 3058894633377727456
         links: []
         position: {x: 3600, y: 190}
-    - rid: 3058894633377726608
+    - rid: 3058894633377727301
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -1262,12 +1272,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726609
+    - rid: 3058894633377727302
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1303,12 +1313,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726610
+    - rid: 3058894633377727303
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: That night...
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1335,12 +1345,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726611
+    - rid: 3058894633377727304
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1390,12 +1400,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726612
+    - rid: 3058894633377727305
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1415,7 +1425,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726764
+        - rid: 3058894633377727457
         links:
         - conversationId: 2
           entryId: 6
@@ -1423,12 +1433,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726613
+    - rid: 3058894633377727306
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1455,12 +1465,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 190}
-    - rid: 3058894633377726614
+    - rid: 3058894633377727307
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1505,12 +1515,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1500, y: 0}
-    - rid: 3058894633377726615
+    - rid: 3058894633377727308
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
         title: 
-        actorId: 512555997
+        actorId: 488088358
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1537,12 +1547,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1800, y: 190}
-    - rid: 3058894633377726616
+    - rid: 3058894633377727309
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1569,12 +1579,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2100, y: 190}
-    - rid: 3058894633377726617
+    - rid: 3058894633377727310
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 9
         title: 
-        actorId: 512555997
+        actorId: 488088358
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1602,12 +1612,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2400, y: 190}
-    - rid: 3058894633377726618
+    - rid: 3058894633377727311
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 10
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1634,12 +1644,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2700, y: 190}
-    - rid: 3058894633377726619
+    - rid: 3058894633377727312
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 11
         title: 
-        actorId: 512555997
+        actorId: 488088358
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1679,10 +1689,10 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726765
+        - rid: 3058894633377727458
         links: []
         position: {x: 3000, y: 190}
-    - rid: 3058894633377726620
+    - rid: 3058894633377727313
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -1714,17 +1724,17 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726621
+    - rid: 3058894633377727314
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
-          m_Text: H... Hmph. Don't tell me a little thing like this has you scared,
-            Potter?
+          m_Text: H...<pause 0.4> Hmph.<pause 0.3> Don't tell me a little thing like
+            this has you <speed 8>scared</speed>, Potter?
         menuText:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1738,7 +1748,7 @@ MonoBehaviour:
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
-            m_Text: "(I'm scared!! I'm so scared\u2014!!!)"
+            m_Text: "<whisper>(I'm scared!! I'm so scared\u2014!!!)</whisper>"
           emotion: 
           voice: {fileID: 0}
           localizedVoice:
@@ -1761,12 +1771,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726622
+    - rid: 3058894633377727315
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1786,7 +1796,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726766
+        - rid: 3058894633377727459
         links:
         - conversationId: 3
           entryId: 4
@@ -1794,12 +1804,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726623
+    - rid: 3058894633377727316
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1819,7 +1829,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726767
+        - rid: 3058894633377727460
         links:
         - conversationId: 3
           entryId: 5
@@ -1827,16 +1837,17 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 190}
-    - rid: 3058894633377726624
+    - rid: 3058894633377727317
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
-          m_Text: AAAAH!!! A M-MONSTER!!!!!!
+          m_Text: <speed 90><shake>AAAAH!!! A M-MONSTER!!!!!!</shake></speed><event
+            name="monster">
         menuText:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1850,7 +1861,8 @@ MonoBehaviour:
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
-            m_Text: H-HURRY UP! WHAT ARE YOU WAITING FOR, YOU FILTHY IDIOT!!!
+            m_Text: <shout>H-HURRY UP!</shout> WHAT ARE YOU WAITING FOR, YOU FILTHY
+              IDIOT!!!
           emotion: 
           voice: {fileID: 0}
           localizedVoice:
@@ -1861,16 +1873,16 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726768
-        - rid: 3058894633377726769
+        - rid: 3058894633377727461
+        - rid: 3058894633377727462
         links: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726625
+    - rid: 3058894633377727318
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1888,7 +1900,7 @@ MonoBehaviour:
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
-            m_Text: ...Just so you don't get lost. That's all.
+            m_Text: ...Just so you don't get lost.<pause 0.6> <whisper>That's all.</whisper>
           emotion: Pout
           voice: {fileID: 0}
           localizedVoice:
@@ -1899,10 +1911,10 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726770
+        - rid: 3058894633377727463
         links: []
         position: {x: 900, y: 190}
-    - rid: 3058894633377726626
+    - rid: 3058894633377727319
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -1934,16 +1946,17 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726627
+    - rid: 3058894633377727320
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 491289632
+        actorId: 351161079
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
-          m_Text: You understand, I trust... only you can do this.
+          m_Text: <speed 14>You understand, I trust...</speed><pause 0.6> only <b>you</b>
+            can do this.
         menuText:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -1976,12 +1989,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726628
+    - rid: 3058894633377727321
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2008,12 +2021,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726629
+    - rid: 3058894633377727322
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2031,7 +2044,8 @@ MonoBehaviour:
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
-            m_Text: (This is a mission... It's not like I want to do this...)
+            m_Text: (This is a <err id="m">date</err><fix id="m" text="mission">...<pause
+              0.3> It's not like I want to do this...)
           emotion: Embarrassed
           voice: {fileID: 0}
           localizedVoice:
@@ -2063,12 +2077,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726630
+    - rid: 3058894633377727323
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2088,7 +2102,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726771
+        - rid: 3058894633377727464
         links:
         - conversationId: 4
           entryId: 6
@@ -2096,12 +2110,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726631
+    - rid: 3058894633377727324
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2121,7 +2135,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726772
+        - rid: 3058894633377727465
         links:
         - conversationId: 4
           entryId: 7
@@ -2129,12 +2143,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 190}
-    - rid: 3058894633377726632
+    - rid: 3058894633377727325
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2171,12 +2185,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1500, y: 0}
-    - rid: 3058894633377726633
+    - rid: 3058894633377727326
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2204,12 +2218,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1500, y: 190}
-    - rid: 3058894633377726634
+    - rid: 3058894633377727327
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2229,7 +2243,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726773
+        - rid: 3058894633377727466
         links:
         - conversationId: 4
           entryId: 9
@@ -2237,12 +2251,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1800, y: 0}
-    - rid: 3058894633377726635
+    - rid: 3058894633377727328
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 9
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2269,12 +2283,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2100, y: 0}
-    - rid: 3058894633377726636
+    - rid: 3058894633377727329
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 10
         title: 
-        actorId: 461178946
+        actorId: 397882213
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2302,16 +2316,16 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2400, y: 0}
-    - rid: 3058894633377726637
+    - rid: 3058894633377727330
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 11
         title: 
-        actorId: 491289632
+        actorId: 351161079
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
-          m_Text: CRUCIO.
+          m_Text: <pause 0.8><shout>CRUCIO.</shout><event name="crucio">
         menuText:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2327,10 +2341,10 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726774
+        - rid: 3058894633377727467
         links: []
         position: {x: 2700, y: 0}
-    - rid: 3058894633377726638
+    - rid: 3058894633377727331
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -2360,21 +2374,21 @@ MonoBehaviour:
           entryId: 1
           priority: 2
           conditions:
-          - rid: 3058894633377726775
+          - rid: 3058894633377727468
           bends: []
         - conversationId: 5
           entryId: 6
           priority: 2
           conditions:
-          - rid: 3058894633377726776
+          - rid: 3058894633377727469
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726639
+    - rid: 3058894633377727332
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2394,8 +2408,8 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726777
-        - rid: 3058894633377726778
+        - rid: 3058894633377727470
+        - rid: 3058894633377727471
         links:
         - conversationId: 5
           entryId: 2
@@ -2403,12 +2417,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726640
+    - rid: 3058894633377727333
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2449,12 +2463,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726641
+    - rid: 3058894633377727334
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2474,7 +2488,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726779
+        - rid: 3058894633377727472
         links:
         - conversationId: 5
           entryId: 5
@@ -2482,12 +2496,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726642
+    - rid: 3058894633377727335
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2507,8 +2521,8 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726780
-        - rid: 3058894633377726781
+        - rid: 3058894633377727473
+        - rid: 3058894633377727474
         links:
         - conversationId: 5
           entryId: 5
@@ -2516,12 +2530,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 190}
-    - rid: 3058894633377726643
+    - rid: 3058894633377727336
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2543,12 +2557,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726644
+    - rid: 3058894633377727337
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2570,7 +2584,7 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 380}
-    - rid: 3058894633377726645
+    - rid: 3058894633377727338
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -2600,8 +2614,8 @@ MonoBehaviour:
           entryId: 1
           priority: 2
           conditions:
-          - rid: 3058894633377726782
-          - rid: 3058894633377726783
+          - rid: 3058894633377727475
+          - rid: 3058894633377727476
           bends: []
         - conversationId: 6
           entryId: 2
@@ -2609,12 +2623,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726646
+    - rid: 3058894633377727339
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: the crane
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2660,12 +2674,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726647
+    - rid: 3058894633377727340
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2687,12 +2701,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 380}
-    - rid: 3058894633377726648
+    - rid: 3058894633377727341
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2712,8 +2726,8 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726784
-        - rid: 3058894633377726785
+        - rid: 3058894633377727477
+        - rid: 3058894633377727478
         links:
         - conversationId: 6
           entryId: 6
@@ -2721,12 +2735,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726649
+    - rid: 3058894633377727342
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2746,9 +2760,9 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726786
-        - rid: 3058894633377726787
-        - rid: 3058894633377726788
+        - rid: 3058894633377727479
+        - rid: 3058894633377727480
+        - rid: 3058894633377727481
         links:
         - conversationId: 6
           entryId: 7
@@ -2756,12 +2770,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 190}
-    - rid: 3058894633377726650
+    - rid: 3058894633377727343
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2781,9 +2795,9 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726789
-        - rid: 3058894633377726790
-        - rid: 3058894633377726791
+        - rid: 3058894633377727482
+        - rid: 3058894633377727483
+        - rid: 3058894633377727484
         links:
         - conversationId: 6
           entryId: 8
@@ -2791,12 +2805,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 380}
-    - rid: 3058894633377726651
+    - rid: 3058894633377727344
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2816,15 +2830,15 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726792
+        - rid: 3058894633377727485
         links: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726652
+    - rid: 3058894633377727345
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2854,15 +2868,15 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726793
+        - rid: 3058894633377727486
         links: []
         position: {x: 900, y: 190}
-    - rid: 3058894633377726653
+    - rid: 3058894633377727346
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -2893,7 +2907,7 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 900, y: 380}
-    - rid: 3058894633377726654
+    - rid: 3058894633377727347
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -2923,8 +2937,8 @@ MonoBehaviour:
           entryId: 1
           priority: 2
           conditions:
-          - rid: 3058894633377726794
-          - rid: 3058894633377726795
+          - rid: 3058894633377727487
+          - rid: 3058894634309386240
           bends: []
         - conversationId: 7
           entryId: 8
@@ -2932,7 +2946,7 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726655
+    - rid: 3058894633377727348
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
@@ -2974,12 +2988,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726656
+    - rid: 3058894633377727349
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 512555997
+        actorId: 488088358
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3015,12 +3029,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726657
+    - rid: 3058894633377727350
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3052,12 +3066,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726658
+    - rid: 3058894633377727351
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3077,8 +3091,8 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726796
-        - rid: 3058894633377726797
+        - rid: 3058894634309386241
+        - rid: 3058894634309386242
         links:
         - conversationId: 7
           entryId: 6
@@ -3086,12 +3100,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726659
+    - rid: 3058894633377727352
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3111,7 +3125,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726798
+        - rid: 3058894634309386243
         links:
         - conversationId: 7
           entryId: 7
@@ -3119,12 +3133,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 190}
-    - rid: 3058894633377726660
+    - rid: 3058894633377727353
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3144,16 +3158,16 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726799
-        - rid: 3058894633377726800
+        - rid: 3058894634309386244
+        - rid: 3058894634309386245
         links: []
         position: {x: 1500, y: 0}
-    - rid: 3058894633377726661
+    - rid: 3058894633377727354
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3175,12 +3189,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 1500, y: 190}
-    - rid: 3058894633377726662
+    - rid: 3058894633377727355
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3202,7 +3216,7 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 380}
-    - rid: 3058894633377726663
+    - rid: 3058894633377727356
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -3232,8 +3246,8 @@ MonoBehaviour:
           entryId: 1
           priority: 2
           conditions:
-          - rid: 3058894633377726801
-          - rid: 3058894633377726802
+          - rid: 3058894634309386246
+          - rid: 3058894634309386247
           bends: []
         - conversationId: 8
           entryId: 2
@@ -3241,12 +3255,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726664
+    - rid: 3058894633377727357
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3282,12 +3296,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726665
+    - rid: 3058894633377727358
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3309,12 +3323,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 380}
-    - rid: 3058894633377726666
+    - rid: 3058894633377727359
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3334,7 +3348,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726803
+        - rid: 3058894634309386248
         links:
         - conversationId: 8
           entryId: 7
@@ -3342,12 +3356,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726667
+    - rid: 3058894633377727360
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3367,7 +3381,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726804
+        - rid: 3058894634309386249
         links:
         - conversationId: 8
           entryId: 8
@@ -3375,12 +3389,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 190}
-    - rid: 3058894633377726668
+    - rid: 3058894633377727361
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3400,8 +3414,8 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726805
-        - rid: 3058894633377726806
+        - rid: 3058894634309386250
+        - rid: 3058894634309386251
         links:
         - conversationId: 8
           entryId: 8
@@ -3409,12 +3423,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 380}
-    - rid: 3058894633377726669
+    - rid: 3058894633377727362
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: answers
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3451,12 +3465,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 510, y: 230}
-    - rid: 3058894633377726670
+    - rid: 3058894633377727363
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3492,12 +3506,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726671
+    - rid: 3058894633377727364
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3524,12 +3538,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 190}
-    - rid: 3058894633377726672
+    - rid: 3058894633377727365
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 9
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3558,8 +3572,8 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726807
-        - rid: 3058894633377726808
+        - rid: 3058894634309386252
+        - rid: 3058894634309386253
         links:
         - conversationId: 8
           entryId: 10
@@ -3572,12 +3586,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726673
+    - rid: 3058894633377727366
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 10
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3602,7 +3616,7 @@ MonoBehaviour:
           entryId: 12
           priority: 4
           conditions:
-          - rid: 3058894633377726809
+          - rid: 3058894634309386254
           bends: []
         - conversationId: 8
           entryId: 13
@@ -3610,12 +3624,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1500, y: 0}
-    - rid: 3058894633377726674
+    - rid: 3058894633377727367
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 11
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3635,7 +3649,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726810
+        - rid: 3058894634309386255
         links:
         - conversationId: 8
           entryId: 14
@@ -3643,12 +3657,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1500, y: 190}
-    - rid: 3058894633377726675
+    - rid: 3058894633377727368
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 12
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3668,16 +3682,16 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726811
-        - rid: 3058894633377726812
+        - rid: 3058894634309386256
+        - rid: 3058894634309386257
         links: []
         position: {x: 1800, y: 0}
-    - rid: 3058894633377726676
+    - rid: 3058894633377727369
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 13
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3697,16 +3711,16 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726813
-        - rid: 3058894633377726814
+        - rid: 3058894634309386258
+        - rid: 3058894634309386259
         links: []
         position: {x: 1800, y: 190}
-    - rid: 3058894633377726677
+    - rid: 3058894633377727370
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 14
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3726,11 +3740,11 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726815
-        - rid: 3058894633377726816
+        - rid: 3058894634309386260
+        - rid: 3058894634309386261
         links: []
         position: {x: 1800, y: 380}
-    - rid: 3058894633377726678
+    - rid: 3058894633377727371
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -3762,12 +3776,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726679
+    - rid: 3058894633377727372
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 323058324
+        actorId: 416748813
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3794,12 +3808,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726680
+    - rid: 3058894633377727373
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3826,12 +3840,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726681
+    - rid: 3058894633377727374
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 323058324
+        actorId: 416748813
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3858,16 +3872,17 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726682
+    - rid: 3058894633377727375
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
-          m_Text: Messy black hair, ridiculous round glasses... Green eyes!
+          m_Text: Messy black hair,<pause 0.3> ridiculous round glasses...<pause
+            0.5> <wave>Green eyes!</wave>
         menuText:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3890,12 +3905,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726683
+    - rid: 3058894633377727376
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 323058324
+        actorId: 416748813
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3922,12 +3937,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1500, y: 0}
-    - rid: 3058894633377726684
+    - rid: 3058894633377727377
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3945,8 +3960,8 @@ MonoBehaviour:
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
-            m_Text: THAT'S BECAUSE HE'S ALWAYS RIGHT IN FRONT OF ME, GETTING ON MY
-              NERVES!
+            m_Text: <shout>THAT'S BECAUSE HE'S ALWAYS RIGHT IN FRONT OF ME,</shout><br
+              posX="40"><shake>GETTING ON MY NERVES!</shake>
           emotion: Embarrassed
           voice: {fileID: 0}
           localizedVoice:
@@ -3964,16 +3979,16 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1800, y: 0}
-    - rid: 3058894633377726685
+    - rid: 3058894633377727378
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
         title: 
-        actorId: 323058324
+        actorId: 416748813
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
-          m_Text: Are you sure you're not rather fond of him?
+          m_Text: Are you sure you're not rather <wave>fond</wave> of him~?
         menuText:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -3996,12 +4011,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2100, y: 0}
-    - rid: 3058894633377726686
+    - rid: 3058894633377727379
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4028,12 +4043,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2400, y: 0}
-    - rid: 3058894633377726687
+    - rid: 3058894633377727380
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 9
         title: 'Next morning: the Daily Prophet. ''MISS MALFOY''S IDEAL MAN?'''
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4060,12 +4075,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2700, y: 0}
-    - rid: 3058894633377726688
+    - rid: 3058894633377727381
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 10
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4097,12 +4112,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 3000, y: 0}
-    - rid: 3058894633377726689
+    - rid: 3058894633377727382
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 11
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4128,13 +4143,13 @@ MonoBehaviour:
           entryId: 16
           priority: 4
           conditions:
-          - rid: 3058894633377726817
+          - rid: 3058894634309386262
           bends: []
         - conversationId: 9
           entryId: 14
           priority: 3
           conditions:
-          - rid: 3058894633377726818
+          - rid: 3058894634309386263
           bends: []
         - conversationId: 9
           entryId: 15
@@ -4142,12 +4157,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 3300, y: 0}
-    - rid: 3058894633377726690
+    - rid: 3058894633377727383
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 12
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4174,12 +4189,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 3300, y: 190}
-    - rid: 3058894633377726691
+    - rid: 3058894633377727384
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 13
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4204,13 +4219,13 @@ MonoBehaviour:
           entryId: 16
           priority: 4
           conditions:
-          - rid: 3058894633377726819
+          - rid: 3058894634309386264
           bends: []
         - conversationId: 9
           entryId: 14
           priority: 3
           conditions:
-          - rid: 3058894633377726820
+          - rid: 3058894634309386265
           bends: []
         - conversationId: 9
           entryId: 15
@@ -4218,12 +4233,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 3600, y: 190}
-    - rid: 3058894633377726692
+    - rid: 3058894633377727385
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 14
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4261,7 +4276,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726821
+        - rid: 3058894634309386266
         links:
         - conversationId: 9
           entryId: 17
@@ -4269,12 +4284,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 3900, y: 0}
-    - rid: 3058894633377726693
+    - rid: 3058894633377727386
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 15
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4303,16 +4318,16 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726822
-        - rid: 3058894633377726823
+        - rid: 3058894634309386267
+        - rid: 3058894634309386268
         links: []
         position: {x: 3900, y: 190}
-    - rid: 3058894633377726694
+    - rid: 3058894633377727387
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 16
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4342,21 +4357,23 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726824
-        - rid: 3058894633377726825
-        - rid: 3058894633377726826
+        - rid: 3058894634309386269
+        - rid: 3058894634309386270
+        - rid: 3058894634309386271
         links: []
         position: {x: 3900, y: 380}
-    - rid: 3058894633377726695
+    - rid: 3058894633377727388
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 17
         title: 
-        actorId: 293476815
+        actorId: 382325359
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
-          m_Text: HARRRRRY POTTERRR! GET TO MY OFFICE NOW!!! ...WE'RE HAVING FIREWORKS!!!
+          m_Text: <speed 25>HARRRRRY POTTERRR!</speed> <shout>GET TO MY OFFICE NOW!!!</shout><pause
+            0.6> ...WE'RE HAVING <wave>FIREWORKS</wave>!!!<event name="fireworks"
+            arg="office">
         menuText:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4379,12 +4396,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 4200, y: 0}
-    - rid: 3058894633377726696
+    - rid: 3058894633377727389
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 18
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4404,10 +4421,10 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726827
+        - rid: 3058894634309386272
         links: []
         position: {x: 4500, y: 0}
-    - rid: 3058894633377726697
+    - rid: 3058894633377727390
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -4439,12 +4456,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726698
+    - rid: 3058894633377727391
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4471,7 +4488,7 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726699
+    - rid: 3058894633377727392
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
@@ -4480,7 +4497,7 @@ MonoBehaviour:
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
-          m_Text: Oh, darling~ You've really dolled yourself up today!
+          m_Text: Oh, darling~ You've really <wave>dolled yourself up</wave> today!
         menuText:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4494,7 +4511,8 @@ MonoBehaviour:
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
-            m_Text: Off on a date, are we~? Shall I guess who with?
+            m_Text: Off on a date, are we~?<br posX="40"><whisper>Shall I guess who
+              with?</whisper>
           emotion: 
           voice: {fileID: 0}
           localizedVoice:
@@ -4512,12 +4530,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726700
+    - rid: 3058894633377727393
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4544,7 +4562,7 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726701
+    - rid: 3058894633377727394
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
@@ -4576,16 +4594,16 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726702
+    - rid: 3058894633377727395
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
-          m_Text: BE QUIET, YOU STUPID MIRROR!!!
+          m_Text: <shout>BE QUIET, YOU STUPID MIRROR!!!</shout>
         menuText:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4613,12 +4631,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1500, y: 0}
-    - rid: 3058894633377726703
+    - rid: 3058894633377727396
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4645,12 +4663,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1800, y: 0}
-    - rid: 3058894633377726704
+    - rid: 3058894633377727397
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4677,12 +4695,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1800, y: 190}
-    - rid: 3058894633377726705
+    - rid: 3058894633377727398
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4711,10 +4729,10 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726828
+        - rid: 3058894634309386273
         links: []
         position: {x: 2100, y: 0}
-    - rid: 3058894633377726706
+    - rid: 3058894633377727399
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 9
@@ -4746,12 +4764,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2100, y: 190}
-    - rid: 3058894633377726707
+    - rid: 3058894633377727400
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 10
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4778,7 +4796,7 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 2400, y: 190}
-    - rid: 3058894633377726708
+    - rid: 3058894633377727401
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 11
@@ -4803,10 +4821,10 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726829
+        - rid: 3058894634309386274
         links: []
         position: {x: 2700, y: 190}
-    - rid: 3058894633377726709
+    - rid: 3058894633377727402
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -4836,7 +4854,7 @@ MonoBehaviour:
           entryId: 1
           priority: 4
           conditions:
-          - rid: 3058894633377726830
+          - rid: 3058894634309386275
           bends: []
         - conversationId: 11
           entryId: 2
@@ -4844,12 +4862,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726710
+    - rid: 3058894633377727403
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4876,12 +4894,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 190}
-    - rid: 3058894633377726711
+    - rid: 3058894633377727404
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4908,7 +4926,8 @@ MonoBehaviour:
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
-            m_Text: We were never going to be just "friends", were we?
+            m_Text: We were never going to be just<pause 0.4> "<err id="f">rivals</err><fix
+              id="f" text="friends">",<pause 0.3> were we?
           emotion: Embarrassed
           voice: {fileID: 0}
           localizedVoice:
@@ -4931,12 +4950,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726712
+    - rid: 3058894633377727405
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4963,12 +4982,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726713
+    - rid: 3058894633377727406
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -4995,12 +5014,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 190}
-    - rid: 3058894633377726714
+    - rid: 3058894633377727407
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5020,16 +5039,16 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726831
-        - rid: 3058894633377726832
+        - rid: 3058894634309386276
+        - rid: 3058894634309386277
         links: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726715
+    - rid: 3058894633377727408
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5058,11 +5077,11 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726833
-        - rid: 3058894633377726834
+        - rid: 3058894634309386278
+        - rid: 3058894634309386279
         links: []
         position: {x: 1200, y: 190}
-    - rid: 3058894633377726716
+    - rid: 3058894633377727409
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -5092,20 +5111,20 @@ MonoBehaviour:
           entryId: 1
           priority: 4
           conditions:
-          - rid: 3058894633377726835
+          - rid: 3058894634309386280
           bends: []
         - conversationId: 12
           entryId: 2
           priority: 3
           conditions:
-          - rid: 3058894633377726836
-          - rid: 3058894633377726837
+          - rid: 3058894634309386281
+          - rid: 3058894634309386282
           bends: []
         - conversationId: 12
           entryId: 3
           priority: 2
           conditions:
-          - rid: 3058894633377726838
+          - rid: 3058894634309386283
           bends: []
         - conversationId: 12
           entryId: 4
@@ -5113,12 +5132,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726717
+    - rid: 3058894633377727410
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5154,12 +5173,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726718
+    - rid: 3058894633377727411
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5195,12 +5214,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 190}
-    - rid: 3058894633377726719
+    - rid: 3058894633377727412
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5227,12 +5246,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 380}
-    - rid: 3058894633377726720
+    - rid: 3058894633377727413
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5259,12 +5278,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 570}
-    - rid: 3058894633377726721
+    - rid: 3058894633377727414
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5284,8 +5303,8 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726839
-        - rid: 3058894633377726840
+        - rid: 3058894634309386284
+        - rid: 3058894634309386285
         links:
         - conversationId: 12
           entryId: 10
@@ -5293,12 +5312,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726722
+    - rid: 3058894633377727415
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5318,7 +5337,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726841
+        - rid: 3058894634309386286
         links:
         - conversationId: 12
           entryId: 13
@@ -5326,12 +5345,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 190}
-    - rid: 3058894633377726723
+    - rid: 3058894633377727416
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5358,12 +5377,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 380}
-    - rid: 3058894633377726724
+    - rid: 3058894633377727417
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5383,8 +5402,8 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726842
-        - rid: 3058894633377726843
+        - rid: 3058894634309386287
+        - rid: 3058894634309386288
         links:
         - conversationId: 12
           entryId: 20
@@ -5392,12 +5411,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 570}
-    - rid: 3058894633377726725
+    - rid: 3058894633377727418
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 9
         title: replies
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5439,12 +5458,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 660, y: 325}
-    - rid: 3058894633377726726
+    - rid: 3058894633377727419
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 10
         title: React to the compliment
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5469,7 +5488,7 @@ MonoBehaviour:
           entryId: 12
           priority: 4
           conditions:
-          - rid: 3058894633377726844
+          - rid: 3058894634309386289
           bends: []
         - conversationId: 12
           entryId: 11
@@ -5477,12 +5496,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726727
+    - rid: 3058894633377727420
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 11
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5513,12 +5532,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 1500, y: 0}
-    - rid: 3058894633377726728
+    - rid: 3058894633377727421
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 12
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5540,12 +5559,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 1500, y: 190}
-    - rid: 3058894633377726729
+    - rid: 3058894633377727422
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 13
         title: React to the tease
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5570,7 +5589,7 @@ MonoBehaviour:
           entryId: 14
           priority: 4
           conditions:
-          - rid: 3058894633377726845
+          - rid: 3058894634309386290
           bends: []
         - conversationId: 12
           entryId: 15
@@ -5578,12 +5597,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 190}
-    - rid: 3058894633377726730
+    - rid: 3058894633377727423
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 14
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5614,12 +5633,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 1500, y: 380}
-    - rid: 3058894633377726731
+    - rid: 3058894633377727424
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 15
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5641,12 +5660,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 1500, y: 570}
-    - rid: 3058894633377726732
+    - rid: 3058894633377727425
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 16
         title: React to the invitation
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5671,13 +5690,13 @@ MonoBehaviour:
           entryId: 19
           priority: 4
           conditions:
-          - rid: 3058894633377726846
+          - rid: 3058894634309386291
           bends: []
         - conversationId: 12
           entryId: 17
           priority: 3
           conditions:
-          - rid: 3058894633377726847
+          - rid: 3058894634309386292
           bends: []
         - conversationId: 12
           entryId: 18
@@ -5685,12 +5704,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 1200, y: 380}
-    - rid: 3058894633377726733
+    - rid: 3058894633377727426
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 17
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5719,15 +5738,15 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726848
+        - rid: 3058894634309386293
         links: []
         position: {x: 1500, y: 760}
-    - rid: 3058894633377726734
+    - rid: 3058894633377727427
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 18
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5758,12 +5777,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 1500, y: 950}
-    - rid: 3058894633377726735
+    - rid: 3058894633377727428
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 19
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5783,15 +5802,15 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726849
+        - rid: 3058894634309386294
         links: []
         position: {x: 1500, y: 1140}
-    - rid: 3058894633377726736
+    - rid: 3058894633377727429
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 20
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5813,7 +5832,7 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 1500, y: 1330}
-    - rid: 3058894633377726737
+    - rid: 3058894633377727430
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -5843,7 +5862,7 @@ MonoBehaviour:
           entryId: 1
           priority: 2
           conditions:
-          - rid: 3058894633377726850
+          - rid: 3058894634309386295
           bends: []
         - conversationId: 13
           entryId: 7
@@ -5851,12 +5870,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726738
+    - rid: 3058894633377727431
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5876,7 +5895,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726851
+        - rid: 3058894634309386296
         links:
         - conversationId: 13
           entryId: 2
@@ -5884,7 +5903,7 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726739
+    - rid: 3058894633377727432
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
@@ -5910,7 +5929,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726852
+        - rid: 3058894634309386297
         links:
         - conversationId: 13
           entryId: 3
@@ -5923,12 +5942,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 600, y: 0}
-    - rid: 3058894633377726740
+    - rid: 3058894633377727433
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5948,7 +5967,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726853
+        - rid: 3058894634309386298
         links:
         - conversationId: 13
           entryId: 5
@@ -5956,12 +5975,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 0}
-    - rid: 3058894633377726741
+    - rid: 3058894633377727434
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 275846393
+        actorId: 300837243
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -5981,7 +6000,7 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726854
+        - rid: 3058894634309386299
         links:
         - conversationId: 13
           entryId: 6
@@ -5989,12 +6008,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 900, y: 190}
-    - rid: 3058894633377726742
+    - rid: 3058894633377727435
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6024,15 +6043,15 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726855
+        - rid: 3058894634309386300
         links: []
         position: {x: 1200, y: 0}
-    - rid: 3058894633377726743
+    - rid: 3058894633377727436
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6052,10 +6071,10 @@ MonoBehaviour:
         isHub: 0
         conditions: []
         actions:
-        - rid: 3058894633377726856
+        - rid: 3058894634309386301
         links: []
         position: {x: 1200, y: 190}
-    - rid: 3058894633377726744
+    - rid: 3058894633377727437
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
@@ -6082,7 +6101,7 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 380}
-    - rid: 3058894633377726745
+    - rid: 3058894633377727438
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -6112,21 +6131,21 @@ MonoBehaviour:
           entryId: 1
           priority: 4
           conditions:
-          - rid: 3058894633377726857
-          - rid: 3058894633377726858
+          - rid: 3058894634309386302
+          - rid: 3058894634309386303
           bends: []
         - conversationId: 14
           entryId: 2
           priority: 3
           conditions:
-          - rid: 3058894633377726859
-          - rid: 3058894633377726860
+          - rid: 3058894634309386304
+          - rid: 3058894634309386305
           bends: []
         - conversationId: 14
           entryId: 3
           priority: 3
           conditions:
-          - rid: 3058894633377726861
+          - rid: 3058894634309386306
           bends: []
         - conversationId: 14
           entryId: 4
@@ -6144,12 +6163,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726746
+    - rid: 3058894633377727439
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6171,12 +6190,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726747
+    - rid: 3058894633377727440
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6198,12 +6217,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 190}
-    - rid: 3058894633377726748
+    - rid: 3058894633377727441
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6225,12 +6244,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 380}
-    - rid: 3058894633377726749
+    - rid: 3058894633377727442
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6252,12 +6271,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 570}
-    - rid: 3058894633377726750
+    - rid: 3058894633377727443
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6279,12 +6298,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 760}
-    - rid: 3058894633377726751
+    - rid: 3058894633377727444
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6306,7 +6325,7 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 950}
-    - rid: 3058894633377726752
+    - rid: 3058894633377727445
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -6336,13 +6355,13 @@ MonoBehaviour:
           entryId: 1
           priority: 4
           conditions:
-          - rid: 3058894633377726862
+          - rid: 3058894634309386307
           bends: []
         - conversationId: 15
           entryId: 2
           priority: 3
           conditions:
-          - rid: 3058894633377726863
+          - rid: 3058894634309386308
           bends: []
         - conversationId: 15
           entryId: 3
@@ -6355,12 +6374,12 @@ MonoBehaviour:
           conditions: []
           bends: []
         position: {x: 0, y: 0}
-    - rid: 3058894633377726753
+    - rid: 3058894633377727446
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6382,12 +6401,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 0}
-    - rid: 3058894633377726754
+    - rid: 3058894633377727447
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6409,12 +6428,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 190}
-    - rid: 3058894633377726755
+    - rid: 3058894633377727448
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6436,12 +6455,12 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 380}
-    - rid: 3058894633377726756
+    - rid: 3058894633377727449
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
         title: 
-        actorId: 507349979
+        actorId: 433743447
         text:
           m_EntryId: 0
           m_Table: {fileID: 0}
@@ -6463,729 +6482,729 @@ MonoBehaviour:
         actions: []
         links: []
         position: {x: 300, y: 570}
-    - rid: 3058894633377726757
+    - rid: 3058894633377727450
       type: {class: EntrySeenCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         conversation: 
         entryId: 1
         seen: 0
-    - rid: 3058894633377726758
+    - rid: 3058894633377727451
       type: {class: EntrySeenCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         conversation: 
         entryId: 1
         seen: 1
-    - rid: 3058894633377726759
+    - rid: 3058894633377727452
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726760
+    - rid: 3058894633377727453
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 3
         objectValue: {fileID: 0}
-    - rid: 3058894633377726761
+    - rid: 3058894633377727454
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726762
+    - rid: 3058894633377727455
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726763
+    - rid: 3058894633377727456
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726764
+    - rid: 3058894633377727457
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726765
+    - rid: 3058894633377727458
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 3
         objectValue: {fileID: 0}
-    - rid: 3058894633377726766
+    - rid: 3058894633377727459
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726767
+    - rid: 3058894633377727460
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726768
+    - rid: 3058894633377727461
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726769
+    - rid: 3058894633377727462
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 4
         objectValue: {fileID: 0}
-    - rid: 3058894633377726770
+    - rid: 3058894633377727463
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 4
         objectValue: {fileID: 0}
-    - rid: 3058894633377726771
+    - rid: 3058894633377727464
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726772
+    - rid: 3058894633377727465
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726773
+    - rid: 3058894633377727466
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726774
+    - rid: 3058894633377727467
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 5
         objectValue: {fileID: 0}
-    - rid: 3058894633377726775
+    - rid: 3058894633377727468
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.asked
         op: 0
         value: false
         objectValue: {fileID: 0}
-    - rid: 3058894633377726776
+    - rid: 3058894633377727469
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.asked
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726777
+    - rid: 3058894633377727470
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: yule_ball
         state: 1
-    - rid: 3058894633377726778
+    - rid: 3058894633377727471
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.asked
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726779
+    - rid: 3058894633377727472
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726780
+    - rid: 3058894633377727473
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726781
+    - rid: 3058894633377727474
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.pride
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726782
+    - rid: 3058894633377727475
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.asked
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726783
+    - rid: 3058894633377727476
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.crane_answered
         op: 0
         value: false
         objectValue: {fileID: 0}
-    - rid: 3058894633377726784
+    - rid: 3058894633377727477
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726785
+    - rid: 3058894633377727478
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.crane_answered
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726786
+    - rid: 3058894633377727479
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726787
+    - rid: 3058894633377727480
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.pride
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726788
+    - rid: 3058894633377727481
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.crane_answered
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726789
+    - rid: 3058894633377727482
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 3
         objectValue: {fileID: 0}
-    - rid: 3058894633377726790
+    - rid: 3058894633377727483
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.ferret
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726791
+    - rid: 3058894633377727484
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.crane_answered
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726792
+    - rid: 3058894633377727485
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.partner
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726793
+    - rid: 3058894633377727486
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.partner
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726794
+    - rid: 3058894633377727487
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.ferret
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726795
+    - rid: 3058894634309386240
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.forgiven
         op: 0
         value: false
         objectValue: {fileID: 0}
-    - rid: 3058894633377726796
+    - rid: 3058894634309386241
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726797
+    - rid: 3058894634309386242
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: -2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726798
+    - rid: 3058894634309386243
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726799
+    - rid: 3058894634309386244
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.forgiven
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726800
+    - rid: 3058894634309386245
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.partner
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726801
+    - rid: 3058894634309386246
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.partner
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726802
+    - rid: 3058894634309386247
       type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: yule_ball
         op: 0
         state: 1
-    - rid: 3058894633377726803
+    - rid: 3058894634309386248
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726804
+    - rid: 3058894634309386249
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726805
+    - rid: 3058894634309386250
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.pride
         mode: 1
         value: -1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726806
+    - rid: 3058894634309386251
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726807
+    - rid: 3058894634309386252
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.danced
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726808
+    - rid: 3058894634309386253
       type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         eventName: yule_dance
         argument: 
-    - rid: 3058894633377726809
+    - rid: 3058894634309386254
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         op: 5
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726810
+    - rid: 3058894634309386255
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.pride
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726811
+    - rid: 3058894634309386256
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: yule_ball
         state: 2
-    - rid: 3058894633377726812
+    - rid: 3058894634309386257
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726813
+    - rid: 3058894634309386258
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: yule_ball
         state: 2
-    - rid: 3058894633377726814
+    - rid: 3058894634309386259
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726815
+    - rid: 3058894634309386260
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: yule_ball
         state: 2
-    - rid: 3058894633377726816
+    - rid: 3058894634309386261
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726817
+    - rid: 3058894634309386262
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         op: 5
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726818
+    - rid: 3058894634309386263
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         op: 5
         value: 4
         objectValue: {fileID: 0}
-    - rid: 3058894633377726819
+    - rid: 3058894634309386264
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         op: 5
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726820
+    - rid: 3058894634309386265
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         op: 5
         value: 4
         objectValue: {fileID: 0}
-    - rid: 3058894633377726821
+    - rid: 3058894634309386266
       type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         eventName: ending_together
         argument: 
-    - rid: 3058894633377726822
+    - rid: 3058894634309386267
       type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         eventName: ending_rivals
         argument: 
-    - rid: 3058894633377726823
+    - rid: 3058894634309386268
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 7
         objectValue: {fileID: 0}
-    - rid: 3058894633377726824
+    - rid: 3058894634309386269
       type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         eventName: ending_hostile
         argument: 
-    - rid: 3058894633377726825
+    - rid: 3058894634309386270
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 9
         objectValue: {fileID: 0}
-    - rid: 3058894633377726826
+    - rid: 3058894634309386271
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: malfoy_saga
         state: 3
-    - rid: 3058894633377726827
+    - rid: 3058894634309386272
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 7
         objectValue: {fileID: 0}
-    - rid: 3058894633377726828
+    - rid: 3058894634309386273
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 8
         objectValue: {fileID: 0}
-    - rid: 3058894633377726829
+    - rid: 3058894634309386274
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 8
         objectValue: {fileID: 0}
-    - rid: 3058894633377726830
+    - rid: 3058894634309386275
       type: {class: EntrySeenCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         conversation: '7. Epilogue: The Mirror'
         entryId: 5
         seen: 1
-    - rid: 3058894633377726831
+    - rid: 3058894634309386276
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 9
         objectValue: {fileID: 0}
-    - rid: 3058894633377726832
+    - rid: 3058894634309386277
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: malfoy_saga
         state: 2
-    - rid: 3058894633377726833
+    - rid: 3058894634309386278
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: saga.chapter
         mode: 0
         value: 9
         objectValue: {fileID: 0}
-    - rid: 3058894633377726834
+    - rid: 3058894634309386279
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: malfoy_saga
         state: 2
-    - rid: 3058894633377726835
+    - rid: 3058894634309386280
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         op: 5
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726836
+    - rid: 3058894634309386281
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         op: 5
         value: 4
         objectValue: {fileID: 0}
-    - rid: 3058894633377726837
+    - rid: 3058894634309386282
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         op: 2
         value: 3
         objectValue: {fileID: 0}
-    - rid: 3058894633377726838
+    - rid: 3058894634309386283
       type: {class: AnyCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         conditions:
-        - rid: 3058894633377726864
-        - rid: 3058894633377726865
-    - rid: 3058894633377726839
+        - rid: 3058894634309386309
+        - rid: 3058894634309386310
+    - rid: 3058894634309386284
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.pride
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726840
+    - rid: 3058894634309386285
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726841
+    - rid: 3058894634309386286
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894633377726842
+    - rid: 3058894634309386287
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726843
+    - rid: 3058894634309386288
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: -1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726844
+    - rid: 3058894634309386289
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         op: 5
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726845
+    - rid: 3058894634309386290
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         op: 5
         value: 4
         objectValue: {fileID: 0}
-    - rid: 3058894633377726846
+    - rid: 3058894634309386291
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         op: 5
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726847
+    - rid: 3058894634309386292
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         op: 5
         value: 3
         objectValue: {fileID: 0}
-    - rid: 3058894633377726848
+    - rid: 3058894634309386293
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726849
+    - rid: 3058894634309386294
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726850
+    - rid: 3058894634309386295
       type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: chocolate_frog
         op: 0
         state: 0
-    - rid: 3058894633377726851
+    - rid: 3058894634309386296
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: chocolate_frog
         state: 1
-    - rid: 3058894633377726852
+    - rid: 3058894634309386297
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: frog.found
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726853
+    - rid: 3058894634309386298
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726854
+    - rid: 3058894634309386299
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894633377726855
+    - rid: 3058894634309386300
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: chocolate_frog
         state: 2
-    - rid: 3058894633377726856
+    - rid: 3058894634309386301
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: chocolate_frog
         state: 3
-    - rid: 3058894633377726857
+    - rid: 3058894634309386302
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.ferret
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726858
+    - rid: 3058894634309386303
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.forgiven
         op: 0
         value: false
         objectValue: {fileID: 0}
-    - rid: 3058894633377726859
+    - rid: 3058894634309386304
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.partner
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726860
+    - rid: 3058894634309386305
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.danced
         op: 0
         value: false
         objectValue: {fileID: 0}
-    - rid: 3058894633377726861
+    - rid: 3058894634309386306
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: yule.danced
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894633377726862
+    - rid: 3058894634309386307
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.annoyance
         op: 5
         value: 6
         objectValue: {fileID: 0}
-    - rid: 3058894633377726863
+    - rid: 3058894634309386308
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection
         op: 5
         value: 4
         objectValue: {fileID: 0}
-    - rid: 3058894633377726864
+    - rid: 3058894634309386309
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.pride
         op: 5
         value: 12
         objectValue: {fileID: 0}
-    - rid: 3058894633377726865
+    - rid: 3058894634309386310
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Malfoy.affection

@@ -119,7 +119,7 @@ namespace ND.Dialogue
                 button.name = $"Response {i + 1}";
                 button.gameObject.SetActive(true);
                 var label = FindLabel(button);
-                SetText(label, m_KeyboardInput && i < 9 ? $"{i + 1}. {choice.Text}" : choice.Text);
+                SetText(label, m_KeyboardInput && i < 9 ? $"{i + 1}. {LineTimeline.Final(choice.Text)}" : LineTimeline.Final(choice.Text));
                 int index = choice.Index;
                 button.onClick.AddListener(() => Choose(index));
                 m_ResponseButtons.Add(button);

@@ -582,8 +582,8 @@ namespace ND.Dialogue.Editor.Samples
         {
             var b = new Writer(db, ForestChapter, "Detention in the Forbidden Forest. Someone is very brave. Out loud.", cast);
             var brave = b.Say(1, 0, "Malfoy",
-                ("Scared", "H... Hmph. Don't tell me a little thing like this has you scared, Potter?"),
-                ("Scared", "(I'm scared!! I'm so scared—!!!)"));
+                ("Scared", "H...<pause 0.4> Hmph.<pause 0.3> Don't tell me a little thing like this has you <speed 8>scared</speed>, Potter?"),
+                ("Scared", "<whisper>(I'm scared!! I'm so scared—!!!)</whisper>"));
             b.Link(b.Start, brave);
             var point = b.Choice(2, 0, "Oh, over there...", "Surprised");
             point.actions.Add(AddTo(Annoyance, 1)); // scaring her on purpose?
@@ -592,13 +592,14 @@ namespace ND.Dialogue.Editor.Samples
             b.Link(brave, point);
             b.Link(brave, sleeve);
             var monster = b.Say(3, 0, "Malfoy",
-                ("Scared", "AAAAH!!! A M-MONSTER!!!!!!"),
-                ("Scared", "H-HURRY UP! WHAT ARE YOU WAITING FOR, YOU FILTHY IDIOT!!!"));
+                ("Scared", "<speed 90><shake>AAAAH!!! A M-MONSTER!!!!!!</shake></speed><event name=\"monster\">"),
+                ("Scared", "<shout>H-HURRY UP!</shout> WHAT ARE YOU WAITING FOR, YOU FILTHY IDIOT!!!"));
             monster.actions.Add(AddAffection(1)); // she came back for him
+            db.events.Add(new EventDefinition { name = "monster", description = "Raised inside the line (<event> markup) when the scream is typed: e.g. a camera shake." });
             b.Link(point, monster);
             var hold = b.Say(3, 1, "Malfoy",
                 ("Embarrassed", "Wh-who'd want to hold YOUR sleeve?!"),
-                ("Pout", "...Just so you don't get lost. That's all."));
+                ("Pout", "...Just so you don't get lost.<pause 0.6> <whisper>That's all.</whisper>"));
             b.Link(sleeve, hold);
         }
 
@@ -606,14 +607,14 @@ namespace ND.Dialogue.Editor.Samples
         {
             var b = new Writer(db, MissionChapter, "Orders are orders. Surveillance is surveillance. Treacle tart is... surveillance.", cast);
             var orders = b.Say(1, 0, "Voldemort",
-                ("", "You understand, I trust... only you can do this."),
+                ("", "<speed 14>You understand, I trust...</speed><pause 0.6> only <b>you</b> can do this."),
                 ("", "Do not leave Potter's side. Not for a moment. Report his every move to me."));
             b.Link(b.Start, orders);
             var gasp = b.Say(2, 0, "Malfoy", ("Surprised", "!!"));
             b.Link(orders, gasp);
             var library = b.Say(3, 0, "Malfoy",
                 ("Neutral", "Potter, explain this bit to me."),
-                ("Embarrassed", "(This is a mission... It's not like I want to do this...)"),
+                ("Embarrassed", "(This is a <err id=\"m\">date</err><fix id=\"m\" text=\"mission\">...<pause 0.3> It's not like I want to do this...)"),
                 ("Embarrassed", "(I'm just following orders...!!)"));
             b.Link(gasp, library);
             var sit = b.Choice(4, 0, "Sure. Sit here.", "Happy");
@@ -634,7 +635,8 @@ namespace ND.Dialogue.Editor.Samples
             b.Link(together, coming);
             var report = b.Say(8, 0, "Wormtail", ("", "M-my Lord... Are these reports really of any use...? 'Potter appears to be fond of treacle tart'..."));
             b.Link(coming, report);
-            var crucio = b.Say(9, 0, "Voldemort", ("", "CRUCIO."));
+            var crucio = b.Say(9, 0, "Voldemort", ("", "<pause 0.8><shout>CRUCIO.</shout><event name=\"crucio\">"));
+            db.events.Add(new EventDefinition { name = "crucio", description = "Raised inside the line (<event> markup) after the pause." });
             b.Link(report, crucio);
         }
 
@@ -647,15 +649,15 @@ namespace ND.Dialogue.Editor.Samples
             b.Link(q, idiot);
             var looks = b.Say(3, 0, "Rita", ("", "And what does he look like?"));
             b.Link(idiot, looks);
-            var describe = b.Say(4, 0, "Malfoy", ("Angry", "Messy black hair, ridiculous round glasses... Green eyes!"));
+            var describe = b.Say(4, 0, "Malfoy", ("Angry", "Messy black hair,<pause 0.3> ridiculous round glasses...<pause 0.5> <wave>Green eyes!</wave>"));
             b.Link(looks, describe);
             var attention = b.Say(5, 0, "Rita", ("", "My, my... You've certainly paid attention."));
             b.Link(describe, attention);
             var deny = b.Say(6, 0, "Malfoy",
                 ("Surprised", "?!"),
-                ("Embarrassed", "THAT'S BECAUSE HE'S ALWAYS RIGHT IN FRONT OF ME, GETTING ON MY NERVES!"));
+                ("Embarrassed", "<shout>THAT'S BECAUSE HE'S ALWAYS RIGHT IN FRONT OF ME,</shout><br posX=\"40\"><shake>GETTING ON MY NERVES!</shake>"));
             b.Link(attention, deny);
-            var fond = b.Say(7, 0, "Rita", ("", "Are you sure you're not rather fond of him?"));
+            var fond = b.Say(7, 0, "Rita", ("", "Are you sure you're not rather <wave>fond</wave> of him~?"));
             b.Link(deny, fond);
             var hate = b.Say(8, 0, "Malfoy", ("Embarrassed", "I TOLD YOU, I HATE HIM!!"));
             b.Link(fond, hate);
@@ -693,7 +695,8 @@ namespace ND.Dialogue.Editor.Samples
                 b.Link(from, togetherEnd, LinkPriority.AboveNormal).conditions.Add(When(Affection, CompareOp.GreaterOrEqual, 4));
                 b.Link(from, rivalsEnd, LinkPriority.Low);
             }
-            var office = b.Say(14, 0, "Dumbledore", ("", "HARRRRRY POTTERRR! GET TO MY OFFICE NOW!!! ...WE'RE HAVING FIREWORKS!!!"));
+            var office = b.Say(14, 0, "Dumbledore", ("", "<speed 25>HARRRRRY POTTERRR!</speed> <shout>GET TO MY OFFICE NOW!!!</shout><pause 0.6> ...WE'RE HAVING <wave>FIREWORKS</wave>!!!<event name=\"fireworks\" arg=\"office\">"));
+            db.events.Add(new EventDefinition { name = "fireworks", description = "Raised at the end of Dumbledore's line (<event> markup, arg = office)." });
             b.Link(togetherEnd, office);
             var huh = b.Choice(15, 0, "!?", "Surprised");
             b.Link(office, huh);
@@ -775,13 +778,13 @@ namespace ND.Dialogue.Editor.Samples
             var b = new Writer(db, MirrorChapter, "Years later. A date, an outfit, and a mirror that will not stop talking.", cast);
             var fit = b.Say(1, 0, "Malfoy", ("Neutral", "(...Do I look like I'm trying too hard?)"));
             b.Link(b.Start, fit);
-            var tease = b.Say(2, 0, "Mirror", ("", "Oh, darling~ You've really dolled yourself up today!"), ("", "Off on a date, are we~? Shall I guess who with?"));
+            var tease = b.Say(2, 0, "Mirror", ("", "Oh, darling~ You've really <wave>dolled yourself up</wave> today!"), ("", "Off on a date, are we~?<br posX=\"40\"><whisper>Shall I guess who with?</whisper>"));
             b.Link(fit, tease);
             var what = b.Say(3, 0, "Malfoy", ("Embarrassed", "What on earth are you talking about?!"));
             b.Link(tease, what);
             var boy = b.Say(4, 0, "Mirror", ("", "That boy you complain about every night..."));
             b.Link(what, boy);
-            var shout = b.Say(5, 0, "Malfoy", ("Older_Angry", "BE QUIET, YOU STUPID MIRROR!!!"));
+            var shout = b.Say(5, 0, "Malfoy", ("Older_Angry", "<shout>BE QUIET, YOU STUPID MIRROR!!!</shout>"));
             s_ShoutEntryId = shout.id;
             b.Link(boy, shout);
             var knock = b.Choice(6, 0, "(Knock) Ready, Malfoy?", "Happy", menu: "Knock on the door");
@@ -807,7 +810,7 @@ namespace ND.Dialogue.Editor.Samples
             var morning = b.Say(2, 0, "Malfoy",
                 ("Neutral", "Morning, Potter."),
                 ("Older_Smug", "Guess you were right."),
-                ("Embarrassed", "We were never going to be just \"friends\", were we?"));
+                ("Embarrassed", "We were never going to be just<pause 0.4> \"<err id=\"f\">rivals</err><fix id=\"f\" text=\"friends\">\",<pause 0.3> were we?"));
             b.Link(b.Start, morning, LinkPriority.Low);
             b.Link(warning, morning);
             var choke = b.Choice(3, 0, "(Choke on the toothpaste.)", "Surprised", menu: "Choke on the toothpaste");

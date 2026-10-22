@@ -28,7 +28,7 @@ namespace ND.Dialogue
         public static void Set(Graphic graphic, string text)
         {
             if (graphic == null) return;
-            if (graphic is Text legacy) { legacy.text = text; return; }
+            if (graphic is Text legacy) { legacy.text = ForLegacyText(text); return; }
             var property = TextProperty(graphic);
             if (property == null)
             {
@@ -36,6 +36,27 @@ namespace ND.Dialogue
                 return;
             }
             property.SetValue(graphic, text);
+        }
+
+        // A rich tag: </?name, then =value or attributes.
+        private static readonly System.Text.RegularExpressions.Regex s_Tag =
+            new System.Text.RegularExpressions.Regex(@"</?([A-Za-z]+)[^<>]*>", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+        /// <summary>
+        /// <paramref name="text"/> with only the rich tags a legacy UI.Text draws (b, i, color): the others (s, size=%,
+        /// indent… from line styles) would show as raw text there. TextMeshPro gets the full text.
+        /// </summary>
+        public static string ForLegacyText(string text)
+        {
+            if (string.IsNullOrEmpty(text) || text.IndexOf('<') < 0) return text;
+            return s_Tag.Replace(text, m =>
+            {
+                string name = m.Groups[1].Value;
+                return string.Equals(name, "b", StringComparison.OrdinalIgnoreCase) || string.Equals(name, "i", StringComparison.OrdinalIgnoreCase) ||
+                       string.Equals(name, "color", StringComparison.OrdinalIgnoreCase)
+                    ? m.Value
+                    : string.Empty;
+            });
         }
     }
 }
