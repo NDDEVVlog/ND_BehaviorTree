@@ -22,13 +22,16 @@ namespace ND.GraphUI
             public readonly object UserData;
             /// <summary>Shown when hovering the row (e.g. what a node type does).</summary>
             public readonly string Tooltip;
+            /// <summary>When set, the row shows a dot of this colour instead of the icon (e.g. a variable's type colour).</summary>
+            public readonly Color? Color;
 
-            public Entry(string path, Texture2D icon, object userData, string tooltip = null)
+            public Entry(string path, Texture2D icon, object userData, string tooltip = null, Color? color = null)
             {
                 Path = path;
                 Icon = icon;
                 UserData = userData;
                 Tooltip = tooltip;
+                Color = color;
             }
         }
 
@@ -142,7 +145,15 @@ namespace ND.GraphUI
         {
             var row = m_Rows[index];
             element.userData = index;
-            element.Q<Image>("icon").image = row.IsFolder ? EditorGUIUtility.IconContent("Folder Icon").image : m_AllEntries[row.EntryIndex].Icon;
+            var icon = element.Q<Image>("icon");
+            Color? dot = row.IsFolder ? null : m_AllEntries[row.EntryIndex].Color;
+            icon.image = dot.HasValue ? null : row.IsFolder ? EditorGUIUtility.IconContent("Folder Icon").image : m_AllEntries[row.EntryIndex].Icon;
+            icon.style.backgroundColor = dot.HasValue ? new StyleColor(dot.Value) : new StyleColor(StyleKeyword.Null);
+            float size = dot.HasValue ? 10f : 16f, radius = dot.HasValue ? 5f : 0f;
+            icon.style.width = icon.style.height = size;
+            icon.style.marginLeft = dot.HasValue ? 3f : 0f;
+            icon.style.marginRight = dot.HasValue ? 7f : 4f;
+            icon.style.borderTopLeftRadius = icon.style.borderTopRightRadius = icon.style.borderBottomLeftRadius = icon.style.borderBottomRightRadius = radius;
             element.Q<Label>("label").text = row.Label;
             element.Q<Label>("arrow").style.display = row.IsFolder ? DisplayStyle.Flex : DisplayStyle.None;
             element.tooltip = row.IsFolder ? string.Empty : m_AllEntries[row.EntryIndex].Tooltip ?? string.Empty;
