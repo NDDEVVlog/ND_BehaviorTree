@@ -7,6 +7,9 @@ namespace ND.Dialogue
 {
     public enum DialogueRunnerState { Idle, ShowingLine, WaitingForChoice, Ended }
 
+    /// <summary>Which valid line a bark says: any at random, each in turn, or always the first (by link order).</summary>
+    public enum BarkOrder { Random, Sequential, FirstValid }
+
     /// <summary>A line to display: who says what, with which emotion, and where it is in its entry (line 2 of 3…).</summary>
     public readonly struct DialogueLine
     {
@@ -272,6 +275,74 @@ namespace ND.Dialogue
             }
         }
 
+        /// <summary>
+        /// A bark: one line said in passing, without starting the conversation (gameplay keeps going, nothing waits for
+        /// Continue). From START's valid links (same rules as a conversation: priorities, conditions, hubs), the NPC
+        /// lines are the candidates; <paramref name="order"/> picks one. Its actions run and it counts as seen. Returns
+        /// its lines (all of an entry's lines, in order), or an empty list when no line is valid right now.
+        /// Does not touch the conversation being played (use a separate runner for barks during a conversation).
+        /// </summary>
+        /// <param name="sequence">For <see cref="BarkOrder.Sequential"/>: the caller's counter, advanced on each bark.</param>
+        public List<DialogueLine> Bark(int conversationId, BarkOrder order, ref int sequence)
+        {
+            var lines = new List<DialogueLine>();
+            if (m_Database == null || m_Context == null)
+            {
+                Debug.LogError($"{LogTag} {nameof(Bark)} rejected: database={(m_Database != null)}, context={(m_Context != null)}.");
+                return lines;
+            }
+            if (IsRunning)
+            {
+                Debug.LogWarning($"{LogTag} {nameof(Bark)} rejected: this runner plays '{m_Conversation?.title}' (state={State}); bark with another runner.");
+                return lines;
+            }
+            var conversation = m_Database.FindConversation(conversationId);
+            var start = conversation?.StartEntry;
+            if (start == null)
+            {
+                Debug.LogError($"{LogTag} {nameof(Bark)} rejected: conversation {conversationId} not found (or it has no START).");
+                return lines;
+            }
+            var candidates = new List<(Conversation conversation, DialogueEntry entry)>();
+            foreach (var (c, e) in ValidLinksOfHighestPriority(conversation, start))
+                if (!IsPlayerResponse(e) && e.LineCount > 0) candidates.Add((c, e));
+            if (candidates.Count == 0) return lines; // nothing to say right now: conditions decide, not an error
+
+            int index;
+            switch (order)
+            {
+                case BarkOrder.Random: index = UnityEngine.Random.Range(0, candidates.Count); break;
+                case BarkOrder.Sequential: index = Mathf.Abs(sequence++) % candidates.Count; break;
+                default: index = 0; break;
+            }
+            var (barkConversation, entry) = candidates[index];
+            var speaker = m_Database.FindActor(entry.actorId);
+            if (speaker == null)
+            {
+                Debug.LogError($"{LogTag} {nameof(Bark)} '{barkConversation.title}' entry {entry.id}: unknown actor id {entry.actorId}.");
+                return lines;
+            }
+
+            m_Conversation = barkConversation;
+            m_Entry = entry;
+            EntryEntered?.Invoke(barkConversation, entry);
+            foreach (var action in entry.actions)
+            {
+                if (action == null) { Debug.LogError($"{LogTag} '{barkConversation.title}' entry {entry.id}: empty action slot skipped."); continue; }
+                action.Execute(m_Eval);
+            }
+            entry.OnEnter(m_Eval);
+            Memory.MarkSeen(barkConversation.id, entry.id);
+            for (int i = 0; i < entry.LineCount; i++)
+                lines.Add(new DialogueLine(barkConversation, entry, speaker, m_Database.FindEmotion(speaker, entry.LineEmotion(i)),
+                    ResolveText(entry.LineText(i), barkConversation, entry), i, entry.LineCount, m_Database.DisplayNameOf(speaker)));
+            Barked?.Invoke(lines);
+            return lines;
+        }
+
+        /// <summary>(lines) A bark was said (see <see cref="Bark"/>).</summary>
+        public event Action<IReadOnlyList<DialogueLine>> Barked;
+
         /// <summary>Ends the conversation now (raises <see cref="ConversationEnded"/> if one was running).</summary>
         public void Stop()
         {
@@ -367,7 +438,13 @@ namespace ND.Dialogue
             return actor != null && actor.isPlayer;
         }
 
-        private List<(Conversation conversation, DialogueEntry entry)> ValidLinksOfHighestPriority(Conversation conversation, DialogueEntry from)
+        private const int MaxHubDepth = 16;
+
+        /// <summary>
+        /// The links of the highest priority with at least one valid target. A link into a hub (if its conditions and
+        /// the hub's hold) stands for the hub's own valid targets, which join that group in place of the hub.
+        /// </summary>
+        private List<(Conversation conversation, DialogueEntry entry)> ValidLinksOfHighestPriority(Conversation conversation, DialogueEntry from, int hubDepth = 0)
         {
             var result = new List<(Conversation, DialogueEntry)>();
             for (var priority = LinkPriority.High; priority >= LinkPriority.Low; priority--)
@@ -382,7 +459,19 @@ namespace ND.Dialogue
                         Debug.LogError($"{LogTag} '{conversation.title}' entry {from.id}: link to missing conversation {link.conversationId} / entry {link.entryId}; skipped.");
                         continue;
                     }
-                    if (AllHold(link.conditions) && AllHold(target.conditions)) result.Add((targetConversation, target));
+                    if (!AllHold(link.conditions) || !AllHold(target.conditions)) continue;
+                    if (!target.IsHub)
+                    {
+                        result.Add((targetConversation, target));
+                        continue;
+                    }
+                    if (hubDepth >= MaxHubDepth)
+                    {
+                        Debug.LogError($"{LogTag} '{targetConversation.title}' hub {target.id}: more than {MaxHubDepth} hubs in a row (a hub loop?); skipped.");
+                        continue;
+                    }
+                    foreach (var reached in ValidLinksOfHighestPriority(targetConversation, target, hubDepth + 1))
+                        if (!result.Contains(reached)) result.Add(reached);
                 }
                 if (result.Count > 0) break;
             }

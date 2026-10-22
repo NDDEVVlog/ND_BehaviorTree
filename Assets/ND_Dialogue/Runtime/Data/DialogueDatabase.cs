@@ -20,9 +20,34 @@ namespace ND.Dialogue
     public class QuestDefinition
     {
         public string name;
+        [Tooltip("Name shown to players in the quest log and tracker. Empty = the quest id.")]
         public LocalizableString title = new LocalizableString();
         public QuestState initialState = QuestState.Inactive;
+        [Tooltip("Note for designers (not shown in game).")]
         [TextArea] public string description;
+
+        [Tooltip("Shown in the quest log under the title.")]
+        public LocalizableString summary = new LocalizableString();
+        [Tooltip("Quest log group, e.g. Main or Side.")]
+        public string group = "Main";
+        [Tooltip("Show it in the on-screen tracker as soon as it becomes Active.")]
+        public bool trackWhenActive = true;
+        [Tooltip("The steps listed under the quest (each shows and ticks itself by conditions).")]
+        public List<QuestStep> steps = new List<QuestStep>();
+    }
+
+    /// <summary>
+    /// One line of a quest's journal ("Find the old key"): shown while <see cref="visibleWhen"/> holds and ticked once
+    /// <see cref="doneWhen"/> holds. Both read the world (variables, quests), so steps need no state of their own.
+    /// </summary>
+    [Serializable]
+    public class QuestStep
+    {
+        public LocalizableString text = new LocalizableString();
+        [Tooltip("All must hold for the step to be listed. Empty = always listed.")]
+        [SerializeReference] public List<DialogueCondition> visibleWhen = new List<DialogueCondition>();
+        [Tooltip("All must hold for the step to be ticked. Empty = ticked when the quest is Completed.")]
+        [SerializeReference] public List<DialogueCondition> doneWhen = new List<DialogueCondition>();
     }
 
     /// <summary>A gameplay event dialogue can fire (RaiseEventAction) and scenes can react to (DialogueEventListener).</summary>
@@ -439,6 +464,20 @@ namespace ND.Dialogue
             }
             CheckNames(variables, v => v.name, "variable", issues);
             CheckNames(quests, q => q.name, "quest", issues);
+            foreach (var q in quests)
+            {
+                if (q == null || string.IsNullOrEmpty(q.name)) continue;
+                if (schemaSource != null && !schema.HasQuest(q.name))
+                    issues.Add($"Quest journal '{q.name}': the world ('{schemaSource.name}') has no such quest.");
+                for (int i = 0; i < q.steps.Count; i++)
+                {
+                    var step = q.steps[i];
+                    if (step == null) { issues.Add($"Quest '{q.name}': empty step slot {i + 1}."); continue; }
+                    string where = $"Quest '{q.name}' step {i + 1}";
+                    foreach (var c in step.visibleWhen) if (c == null) issues.Add($"{where}: empty condition slot."); else c.Validate(schema, where, issues);
+                    foreach (var c in step.doneWhen) if (c == null) issues.Add($"{where}: empty condition slot."); else c.Validate(schema, where, issues);
+                }
+            }
             CheckNames(events, e => e.name, "event", issues);
 
             var conversationIds = new HashSet<int>();
@@ -455,6 +494,15 @@ namespace ND.Dialogue
                     string where = $"Conversation '{c.title}' entry {e.id}";
                     if (!entryIds.Add(e.id)) issues.Add($"{where}: duplicate entry id.");
                     if (e.id != Conversation.StartEntryId && FindActor(e.actorId) == null) issues.Add($"{where}: unknown actor id {e.actorId}.");
+                    if (e.isHub && !e.isPassthrough) issues.Add($"{where}: Hub is on but Passthrough is off (it works as a hub only when it shows no line).");
+                    if (e.IsHub && e.actions.Count > 0) issues.Add($"{where}: a hub is never entered, so its actions never run (move them to the lines it leads to).");
+                    if (e.IsHub && e.links.Count == 0) issues.Add($"{where}: hub without links (links into it lead nowhere).");
+                    if (!string.IsNullOrWhiteSpace(e.sequence))
+                    {
+                        var sequenceErrors = new List<string>();
+                        DialogueSequence.Parse(e.sequence, sequenceErrors);
+                        foreach (var error in sequenceErrors) issues.Add($"{where}: sequence {error}");
+                    }
                     foreach (var link in e.links)
                     {
                         var target = FindConversation(link.conversationId);

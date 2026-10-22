@@ -135,5 +135,82 @@ namespace ND.Dialogue.Tests
             db = AssetDatabase.LoadAssetAtPath<DialogueDatabase>(path);
             CollectionAssert.AreEqual(new[] { 0, 5 }, db.FindConversation(1).entries.Select(e => e.id));
         }
+
+        private DialogueEntry Say(Actor actor, string text)
+        {
+            var e = m_Conv.AddEntry(actor.id);
+            e.text.Text = text;
+            return e;
+        }
+
+        private DialogueEntry Hub()
+        {
+            var hub = m_Conv.AddEntry(m_Player.id);
+            hub.isPassthrough = true;
+            hub.isHub = true;
+            return hub;
+        }
+
+        [Test]
+        public void AHub_IsNeverEntered_ItsTargetsStandInForIt_WithItsConditionsAndPriorities()
+        {
+            m_Db.AddVariable("brave", VariableValue.Bool(false));
+            var greet = Say(m_Npc, "Potter.");
+            var hub = Hub();
+            hub.actions.Add(new SetVariableAction { variable = "brave", value = "true" }); // never runs (Validate says so)
+            var nice = Say(m_Player, "Nice broom.");
+            var tease = Say(m_Player, "Scared?");
+            var dare = Say(m_Player, "Race me!");
+            m_Conv.Link(m_Conv.StartEntry, greet);
+            m_Conv.Link(greet, hub);
+            m_Conv.Link(hub, nice);
+            m_Conv.Link(hub, tease);
+            m_Conv.Link(hub, dare, LinkPriority.High).conditions.Add(new VariableCondition { variable = "brave", value = "true" });
+
+            var world = new DialogueWorld(m_Db);
+            var runner = new DialogueRunner(m_Db, world);
+            var entered = new List<int>();
+            runner.EntryEntered += (c, e) => entered.Add(e.id);
+            runner.Start(m_Conv.id);
+            runner.Continue();
+            CollectionAssert.AreEqual(new[] { "Nice broom.", "Scared?" }, runner.CurrentChoices.Select(c => c.Text), "the hub's own priorities: 'dare' (High) needs brave");
+            CollectionAssert.DoesNotContain(entered, hub.id);
+            Assert.IsTrue(world.TryGetVariable("brave", out var brave) && !brave.boolValue, "a hub runs nothing");
+
+            runner.Stop();
+            world.SetVariable("brave", VariableValue.Bool(true));
+            runner.Start(m_Conv.id);
+            runner.Continue();
+            CollectionAssert.AreEqual(new[] { "Race me!" }, runner.CurrentChoices.Select(c => c.Text));
+            Assert.That(m_Db.Validate(), Has.Some.Contains("a hub is never entered"));
+        }
+
+        [Test]
+        public void HubLinkConditions_AndChainedHubs_Apply_AndAnNpcLineBehindAHubStillWins()
+        {
+            m_Db.AddVariable("met", VariableValue.Bool(false));
+            var first = Hub();
+            var second = Hub();
+            var again = Say(m_Npc, "You again.");
+            var hello = Say(m_Npc, "Hello.");
+            m_Conv.Link(m_Conv.StartEntry, first);
+            m_Conv.Link(first, second).conditions.Add(new VariableCondition { variable = "met", value = "true" });
+            m_Conv.Link(first, hello, LinkPriority.Low);
+            m_Conv.Link(second, again);
+
+            var world = new DialogueWorld(m_Db);
+            var runner = new DialogueRunner(m_Db, world);
+            runner.Start(m_Conv.id);
+            Assert.AreEqual("Hello.", runner.CurrentLine.Text, "the link into the second hub fails: the Low group is used");
+            runner.Stop();
+            world.SetVariable("met", VariableValue.Bool(true));
+            runner.Start(m_Conv.id);
+            Assert.AreEqual("You again.", runner.CurrentLine.Text, "through two hubs");
+
+            m_Conv.Link(second, first); // a hub loop is reported, not followed forever
+            UnityEngine.TestTools.LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("hubs in a row"));
+            runner.Stop();
+            runner.Start(m_Conv.id);
+        }
     }
 }

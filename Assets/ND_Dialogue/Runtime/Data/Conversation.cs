@@ -22,6 +22,8 @@ namespace ND.Dialogue
         public LinkPriority priority = LinkPriority.Normal;
         [Tooltip("All must hold for this branch (in addition to the target entry's own conditions).")]
         [SerializeReference] public List<DialogueCondition> conditions = new List<DialogueCondition>();
+        [Tooltip("Editor only: points the edge bends through on the graph.")]
+        [HideInInspector] public List<Vector2> bends = new List<Vector2>();
     }
 
     /// <summary>One more line of the same speaker inside an entry, with its own emotion (shown after the previous one on Continue).</summary>
@@ -60,6 +62,13 @@ namespace ND.Dialogue
         public List<DialoguePage> moreLines = new List<DialoguePage>();
         [Tooltip("No line is shown: the entry only runs its actions and continues.")]
         public bool isPassthrough;
+        [Tooltip("Sequence played when the entry starts (camera, animation, sound…): Name(args)@seconds, separated by ; or new lines. Needs a Dialogue Sequencer in the scene. E.g. Anim(speaker, Blush); Camera(CloseUp)@0.5")]
+        [TextArea(1, 6)] public string sequence;
+        [Tooltip("Hub (with Passthrough): merges links. It is never entered: a link into it counts as a link to each of its targets (its own links' conditions and priorities apply). Use it when many lines lead to the same replies.")]
+        public bool isHub;
+
+        /// <summary>A hub is never entered: links into it stand for links to each of its targets (see <see cref="isHub"/>).</summary>
+        public bool IsHub => isHub && isPassthrough && id != Conversation.StartEntryId;
 
         [Tooltip("All must be true for this entry to be reachable.")]
         [SerializeReference] public List<DialogueCondition> conditions = new List<DialogueCondition>();

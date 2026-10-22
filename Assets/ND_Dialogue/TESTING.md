@@ -176,6 +176,63 @@ Mở `GuardSample.unity`, bấm **Play**. Đi bằng **WASD/mũi tên**. Lại g
 | T-09 | **⟲ Reset world** | Chat trống, giá trị về ban đầu, các câu "đã nói" bị quên | | |
 | T-10 | Terminal: `ndbt dlg-test-run --database MalfoyStory_Dialogue --conversation "6. Hallway (any time)" --json '{"choices":[2]}'` khi Dialogue Editor đang mở database đó | Chat trong editor tự chạy (where = "live"), lệnh in transcript + giá trị biến | | |
 
+## 11. Quest log và tracker (Stage 4)
+
+| ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
+|---|---|---|---|---|
+| Q-01 | Dựng lại mẫu Guard (`ND_BehaviorTree/Samples/Build Dialogue Guard Sample`), mở database → mục **Quests** | Phần "Quests in the world" (key `quest.key`) và phần **Journal**: thẻ "key" có Title "The Old Key", Summary, 3 bước, mỗi bước có "Shown when" / "Done when" | | |
+| Q-02 | Thêm một bước, thêm điều kiện cho bước đó (+ condition), xoá bước | Đúng như thao tác, Ctrl+Z hoàn tác được | | |
+| Q-03 | Play, nói chuyện với Guard, chọn "I'm looking for work." | Toast trên cùng "Quest started: The Old Key". Góc phải trên: "The Old Key" kèm "✓ Ask the gate guard…" và "• Find the old key…" | | |
+| Q-04 | Mua chìa ở Merchant | Tracker: "✓ Find the old key", hiện thêm "• Bring the key back…" | | |
+| Q-05 | Bấm **J** | Bảng Quests: mục Active có "The Old Key"; bên phải là tên, "Main · Active", tóm tắt, các bước. Nút **Untrack** ẩn quest khỏi tracker, **Track** hiện lại | | |
+| Q-06 | Đưa chìa cho Guard | Toast "Quest completed", tracker trống, bảng J chuyển quest sang mục Completed (các bước đều ✓) | | |
+| Q-07 | Save giữa chừng (sau Q-03) → chơi tiếp → Load | Tracker và trạng thái quest trở lại như lúc Save, **không** hiện toast "Quest started" khi Load | | |
+| Q-08 | Scene khác: GameObject › ND Dialogue › Quest Tracker / Quest Log | Tạo UI gắn vào Dialogue Manager có sẵn; không có manager thì Console báo rõ | | |
+
+## 12. Graph: bẻ edge, hub, sáng edge, bảng Variables
+
+| ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
+|---|---|---|---|---|
+| G-01 | Double-click lên một edge (Dialogue) | Có một chấm tại chỗ click, edge đi qua chấm (góc bo tròn). Kéo chấm → edge đổi hướng; Ctrl+Z hoàn tác | | |
+| G-02 | Double-click (hoặc Alt+click) lên chấm | Chấm biến mất, edge thẳng lại | | |
+| G-03 | BehaviorTree: double-click lên edge | Có chấm bẻ hướng (không còn tạo node Reroute). Kéo/xoá như G-01/G-02. Ngắt edge (Alt+click edge) rồi nối lại thì các chấm cũ không còn | | |
+| G-04 | BT có node Reroute cũ: chuột phải nền → **Convert Reroutes to Bend Points** | Reroute biến mất, edge nối thẳng (giữ thứ tự chạy), có chấm ở chỗ reroute cũ | | |
+| G-05 | Dialogue: click chọn một entry | Edge đi ra màu xanh dương, edge đi vào màu xanh lá, các edge khác mờ đi; bỏ chọn thì trở lại bình thường | | |
+| G-06 | Chọn 2+ entry cùng nối tới 2+ entry (VD 4 câu chào của Malfoy) → chuột phải → **Merge Shared Links into a Hub** | Có node tím "◆ hub" ở giữa; N×M edge thành N+M; Test Dialogue chạy ra đúng các lựa chọn như trước | | |
+| G-07 | Inspector của entry: bật **Hub**, rồi thêm action cho hub | Validate báo "a hub is never entered…" | | |
+| G-08 | Test Dialogue → bật **Variables** | Cột phải liệt kê biến/quest mà conversation dùng, nhãn `if` (đọc) / `set` (ghi). Tick **All** thì hiện tất cả | | |
+| G-09 | Sửa một giá trị (VD `Malfoy.annoyance` = 6, Enter) rồi ▶ Start | Chat có dòng "✎ Malfoy.annoyance: … → 6"; câu chào đổi theo giá trị mới | | |
+| G-10 | Đổi conversation ở ô chọn trên toolbar khi đang chạy | Cuộc cũ dừng, graph và Variables chuyển sang conversation mới, ▶ Start chạy cái mới | | |
+
+## 13. Bark (Stage 5)
+
+| ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
+|---|---|---|---|---|
+| B-01 | `ND Dialogue/Samples/Malfoy Story/Build Yule Ball (quest sample)`, mở `MalfoyYuleBall.unity`, Play | Malfoy (sprite) bên phải; cứ ~8 s có bong bóng trắng trên đầu với một câu ("Hmph." …), tự tắt sau vài giây | | |
+| B-02 | Đang trong hội thoại | Không có bark (Quiet While Talking) | | |
+| B-03 | Sau khi trả lời con hạc giấy bằng "Moaning Myrtle" | Bark chỉ còn "Not. A. Word." (ưu tiên High) | | |
+| B-04 | Scene khác: chọn một nhân vật → GameObject › ND Dialogue › **Bark Bubble (on selected)** | Có canvas bong bóng trên đầu + Dialogue Barker đã nối manager/UI | | |
+| B-05 | BT: node **Action/Dialogue/Bark** trên agent có Dialogue Barker | Succeeded khi nói được; thiếu barker thì Console báo rõ | | |
+
+## 14. Sequencer (Stage 6)
+
+| ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
+|---|---|---|---|---|
+| S-01 | Inspector entry → **Sequence**: gõ `Oops` | Dòng đỏ báo lỗi ngay dưới; Validate cũng báo | | |
+| S-02 | Node có sequence | Chip 🎬 n trên node, tooltip liệt kê lệnh; Test Dialogue có dòng "🎬 #id sequence: …" | | |
+| S-03 | Yule Ball: chơi tới "Yule 4. The Ball" | Lúc Malfoy xuất hiện: ảnh đổi sang váy dạ hội, camera cắt cận mặt; lúc nhảy: camera lùi ra DanceFloor | | |
+| S-04 | Sequence gọi tên không có (VD `SetActive(Nobody, true)`) | Console: "no target 'Nobody'…", hội thoại vẫn chạy | | |
+
+## 15. Mẫu Yule Ball (quest)
+
+| ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
+|---|---|---|---|---|
+| Y-01 | Play → "Yule 1" chạy luôn | Toast "Quest started: A Partner for the Yule Ball", tracker có 2 bước | | |
+| Y-02 | Chapter "Yule 2" → "I'd love to." | Bước "Answer the paper crane" ✓, hiện "Meet her at the Great Hall" | | |
+| Y-03 | "Yule 4" → "Why are you so beautiful?" → "Just one?" | "...Fine. Two." — quest Completed, J: mọi bước ✓ | | |
+| Y-04 | Reset/chơi lại, ở Yule 2 chọn "Moaning Myrtle" → "Yule 3" | Bước "Make it up to her" hiện; "I'm sorry" → bước ✓ | | |
+| Y-05 | Chapter "Side. Chocolate Frog" → "Bin it, Ron." | Quest phụ (nhóm Side) chuyển Failed trong J | | |
+
 ## Chưa nằm trong checklist này
-- Quest log, bark, sequencer, importer: chưa làm. Trigger kiểu OnTriggerEnter (vùng chạm) có trong component nhưng mẫu chưa dùng.
+- Importer (Twine / Arcweave): chưa làm. Trigger kiểu OnTriggerEnter (vùng chạm) có trong component nhưng mẫu chưa dùng.
 - `DialogueActorAgent` (thuộc tính lấy từ blackboard runtime của agent BT): đã có test tự động. Mẫu chưa có agent BT nên chưa kiểm được bằng tay.

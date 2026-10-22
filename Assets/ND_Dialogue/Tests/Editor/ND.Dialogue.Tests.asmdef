@@ -4,6 +4,7 @@
     "references": [
         "ND.Dialogue",
         "ND.Localization",
+        "UnityEngine.UI",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

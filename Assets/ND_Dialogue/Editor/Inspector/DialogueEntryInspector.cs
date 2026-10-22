@@ -110,9 +110,38 @@ namespace ND.Dialogue.Editor
                 BuildSubclassFields(entryProp);
                 BuildList("Plays only if…", "Entry conditions: every way into this line needs them (all must hold). A condition for one branch only goes on that link (click its edge).", entryProp?.FindPropertyRelative(nameof(DialogueEntry.conditions)), typeof(DialogueCondition), m_Entry.conditions);
                 BuildList("When it plays, do…", "Actions run when the line starts.", entryProp?.FindPropertyRelative(nameof(DialogueEntry.actions)), typeof(DialogueAction), m_Entry.actions);
+                if (!m_Entry.IsHub) BuildSequence();
             }
             BuildLinks();
             BuildPluginSections();
+        }
+
+        /// <summary>The entry's sequence (camera, animation, sound…) with its parse errors under it.</summary>
+        private void BuildSequence()
+        {
+            var foldout = new Foldout { text = "Sequence (camera, animation, sound…)", value = !string.IsNullOrWhiteSpace(m_Entry.sequence) };
+            var field = new TextField { value = m_Entry.sequence ?? string.Empty, multiline = true, isDelayed = true,
+                tooltip = "Name(args)@seconds, separated by ; or new lines. Built-in: Wait(s), Anim(target, trigger or state), Audio(target), SetActive(target, true|false), Camera(target), LookAt(target, at), SendMessage(target, method, arg?), Continue(). Targets: speaker, a Sequencer target, or a character (Dialogue Actor Object)." };
+            field.style.minHeight = 40;
+            var errors = new Label { name = "sequence-errors" };
+            errors.AddToClassList("dlg-inspector__error");
+            void ShowErrors(string text)
+            {
+                var list = new List<string>();
+                DialogueSequence.Parse(text, list);
+                errors.text = string.Join("\n", list);
+                errors.style.display = list.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+            ShowErrors(m_Entry.sequence);
+            field.RegisterValueChangedCallback(evt =>
+            {
+                Edit("Edit Sequence", () => m_Entry.sequence = evt.newValue);
+                ShowErrors(evt.newValue);
+            });
+            foldout.Add(field);
+            foldout.Add(errors);
+            foldout.Add(new Label("e.g.  Anim(speaker, Blush); Camera(CloseUp)@0.5; Wait(2); Continue()@2") { style = { fontSize = 10, color = new Color(0.6f, 0.62f, 0.68f) } });
+            Add(foldout);
         }
 
         private void BuildPluginSections()
@@ -170,6 +199,19 @@ namespace ND.Dialogue.Editor
                 Rebuild();
             });
             Add(routing);
+
+            var hub = new Toggle("Hub (merges links)") { value = m_Entry.isHub,
+                tooltip = "Never entered: a link into the hub counts as a link to each of its targets (its links' conditions and priorities apply). Use it when many lines lead to the same replies — N × M edges become N + M. Turns Passthrough on." };
+            hub.RegisterValueChangedCallback(evt =>
+            {
+                Edit("Toggle Hub", () =>
+                {
+                    m_Entry.isHub = evt.newValue;
+                    if (evt.newValue) m_Entry.isPassthrough = true;
+                });
+                Rebuild();
+            });
+            Add(hub);
         }
 
         /// <summary>

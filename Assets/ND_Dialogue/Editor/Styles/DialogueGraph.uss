@@ -14,6 +14,8 @@
 .dlg-node--player { border-left-color: rgb(255, 184, 77); border-left-width: 5px; background-color: rgb(54, 50, 42); }
 .dlg-node--passthrough { background-color: rgb(40, 40, 44); border-color: rgb(80, 80, 88); min-height: 34px; width: 180px; }
 .dlg-node--start { background-color: rgb(38, 110, 64); border-color: rgb(28, 80, 46); min-height: 30px; width: 110px; border-radius: 16px; padding: 4px 10px 4px 10px; }
+.dlg-node--hub { background-color: rgb(70, 52, 110); border-color: rgb(150, 110, 230); min-height: 26px; width: 112px; border-radius: 14px; padding: 3px 8px 3px 8px; }
+.dlg-node--hub .dlg-node__speaker { -unity-text-align: middle-center; margin-bottom: 0; color: rgb(230, 215, 255); }
 
 .dlg-node.selected { border-color: rgb(77, 163, 255); }
 .dlg-node.nd-link-candidate { border-color: rgb(124, 220, 90); }
@@ -265,3 +267,26 @@
 }
 .dlg-reply:hover { background-color: rgba(0, 120, 255, 0.28); }
 .dlg-reply--continue { background-color: rgb(0, 120, 255); color: rgb(255, 255, 255); }
+
+/* Quests: one card per quest (journal), steps with their conditions */
+.dlg-questcard { margin: 4px 0 10px 0; padding: 6px 8px 8px 8px; border-radius: 6px; background-color: rgba(255, 255, 255, 0.04); border-left-width: 3px; border-left-color: rgb(255, 199, 77); }
+.dlg-questcard__head { flex-direction: row; align-items: center; margin-bottom: 4px; flex-wrap: wrap; }
+.dlg-questcard__id { width: 180px; -unity-font-style: bold; }
+.dlg-questcard__steps { -unity-font-style: bold; margin: 6px 0 2px 0; color: rgb(220, 225, 235); }
+.dlg-compact > Label, .dlg-compact .unity-base-field__label { min-width: 40px; width: 44px; }
+.dlg-condlist { margin: 2px 0 2px 24px; }
+.dlg-condlist__add { align-self: flex-start; font-size: 11px; padding: 1px 8px 1px 8px; }
+
+/* Test Dialogue: variables panel */
+.dlg-values { width: 240px; flex-shrink: 0; border-left-width: 1px; border-color: rgb(20, 20, 22); background-color: rgb(34, 35, 39); padding: 6px 8px 6px 8px; }
+.dlg-values__head { flex-direction: row; align-items: center; margin-bottom: 4px; }
+.dlg-values__head > #title { -unity-font-style: bold; color: rgb(200, 205, 215); }
+.dlg-values__row { margin: 3px 0 5px 0; padding-bottom: 4px; border-bottom-width: 1px; border-color: rgb(46, 47, 52); }
+.dlg-values__name-row { flex-direction: row; align-items: center; }
+.dlg-values__name { color: rgb(215, 220, 230); flex-shrink: 1; overflow: hidden; }
+.dlg-values__tag { font-size: 9px; padding: 0 4px 0 4px; margin-left: 4px; border-radius: 6px; color: rgb(20, 20, 22); }
+.dlg-values__tag--if { background-color: rgb(230, 180, 80); }
+.dlg-values__tag--set { background-color: rgb(140, 190, 255); }
+.dlg-values__hint { font-size: 10px; color: rgb(130, 136, 148); white-space: normal; margin-top: 4px; }
+.dlg-inspector__error { color: rgb(255, 120, 110); white-space: normal; font-size: 11px; }
+.dlg-chip--sequence { background-color: rgb(40, 70, 90); color: rgb(170, 220, 255); }

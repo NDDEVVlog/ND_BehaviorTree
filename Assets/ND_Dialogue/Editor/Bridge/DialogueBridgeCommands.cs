@@ -43,12 +43,13 @@ namespace ND.Dialogue.Editor.Bridge
             ["test_continue"] = new Command { Summary = "Next line in the test chat. Args: database, values?", Run = TestContinue },
             ["test_choose"] = new Command { Summary = "Pick a choice (1 = first) in the test chat. Args: database, choice, values?", Run = TestChoose },
             ["test_state"] = new Command { Summary = "Where the test chat is: state, entry, choices, all variable / quest values, the transcript so far. Args: database", Run = TestState },
+            ["test_set"] = new Command { Summary = "What if: set a variable (name) or a quest (\"quest name\") of the test world, then keep playing to see where it goes (applies from the next step). Args: database, name, value (text in the variable's type, or a quest state)", Run = TestSet },
             ["test_reset"] = new Command { Summary = "New test world (initial values, nothing seen, empty chat). Args: database", Run = TestReset },
             ["test_run"] = new Command { Summary = "Play a whole path: continue through lines, take the given choices in order (1 = first), stop at the end, at a choice not given, or after maxSteps. Args: database, conversation, entry?, choices? ([1,2,…]), reset? (default true), maxSteps? (200)", Run = TestRun },
 
             ["conversation_create"] = new Command { Write = true, Summary = "Add a conversation. Args: database, title", Run = ConversationCreate },
-            ["entry_add"] = new Command { Write = true, Summary = "Add a line. Args: database, conversation, actor, text?, emotion?, title?, passthrough?, from? (entry id to link from), lines? (more lines: [\"text\" or {\"text\", \"emotion\"}]), locale?", Run = EntryAdd },
-            ["entry_set"] = new Command { Write = true, Summary = "Change a line. Args: database, conversation, entry, text?, menuText?, actor?, emotion?, title?, passthrough?, lines? (replaces the more lines), locale?", Run = EntrySet },
+            ["entry_add"] = new Command { Write = true, Summary = "Add a line. Args: database, conversation, actor, text?, emotion?, title?, passthrough?, hub? (merges links: links into it count as links to its targets), from? (entry id to link from), lines? (more lines: [\"text\" or {\"text\", \"emotion\"}]), locale?", Run = EntryAdd },
+            ["entry_set"] = new Command { Write = true, Summary = "Change a line. Args: database, conversation, entry, text?, menuText?, actor?, emotion?, title?, passthrough?, hub?, sequence? (Name(args)@seconds; …), lines? (replaces the more lines), locale?", Run = EntrySet },
             ["entry_remove"] = new Command { Write = true, Summary = "Delete a line (and links to it). Args: database, conversation, entry", Run = EntryRemove },
             ["link_add"] = new Command { Write = true, Summary = "Link two lines. Args: database, conversation, from, to, toConversation?, priority? (Low|BelowNormal|Normal|AboveNormal|High)", Run = LinkAdd },
             ["link_remove"] = new Command { Write = true, Summary = "Remove a link. Args: database, conversation, from, to, toConversation?", Run = LinkRemove },
@@ -172,7 +173,8 @@ namespace ND.Dialogue.Editor.Bridge
                     var actor = db.FindActor(entry.actorId);
                     sb.Append($"#{entry.id} {(actor != null ? actor.name : "?")}");
                     if (!string.IsNullOrEmpty(entry.emotion)) sb.Append($" [{entry.emotion}]");
-                    if (entry.isPassthrough) sb.Append(" (routing)");
+                    if (entry.IsHub) sb.Append(" (hub)");
+                    else if (entry.isPassthrough) sb.Append(" (routing)");
                     else sb.Append($": \"{DialogueTextEditing.Read(entry.text, locale) ?? string.Empty}\"");
                     for (int i = 1; i < entry.LineCount; i++)
                         sb.Append($"\n    + [{entry.LineEmotion(i)}] \"{DialogueTextEditing.Read(entry.LineText(i), locale) ?? string.Empty}\"");
@@ -204,6 +206,8 @@ namespace ND.Dialogue.Editor.Bridge
                 ["emotion"] = e.emotion,
                 ["title"] = e.title,
                 ["passthrough"] = e.isPassthrough,
+                ["hub"] = e.IsHub,
+                ["sequence"] = e.sequence,
                 ["text"] = DialogueTextEditing.Read(e.text, locale),
                 ["localized"] = e.text.IsLocalized,
                 ["conditions"] = e.conditions.Select(c => c?.Describe()).ToList(),
@@ -294,6 +298,13 @@ namespace ND.Dialogue.Editor.Bridge
             return TestStep(Database(args), args, p => p.Choose(index), s => s.Choose(index));
         }
 
+        private static object TestSet(Dictionary<string, object> args)
+        {
+            string name = Str(args, "name");
+            string value = Str(args, "value");
+            return TestStep(Database(args), args, p => p.SetValue(name, value), s => s.SetValue(name, value));
+        }
+
         private static object TestState(Dictionary<string, object> args)
         {
             var db = Database(args);
@@ -375,7 +386,8 @@ namespace ND.Dialogue.Editor.Bridge
             {
                 created = conversation.AddEntry(actor.id, OptStr(args, "title"));
                 created.emotion = OptStr(args, "emotion");
-                created.isPassthrough = OptBool(args, "passthrough");
+                created.isHub = OptBool(args, "hub");
+                created.isPassthrough = OptBool(args, "passthrough") || created.isHub;
                 created.position = from != null ? from.position + new Vector2(280f, 40f * from.links.Count) : new Vector2(280f * conversation.entries.Count, 0f);
                 if (args.ContainsKey("text")) DialogueTextEditing.Write(db, conversation, created, false, locale, Str(args, "text"));
                 if (from != null) conversation.Link(from, created);
@@ -398,8 +410,10 @@ namespace ND.Dialogue.Editor.Bridge
                 if (args.ContainsKey("emotion")) entry.emotion = OptStr(args, "emotion");
                 if (args.ContainsKey("title")) entry.title = OptStr(args, "title");
                 if (args.ContainsKey("passthrough")) entry.isPassthrough = OptBool(args, "passthrough");
+                if (args.ContainsKey("hub")) { entry.isHub = OptBool(args, "hub"); if (entry.isHub) entry.isPassthrough = true; }
                 if (args.ContainsKey("text")) DialogueTextEditing.Write(db, conversation, entry, false, locale, Str(args, "text"));
                 if (args.ContainsKey("menuText")) DialogueTextEditing.Write(db, conversation, entry, true, locale, Str(args, "menuText"));
+                if (args.ContainsKey("sequence")) entry.sequence = OptStr(args, "sequence");
                 if (args.ContainsKey("lines")) SetMoreLines(entry, args["lines"]);
             });
             return new Dictionary<string, object> { ["id"] = entry.id };
