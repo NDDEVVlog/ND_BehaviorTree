@@ -1,16 +1,27 @@
 using System;
 using System.Collections.Generic;
+using ND.Quests;
 using UnityEngine;
 
 namespace ND.Dialogue
 {
     public enum CompareOp { Equal, NotEqual, Less, LessOrEqual, Greater, GreaterOrEqual }
 
-    /// <summary>Gate on an entry. All conditions of an entry must hold for it to be reachable.</summary>
+    /// <summary>
+    /// Gate on an entry. All conditions of an entry must hold for it to be reachable. Every dialogue condition also
+    /// works in quest steps: there it reads the dialogue world the quests were given (<see cref="QuestRuntime.ConditionWorld"/>).
+    /// </summary>
     [Serializable]
-    public abstract class DialogueCondition
+    public abstract class DialogueCondition : IQuestCondition
     {
         public abstract bool Evaluate(IDialogueContext context);
+
+        bool IQuestCondition.IsMet(QuestConditionContext context)
+        {
+            if (context.World is IDialogueContext world) return Evaluate(world);
+            Debug.LogError($"[Dialogue] Quest step condition '{Describe()}' needs a dialogue world, but the quests have none (world={context.World?.GetType().Name ?? "null"}). Use it with a Dialogue Manager, or use a quest condition.");
+            return false;
+        }
 
         /// <summary>Adds problems (unknown names, unparsable values) to <paramref name="issues"/>, prefixed with <paramref name="where"/>.</summary>
         public virtual void Validate(IDialogueSchema schema, string where, List<string> issues) { }
@@ -60,10 +71,31 @@ namespace ND.Dialogue
         [Tooltip("Object variables: the reference to compare with (empty = is null).")]
         public UnityEngine.Object objectValue;
 
+        // The parsed expected value, kept while type/text/object are the same (conditions are polled every frame by
+        // interactors: parsing a Vector/Color each time would allocate).
+        [NonSerialized] private bool m_HasExpected;
+        [NonSerialized] private VariableType m_ExpectedType;
+        [NonSerialized] private string m_ExpectedText;
+        [NonSerialized] private UnityEngine.Object m_ExpectedObject;
+        [NonSerialized] private VariableValue m_Expected;
+
+        private bool TryExpected(VariableType type, out VariableValue expected)
+        {
+            if (!m_HasExpected || m_ExpectedType != type || !ReferenceEquals(m_ExpectedText, value) || !ReferenceEquals(m_ExpectedObject, objectValue))
+            {
+                m_HasExpected = VariableValue.Build(type, value, objectValue, out m_Expected);
+                m_ExpectedType = type;
+                m_ExpectedText = value;
+                m_ExpectedObject = objectValue;
+            }
+            expected = m_Expected;
+            return m_HasExpected;
+        }
+
         public override bool Evaluate(IDialogueContext context)
         {
             if (!context.TryGetVariable(variable, out var current)) return false;
-            if (!VariableValue.Build(current.type, value, objectValue, out var expected))
+            if (!TryExpected(current.type, out var expected))
             {
                 Debug.LogError($"[Dialogue] Condition '{Describe()}': '{value}' is not a valid {current.type}.");
                 return false;
@@ -115,6 +147,31 @@ namespace ND.Dialogue
         }
 
         public override string Describe() => $"quest {quest} {Symbol(op)} {state}";
+    }
+
+    /// <summary>Holds once a quest's progress reached a value (quests with a goal: "goblins killed ≥ 10").</summary>
+    [Serializable]
+    public class QuestProgressAtLeastCondition : DialogueCondition
+    {
+        [DialogueQuest] public string quest;
+        [Min(0)] public int atLeast = 1;
+
+        public override bool Evaluate(IDialogueContext context)
+        {
+            if (!(context is IDialogueQuestHost host) || host.Quests == null)
+            {
+                Debug.LogError($"[Dialogue] Condition '{Describe()}': the world has no quest runtime (context {context?.GetType().Name}).");
+                return false;
+            }
+            return host.Quests.TryGetProgress(quest, out int progress) && progress >= atLeast;
+        }
+
+        public override void Validate(IDialogueSchema schema, string where, List<string> issues)
+        {
+            if (!schema.HasQuest(quest)) issues.Add($"{where}: condition uses unknown quest '{quest}'.");
+        }
+
+        public override string Describe() => $"quest {quest} progress >= {atLeast}";
     }
 
     /// <summary>

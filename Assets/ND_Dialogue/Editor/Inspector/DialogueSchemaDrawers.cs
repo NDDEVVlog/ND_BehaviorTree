@@ -27,7 +27,7 @@ namespace ND.Dialogue.Editor
             }
 
             var target = property.serializedObject.targetObject;
-            var database = target as DialogueDatabase ?? (target as IDialogueDatabaseOwner)?.Database;
+            var database = DialogueRowGUI.DatabaseOf(target);
             var names = database != null ? NamesFrom(database.Schema).Distinct().OrderBy(n => n).ToList() : new List<string>();
             if (names.Count == 0)
             {
@@ -90,7 +90,7 @@ namespace ND.Dialogue.Editor
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var target = property.serializedObject.targetObject;
-            m_Database = target as DialogueDatabase ?? (target as IDialogueDatabaseOwner)?.Database;
+            m_Database = DialogueRowGUI.DatabaseOf(target);
             base.OnGUI(position, property, label);
         }
 
@@ -108,7 +108,7 @@ namespace ND.Dialogue.Editor
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var target = property.serializedObject.targetObject;
-            m_Database = target as DialogueDatabase ?? (target as IDialogueDatabaseOwner)?.Database;
+            m_Database = DialogueRowGUI.DatabaseOf(target);
             base.OnGUI(position, property, label);
         }
 
@@ -116,6 +116,24 @@ namespace ND.Dialogue.Editor
             m_Database != null ? m_Database.conversations.Where(c => c != null && !string.IsNullOrEmpty(c.title)).Select(c => c.title) : Enumerable.Empty<string>();
 
         protected override string Kind => "Conversation";
+    }
+
+    [CustomPropertyDrawer(typeof(DialogueBarkConversationAttribute))]
+    public class DialogueBarkConversationDrawer : DialogueSchemaNameDrawer
+    {
+        private DialogueDatabase m_Database;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            m_Database = DialogueRowGUI.DatabaseOf(property.serializedObject.targetObject);
+            base.OnGUI(position, property, label);
+        }
+
+        /// <summary>Only conversations marked Bark (a conversation that is not one shows as "⚠ missing").</summary>
+        protected override IEnumerable<string> NamesFrom(IDialogueSchema schema) =>
+            m_Database != null ? m_Database.conversations.Where(c => c != null && c.isBark && !string.IsNullOrEmpty(c.title)).Select(c => c.title) : Enumerable.Empty<string>();
+
+        protected override string Kind => "Bark conversation";
     }
 
     [CustomPropertyDrawer(typeof(DialogueEventAttribute))]

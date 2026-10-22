@@ -1,3 +1,4 @@
+using ND.Quests;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -133,22 +134,38 @@ namespace ND.Dialogue.NDBT.Tests
         }
 
         [Test]
-        public void TheBlackboardWorld_ReportsChanges_FromDialogueAndFromAgents_ToTheQuestLog()
+        public void TheBlackboardWorld_MirrorsQuests_BothWays_AndReportsChanges()
         {
             var source = Track(ScriptableObject.CreateInstance<BlackboardSchemaSource>());
-            source.blackboard = m_WorldAsset; // the log lists the world's quests (quest.key)
+            source.blackboard = m_WorldAsset; // the quests are the world's quest.* keys
             m_Db.schemaSource = source;
             var context = BlackboardDialogueContext.ForWorld(m_WorldAsset, database: m_Db);
             var changes = new List<string>();
             context.StateChanged += (name, quest) => changes.Add($"{(quest ? "quest " : string.Empty)}{name}");
-            var log = new QuestLog(m_Db, context);
+            var runtime = SharedBlackboards.GetRuntime(m_WorldAsset);
 
             context.SetQuestState("key", QuestState.Active); // dialogue
-            Assert.IsTrue(SharedBlackboards.GetRuntime(m_WorldAsset).TryGetKey("player.has_old_key", out var key));
-            key.SetValueObject(true); // an agent writing the shared blackboard
+            Assert.AreEqual((int)QuestState.Active, runtime.GetValue<int>("quest.key"), "the key follows the quest");
+            Assert.IsTrue(runtime.TryGetKey("player.has_old_key", out var flag));
+            flag.SetValueObject(true); // an agent writing the shared blackboard
             CollectionAssert.AreEqual(new[] { "quest key", "player.has_old_key" }, changes);
-            Assert.AreEqual(QuestState.Active, log.Find("key").State, "the log heard the world");
-            log.Dispose();
+            Assert.AreEqual(QuestState.Active, context.Quests.Find("key").State);
+
+            runtime.SetValue("quest.key", (int)QuestState.Completed); // an agent finishing the quest
+            Assert.AreEqual(QuestState.Completed, context.Quests.Find("key").State, "the quest follows the key");
+            context.Dispose();
+        }
+
+        [Test]
+        public void WithASharedQuestRuntime_TheRuntimeIsTheTruth_AndTheKeysFollowIt()
+        {
+            var shared = new QuestRuntime();
+            shared.RegisterId("key", QuestState.Completed, "a quest database");
+            var context = BlackboardDialogueContext.ForWorld(m_WorldAsset, database: m_Db, quests: shared);
+            Assert.AreSame(shared, context.Quests);
+            Assert.AreEqual((int)QuestState.Completed, SharedBlackboards.GetRuntime(m_WorldAsset).GetValue<int>("quest.key"), "the runtime wrote its state into the key");
+            Assert.IsTrue(context.TryGetQuestState("key", out var state) && state == QuestState.Completed);
+            context.Dispose();
         }
 
         [Test]

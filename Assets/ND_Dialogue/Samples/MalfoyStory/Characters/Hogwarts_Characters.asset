@@ -13,21 +13,21 @@ MonoBehaviour:
   m_Name: Hogwarts_Characters
   m_EditorClassIdentifier: ND.Dialogue::ND.Dialogue.CharacterDatabase
   characters:
-  - rid: 3058894627830235235
-  - rid: 3058894627830235236
-  - rid: 3058894627830235237
-  - rid: 3058894627830235238
-  - rid: 3058894627830235239
-  - rid: 3058894627830235240
-  - rid: 3058894627830235241
+  - rid: 3058894633377726553
+  - rid: 3058894633377726554
+  - rid: 3058894633377726555
+  - rid: 3058894633377726556
+  - rid: 3058894633377726557
+  - rid: 3058894633377726558
+  - rid: 3058894633377726559
   templateAttributes: []
   references:
     version: 2
     RefIds:
-    - rid: 3058894627830235235
+    - rid: 3058894633377726553
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 282886598
+        id: 275846393
         name: Harry
         displayName:
           m_EntryId: 0
@@ -84,10 +84,10 @@ MonoBehaviour:
         template: {fileID: 11400000, guid: a8a37d86cf33d524981a600d9936d5ed, type: 2}
         templateValues: []
         attributes: []
-    - rid: 3058894627830235236
+    - rid: 3058894633377726554
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 362182703
+        id: 507349979
         name: Malfoy
         displayName:
           m_EntryId: 0
@@ -176,6 +176,69 @@ MonoBehaviour:
           localizedTint:
             m_EntryId: 0
             m_Table: {fileID: 0}
+        - id: Ball_Embarrassed
+          portrait: {fileID: 21300000, guid: 7a96f33b06d3a7b40864949240b3bd77, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Ball_Happy
+          portrait: {fileID: 21300000, guid: 72fb126c2c5747b4db7c614c65a3047b, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Ball_Sad
+          portrait: {fileID: 21300000, guid: 51f193447ee949e4ea33e013b7a69d91, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Ball_Surprised
+          portrait: {fileID: 21300000, guid: 681e02bf7667af641be96511bc8c7d9e, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Older_Angry
+          portrait: {fileID: 21300000, guid: 33df1f7c411592740b084bc760b67dd4, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Older_Smug
+          portrait: {fileID: 21300000, guid: 27c576e16c67fb047a6be8fc75aea5cf, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Older_Pout
+          portrait: {fileID: 21300000, guid: cf39c5e334d4dd14ead3c8800479b602, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
         defaultEmotion: Neutral
         template: {fileID: 11400000, guid: a8a37d86cf33d524981a600d9936d5ed, type: 2}
         templateValues:
@@ -202,10 +265,10 @@ MonoBehaviour:
             colorValue: {r: 0, g: 0, b: 0, a: 0}
             objectValue: {fileID: 0}
           description: Her own attribute, next to the template's.
-    - rid: 3058894627830235237
+    - rid: 3058894633377726555
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 301471443
+        id: 512555997
         name: McGonagall
         displayName:
           m_EntryId: 0
@@ -226,10 +289,10 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894627830235238
+    - rid: 3058894633377726556
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 533170347
+        id: 491289632
         name: Voldemort
         displayName:
           m_EntryId: 0
@@ -250,10 +313,10 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894627830235239
+    - rid: 3058894633377726557
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 283678530
+        id: 461178946
         name: Wormtail
         displayName:
           m_EntryId: 0
@@ -274,10 +337,10 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894627830235240
+    - rid: 3058894633377726558
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 514538025
+        id: 323058324
         name: Rita
         displayName:
           m_EntryId: 0
@@ -298,10 +361,10 @@ MonoBehaviour:
         template: {fileID: 0}
         templateValues: []
         attributes: []
-    - rid: 3058894627830235241
+    - rid: 3058894633377726559
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
-        id: 365809420
+        id: 293476815
         name: Dumbledore
         displayName:
           m_EntryId: 0

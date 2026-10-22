@@ -2,6 +2,7 @@
     "name": "ND.Dialogue.Editor.Tests",
     "rootNamespace": "ND.Dialogue.Editor.Tests",
     "references": [
+        "ND.Quests",
         "ND.Dialogue",
         "ND.Dialogue.Editor",
         "ND.Localization",

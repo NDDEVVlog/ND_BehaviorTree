@@ -1,3 +1,4 @@
+using ND.Quests;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +18,7 @@ namespace ND.Dialogue.Editor
     /// Conversations section is the graph itself). Edits go through bound PropertyFields or <see cref="Edit"/>
     /// (undoable); <see cref="DatabaseChanged"/> tells the window to redraw the graph and inspector.
     /// </summary>
-    public class DialogueDatabasePanel : VisualElement
+    public partial class DialogueDatabasePanel : VisualElement
     {
         public const string ConversationsTab = "Conversations";
         /// <summary>The test chat (shown by the Dialogue Editor window itself).</summary>
@@ -28,7 +29,8 @@ namespace ND.Dialogue.Editor
         public const string EventsTab = "Events";
         public const string LocalizationTab = "Localization";
         public const string SettingsTab = "Settings";
-        private static readonly string[] BuiltInTabs = { ConversationsTab, TestTab, CharactersTab, VariablesTab, QuestsTab, EventsTab, LocalizationTab, SettingsTab };
+        public const string ToolsTab = "Tools";
+        private static readonly string[] BuiltInTabs = { ConversationsTab, TestTab, CharactersTab, VariablesTab, QuestsTab, EventsTab, LocalizationTab, ToolsTab, SettingsTab };
 
         private DialogueDatabase m_Database;
         private SerializedObject m_Serialized;
@@ -40,6 +42,8 @@ namespace ND.Dialogue.Editor
 
         /// <summary>The user picked a conversation to show on the canvas.</summary>
         public event Action<int> ConversationSelected;
+        /// <summary>(conversation id, entry id) Show that entry on the graph (from a search result).</summary>
+        public event Action<int, int> EntryRequested;
         /// <summary>The database was edited from this panel (debounced).</summary>
         public event Action DatabaseChanged;
         /// <summary>A section asked to show another section (e.g. "Edit in Characters").</summary>
@@ -96,6 +100,7 @@ namespace ND.Dialogue.Editor
                 case CharactersTab: BuildCharacters(); break;
                 case VariablesTab: BuildVariables(); break;
                 case QuestsTab: BuildQuests(); break;
+                case ToolsTab: BuildTools(); break;
                 case EventsTab: BuildEvents(); break;
                 case LocalizationTab: BuildLocalization(); break;
                 case SettingsTab: BuildSettings(); break;
@@ -146,7 +151,7 @@ namespace ND.Dialogue.Editor
                 var c = conversation;
                 var card = Card(c.id == m_SelectedConversationId);
                 card.Add(CardTitle(c.title));
-                card.Add(CardSub($"#{c.id}  ·  {c.entries.Count - 1} lines"));
+                card.Add(CardSub($"#{c.id}  ·  {c.entries.Count - 1} lines{(c.isBark ? "  ·  💬 bark" : string.Empty)}"));
                 card.RegisterCallback<ClickEvent>(_ =>
                 {
                     m_SelectedConversationId = c.id;
@@ -172,6 +177,13 @@ namespace ND.Dialogue.Editor
             ConversationSelected?.Invoke(created.id);
             Rebuild();
             return created;
+        }
+
+        /// <summary>Marks a conversation as barks (said in passing by a Dialogue Barker) or as a normal conversation.</summary>
+        public void SetBark(Conversation conversation, bool isBark)
+        {
+            if (conversation == null || conversation.isBark == isBark) return;
+            Edit(isBark ? "Mark as Bark Conversation" : "Mark as Conversation", () => conversation.isBark = isBark);
         }
 
         public void RenameConversation(Conversation conversation, string title)
@@ -578,10 +590,48 @@ namespace ND.Dialogue.Editor
             m_Content.Add(characters);
         }
 
+        /// <summary>Where a quest card's data lives: this dialogue database's own list, or a Quest Database asset.</summary>
+        private sealed class QuestList
+        {
+            public UnityEngine.Object Owner;
+            public SerializedObject Serialized;
+            public List<QuestDefinition> Quests;
+            public string Path;
+        }
+
+        private QuestList OwnQuests() => new QuestList { Owner = m_Database, Serialized = m_Serialized, Quests = m_Database.quests, Path = nameof(DialogueDatabase.quests) };
+
+        private static QuestList QuestsOf(QuestDatabase database) =>
+            new QuestList { Owner = database, Serialized = new SerializedObject(database), Quests = database.quests, Path = nameof(QuestDatabase.quests) };
+
+        private void EditQuests(QuestList list, string undoLabel, Action change)
+        {
+            Undo.RecordObject(list.Owner, undoLabel);
+            change();
+            EditorUtility.SetDirty(list.Owner);
+            DatabaseChanged?.Invoke();
+            Rebuild();
+        }
+
         private void BuildQuests()
         {
-            Intro("Quests have a state (Inactive, Active, Completed, Failed, Abandoned) that lines can check and change. " +
-                  "Their journal (title, summary, steps) is what the in-game Quest Log and Tracker show.");
+            Intro("Quests have a state (Inactive, Active, Completed, Failed, Abandoned) that lines can check and change, and " +
+                  "optionally a goal (a counter gameplay reports progress to). They live in Quest Databases, which a scene's " +
+                  "Quest Manager shares with every other system; this database lists the ones its lines use.");
+
+            var databases = Group("Quest Databases", "The quests this database's lines may name. Shared with gameplay and UI through a Quest Manager.");
+            databases.Add(Bound(m_Serialized.FindProperty(nameof(DialogueDatabase.questDatabases))));
+            m_Content.Add(databases);
+            foreach (var questDatabase in m_Database.questDatabases.Where(d => d != null).Distinct())
+            {
+                var list = QuestsOf(questDatabase);
+                var group = Group(questDatabase.name, AssetDatabase.GetAssetPath(questDatabase));
+                for (int i = 0; i < list.Quests.Count; i++) group.Add(QuestCard(list, i, removable: true, renamable: true, showInitialState: true));
+                group.Add(AddQuestButton(list));
+                m_Content.Add(group);
+            }
+
+            var own = OwnQuests();
             var source = m_Database.schemaSource;
             if (source != null)
             {
@@ -590,45 +640,51 @@ namespace ND.Dialogue.Editor
                 if (editor?.Quests != null) world.Add(DialoguePluginRegistry.BuildSchemaEditor(editor, editor.Quests, Args()));
                 else world.Add(ReadOnlySchema(source, m_Database.Schema.QuestNames, "quests"));
                 m_Content.Add(world);
-            }
 
-            var journal = Group(source == null ? "Quests" : "Journal",
-                source == null ? "Each quest: its id and starting state, then what players read." : "What players read about each quest of the world (matched by name).");
-            if (source == null)
-            {
-                for (int i = 0; i < m_Database.quests.Count; i++) journal.Add(QuestCard(i, removable: true));
-                var add = new Button(() => Edit("Add Quest", () =>
-                {
-                    var names = m_Database.quests.Where(q => q != null).Select(q => q.name).ToArray();
-                    m_Database.AddQuest(ObjectNames.GetUniqueName(names, "new_quest"));
-                })) { text = "+ Add quest" };
-                add.AddToClassList("dlg-inspector__add");
-                journal.Add(add);
-            }
-            else
-            {
+                var journal = Group("Journal", "What players read about each quest of the world (matched by name).");
                 foreach (var name in m_Database.Schema.QuestNames.Distinct().OrderBy(n => n))
                 {
-                    int index = m_Database.quests.FindIndex(q => q != null && q.name == name);
-                    if (index >= 0) { journal.Add(QuestCard(index, removable: true)); continue; }
+                    int index = own.Quests.FindIndex(q => q != null && q.name == name);
+                    if (index >= 0) { journal.Add(QuestCard(own, index, removable: true, renamable: false, showInitialState: false)); continue; }
+                    if (m_Database.FindQuest(name) != null) continue; // its journal is in a Quest Database above
                     var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
                     row.Add(VariableRow(name, "no journal yet", DialogueVariableStyle.QuestColor));
                     string questName = name;
-                    row.Add(new Button(() => Edit("Add Quest Journal", () => m_Database.quests.Add(new QuestDefinition { name = questName })))
+                    row.Add(new Button(() => EditQuests(own, "Add Quest Journal", () => own.Quests.Add(new QuestDefinition { name = questName })))
                         { text = "+ Journal", tooltip = "Give this quest a title, summary and steps for the quest log" });
                     journal.Add(row);
                 }
-                foreach (var orphan in m_Database.quests.Where(q => q != null && !m_Database.Schema.HasQuest(q.name)).ToList())
+                foreach (var orphan in own.Quests.Where(q => q != null && !m_Database.Schema.HasQuest(q.name)).ToList())
                     journal.Add(new HelpBox($"Journal '{orphan.name}' matches no quest of the world.", HelpBoxMessageType.Warning));
+                m_Content.Add(journal);
             }
-            m_Content.Add(journal);
+            else if (own.Quests.Count > 0)
+            {
+                var inline = Group("Quests in this database", "Older content: new quests belong in a Quest Database (shared with gameplay).");
+                for (int i = 0; i < own.Quests.Count; i++) inline.Add(QuestCard(own, i, removable: true, renamable: true, showInitialState: true));
+                inline.Add(AddQuestButton(own));
+                m_Content.Add(inline);
+            }
+            if (source == null && m_Database.questDatabases.All(d => d == null) && own.Quests.Count == 0)
+                m_Content.Add(new HelpBox("No quests yet: assign or create a Quest Database above (Assets › Create › ND Quests › Quest Database).", HelpBoxMessageType.Info));
         }
 
-        /// <summary>One quest's card: id, state, group, tracking, title, summary, note, and its steps with conditions.</summary>
-        private VisualElement QuestCard(int index, bool removable)
+        private Button AddQuestButton(QuestList list)
         {
-            var quest = m_Database.quests[index];
-            var prop = m_Serialized.FindProperty($"{nameof(DialogueDatabase.quests)}.Array.data[{index}]");
+            var add = new Button(() => EditQuests(list, "Add Quest", () =>
+            {
+                var names = m_Database.AllQuests.Select(q => q.name).Concat(list.Quests.Where(q => q != null).Select(q => q.name)).ToArray();
+                list.Quests.Add(new QuestDefinition { name = ObjectNames.GetUniqueName(names, "new_quest") });
+            })) { text = "+ Add quest" };
+            add.AddToClassList("dlg-inspector__add");
+            return add;
+        }
+
+        /// <summary>One quest's card: id, state, group, tracking, goal, title, summary, note, and its steps with conditions.</summary>
+        private VisualElement QuestCard(QuestList list, int index, bool removable, bool renamable, bool showInitialState)
+        {
+            var quest = list.Quests[index];
+            var prop = list.Serialized.FindProperty($"{list.Path}.Array.data[{index}]");
             var card = new VisualElement();
             card.AddToClassList("dlg-questcard");
             if (quest == null || prop == null) { card.Add(new Label("(empty)")); return card; }
@@ -638,43 +694,65 @@ namespace ND.Dialogue.Editor
             var dot = new VisualElement { style = { backgroundColor = DialogueVariableStyle.QuestColor } };
             dot.AddToClassList("dlg-varrow__dot");
             head.Add(dot);
-            var id = new TextField { value = quest.name, isDelayed = true, tooltip = "Quest id (conditions and actions use it)" };
+            var id = new TextField { value = quest.name, isDelayed = true, tooltip = "Quest id (dialogue, gameplay and saves use it)" };
             id.AddToClassList("dlg-questcard__id");
-            id.SetEnabled(m_Database.schemaSource == null); // a world's quest is renamed in the world
-            id.RegisterValueChangedCallback(evt => RenameQuest(index, evt.newValue));
+            id.SetEnabled(renamable); // a world's quest is renamed in the world
+            id.RegisterValueChangedCallback(evt => RenameQuest(list, index, evt.newValue));
             head.Add(id);
-            if (m_Database.schemaSource == null) head.Add(CompactField(prop.FindPropertyRelative(nameof(QuestDefinition.initialState)), "starts", 150));
-            head.Add(CompactField(prop.FindPropertyRelative(nameof(QuestDefinition.group)), "group", 140));
-            head.Add(CompactField(prop.FindPropertyRelative(nameof(QuestDefinition.trackWhenActive)), "track", 60));
+            if (showInitialState) head.Add(CompactField(list, prop.FindPropertyRelative(nameof(QuestDefinition.initialState)), "starts", 150));
+            head.Add(CompactField(list, prop.FindPropertyRelative(nameof(QuestDefinition.group)), "group", 140));
+            head.Add(CompactField(list, prop.FindPropertyRelative(nameof(QuestDefinition.trackWhenActive)), "track", 60));
             head.Add(new VisualElement { style = { flexGrow = 1 } });
             if (removable)
             {
                 var remove = new Button(() =>
                 {
                     if (EditorUtility.DisplayDialog("Remove quest", $"Remove '{quest.name}' and its journal?", "Remove", "Cancel"))
-                        Edit("Remove Quest", () => m_Database.quests.RemoveAt(index));
+                        EditQuests(list, "Remove Quest", () => list.Quests.RemoveAt(index));
                 }) { text = "✕", tooltip = "Remove" };
                 remove.AddToClassList("dlg-inspector__remove");
                 head.Add(remove);
             }
             card.Add(head);
 
-            card.Add(Bound(prop.FindPropertyRelative(nameof(QuestDefinition.title))));
-            card.Add(Bound(prop.FindPropertyRelative(nameof(QuestDefinition.summary))));
-            card.Add(Bound(prop.FindPropertyRelative(nameof(QuestDefinition.description))));
+            card.Add(Bound(prop.FindPropertyRelative(nameof(QuestDefinition.title)), list.Serialized));
+            card.Add(Bound(prop.FindPropertyRelative(nameof(QuestDefinition.summary)), list.Serialized));
+            card.Add(Bound(prop.FindPropertyRelative(nameof(QuestDefinition.description)), list.Serialized));
+
+            var goal = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+            goal.Add(CompactField(list, prop.FindPropertyRelative(nameof(QuestDefinition.goal)), "goal", 120));
+            if (quest.HasGoal)
+            {
+                goal.Add(CompactField(list, prop.FindPropertyRelative(nameof(QuestDefinition.completeAtGoal)), "complete at goal", 140));
+                var progression = new Button(() =>
+                {
+                    var menu = new GenericMenu();
+                    foreach (var type in DialogueRowGUI.ConcreteTypes(typeof(IQuestProgression)))
+                    {
+                        var t = type;
+                        menu.AddItem(new GUIContent(DialogueRowGUI.TypeLabel(t)), quest.progression?.GetType() == t, () =>
+                            EditQuests(list, "Change Quest Progression", () => quest.progression = (IQuestProgression)Activator.CreateInstance(t)));
+                    }
+                    menu.ShowAsContext();
+                }) { text = $"counts: {DialogueRowGUI.TypeLabel((quest.progression ?? new IncrementProgression()).GetType())} ▾", tooltip = "How a reported value changes the progress: add it (Increment) or keep the highest (Max Value)." };
+                progression.AddToClassList("dlg-questcard__progression");
+                goal.Add(progression);
+            }
+            else goal.Add(new Label("no counter (dialogue or code completes it)") { style = { color = new Color(0.6f, 0.62f, 0.68f), fontSize = 11, marginLeft = 6 } });
+            card.Add(goal);
 
             var steps = new Label("Steps") { tooltip = "Listed under the quest in the log and tracker. Each shows and ticks itself by conditions." };
             steps.AddToClassList("dlg-questcard__steps");
             card.Add(steps);
             var stepsProp = prop.FindPropertyRelative(nameof(QuestDefinition.steps));
-            for (int s = 0; s < quest.steps.Count; s++) card.Add(StepCard(index, s, stepsProp.GetArrayElementAtIndex(s)));
-            var addStep = new Button(() => Edit("Add Quest Step", () => m_Database.quests[index].steps.Add(new QuestStep()))) { text = "+ Add step" };
+            for (int s = 0; s < quest.steps.Count; s++) card.Add(StepCard(list, index, s, stepsProp.GetArrayElementAtIndex(s)));
+            var addStep = new Button(() => EditQuests(list, "Add Quest Step", () => list.Quests[index].steps.Add(new QuestStep()))) { text = "+ Add step" };
             addStep.AddToClassList("dlg-inspector__add");
             card.Add(addStep);
             return card;
         }
 
-        private VisualElement StepCard(int questIndex, int stepIndex, SerializedProperty stepProp)
+        private VisualElement StepCard(QuestList list, int questIndex, int stepIndex, SerializedProperty stepProp)
         {
             var box = new VisualElement();
             box.AddToClassList("dlg-line");
@@ -684,18 +762,21 @@ namespace ND.Dialogue.Editor
             number.AddToClassList("dlg-line__number");
             head.Add(number);
             head.Add(new VisualElement { style = { flexGrow = 1 } });
-            var remove = new Button(() => Edit("Remove Quest Step", () => m_Database.quests[questIndex].steps.RemoveAt(stepIndex))) { text = "✕", tooltip = "Remove this step" };
+            var remove = new Button(() => EditQuests(list, "Remove Quest Step", () => list.Quests[questIndex].steps.RemoveAt(stepIndex))) { text = "✕", tooltip = "Remove this step" };
             remove.AddToClassList("dlg-line__button");
             head.Add(remove);
             box.Add(head);
-            box.Add(Bound(stepProp.FindPropertyRelative(nameof(QuestStep.text))));
-            box.Add(ConditionList(stepProp.FindPropertyRelative(nameof(QuestStep.visibleWhen)), "Shown when (empty = always)"));
-            box.Add(ConditionList(stepProp.FindPropertyRelative(nameof(QuestStep.doneWhen)), "Done when (empty = when the quest is Completed)"));
+            box.Add(Bound(stepProp.FindPropertyRelative(nameof(QuestStep.text)), list.Serialized));
+            box.Add(ConditionList(list, stepProp.FindPropertyRelative(nameof(QuestStep.visibleWhen)), "Shown when (empty = always)"));
+            box.Add(ConditionList(list, stepProp.FindPropertyRelative(nameof(QuestStep.doneWhen)), "Done when (empty = when the quest is Completed)"));
             return box;
         }
 
-        /// <summary>A [SerializeReference] condition list: one row per condition (its drawer), ✕, and "+ condition".</summary>
-        private VisualElement ConditionList(SerializedProperty list, string title)
+        /// <summary>
+        /// A [SerializeReference] quest-condition list: one row per condition (its drawer), ✕, and "+ condition" with the
+        /// dialogue conditions and the quest conditions (state, progress).
+        /// </summary>
+        private VisualElement ConditionList(QuestList owner, SerializedProperty list, string title)
         {
             var box = new VisualElement();
             box.AddToClassList("dlg-condlist");
@@ -706,11 +787,11 @@ namespace ND.Dialogue.Editor
                 int index = i;
                 var row = new VisualElement();
                 row.AddToClassList("dlg-inspector__row");
-                row.Add(Bound(list.GetArrayElementAtIndex(i)));
+                row.Add(Bound(list.GetArrayElementAtIndex(i), owner.Serialized));
                 var remove = new Button(() =>
                 {
-                    Undo.RecordObject(m_Database, "Remove Condition");
-                    var so = new SerializedObject(m_Database);
+                    Undo.RecordObject(owner.Owner, "Remove Condition");
+                    var so = new SerializedObject(owner.Owner);
                     so.FindProperty(path).DeleteArrayElementAtIndex(index);
                     so.ApplyModifiedProperties();
                     DatabaseChanged?.Invoke();
@@ -726,41 +807,42 @@ namespace ND.Dialogue.Editor
             {
                 var menu = new GenericMenu();
                 foreach (var type in DialogueRowGUI.ConcreteTypes(typeof(DialogueCondition)))
-                {
-                    var t = type;
-                    menu.AddItem(new GUIContent(DialogueRowGUI.TypeLabel(t)), false, () =>
-                    {
-                        DialogueRowGUI.AppendManagedReference(m_Database, path, t);
-                        DatabaseChanged?.Invoke();
-                        Rebuild();
-                    });
-                }
+                    AddItem(type, string.Empty);
+                foreach (var type in DialogueRowGUI.ConcreteTypes(typeof(IQuestCondition)).Where(t => !typeof(DialogueCondition).IsAssignableFrom(t)))
+                    AddItem(type, "Quest/");
                 menu.ShowAsContext();
+
+                void AddItem(Type t, string folder) => menu.AddItem(new GUIContent(folder + DialogueRowGUI.TypeLabel(t)), false, () =>
+                {
+                    DialogueRowGUI.AppendManagedReference(owner.Owner, path, t);
+                    DatabaseChanged?.Invoke();
+                    Rebuild();
+                });
             };
             box.Add(add);
             return box;
         }
 
-        private VisualElement CompactField(SerializedProperty property, string label, float width)
+        private static VisualElement CompactField(QuestList list, SerializedProperty property, string label, float width)
         {
             var field = new PropertyField(property, label) { style = { width = width, marginLeft = 6 } };
             field.AddToClassList("dlg-compact");
-            field.Bind(m_Serialized);
+            field.Bind(list.Serialized);
             return field;
         }
 
-        private void RenameQuest(int index, string newName)
+        private void RenameQuest(QuestList list, int index, string newName)
         {
             newName = newName?.Trim();
-            var quest = m_Database.quests[index];
+            var quest = list.Quests[index];
             if (string.IsNullOrEmpty(newName) || newName == quest.name) return;
-            if (m_Database.FindQuest(newName) != null)
+            if (m_Database.FindQuest(newName) != null || list.Quests.Any(q => q != null && q.name == newName))
             {
                 Debug.LogWarning($"[Dialogue Editor] A quest named '{newName}' already exists.");
                 Rebuild();
                 return;
             }
-            Edit("Rename Quest", () => quest.name = newName);
+            EditQuests(list, "Rename Quest", () => quest.name = newName);
         }
 
         /// <summary>Names from a source no plugin can edit here: listed with colours, plus a way to the source asset.</summary>

@@ -14,6 +14,9 @@ namespace ND.Dialogue
     /// <summary>The string field names a conversation of the database (the editor shows a picker).</summary>
     public class DialogueConversationAttribute : PropertyAttribute { }
 
+    /// <summary>The string field names a bark conversation of the database (the editor lists only those marked Bark).</summary>
+    public class DialogueBarkConversationAttribute : PropertyAttribute { }
+
     /// <summary>The string field names an actor of the database (the editor shows a picker).</summary>
     public class DialogueActorAttribute : PropertyAttribute { }
 

@@ -37,8 +37,7 @@ MonoBehaviour:
       colorValue: {r: 0, g: 0, b: 0, a: 0}
       objectValue: {fileID: 0}
     description: 'How fed up this student is with Harry (hate). Malfoy''s: 6+ at
-      the interview gives the ''hostile'' ending; it changes how she greets him in
-      the hallway.'
+      the interview gives the ''hostile'' ending; it changes how she greets him.'
   references:
     version: 2
     RefIds: []

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ND.Quests;
 using UnityEngine;
 
 namespace ND.Dialogue
@@ -77,6 +78,31 @@ namespace ND.Dialogue
         }
 
         public override string Describe() => $"quest {quest} → {state}";
+    }
+
+    /// <summary>Reports progress to a quest with a goal (e.g. +1 "favours done"); see <see cref="QuestRuntime.ReportProgress"/>.</summary>
+    [Serializable]
+    public class ReportQuestProgressAction : DialogueAction
+    {
+        [DialogueQuest] public string quest;
+        public int amount = 1;
+
+        public override void Execute(IDialogueContext context)
+        {
+            if (!(context is IDialogueQuestHost host) || host.Quests == null)
+            {
+                Debug.LogError($"[Dialogue] Action '{Describe()}': the world has no quest runtime (context {context?.GetType().Name}).");
+                return;
+            }
+            host.Quests.ReportProgress(quest, amount); // not Active: ignored (normal flow)
+        }
+
+        public override void Validate(IDialogueSchema schema, string where, List<string> issues)
+        {
+            if (!schema.HasQuest(quest)) issues.Add($"{where}: action uses unknown quest '{quest}'.");
+        }
+
+        public override string Describe() => $"quest {quest} progress {(amount >= 0 ? "+" : string.Empty)}{amount}";
     }
 
     /// <summary>Fires a named gameplay event (listen on <see cref="DialogueWorld.EventRaised"/> or your own context).</summary>

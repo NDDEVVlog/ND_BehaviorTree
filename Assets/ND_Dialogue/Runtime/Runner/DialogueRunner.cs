@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using ND.Quests;
 using UnityEngine;
 
 namespace ND.Dialogue
@@ -22,9 +23,11 @@ namespace ND.Dialogue
         public readonly int LineIndex;
         /// <summary>How many lines the entry shows.</summary>
         public readonly int LineCount;
+        /// <summary>The line's voice-over (null = none).</summary>
+        public readonly AudioClip Voice;
         private readonly string m_SpeakerName;
 
-        public DialogueLine(Conversation conversation, DialogueEntry entry, Actor speaker, ActorEmotion emotion, string text, int lineIndex = 0, int lineCount = 1, string speakerName = null)
+        public DialogueLine(Conversation conversation, DialogueEntry entry, Actor speaker, ActorEmotion emotion, string text, int lineIndex = 0, int lineCount = 1, string speakerName = null, AudioClip voice = null)
         {
             Conversation = conversation;
             Entry = entry;
@@ -34,6 +37,7 @@ namespace ND.Dialogue
             LineIndex = lineIndex;
             LineCount = lineCount;
             m_SpeakerName = speakerName;
+            Voice = voice;
         }
 
         /// <summary>The speaker's name as shown in this database (its look's name, else the character's display name).</summary>
@@ -111,6 +115,9 @@ namespace ND.Dialogue
         /// dialogue without it (the editor's test chat) read the table directly for one locale.
         /// </summary>
         public Func<ND.Localization.LocalizableString, string> TextResolver { get; set; }
+
+        /// <summary>Optional: how localized voice clips are read (default: the running localization). The editor reads the table for one locale.</summary>
+        public Func<ND.Localization.LocalizedAudioClip, AudioClip> VoiceResolver { get; set; }
 
         /// <summary>Entries seen so far (shown, or chosen by the player). Part of a save.</summary>
         public DialogueMemory Memory { get; }
@@ -254,7 +261,7 @@ namespace ND.Dialogue
         }
 
         /// <summary>The runner's context for conditions/actions: the world, plus what the runner remembers.</summary>
-        private sealed class RunnerContext : IDialogueContext, IDialogueMemory, IDialogueConversationLookup
+        private sealed class RunnerContext : IDialogueContext, IDialogueMemory, IDialogueConversationLookup, IDialogueQuestHost
         {
             private readonly DialogueRunner m_Runner;
             public RunnerContext(DialogueRunner runner) { m_Runner = runner; }
@@ -266,6 +273,7 @@ namespace ND.Dialogue
             public void RaiseEvent(string eventName, string argument) => m_Runner.m_Context.RaiseEvent(eventName, argument);
             public bool WasSeen(int conversationId, int entryId) => m_Runner.Memory.WasSeen(conversationId, entryId);
             public int CurrentConversationId => m_Runner.m_Conversation != null ? m_Runner.m_Conversation.id : 0;
+            public QuestRuntime Quests => (m_Runner.m_Context as IDialogueQuestHost)?.Quests;
 
             public bool TryGetConversationId(string title, out int conversationId)
             {
@@ -283,7 +291,8 @@ namespace ND.Dialogue
         /// Does not touch the conversation being played (use a separate runner for barks during a conversation).
         /// </summary>
         /// <param name="sequence">For <see cref="BarkOrder.Sequential"/>: the caller's counter, advanced on each bark.</param>
-        public List<DialogueLine> Bark(int conversationId, BarkOrder order, ref int sequence)
+        /// <param name="avoidEntryId">For <see cref="BarkOrder.Random"/>: an entry not to pick when another one is valid (e.g. the last bark).</param>
+        public List<DialogueLine> Bark(int conversationId, BarkOrder order, ref int sequence, int avoidEntryId = -1)
         {
             var lines = new List<DialogueLine>();
             if (m_Database == null || m_Context == null)
@@ -311,7 +320,10 @@ namespace ND.Dialogue
             int index;
             switch (order)
             {
-                case BarkOrder.Random: index = UnityEngine.Random.Range(0, candidates.Count); break;
+                case BarkOrder.Random: 
+                    if (candidates.Count > 1 && avoidEntryId >= 0) candidates.RemoveAll(c => c.entry.id == avoidEntryId && c.conversation.id == conversationId); // one match at most: one candidate stays
+                    index = UnityEngine.Random.Range(0, candidates.Count);
+                    break;
                 case BarkOrder.Sequential: index = Mathf.Abs(sequence++) % candidates.Count; break;
                 default: index = 0; break;
             }
@@ -335,7 +347,7 @@ namespace ND.Dialogue
             Memory.MarkSeen(barkConversation.id, entry.id);
             for (int i = 0; i < entry.LineCount; i++)
                 lines.Add(new DialogueLine(barkConversation, entry, speaker, m_Database.FindEmotion(speaker, entry.LineEmotion(i)),
-                    ResolveText(entry.LineText(i), barkConversation, entry), i, entry.LineCount, m_Database.DisplayNameOf(speaker)));
+                    ResolveText(entry.LineText(i), barkConversation, entry), i, entry.LineCount, m_Database.DisplayNameOf(speaker), entry.LineVoice(i, VoiceResolver)));
             Barked?.Invoke(lines);
             return lines;
         }
@@ -384,7 +396,7 @@ namespace ND.Dialogue
         private void ShowLine(Conversation conversation, DialogueEntry entry, Actor speaker, int index)
         {
             var line = new DialogueLine(conversation, entry, speaker, m_Database.FindEmotion(speaker, entry.LineEmotion(index)),
-                ResolveText(entry.LineText(index), conversation, entry), index, entry.LineCount, m_Database.DisplayNameOf(speaker));
+                ResolveText(entry.LineText(index), conversation, entry), index, entry.LineCount, m_Database.DisplayNameOf(speaker), entry.LineVoice(index, VoiceResolver));
             CurrentLine = line;
             State = DialogueRunnerState.ShowingLine;
             LineStarted?.Invoke(line);

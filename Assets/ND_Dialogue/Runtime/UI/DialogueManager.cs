@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ND.Quests;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,6 +25,8 @@ namespace ND.Dialogue
         [SerializeField] private DialogueDatabase m_Database;
         [Tooltip("Shows the conversation. Empty = no view (drive the runner yourself).")]
         [SerializeField] private DialogueViewBase m_View;
+        [Tooltip("The scene's quests, shared with every other system (gameplay, UI, saves). Empty = this manager keeps its database's quests to itself.")]
+        [SerializeField] private QuestManager m_QuestManager;
         [Tooltip("Started when the scene starts (empty = none).")]
         [SerializeField] private string m_StartConversation;
 
@@ -53,8 +56,9 @@ namespace ND.Dialogue
         public DialogueDatabase Database => m_Database;
         public IDialogueContext Context { get; private set; }
         public DialogueRunner Runner { get; private set; }
-        /// <summary>The player's quest journal over this manager's world (quest log and tracker UIs read it).</summary>
-        public QuestLog QuestLog { get; private set; }
+        /// <summary>The quests dialogue reads and writes: the Quest Manager's runtime, else this manager's own.</summary>
+        public QuestRuntime Quests { get; private set; }
+        public QuestManager QuestManager => m_QuestManager;
         /// <summary>Says barks (<see cref="Bark"/>): same world and memory as <see cref="Runner"/>, never blocks it.</summary>
         public DialogueRunner BarkRunner { get; private set; }
         public DialogueViewBase View => m_View;
@@ -78,7 +82,17 @@ namespace ND.Dialogue
                 Debug.LogError($"{LogTag} '{name}': no Dialogue Database assigned.", this);
                 return false;
             }
-            Context = m_Database.CreateContext();
+            QuestRuntime shared = null;
+            if (m_QuestManager != null)
+            {
+                if (!m_QuestManager.Initialize())
+                {
+                    Debug.LogError($"{LogTag} '{name}': Quest Manager '{m_QuestManager.name}' is not ready (state={m_QuestManager.State}).", this);
+                    return false;
+                }
+                shared = m_QuestManager.Runtime;
+            }
+            Context = m_Database.CreateContext(shared);
             if (Context == null)
             {
                 Debug.LogError($"{LogTag} '{name}': the database's schema source returned no context.", this);
@@ -86,7 +100,8 @@ namespace ND.Dialogue
             }
             Runner = new DialogueRunner(m_Database, Context);
             BarkRunner = new DialogueRunner(m_Database, Context, null, Runner.Memory); // barks during a conversation too
-            QuestLog = new QuestLog(m_Database, Context, Runner.Memory);
+            Quests = (Context as IDialogueQuestHost)?.Quests;
+            if (Quests != null) Quests.ConditionWorld = new DialogueConditionWorld(Context, Runner.Memory); // quest steps may use Entry Seen
             Runner.ConversationEnded += OnRunnerEnded;
             Runner.LineStarted += OnRunnerLine;
             State = DialogueManagerState.Ready;
@@ -105,7 +120,8 @@ namespace ND.Dialogue
                 Runner.ConversationEnded -= OnRunnerEnded;
                 Runner.LineStarted -= OnRunnerLine;
             }
-            QuestLog?.Dispose();
+            if (Quests != null && Quests.ConditionWorld is DialogueConditionWorld world && world.Inner == Context) Quests.ConditionWorld = null;
+            (Context as IDisposable)?.Dispose(); // stop listening to a shared quest runtime
             if (m_View != null) m_View.Detach();
         }
 
@@ -166,7 +182,6 @@ namespace ND.Dialogue
                 return null;
             }
             var data = DialogueSaveSystem.Capture(m_Database, Context, Runner.Memory, Runner);
-            if (data != null && QuestLog != null) data.trackedQuests.AddRange(QuestLog.TrackedQuests);
             if (data != null) SaveData = data;
             return data;
         }
@@ -183,13 +198,7 @@ namespace ND.Dialogue
                 return false;
             }
             StopConversation();
-            if (QuestLog != null) QuestLog.Quiet = true;
-            DialogueSaveSystem.Apply(m_Database, Context, Runner.Memory, data);
-            if (QuestLog != null)
-            {
-                QuestLog.SetTracked(data.trackedQuests);
-                QuestLog.Quiet = false; // no "quest started" toasts for loaded states
-            }
+            DialogueSaveSystem.Apply(m_Database, Context, Runner.Memory, data); // quests: no "quest started" while loading
             SaveData = data;
             if (data.position != null && data.position.active) Resume(data.position);
             return true;
@@ -241,7 +250,7 @@ namespace ND.Dialogue
         /// Picks and says a bark of <paramref name="conversationTitle"/> (see <see cref="DialogueRunner.Bark"/>): returns its
         /// lines for a bark UI, or an empty list when no line is valid now. Logged when not ready or the title is unknown.
         /// </summary>
-        public List<DialogueLine> Bark(string conversationTitle, BarkOrder order, ref int sequence)
+        public List<DialogueLine> Bark(string conversationTitle, BarkOrder order, ref int sequence, int avoidEntryId = -1)
         {
             if (!IsReady)
             {
@@ -254,8 +263,8 @@ namespace ND.Dialogue
                 Debug.LogError($"{LogTag} {nameof(Bark)} rejected: no conversation titled '{conversationTitle}' in '{m_Database.name}'.", this);
                 return new List<DialogueLine>();
             }
-            var lines = BarkRunner.Bark(conversation.id, order, ref sequence);
-            if (lines.Count > 0) QuestLog?.Refresh(); // a bark's actions may move quests
+            var lines = BarkRunner.Bark(conversation.id, order, ref sequence, avoidEntryId);
+            if (lines.Count > 0) Quests?.MarkDirty(); // a bark's actions may move quests
             return lines;
         }
 
@@ -270,7 +279,7 @@ namespace ND.Dialogue
         private void OnRunnerEnded(Conversation conversation)
         {
             if (m_View != null) m_View.Detach();
-            QuestLog?.Refresh(); // for worlds that cannot report changes themselves
+            Quests?.MarkDirty(); // for worlds that cannot report changes themselves
             ConversationEnded?.Invoke(conversation);
             m_OnConversationEnded.Invoke();
         }

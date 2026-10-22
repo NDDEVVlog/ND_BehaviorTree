@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46ad8566cb88a7c49a9c5f35db2f88d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ND.Dialogue.Editor::ND.Dialogue.Editor.DialogueProjectSettings
+  aiFeaturesEnabled: 1
+  aiAccessLevel: 2
+  aiPasswordSalt: RlhP2BoE5N9b6qMKbpiHFQ==
+  aiPasswordHash: JG+WhEs2EU3BE8v521aMhB8erCXbVVHUpxEFtPmKRa0=
+  aiBridgePort: 39878

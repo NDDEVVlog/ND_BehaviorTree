@@ -2,11 +2,13 @@
     "name": "ND.Dialogue.Editor",
     "rootNamespace": "ND.Dialogue.Editor",
     "references": [
+        "ND.Quests",
         "ND.Dialogue",
         "ND.Localization",
         "ND.Localization.Editor",
         "ND.GraphUI",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

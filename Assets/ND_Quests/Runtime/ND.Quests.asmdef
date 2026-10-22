@@ -1,0 +1,17 @@
+{
+    "name": "ND.Quests",
+    "rootNamespace": "ND.Quests",
+    "references": [
+        "ND.Localization",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

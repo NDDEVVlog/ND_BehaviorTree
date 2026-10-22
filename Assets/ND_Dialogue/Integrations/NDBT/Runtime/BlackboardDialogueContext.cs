@@ -1,5 +1,6 @@
 using System;
 using ND_BehaviorTree;
+using ND.Quests;
 using UnityEngine;
 
 namespace ND.Dialogue.NDBT
@@ -8,7 +9,8 @@ namespace ND.Dialogue.NDBT
     /// Dialogue world state backed by an ND_BehaviorTree <see cref="Blackboard"/> — the same values agents read.
     /// <list type="bullet">
     /// <item>Variables are keys of type bool / int / float / string / Vector2 / Vector3 / Color / object, found by name (the parent chain included).</item>
-    /// <item>A quest is an int key named <c>quest.&lt;name&gt;</c> holding a <see cref="QuestState"/> value.</item>
+    /// <item>Quests live in a <see cref="QuestRuntime"/> (a scene's QuestManager's, or its own). An int key named
+    /// <c>quest.&lt;name&gt;</c> mirrors a quest's <see cref="QuestState"/> both ways, so agents read it and may set it.</item>
     /// <item>Change notifications come from <see cref="Blackboard.KeyChanged"/> on the runtime blackboard.</item>
     /// <item>Character attributes (<c>Guard.trust</c>, when a database is given): a <see cref="BlackboardActor"/>'s live in
     /// its own blackboard (<see cref="BlackboardActor.RuntimeBlackboard"/>); a plain actor's are world keys with the full
@@ -16,7 +18,7 @@ namespace ND.Dialogue.NDBT
     /// </list>
     /// Use the shared world instance (<see cref="ForWorld"/>) so dialogue and every agent see one set of values.
     /// </summary>
-    public class BlackboardDialogueContext : IDialogueContext, IDialogueSchema, IObservableDialogueContext
+    public class BlackboardDialogueContext : IDialogueContext, IDialogueSchema, IObservableDialogueContext, IDialogueQuestHost, IDisposable
     {
         private const string LogTag = "[BlackboardDialogueContext]";
         public const string DefaultQuestPrefix = "quest.";
@@ -57,8 +59,10 @@ namespace ND.Dialogue.NDBT
         }
 
         /// <param name="blackboard">A runtime blackboard (or an asset in editor tooling: writes would then change the asset).</param>
-        public BlackboardDialogueContext(Blackboard blackboard, string questKeyPrefix = DefaultQuestPrefix, DialogueDatabase database = null)
+        /// <param name="quests">The quests to use (a scene's QuestManager); null = its own runtime, made on first use.</param>
+        public BlackboardDialogueContext(Blackboard blackboard, string questKeyPrefix = DefaultQuestPrefix, DialogueDatabase database = null, QuestRuntime quests = null)
         {
+            m_SharedQuests = quests;
             if (blackboard == null) Debug.LogError($"{LogTag} Created without a blackboard: every variable lookup will fail.");
             Blackboard = blackboard;
             QuestKeyPrefix = questKeyPrefix ?? string.Empty;
@@ -66,8 +70,8 @@ namespace ND.Dialogue.NDBT
         }
 
         /// <summary>Context over the play-session instance of a shared world blackboard asset.</summary>
-        public static BlackboardDialogueContext ForWorld(Blackboard worldAsset, string questKeyPrefix = DefaultQuestPrefix, DialogueDatabase database = null) =>
-            new BlackboardDialogueContext(SharedBlackboards.GetRuntime(worldAsset), questKeyPrefix, database);
+        public static BlackboardDialogueContext ForWorld(Blackboard worldAsset, string questKeyPrefix = DefaultQuestPrefix, DialogueDatabase database = null, QuestRuntime quests = null) =>
+            new BlackboardDialogueContext(SharedBlackboards.GetRuntime(worldAsset), questKeyPrefix, database, quests);
 
         /// <summary>Reads a bool / int / float / string / Vector2 / Vector3 / Color / object key as a <see cref="VariableValue"/>; false for other key types.</summary>
         /// <summary>The boxed value to write into <paramref name="key"/>; false when an object does not fit the key's type (e.g. a Material into a Transform key).</summary>
@@ -92,6 +96,17 @@ namespace ND.Dialogue.NDBT
         {
             value = default;
             if (key == null || !TryMapType(key.GetValueType(), out var type)) return false;
+            // Typed keys are read without boxing (conditions poll them every frame).
+            switch (key)
+            {
+                case Key<bool> b: value = VariableValue.Bool(b.GetValue()); return true;
+                case Key<int> i: value = VariableValue.Int(i.GetValue()); return true;
+                case Key<float> f: value = VariableValue.Float(f.GetValue()); return true;
+                case Key<Vector2> v2: value = VariableValue.Vector2(v2.GetValue()); return true;
+                case Key<Vector3> v3: value = VariableValue.Vector3(v3.GetValue()); return true;
+                case Key<Color> c: value = VariableValue.Color(c.GetValue()); return true;
+                case Key<string> s: value = VariableValue.String(s.GetValue()); return true;
+            }
             object raw = key.GetValueObject();
             switch (type)
             {
@@ -123,16 +138,40 @@ namespace ND.Dialogue.NDBT
             return false;
         }
 
+        // Variable name → the Blackboard Actor and attribute it names (null actor: a world key). Resolving allocates
+        // (substrings, attribute lists), and conditions are polled every frame, so it is done once per name. The runtime
+        // board itself is looked up each time: agents bind and unbind it.
+        private readonly System.Collections.Generic.Dictionary<string, (BlackboardActor actor, string attribute)> m_AttributeOf =
+            new System.Collections.Generic.Dictionary<string, (BlackboardActor actor, string attribute)>();
+
+        private bool TryResolveBlackboardAttribute(string variableName, out BlackboardActor actor, out string attribute)
+        {
+            if (!m_AttributeOf.TryGetValue(variableName, out var resolved))
+            {
+                resolved = Database != null && Database.TryResolveAttribute(variableName, out var found, out var definition) && found is BlackboardActor blackboardActor
+                    ? (blackboardActor, definition.name)
+                    : (null, null);
+                m_AttributeOf[variableName] = resolved;
+            }
+            (actor, attribute) = resolved;
+            return actor != null;
+        }
+
         private bool TryFindVariableKey(string variableName, out Key key, out VariableType type)
         {
             type = default;
             key = null;
-            if (Database != null && Database.TryResolveAttribute(variableName, out var actor, out var attribute) && actor is BlackboardActor blackboardActor)
+            if (variableName == null)
+            {
+                Debug.LogError($"{LogTag} Variable name is null.");
+                return false;
+            }
+            if (TryResolveBlackboardAttribute(variableName, out var blackboardActor, out var attribute))
             {
                 var board = blackboardActor.RuntimeBlackboard();
-                if (board == null || !board.TryGetKey(attribute.name, out key))
+                if (board == null || !board.TryGetKey(attribute, out key))
                 {
-                    Debug.LogError($"{LogTag} Attribute '{variableName}': character '{actor.name}' has no runtime blackboard with key '{attribute.name}'.");
+                    Debug.LogError($"{LogTag} Attribute '{variableName}': character '{blackboardActor.name}' has no runtime blackboard with key '{attribute}'.");
                     return false;
                 }
             }
@@ -177,7 +216,7 @@ namespace ND.Dialogue.NDBT
             }
             key.SetValueObject(boxed);
             // A Blackboard Actor's attribute lives on its own board (not the world board we listen to): report it here.
-            if (Database != null && Database.TryResolveAttribute(variableName, out var owner, out _) && owner is BlackboardActor) m_StateChanged?.Invoke(variableName, false);
+            if (TryResolveBlackboardAttribute(variableName, out _, out _)) m_StateChanged?.Invoke(variableName, false);
             return true;
         }
 
@@ -207,39 +246,92 @@ namespace ND.Dialogue.NDBT
 
         public string QuestKeyName(string questName) => QuestKeyPrefix + questName;
 
-        private bool TryFindQuestKey(string questName, out IntKey key)
+        private readonly QuestRuntime m_SharedQuests;
+        private QuestRuntime m_Quests;
+        private bool m_Mirroring;
+
+        /// <summary>
+        /// The quests (made on first use): the given runtime, else one of this context. Every <c>quest.x</c> key is a
+        /// quest; a runtime that already knows it writes its state into the key, otherwise the key's value is the start
+        /// state. The database's quests add their journals. From then on key and quest follow each other.
+        /// </summary>
+        public QuestRuntime Quests
         {
-            key = null;
-            string keyName = QuestKeyName(questName);
-            if (Blackboard == null || !Blackboard.TryGetKey(keyName, out var found))
+            get
             {
-                Debug.LogError($"{LogTag} Unknown quest '{questName}': no int key '{keyName}'.");
-                return false;
+                if (m_Quests != null) return m_Quests;
+                m_Quests = m_SharedQuests ?? new QuestRuntime();
+                if (m_Quests.ConditionWorld == null) m_Quests.ConditionWorld = this;
+                if (Blackboard != null)
+                {
+                    foreach (var key in Blackboard.AllKeys)
+                    {
+                        if (!(key is IntKey intKey) || !IsQuestKeyName(key.keyName)) continue;
+                        string questName = key.keyName.Substring(QuestKeyPrefix.Length);
+                        if (m_Quests.Has(questName)) WriteKey(intKey, m_Quests.TryGetState(questName, out var state) ? state : QuestState.Inactive);
+                        else if (TryReadState(intKey, questName, out var initial)) m_Quests.RegisterId(questName, initial, Blackboard.name);
+                    }
+                    Blackboard.KeyChanged += OnQuestKeyChanged;
+                }
+                if (Database != null) m_Quests.Register(Database.AllQuests, Database.name);
+                m_Quests.StateChanged += OnQuestStateChanged;
+                return m_Quests;
             }
-            key = found as IntKey;
-            if (key == null) Debug.LogError($"{LogTag} Quest key '{keyName}' is {found.GetValueType().Name}; it must be an int key.");
-            return key != null;
+        }
+
+        /// <summary>Stops the key ↔ quest mirroring (call it when a shared runtime outlives this context).</summary>
+        public void Dispose()
+        {
+            if (m_Quests == null) return;
+            m_Quests.StateChanged -= OnQuestStateChanged;
+            if (Blackboard != null) Blackboard.KeyChanged -= OnQuestKeyChanged;
+            if (m_Quests.ConditionWorld == this) m_Quests.ConditionWorld = null;
         }
 
         public bool TryGetQuestState(string questName, out QuestState state)
         {
             state = default;
-            if (!TryFindQuestKey(questName, out var key)) return false;
-            int raw = key.GetValue();
-            if (!Enum.IsDefined(typeof(QuestState), raw))
-            {
-                Debug.LogError($"{LogTag} Quest '{questName}' holds {raw}, which is not a {nameof(QuestState)}.");
-                return false;
-            }
-            state = (QuestState)raw;
-            return true;
+            var quests = Quests;
+            // A quest key holding no QuestState was reported when the quests were read; it is not a quest.
+            if (!quests.Has(questName) && Blackboard != null && Blackboard.TryGetKey(QuestKeyName(questName), out var key) && key is IntKey) return false;
+            return quests.TryGetState(questName, out state);
         }
 
-        public bool SetQuestState(string questName, QuestState state)
+        public bool SetQuestState(string questName, QuestState state) => Quests.SetState(questName, state);
+
+        /// <summary>A quest moved: its key follows (agents read it).</summary>
+        private void OnQuestStateChanged(QuestInfo quest, QuestState from, QuestState to)
         {
-            if (!TryFindQuestKey(questName, out var key)) return false;
-            key.SetValue((int)state);
-            return true;
+            if (m_Mirroring || Blackboard == null || !Blackboard.TryGetKey(QuestKeyName(quest.Name), out var key) || !(key is IntKey intKey)) return;
+            WriteKey(intKey, to);
+        }
+
+        /// <summary>An agent wrote a quest key: the quest follows.</summary>
+        private void OnQuestKeyChanged(Key key)
+        {
+            if (m_Mirroring || !(key is IntKey intKey) || !IsQuestKeyName(key.keyName)) return;
+            string questName = key.keyName.Substring(QuestKeyPrefix.Length);
+            if (!m_Quests.Has(questName) || !TryReadState(intKey, questName, out var state)) return;
+            m_Mirroring = true;
+            try { m_Quests.SetState(questName, state); }
+            finally { m_Mirroring = false; }
+        }
+
+        private void WriteKey(IntKey key, QuestState state)
+        {
+            if (key.GetValue() == (int)state) return;
+            m_Mirroring = true;
+            try { key.SetValue((int)state); }
+            finally { m_Mirroring = false; }
+        }
+
+        private bool TryReadState(IntKey key, string questName, out QuestState state)
+        {
+            int raw = key.GetValue();
+            state = (QuestState)raw;
+            if (Enum.IsDefined(typeof(QuestState), raw)) return true;
+            Debug.LogError($"{LogTag} Quest '{questName}' holds {raw}, which is not a {nameof(QuestState)}.");
+            return false;
         }
 
         public bool HasQuest(string questName) =>

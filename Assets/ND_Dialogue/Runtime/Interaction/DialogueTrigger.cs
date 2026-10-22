@@ -100,19 +100,25 @@ namespace ND.Dialogue
         /// Whether <see cref="Fire"/> would start the conversation now. Never logs (interactors poll it every frame);
         /// <paramref name="reason"/> says why not.
         /// </summary>
-        public bool CanFire(out string reason)
+        public bool CanFire(out string reason) => Check(true, out reason);
+
+        /// <summary><see cref="CanFire(out string)"/> without building the reason: no allocation (polled every frame).</summary>
+        public bool CanFire() => Check(false, out _);
+
+        private bool Check(bool explain, out string reason)
         {
+            reason = null;
             if (m_Manager == null) { reason = "no manager"; return false; }
-            if (!m_Manager.IsReady) { reason = $"manager state={m_Manager.State}"; return false; }
+            if (!m_Manager.IsReady) { if (explain) reason = $"manager state={m_Manager.State}"; return false; }
             if (m_Manager.IsTalking) { reason = "already talking"; return false; }
             if (m_Once && m_Fired) { reason = "already used (once)"; return false; }
             if (string.IsNullOrEmpty(m_Conversation)) { reason = "no conversation"; return false; }
-            foreach (var condition in m_Conditions)
+            for (int i = 0; i < m_Conditions.Count; i++)
             {
+                var condition = m_Conditions[i];
                 if (condition == null) continue;
-                if (!condition.Evaluate(m_Manager.Context)) { reason = $"condition failed: {condition.Describe()}"; return false; }
+                if (!condition.Evaluate(m_Manager.Context)) { if (explain) reason = $"condition failed: {condition.Describe()}"; return false; }
             }
-            reason = null;
             return true;
         }
 
@@ -139,6 +145,8 @@ namespace ND.Dialogue
             if (m_Manager == null) Debug.LogWarning($"{LogTag} '{name}': assign the Dialogue Manager.", this);
             else if (Database != null && !string.IsNullOrEmpty(m_Conversation) && Database.FindConversation(m_Conversation) == null)
                 Debug.LogWarning($"{LogTag} '{name}': no conversation titled '{m_Conversation}' in '{Database.name}'.", this);
+            else if (Database != null && Database.FindConversation(m_Conversation) is Conversation c && c.isBark)
+                Debug.LogWarning($"{LogTag} '{name}': '{m_Conversation}' is a bark conversation (said in passing by a Dialogue Barker), not one to talk through.", this);
         }
 
         private void OnDrawGizmosSelected()

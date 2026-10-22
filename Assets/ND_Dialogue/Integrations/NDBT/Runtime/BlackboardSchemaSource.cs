@@ -1,4 +1,5 @@
 using ND_BehaviorTree;
+using ND.Quests;
 using UnityEngine;
 
 namespace ND.Dialogue.NDBT
@@ -22,14 +23,14 @@ namespace ND.Dialogue.NDBT
         public override IDialogueSchema Schema =>
             blackboard != null ? new BlackboardDialogueContext(blackboard, questKeyPrefix) : Empty;
 
-        public override IDialogueContext CreateContext(DialogueDatabase database)
+        public override IDialogueContext CreateContext(DialogueDatabase database, QuestRuntime quests = null)
         {
             if (blackboard == null)
             {
                 Debug.LogError($"[BlackboardSchemaSource] '{name}' has no blackboard assigned.", this);
                 return null;
             }
-            return BlackboardDialogueContext.ForWorld(blackboard, questKeyPrefix, database);
+            return BlackboardDialogueContext.ForWorld(blackboard, questKeyPrefix, database, quests);
         }
 
 #if UNITY_EDITOR

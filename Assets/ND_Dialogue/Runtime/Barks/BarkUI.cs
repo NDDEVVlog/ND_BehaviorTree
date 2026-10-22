@@ -81,7 +81,7 @@ namespace ND.Dialogue
         {
             m_Index = index;
             var line = m_Lines[index];
-            UIText.Set(m_Text, line.Text);
+            UIText.Set(m_Text, LineTimeline.Final(line.Text));
             if (m_Speaker != null) UIText.Set(m_Speaker, line.SpeakerName);
             m_HideAt = DurationOf(line.Text);
             m_Root.SetActive(true);

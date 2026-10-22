@@ -1,0 +1,7194 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e63697bee4f8f924aa1ccb9be1b1104c, type: 3}
+  m_Name: MalfoySaga_Dialogue
+  m_EditorClassIdentifier: ND.Dialogue::ND.Dialogue.DialogueDatabase
+  textTable: {fileID: 0}
+  schemaSource: {fileID: 0}
+  runnerOptions:
+    showPlayerLines: 1
+    alwaysShowChoiceMenu: 1
+    maxSilentSteps: 100
+  actors:
+  - rid: 3058894633377726586
+  - rid: 3058894633377726587
+  - rid: 3058894633377726588
+  - rid: 3058894633377726589
+  characterDatabases:
+  - {fileID: 11400000, guid: c7e8dce0e663e2245b311593e075e219, type: 2}
+  looks: []
+  variables:
+  - name: saga.chapter
+    initialValue:
+      type: 1
+      boolValue: 0
+      intValue: 1
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 
+  - name: yule.asked
+    initialValue:
+      type: 0
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 
+  - name: yule.crane_answered
+    initialValue:
+      type: 0
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 
+  - name: yule.partner
+    initialValue:
+      type: 0
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 
+  - name: yule.ferret
+    initialValue:
+      type: 0
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 
+  - name: yule.forgiven
+    initialValue:
+      type: 0
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 
+  - name: yule.danced
+    initialValue:
+      type: 0
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 
+  - name: frog.found
+    initialValue:
+      type: 0
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 
+  questDatabases:
+  - {fileID: 11400000, guid: 9aaa30c59f6f7d8498d18d11f47067aa, type: 2}
+  quests: []
+  events:
+  - name: ending_together
+    argumentHint: 
+    description: Malfoy admits it.
+  - name: ending_rivals
+    argumentHint: 
+    description: Still 'rivals'. For now.
+  - name: yule_dance
+    argumentHint: 
+    description: 'The dance starts: music, lights.'
+  - name: ending_hostile
+    argumentHint: 
+    description: She means it. This time.
+  conversations:
+  - id: 1
+    title: 1. First Meet
+    description: Madam Malkin's, then the Great Hall. Will Harry take her hand this
+      time?
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726590
+    - rid: 3058894633377726591
+    - rid: 3058894633377726592
+    - rid: 3058894633377726593
+    - rid: 3058894633377726594
+    - rid: 3058894633377726595
+    - rid: 3058894633377726596
+    - rid: 3058894633377726597
+    - rid: 3058894633377726598
+    - rid: 3058894633377726599
+    - rid: 3058894633377726600
+    - rid: 3058894633377726601
+    - rid: 3058894633377726602
+    - rid: 3058894633377726603
+    - rid: 3058894633377726604
+    - rid: 3058894633377726605
+    - rid: 3058894633377726606
+    - rid: 3058894633377726607
+    m_LegacyEntries: []
+    m_NextEntryId: 18
+  - id: 2
+    title: 2. Flying Lesson
+    description: Harry is a natural on a broom. Malfoy is... not taking it well.
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726608
+    - rid: 3058894633377726609
+    - rid: 3058894633377726610
+    - rid: 3058894633377726611
+    - rid: 3058894633377726612
+    - rid: 3058894633377726613
+    - rid: 3058894633377726614
+    - rid: 3058894633377726615
+    - rid: 3058894633377726616
+    - rid: 3058894633377726617
+    - rid: 3058894633377726618
+    - rid: 3058894633377726619
+    m_LegacyEntries: []
+    m_NextEntryId: 12
+  - id: 3
+    title: 3. Forbidden Forest
+    description: Detention in the Forbidden Forest. Someone is very brave. Out loud.
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726620
+    - rid: 3058894633377726621
+    - rid: 3058894633377726622
+    - rid: 3058894633377726623
+    - rid: 3058894633377726624
+    - rid: 3058894633377726625
+    m_LegacyEntries: []
+    m_NextEntryId: 6
+  - id: 4
+    title: 4. The Dark Lord's Mission
+    description: Orders are orders. Surveillance is surveillance. Treacle tart is...
+      surveillance.
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726626
+    - rid: 3058894633377726627
+    - rid: 3058894633377726628
+    - rid: 3058894633377726629
+    - rid: 3058894633377726630
+    - rid: 3058894633377726631
+    - rid: 3058894633377726632
+    - rid: 3058894633377726633
+    - rid: 3058894633377726634
+    - rid: 3058894633377726635
+    - rid: 3058894633377726636
+    - rid: 3058894633377726637
+    m_LegacyEntries: []
+    m_NextEntryId: 12
+  - id: 5
+    title: '5. Yule Ball: The Invitation'
+    description: Harry asks; Malfoy refuses (after @lattekoi5252). Starts the quest.
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726638
+    - rid: 3058894633377726639
+    - rid: 3058894633377726640
+    - rid: 3058894633377726641
+    - rid: 3058894633377726642
+    - rid: 3058894633377726643
+    - rid: 3058894633377726644
+    m_LegacyEntries: []
+    m_NextEntryId: 7
+  - id: 6
+    title: '5. Yule Ball: The Paper Crane'
+    description: In class a paper crane lands on Harry's desk (after @Hagane666;
+      her answer after @lattekoi5252).
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726645
+    - rid: 3058894633377726646
+    - rid: 3058894633377726647
+    - rid: 3058894633377726648
+    - rid: 3058894633377726649
+    - rid: 3058894633377726650
+    - rid: 3058894633377726651
+    - rid: 3058894633377726652
+    - rid: 3058894633377726653
+    m_LegacyEntries: []
+    m_NextEntryId: 9
+  - id: 7
+    title: '5. Yule Ball: The Ferret'
+    description: Moody stops the duel the hard way (after @Nef_Arius). Only after
+      the Myrtle answer.
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726654
+    - rid: 3058894633377726655
+    - rid: 3058894633377726656
+    - rid: 3058894633377726657
+    - rid: 3058894633377726658
+    - rid: 3058894633377726659
+    - rid: 3058894633377726660
+    - rid: 3058894633377726661
+    - rid: 3058894633377726662
+    m_LegacyEntries: []
+    m_NextEntryId: 9
+  - id: 8
+    title: '5. Yule Ball: The Ball'
+    description: The Great Hall (hair charm after @nitekidoe, the dance after @lattekoi5252,
+      "beautiful" after @Foca_Honesta). The camera cuts to her and her gown look
+      appears (sequence).
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726663
+    - rid: 3058894633377726664
+    - rid: 3058894633377726665
+    - rid: 3058894633377726666
+    - rid: 3058894633377726667
+    - rid: 3058894633377726668
+    - rid: 3058894633377726669
+    - rid: 3058894633377726670
+    - rid: 3058894633377726671
+    - rid: 3058894633377726672
+    - rid: 3058894633377726673
+    - rid: 3058894633377726674
+    - rid: 3058894633377726675
+    - rid: 3058894633377726676
+    - rid: 3058894633377726677
+    m_LegacyEntries: []
+    m_NextEntryId: 15
+  - id: 9
+    title: 6. The Interview
+    description: Rita Skeeter wants to know who Malfoy despises most. The ending
+      depends on Malfoy.affection.
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726678
+    - rid: 3058894633377726679
+    - rid: 3058894633377726680
+    - rid: 3058894633377726681
+    - rid: 3058894633377726682
+    - rid: 3058894633377726683
+    - rid: 3058894633377726684
+    - rid: 3058894633377726685
+    - rid: 3058894633377726686
+    - rid: 3058894633377726687
+    - rid: 3058894633377726688
+    - rid: 3058894633377726689
+    - rid: 3058894633377726690
+    - rid: 3058894633377726691
+    - rid: 3058894633377726692
+    - rid: 3058894633377726693
+    - rid: 3058894633377726694
+    - rid: 3058894633377726695
+    - rid: 3058894633377726696
+    m_LegacyEntries: []
+    m_NextEntryId: 19
+  - id: 10
+    title: '7. Epilogue: The Mirror'
+    description: Years later. A date, an outfit, and a mirror that will not stop
+      talking.
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726697
+    - rid: 3058894633377726698
+    - rid: 3058894633377726699
+    - rid: 3058894633377726700
+    - rid: 3058894633377726701
+    - rid: 3058894633377726702
+    - rid: 3058894633377726703
+    - rid: 3058894633377726704
+    - rid: 3058894633377726705
+    - rid: 3058894633377726706
+    - rid: 3058894633377726707
+    - rid: 3058894633377726708
+    m_LegacyEntries: []
+    m_NextEntryId: 12
+  - id: 11
+    title: '8. Epilogue: Morning'
+    description: The morning after. Toothbrushes, a bathroom mirror (a quiet one),
+      and something Malfoy finally admits.
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726709
+    - rid: 3058894633377726710
+    - rid: 3058894633377726711
+    - rid: 3058894633377726712
+    - rid: 3058894633377726713
+    - rid: 3058894633377726714
+    - rid: 3058894633377726715
+    m_LegacyEntries: []
+    m_NextEntryId: 7
+  - id: 12
+    title: Courtyard (any time)
+    description: "Play it as often as you like: what Malfoy says depends on Malfoy.annoyance,
+      .affection and .pride \u2014 and changes them."
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726716
+    - rid: 3058894633377726717
+    - rid: 3058894633377726718
+    - rid: 3058894633377726719
+    - rid: 3058894633377726720
+    - rid: 3058894633377726721
+    - rid: 3058894633377726722
+    - rid: 3058894633377726723
+    - rid: 3058894633377726724
+    - rid: 3058894633377726725
+    - rid: 3058894633377726726
+    - rid: 3058894633377726727
+    - rid: 3058894633377726728
+    - rid: 3058894633377726729
+    - rid: 3058894633377726730
+    - rid: 3058894633377726731
+    - rid: 3058894633377726732
+    - rid: 3058894633377726733
+    - rid: 3058894633377726734
+    - rid: 3058894633377726735
+    - rid: 3058894633377726736
+    m_LegacyEntries: []
+    m_NextEntryId: 21
+  - id: 13
+    title: 'Side: Chocolate Frog'
+    description: Before the match (after @Nef_Arius). A side quest.
+    isBark: 0
+    m_Entries:
+    - rid: 3058894633377726737
+    - rid: 3058894633377726738
+    - rid: 3058894633377726739
+    - rid: 3058894633377726740
+    - rid: 3058894633377726741
+    - rid: 3058894633377726742
+    - rid: 3058894633377726743
+    - rid: 3058894633377726744
+    m_LegacyEntries: []
+    m_NextEntryId: 8
+  - id: 14
+    title: Malfoy Barks
+    description: 'Barks: one line in her bubble every few seconds (Dialogue Barker).
+      Follows the quest.'
+    isBark: 1
+    m_Entries:
+    - rid: 3058894633377726745
+    - rid: 3058894633377726746
+    - rid: 3058894633377726747
+    - rid: 3058894633377726748
+    - rid: 3058894633377726749
+    - rid: 3058894633377726750
+    - rid: 3058894633377726751
+    m_LegacyEntries: []
+    m_NextEntryId: 7
+  - id: 15
+    title: Malfoy Parting Barks
+    description: Barks after a talk ends (a second Dialogue Barker on the same Malfoy).
+    isBark: 1
+    m_Entries:
+    - rid: 3058894633377726752
+    - rid: 3058894633377726753
+    - rid: 3058894633377726754
+    - rid: 3058894633377726755
+    - rid: 3058894633377726756
+    m_LegacyEntries: []
+    m_NextEntryId: 5
+  m_NextActorId: 5
+  m_NextConversationId: 16
+  references:
+    version: 2
+    RefIds:
+    - rid: 3058894633377726586
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        name: Mirror
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: The Mirror
+        isPlayer: 0
+        emotions:
+        - id: Neutral
+          portrait: {fileID: 0}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
+        attributes: []
+    - rid: 3058894633377726587
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        name: Ron
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Ron Weasley
+        isPlayer: 0
+        emotions:
+        - id: Angry
+          portrait: {fileID: 21300000, guid: 334094c195887154aab386c938de7832, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Angry
+        template: {fileID: 0}
+        templateValues: []
+        attributes: []
+    - rid: 3058894633377726588
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        name: Hermione
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Hermione Granger
+        isPlayer: 0
+        emotions:
+        - id: Angry
+          portrait: {fileID: 21300000, guid: 4e49c710bb372c643929b4ed0dcb47d8, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Angry
+        template: {fileID: 0}
+        templateValues: []
+        attributes: []
+    - rid: 3058894633377726589
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        name: Moody
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Professor Moody
+        isPlayer: 0
+        emotions:
+        - id: Neutral
+          portrait: {fileID: 0}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
+        attributes: []
+    - rid: 3058894633377726590
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 1
+          priority: 2
+          conditions:
+          - rid: 3058894633377726757
+          bends: []
+        - conversationId: 1
+          entryId: 12
+          priority: 2
+          conditions:
+          - rid: 3058894633377726758
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726591
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Hi! Are you going to Hogwarts too?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726592
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Oh? Yeah... I think so.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726593
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Oh, good! Have you ever flown on a broom? I do it all the time!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: First years aren't allowed their own brooms, apparently. But
+              I'm going to sneak one in anyway!
+          emotion: Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Oh, do you like Quidditch? Which house do you think you'll be
+              in?
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 1
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726594
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Er... I'm not really sure yet.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726595
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Gryffindor, maybe?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 190}
+    - rid: 3058894633377726596
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Gryffindor? Ugh. All courage and no brains.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: You'll grow out of it.
+          emotion: Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1500, y: 190}
+    - rid: 3058894633377726597
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I'm definitely going to Slytherin! My whole family's been in it!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: If I end up somewhere like Hufflepuff, I'll bite my tongue off!!
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: You should be in Slytherin too! Don't go mixing with the wrong
+              sort! Especially...
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...What's that? He looks like a savage.
+          emotion: Angry
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 1
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1800, y: 0}
+    - rid: 3058894633377726598
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: That's Hagrid. He's my friend.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726759
+        links:
+        - conversationId: 1
+          entryId: 10
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2100, y: 0}
+    - rid: 3058894633377726599
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 9
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: (Say nothing.)
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 10
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2100, y: 190}
+    - rid: 3058894633377726600
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 10
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Your <shake>FRIEND</shake>?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Hmph.<pause 0.6> Suit yourself.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 11
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2400, y: 0}
+    - rid: 3058894633377726601
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 11
+        title: Great Hall, after the Sorting
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 13
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2700, y: 0}
+    - rid: 3058894633377726602
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 12
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...You again, Potter? Don't think I'll be nice twice.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Well? Go on, then. The Great Hall is that way.
+          emotion: Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 11
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 380}
+    - rid: 3058894633377726603
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 13
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: You're Harry Potter?!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Why are you hanging around with those idiots? I'll help you find
+              better friends!
+          emotion: Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 14
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 1
+          entryId: 15
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 3000, y: 0}
+    - rid: 3058894633377726604
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 14
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I can choose my own friends.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Slap her hand away
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726760
+        links:
+        - conversationId: 1
+          entryId: 16
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 3300, y: 0}
+    - rid: 3058894633377726605
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 15
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...Fine. But Ron and Hermione aren't idiots.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Shake her hand
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726761
+        links:
+        - conversationId: 1
+          entryId: 17
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 3300, y: 190}
+    - rid: 3058894633377726606
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 16
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Huh...?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Sad
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: You...
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: <shout>Y-you'll regret this!!!!</shout>
+          emotion: Embarrassed
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726762
+        links: []
+        position: {x: 3600, y: 0}
+    - rid: 3058894633377726607
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 17
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: '!!'
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: I-it's not like I wanted to shake your hand or anything!
+          emotion: Embarrassed
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Your hand is warm. That's disgusting. Hmph.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726763
+        links: []
+        position: {x: 3600, y: 190}
+    - rid: 3058894633377726608
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 1
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726609
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: <whisper>(How is he so good?!)</whisper>
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: UGH, HE'S SO ANNOYING!!!
+          emotion: Angry
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726610
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: That night...
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726611
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: (No one's around... right?)
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Scared
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: (If even Potter can manage it, so can I!)
+          emotion: Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: (He landed like this... didn't he?)
+          emotion: Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 2
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726612
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Need a hand with that landing?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726764
+        links:
+        - conversationId: 2
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726613
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: (Watch from the shadows.)
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Watch from the shadows
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 190}
+    - rid: 3058894633377726614
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: EEEEEEK!!!! P-POTTER?!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Scared
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: I wasn't practising! I was... inspecting the broom!
+          emotion: Embarrassed
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Fine. Show me. Just once. And if you laugh, I'll hex you.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1500, y: 0}
+    - rid: 3058894633377726615
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 512555997
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: MISS MALFOY?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1800, y: 190}
+    - rid: 3058894633377726616
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: <speed 80><shake>EEEEEEEEEEEEEEK!!!!</shake></speed>
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Scared
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2100, y: 190}
+    - rid: 3058894633377726617
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 9
+        title: 
+        actorId: 512555997
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Stealing Mr Filch's broom and sneaking out after curfew? Minus
+            ten points to Slytherin.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 10
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2400, y: 190}
+    - rid: 3058894633377726618
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 10
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: NOOOOOOOOO!!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Sad
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 11
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2700, y: 190}
+    - rid: 3058894633377726619
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 11
+        title: 
+        actorId: 512555997
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Having trouble sleeping? Then perhaps I should tell you a story.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: It was somewhere in the jungles of East Asia. A quiet night,
+              much like this one.
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: It was a forest when I arrived. By the time I left, it was a
+              runway.
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726765
+        links: []
+        position: {x: 3000, y: 190}
+    - rid: 3058894633377726620
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 3
+          entryId: 1
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726621
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: H... Hmph. Don't tell me a little thing like this has you scared,
+            Potter?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Scared
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: "(I'm scared!! I'm so scared\u2014!!!)"
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 3
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 3
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726622
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Oh, over there...
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726766
+        links:
+        - conversationId: 3
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726623
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: You can hold my sleeve if you want.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726767
+        links:
+        - conversationId: 3
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 190}
+    - rid: 3058894633377726624
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: AAAAH!!! A M-MONSTER!!!!!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Scared
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: H-HURRY UP! WHAT ARE YOU WAITING FOR, YOU FILTHY IDIOT!!!
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726768
+        - rid: 3058894633377726769
+        links: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726625
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Wh-who'd want to hold YOUR sleeve?!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Just so you don't get lost. That's all.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726770
+        links: []
+        position: {x: 900, y: 190}
+    - rid: 3058894633377726626
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 4
+          entryId: 1
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726627
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 491289632
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: You understand, I trust... only you can do this.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Do not leave Potter's side. Not for a moment. Report his every
+              move to me.
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 4
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726628
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: '!!'
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 4
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726629
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Potter, explain this bit to me.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: (This is a mission... It's not like I want to do this...)
+          emotion: Embarrassed
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: (I'm just following orders...!!)
+          emotion: Embarrassed
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 4
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 4
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726630
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Sure. Sit here.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726771
+        links:
+        - conversationId: 4
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726631
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: What's gotten into you today?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726772
+        links:
+        - conversationId: 4
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 190}
+    - rid: 3058894633377726632
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...Thanks.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Here. Take my <err id="t">heart</err><fix id="t" text="treacle
+              tart">.<pause 0.4> Don't read into it.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 4
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1500, y: 0}
+    - rid: 3058894633377726633
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I'm NOT following you! I just...<pause 0.5> <wave>happen</wave>
+            to be going the same way!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 4
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1500, y: 190}
+    - rid: 3058894633377726634
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Aren't we going together?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Wait for her after class
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726773
+        links:
+        - conversationId: 4
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1800, y: 0}
+    - rid: 3058894633377726635
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 9
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: W-wait, Potter! I'm coming too!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 4
+          entryId: 10
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2100, y: 0}
+    - rid: 3058894633377726636
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 10
+        title: 
+        actorId: 461178946
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: M-my Lord... Are these reports really of any use...? 'Potter appears
+            to be fond of treacle tart'...
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 4
+          entryId: 11
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2400, y: 0}
+    - rid: 3058894633377726637
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 11
+        title: 
+        actorId: 491289632
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: CRUCIO.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726774
+        links: []
+        position: {x: 2700, y: 0}
+    - rid: 3058894633377726638
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 5
+          entryId: 1
+          priority: 2
+          conditions:
+          - rid: 3058894633377726775
+          bends: []
+        - conversationId: 5
+          entryId: 6
+          priority: 2
+          conditions:
+          - rid: 3058894633377726776
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726639
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Malfoy. Go to the Yule Ball with me.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726777
+        - rid: 3058894633377726778
+        links:
+        - conversationId: 5
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726640
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Have you lost your mind, Potter?!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Me? With YOU? In your next lifetime!
+          emotion: Angry
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 5
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 5
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726641
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Come on. It'll be fun.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726779
+        links:
+        - conversationId: 5
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726642
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Fine. Your loss.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726780
+        - rid: 3058894633377726781
+        links:
+        - conversationId: 5
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 190}
+    - rid: 3058894633377726643
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Hmph. Ask someone who cares.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726644
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Still moping about the ball, Potter?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 380}
+    - rid: 3058894633377726645
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 6
+          entryId: 1
+          priority: 2
+          conditions:
+          - rid: 3058894633377726782
+          - rid: 3058894633377726783
+          bends: []
+        - conversationId: 6
+          entryId: 2
+          priority: 0
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726646
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: the crane
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: '(A paper crane lands on your desk: "How about me as a dance partner?")'
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Well? What do you think?
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 6
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 6
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 6
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726647
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Eyes on your own parchment, Potter.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 380}
+    - rid: 3058894633377726648
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I'd love to.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726784
+        - rid: 3058894633377726785
+        links:
+        - conversationId: 6
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726649
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Is this a joke?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726786
+        - rid: 3058894633377726787
+        - rid: 3058894633377726788
+        links:
+        - conversationId: 6
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 190}
+    - rid: 3058894633377726650
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I'd rather ask Moaning Myrtle!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726789
+        - rid: 3058894633377726790
+        - rid: 3058894633377726791
+        links:
+        - conversationId: 6
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 380}
+    - rid: 3058894633377726651
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: W-well, obviously. Who else would put up with your dancing?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726792
+        links: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726652
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: "A JOKE?! I've scared off every candidate for\u2014 never mind!"
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Fine! I'll go with you! But only out of pity for your pathetic
+              look!
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726793
+        links: []
+        position: {x: 900, y: 190}
+    - rid: 3058894633377726653
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...Myrtle. MYRTLE?!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: (She draws her wand.)
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 900, y: 380}
+    - rid: 3058894633377726654
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 7
+          entryId: 1
+          priority: 2
+          conditions:
+          - rid: 3058894633377726794
+          - rid: 3058894633377726795
+          bends: []
+        - conversationId: 7
+          entryId: 8
+          priority: 0
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726655
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 4
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Wands down! ...Too late.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: (A flash. Where Malfoy stood, a small white ferret squeaks with
+              rage.)
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 7
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726656
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 512555997
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Professor! We NEVER use transfiguration as a punishment!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: (She turns the ferret back.)
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 7
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726657
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: MY FATHER WILL HEAR ABOUT THIS!!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Sad
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 7
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 7
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726658
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I'm sorry. Myrtle was a stupid joke. Come to the ball with me?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726796
+        - rid: 3058894633377726797
+        links:
+        - conversationId: 7
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726659
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I rather liked you better that way.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726798
+        links:
+        - conversationId: 7
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 190}
+    - rid: 3058894633377726660
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...You'd better dance well enough to make up for it, Potter.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726799
+        - rid: 3058894633377726800
+        links: []
+        position: {x: 1500, y: 0}
+    - rid: 3058894633377726661
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Get. Out. Of. My. Sight.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 1500, y: 190}
+    - rid: 3058894633377726662
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Not. A. Word. About. Ferrets.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 380}
+    - rid: 3058894633377726663
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 8
+          entryId: 1
+          priority: 2
+          conditions:
+          - rid: 3058894633377726801
+          - rid: 3058894633377726802
+          bends: []
+        - conversationId: 8
+          entryId: 2
+          priority: 0
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726664
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...Don't stare.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Ball_Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: It's only a temporary hair charm, Potter. Try to enjoy the view.
+          emotion: Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: SetActive(BallMalfoy, false); SetActive(BallGown, true); Camera(BallCloseUp)@0.3
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 8
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726665
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: No partner, Potter? How tragic.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 380}
+    - rid: 3058894633377726666
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Why are you so beautiful?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726803
+        links:
+        - conversationId: 8
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726667
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Is that a dress or a curtain?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726804
+        links:
+        - conversationId: 8
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 190}
+    - rid: 3058894633377726668
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I knew you'd come.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726805
+        - rid: 3058894633377726806
+        links:
+        - conversationId: 8
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 380}
+    - rid: 3058894633377726669
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: answers
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 1
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 8
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 8
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 8
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 510, y: 230}
+    - rid: 3058894633377726670
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Sh-shut up!! Stupid Potter...
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Ball_Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: (He called me beautiful!!)
+          emotion: Ball_Happy
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 8
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726671
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Say one more word and you'll dance alone.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 8
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 190}
+    - rid: 3058894633377726672
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 9
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Don't get used to this.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Ball_Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Just one dance.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: Camera(DanceFloor)
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726807
+        - rid: 3058894633377726808
+        links:
+        - conversationId: 8
+          entryId: 10
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 8
+          entryId: 11
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726673
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 10
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Just one?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 8
+          entryId: 12
+          priority: 4
+          conditions:
+          - rid: 3058894633377726809
+          bends: []
+        - conversationId: 8
+          entryId: 13
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1500, y: 0}
+    - rid: 3058894633377726674
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 11
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Thank you, Malfoy.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726810
+        links:
+        - conversationId: 8
+          entryId: 14
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1500, y: 190}
+    - rid: 3058894633377726675
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 12
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...Fine. Two. And you're not allowed to step on my feet.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Ball_Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726811
+        - rid: 3058894633377726812
+        links: []
+        position: {x: 1800, y: 0}
+    - rid: 3058894633377726676
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 13
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Don't push your luck, Potter.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726813
+        - rid: 3058894633377726814
+        links: []
+        position: {x: 1800, y: 190}
+    - rid: 3058894633377726677
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 14
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Naturally. You're welcome.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726815
+        - rid: 3058894633377726816
+        links: []
+        position: {x: 1800, y: 380}
+    - rid: 3058894633377726678
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 1
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726679
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 323058324
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Miss Malfoy, what sort of person do you despise most?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726680
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: An idiot who thinks he's something special.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726681
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 323058324
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: And what does he look like?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726682
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Messy black hair, ridiculous round glasses... Green eyes!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726683
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 323058324
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: My, my... You've certainly paid attention.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1500, y: 0}
+    - rid: 3058894633377726684
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ?!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: THAT'S BECAUSE HE'S ALWAYS RIGHT IN FRONT OF ME, GETTING ON MY
+              NERVES!
+          emotion: Embarrassed
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1800, y: 0}
+    - rid: 3058894633377726685
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 323058324
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Are you sure you're not rather fond of him?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2100, y: 0}
+    - rid: 3058894633377726686
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I TOLD YOU, I HATE HIM!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2400, y: 0}
+    - rid: 3058894633377726687
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 9
+        title: 'Next morning: the Daily Prophet. ''MISS MALFOY''S IDEAL MAN?'''
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 10
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2700, y: 0}
+    - rid: 3058894633377726688
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 10
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: WHAT THE HELL IS THIS?!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 11
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 9
+          entryId: 12
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 3000, y: 0}
+    - rid: 3058894633377726689
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 11
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: '''Messy black hair, round glasses, green eyes''... Who could that
+            be~?'
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Read it out loud
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 16
+          priority: 4
+          conditions:
+          - rid: 3058894633377726817
+          bends: []
+        - conversationId: 9
+          entryId: 14
+          priority: 3
+          conditions:
+          - rid: 3058894633377726818
+          bends: []
+        - conversationId: 9
+          entryId: 15
+          priority: 0
+          conditions: []
+          bends: []
+        position: {x: 3300, y: 0}
+    - rid: 3058894633377726690
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 12
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I hate you even without your glasses, too.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Quote the article back at her
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 13
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 3300, y: 190}
+    - rid: 3058894633377726691
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 13
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: THAT'S MY LINE, YOU FILTHY IDIOT!!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 16
+          priority: 4
+          conditions:
+          - rid: 3058894633377726819
+          bends: []
+        - conversationId: 9
+          entryId: 14
+          priority: 3
+          conditions:
+          - rid: 3058894633377726820
+          bends: []
+        - conversationId: 9
+          entryId: 15
+          priority: 0
+          conditions: []
+          bends: []
+        position: {x: 3600, y: 190}
+    - rid: 3058894633377726692
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 14
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: STOP READING IT OUT LOUD!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...It's not wrong, is it.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Guess we were never going to be just "friends", were we?
+          emotion: Happy
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726821
+        links:
+        - conversationId: 9
+          entryId: 17
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 3900, y: 0}
+    - rid: 3058894633377726693
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 15
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: It's LIES! Every single word!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Mostly.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726822
+        - rid: 3058894633377726823
+        links: []
+        position: {x: 3900, y: 190}
+    - rid: 3058894633377726694
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 16
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Ideal man? Him? I'd rather kiss a Blast-Ended Skrewt.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: I hate you, Potter. Every word in that paper is a lie, and so
+              are you.
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726824
+        - rid: 3058894633377726825
+        - rid: 3058894633377726826
+        links: []
+        position: {x: 3900, y: 380}
+    - rid: 3058894633377726695
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 17
+        title: 
+        actorId: 293476815
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: HARRRRRY POTTERRR! GET TO MY OFFICE NOW!!! ...WE'RE HAVING FIREWORKS!!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 9
+          entryId: 18
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 4200, y: 0}
+    - rid: 3058894633377726696
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 18
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: '!?'
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726827
+        links: []
+        position: {x: 4500, y: 0}
+    - rid: 3058894633377726697
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 1
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726698
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: (...Do I look like I'm trying too hard?)
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726699
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 1
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Oh, darling~ You've really dolled yourself up today!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Off on a date, are we~? Shall I guess who with?
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726700
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: What on earth are you talking about?!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726701
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 1
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: That boy you complain about every night...
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726702
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: BE QUIET, YOU STUPID MIRROR!!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Older_Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 10
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1500, y: 0}
+    - rid: 3058894633377726703
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: (Knock) Ready, Malfoy?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Knock on the door
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1800, y: 0}
+    - rid: 3058894633377726704
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: (Wait outside a little longer.)
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Wait outside
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1800, y: 190}
+    - rid: 3058894633377726705
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...Don't look at me like that.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Older_Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: I know. I look amazing.
+          emotion: Older_Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726828
+        links: []
+        position: {x: 2100, y: 0}
+    - rid: 3058894633377726706
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 9
+        title: 
+        actorId: 1
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Oh, why cover me up~? "Potter" would love that outfit!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 10
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2100, y: 190}
+    - rid: 3058894633377726707
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 10
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: JUST SHUT UP!!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 10
+          entryId: 11
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 2400, y: 190}
+    - rid: 3058894633377726708
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 11
+        title: 
+        actorId: 1
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: All right, all right~ Don't stay out too late!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726829
+        links: []
+        position: {x: 2700, y: 190}
+    - rid: 3058894633377726709
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 11
+          entryId: 1
+          priority: 4
+          conditions:
+          - rid: 3058894633377726830
+          bends: []
+        - conversationId: 11
+          entryId: 2
+          priority: 0
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726710
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: And if that mirror says ONE word about last night...
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Older_Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 11
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 190}
+    - rid: 3058894633377726711
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Morning, Potter.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Guess you were right.
+          emotion: Older_Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: We were never going to be just "friends", were we?
+          emotion: Embarrassed
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 11
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 11
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726712
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: (Choke on the toothpaste.)
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Choke on the toothpaste
+        emotion: Surprised
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 11
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726713
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I'd never be friends with someone like you, Malfoy.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Quote your first year
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 11
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 190}
+    - rid: 3058894633377726714
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Hmph. Idiot.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Older_Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726831
+        - rid: 3058894633377726832
+        links: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726715
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Say that again and I'll hex your toothbrush.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Older_Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Idiot.
+          emotion: Older_Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726833
+        - rid: 3058894633377726834
+        links: []
+        position: {x: 1200, y: 190}
+    - rid: 3058894633377726716
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 1
+          priority: 4
+          conditions:
+          - rid: 3058894633377726835
+          bends: []
+        - conversationId: 12
+          entryId: 2
+          priority: 3
+          conditions:
+          - rid: 3058894633377726836
+          - rid: 3058894633377726837
+          bends: []
+        - conversationId: 12
+          entryId: 3
+          priority: 2
+          conditions:
+          - rid: 3058894633377726838
+          bends: []
+        - conversationId: 12
+          entryId: 4
+          priority: 0
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726717
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Move, Potter. Or I'll move you.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Don't even look at me.
+          emotion: 
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726718
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Oh. It's you.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: I wasn't waiting here. I just... like this corridor.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 190}
+    - rid: 3058894633377726719
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Potter. Admiring my new broom, are you?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 380}
+    - rid: 3058894633377726720
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Potter.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 9
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 570}
+    - rid: 3058894633377726721
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Nice broom. Seriously.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726839
+        - rid: 3058894633377726840
+        links:
+        - conversationId: 12
+          entryId: 10
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726722
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Still scared of the Forbidden Forest?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726841
+        links:
+        - conversationId: 12
+          entryId: 13
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 190}
+    - rid: 3058894633377726723
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Want to fly together later?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 16
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 380}
+    - rid: 3058894633377726724
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: (Walk past without a word.)
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Walk past without a word
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726842
+        - rid: 3058894633377726843
+        links:
+        - conversationId: 12
+          entryId: 20
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 570}
+    - rid: 3058894633377726725
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 9
+        title: replies
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 1
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 12
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 12
+          entryId: 7
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 12
+          entryId: 8
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 660, y: 325}
+    - rid: 3058894633377726726
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 10
+        title: React to the compliment
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 12
+          priority: 4
+          conditions:
+          - rid: 3058894633377726844
+          bends: []
+        - conversationId: 12
+          entryId: 11
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726727
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 11
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: O-of course it's nice. It's MINE.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...You have good taste. For once.
+          emotion: Smug
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 1500, y: 0}
+    - rid: 3058894633377726728
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 12
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Don't flatter me. What do you want?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 1500, y: 190}
+    - rid: 3058894633377726729
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 13
+        title: React to the tease
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 14
+          priority: 4
+          conditions:
+          - rid: 3058894633377726845
+          bends: []
+        - conversationId: 12
+          entryId: 15
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 190}
+    - rid: 3058894633377726730
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 14
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...You promised you wouldn't tell anyone.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Sad
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Idiot.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 1500, y: 380}
+    - rid: 3058894633377726731
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 15
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Say that louder and you'll regret it, Potter.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 1500, y: 570}
+    - rid: 3058894633377726732
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 16
+        title: React to the invitation
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 12
+          entryId: 19
+          priority: 4
+          conditions:
+          - rid: 3058894633377726846
+          bends: []
+        - conversationId: 12
+          entryId: 17
+          priority: 3
+          conditions:
+          - rid: 3058894633377726847
+          bends: []
+        - conversationId: 12
+          entryId: 18
+          priority: 0
+          conditions: []
+          bends: []
+        position: {x: 1200, y: 380}
+    - rid: 3058894633377726733
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 17
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I-if you insist.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: Don't be late. And don't think this means anything.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726848
+        links: []
+        position: {x: 1500, y: 760}
+    - rid: 3058894633377726734
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 18
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: With you? Ha!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Maybe. If I'm bored.
+          emotion: Neutral
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 1500, y: 950}
+    - rid: 3058894633377726735
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 19
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I'd rather fall off my broom.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726849
+        links: []
+        position: {x: 1500, y: 1140}
+    - rid: 3058894633377726736
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 20
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...Hmph. Fine. Ignore me, then.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Sad
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 1500, y: 1330}
+    - rid: 3058894633377726737
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 13
+          entryId: 1
+          priority: 2
+          conditions:
+          - rid: 3058894633377726850
+          bends: []
+        - conversationId: 13
+          entryId: 7
+          priority: 0
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726738
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Dementor, dementor! Woooo~
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726851
+        links:
+        - conversationId: 13
+          entryId: 2
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726739
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 2
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Harry, there's a Chocolate Frog in your bag. From HER. Must be
+            poisoned.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726852
+        links:
+        - conversationId: 13
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 13
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 600, y: 0}
+    - rid: 3058894633377726740
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I'm eating it.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726853
+        links:
+        - conversationId: 13
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 0}
+    - rid: 3058894633377726741
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 275846393
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Bin it, Ron.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Neutral
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726854
+        links:
+        - conversationId: 13
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 900, y: 190}
+    - rid: 3058894633377726742
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I won't have Dementors making you faint and handing me an unearned
+            victory!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines:
+        - text:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+            m_Text: ...Use it wisely.
+          emotion: Pout
+          voice: {fileID: 0}
+          localizedVoice:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726855
+        links: []
+        position: {x: 1200, y: 0}
+    - rid: 3058894633377726743
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Don't you DARE, Weasley!!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions:
+        - rid: 3058894633377726856
+        links: []
+        position: {x: 1200, y: 190}
+    - rid: 3058894633377726744
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 3
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Can we PLEASE talk about something other than Malfoy?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 380}
+    - rid: 3058894633377726745
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 14
+          entryId: 1
+          priority: 4
+          conditions:
+          - rid: 3058894633377726857
+          - rid: 3058894633377726858
+          bends: []
+        - conversationId: 14
+          entryId: 2
+          priority: 3
+          conditions:
+          - rid: 3058894633377726859
+          - rid: 3058894633377726860
+          bends: []
+        - conversationId: 14
+          entryId: 3
+          priority: 3
+          conditions:
+          - rid: 3058894633377726861
+          bends: []
+        - conversationId: 14
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 14
+          entryId: 5
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 14
+          entryId: 6
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726746
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Not. A. Word.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726747
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...Don't be late. Not that I care.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 190}
+    - rid: 3058894633377726748
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Two dances. Hmph. Not bad, Potter.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 380}
+    - rid: 3058894633377726749
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Hmph.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 570}
+    - rid: 3058894633377726750
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Staring again, Potter?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 760}
+    - rid: 3058894633377726751
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Ugh. Potter.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 950}
+    - rid: 3058894633377726752
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 1
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 15
+          entryId: 1
+          priority: 4
+          conditions:
+          - rid: 3058894633377726862
+          bends: []
+        - conversationId: 15
+          entryId: 2
+          priority: 3
+          conditions:
+          - rid: 3058894633377726863
+          bends: []
+        - conversationId: 15
+          entryId: 3
+          priority: 2
+          conditions: []
+          bends: []
+        - conversationId: 15
+          entryId: 4
+          priority: 2
+          conditions: []
+          bends: []
+        position: {x: 0, y: 0}
+    - rid: 3058894633377726753
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: And stay away.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 0}
+    - rid: 3058894633377726754
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: ...See you later, Potter.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Embarrassed
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 190}
+    - rid: 3058894633377726755
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Don't follow me.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Pout
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 380}
+    - rid: 3058894633377726756
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 507349979
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: We're done here.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Smug
+        voice: {fileID: 0}
+        localizedVoice:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+        moreLines: []
+        isPassthrough: 0
+        sequence: 
+        isHub: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 570}
+    - rid: 3058894633377726757
+      type: {class: EntrySeenCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        conversation: 
+        entryId: 1
+        seen: 0
+    - rid: 3058894633377726758
+      type: {class: EntrySeenCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        conversation: 
+        entryId: 1
+        seen: 1
+    - rid: 3058894633377726759
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726760
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 3
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726761
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726762
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726763
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726764
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726765
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 3
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726766
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726767
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726768
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726769
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 4
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726770
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 4
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726771
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726772
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726773
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726774
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 5
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726775
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.asked
+        op: 0
+        value: false
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726776
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.asked
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726777
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: yule_ball
+        state: 1
+    - rid: 3058894633377726778
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.asked
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726779
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726780
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726781
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.pride
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726782
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.asked
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726783
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.crane_answered
+        op: 0
+        value: false
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726784
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726785
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.crane_answered
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726786
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726787
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.pride
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726788
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.crane_answered
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726789
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 3
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726790
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.ferret
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726791
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.crane_answered
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726792
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.partner
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726793
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.partner
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726794
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.ferret
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726795
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.forgiven
+        op: 0
+        value: false
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726796
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726797
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: -2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726798
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726799
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.forgiven
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726800
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.partner
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726801
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.partner
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726802
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: yule_ball
+        op: 0
+        state: 1
+    - rid: 3058894633377726803
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726804
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726805
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.pride
+        mode: 1
+        value: -1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726806
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726807
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.danced
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726808
+      type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        eventName: yule_dance
+        argument: 
+    - rid: 3058894633377726809
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        op: 5
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726810
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.pride
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726811
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: yule_ball
+        state: 2
+    - rid: 3058894633377726812
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 6
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726813
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: yule_ball
+        state: 2
+    - rid: 3058894633377726814
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 6
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726815
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: yule_ball
+        state: 2
+    - rid: 3058894633377726816
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 6
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726817
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        op: 5
+        value: 6
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726818
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        op: 5
+        value: 4
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726819
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        op: 5
+        value: 6
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726820
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        op: 5
+        value: 4
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726821
+      type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        eventName: ending_together
+        argument: 
+    - rid: 3058894633377726822
+      type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        eventName: ending_rivals
+        argument: 
+    - rid: 3058894633377726823
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 7
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726824
+      type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        eventName: ending_hostile
+        argument: 
+    - rid: 3058894633377726825
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 9
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726826
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: malfoy_saga
+        state: 3
+    - rid: 3058894633377726827
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 7
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726828
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 8
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726829
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 8
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726830
+      type: {class: EntrySeenCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        conversation: '7. Epilogue: The Mirror'
+        entryId: 5
+        seen: 1
+    - rid: 3058894633377726831
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 9
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726832
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: malfoy_saga
+        state: 2
+    - rid: 3058894633377726833
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: saga.chapter
+        mode: 0
+        value: 9
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726834
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: malfoy_saga
+        state: 2
+    - rid: 3058894633377726835
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        op: 5
+        value: 6
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726836
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        op: 5
+        value: 4
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726837
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        op: 2
+        value: 3
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726838
+      type: {class: AnyCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        conditions:
+        - rid: 3058894633377726864
+        - rid: 3058894633377726865
+    - rid: 3058894633377726839
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.pride
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726840
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726841
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726842
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726843
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: -1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726844
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        op: 5
+        value: 6
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726845
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        op: 5
+        value: 4
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726846
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        op: 5
+        value: 6
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726847
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        op: 5
+        value: 3
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726848
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726849
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726850
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: chocolate_frog
+        op: 0
+        state: 0
+    - rid: 3058894633377726851
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: chocolate_frog
+        state: 1
+    - rid: 3058894633377726852
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: frog.found
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726853
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726854
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726855
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: chocolate_frog
+        state: 2
+    - rid: 3058894633377726856
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: chocolate_frog
+        state: 3
+    - rid: 3058894633377726857
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.ferret
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726858
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.forgiven
+        op: 0
+        value: false
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726859
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.partner
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726860
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.danced
+        op: 0
+        value: false
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726861
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: yule.danced
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726862
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.annoyance
+        op: 5
+        value: 6
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726863
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        op: 5
+        value: 4
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726864
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.pride
+        op: 5
+        value: 12
+        objectValue: {fileID: 0}
+    - rid: 3058894633377726865
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Malfoy.affection
+        op: 5
+        value: 2
+        objectValue: {fileID: 0}

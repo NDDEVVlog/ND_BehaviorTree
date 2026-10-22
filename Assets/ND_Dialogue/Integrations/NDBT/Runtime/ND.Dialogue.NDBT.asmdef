@@ -2,6 +2,7 @@
     "name": "ND.Dialogue.NDBT",
     "rootNamespace": "ND.Dialogue.NDBT",
     "references": [
+        "ND.Quests",
         "ND.Dialogue",
         "ND_BehaviorTree.Runtime"
     ],

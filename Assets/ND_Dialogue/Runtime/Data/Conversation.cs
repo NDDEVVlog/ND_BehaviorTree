@@ -34,6 +34,10 @@ namespace ND.Dialogue
         public LocalizableString text = new LocalizableString();
         [Tooltip("Emotion for this line. Empty = the entry's emotion.")]
         public string emotion;
+        [Tooltip("Voice-over of this line (empty = none). The localized one wins when set.")]
+        public AudioClip voice;
+        [Tooltip("Voice-over per language (an Asset Table entry). Empty = Voice.")]
+        public LocalizedAudioClip localizedVoice = new LocalizedAudioClip();
     }
 
     /// <summary>
@@ -58,6 +62,10 @@ namespace ND.Dialogue
         public LocalizableString menuText = new LocalizableString();
         [Tooltip("Emotion of the speaker for this line. Empty = the actor's default emotion.")]
         public string emotion;
+        [Tooltip("Voice-over of the (first) line (empty = none). The localized one wins when set.")]
+        public AudioClip voice;
+        [Tooltip("Voice-over per language (an Asset Table entry). Empty = Voice.")]
+        public LocalizedAudioClip localizedVoice = new LocalizedAudioClip();
         [Tooltip("More lines the same speaker says here, one after another, each with its own emotion.")]
         public List<DialoguePage> moreLines = new List<DialoguePage>();
         [Tooltip("No line is shown: the entry only runs its actions and continues.")]
@@ -85,6 +93,15 @@ namespace ND.Dialogue
         /// <summary>Text of line <paramref name="index"/> (0 = <see cref="text"/>).</summary>
         public LocalizableString LineText(int index) => index == 0 ? text : moreLines[index - 1]?.text;
 
+        /// <summary>Voice of line <paramref name="index"/> (0 = the first): its localized clip when set, else its clip; null = none.</summary>
+        public AudioClip LineVoice(int index, Func<LocalizedAudioClip, AudioClip> resolveLocalized = null)
+        {
+            var page = index == 0 ? null : moreLines[index - 1];
+            var localized = index == 0 ? localizedVoice : page?.localizedVoice;
+            if (localized != null && !localized.IsEmpty) return resolveLocalized != null ? resolveLocalized(localized) : localized.Resolve();
+            return index == 0 ? voice : page?.voice;
+        }
+
         /// <summary>Emotion of line <paramref name="index"/>: its own, else the entry's.</summary>
         public string LineEmotion(int index)
         {
@@ -110,6 +127,8 @@ namespace ND.Dialogue
         public int id;
         public string title;
         [TextArea] public string description;
+        [Tooltip("A bark conversation: a Dialogue Barker says ONE of its START lines in a bubble while the game goes on (no choices, nothing waits). Off = a normal conversation, played in the dialogue UI.")]
+        public bool isBark;
         [SerializeReference] private List<DialogueEntry> m_Entries = new List<DialogueEntry>();
         // Databases saved before entries could be subclassed stored them by value under "entries"; moved on load.
         [SerializeField, HideInInspector, FormerlySerializedAs("entries")] private List<DialogueEntry> m_LegacyEntries = new List<DialogueEntry>();

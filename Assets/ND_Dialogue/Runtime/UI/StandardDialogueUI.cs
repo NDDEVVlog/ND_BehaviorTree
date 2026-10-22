@@ -49,6 +49,7 @@ namespace ND.Dialogue
         private readonly List<Button> m_ResponseButtons = new List<Button>();
         private string m_FullText = string.Empty;
         private float m_Typed;
+        private int m_TypedVisible = -1; // characters shown so far: the text is rebuilt only when it grows
         private bool m_Typing;
         private float m_ResponseDeadline;
 
@@ -90,8 +91,9 @@ namespace ND.Dialogue
                 m_Portrait.gameObject.SetActive(sprite != null);
             }
 
-            m_FullText = line.Text ?? string.Empty;
+            m_FullText = LineTimeline.Final(line.Text); // markup → rich text (the TMP UI animates it)
             m_Typed = 0f;
+            m_TypedVisible = -1;
             m_Typing = m_CharactersPerSecond > 0f && m_FullText.Length > 0;
             SetText(m_LineText, m_Typing ? string.Empty : m_FullText);
             if (m_ContinueButton != null) m_ContinueButton.gameObject.SetActive(true);
@@ -156,8 +158,12 @@ namespace ND.Dialogue
             {
                 m_Typed += Time.unscaledDeltaTime * m_CharactersPerSecond;
                 int visible = Mathf.FloorToInt(m_Typed);
-                SetText(m_LineText, TypewriterSlice(m_FullText, visible, out bool complete));
-                if (complete) m_Typing = false;
+                if (visible != m_TypedVisible) // no new character: no new string, no text rebuild
+                {
+                    m_TypedVisible = visible;
+                    SetText(m_LineText, TypewriterSlice(m_FullText, visible, out bool complete));
+                    if (complete) m_Typing = false;
+                }
             }
 
             if (AttachedRunner.State == DialogueRunnerState.WaitingForChoice && Time.unscaledTime >= m_ResponseDeadline)
@@ -179,6 +185,8 @@ namespace ND.Dialogue
             }
 #endif
         }
+
+        private static readonly char[] TagNameEnd = { '=', ' ', '>' };
 
         /// <summary>
         /// The first <paramref name="visibleChars"/> visible characters of <paramref name="text"/>: rich-text tags
@@ -202,7 +210,7 @@ namespace ND.Dialogue
                         if (tag.StartsWith("</", StringComparison.Ordinal)) { if (open.Count > 0) open.Pop(); }
                         else if (!tag.EndsWith("/>", StringComparison.Ordinal))
                         {
-                            int end = tag.IndexOfAny(new[] { '=', ' ', '>' }, 1);
+                            int end = tag.IndexOfAny(TagNameEnd, 1);
                             open.Push(tag.Substring(1, end - 1));
                         }
                         i = close;

@@ -2,6 +2,7 @@
     "name": "ND.Dialogue.NDBT.Editor",
     "rootNamespace": "ND.Dialogue.NDBT.Editor",
     "references": [
+        "ND.Quests",
         "ND.Dialogue",
         "ND.Dialogue.Editor",
         "ND.Dialogue.NDBT",

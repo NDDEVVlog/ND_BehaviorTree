@@ -154,8 +154,8 @@ Mở `GuardSample.unity`, bấm **Play**. Đi bằng **WASD/mũi tên**. Lại g
 | C-04 | Ở DB thứ hai → nhóm **Look in this database** → gán portrait khác cho Angry, đặt "Display name here" | Node và game của DB thứ hai dùng ảnh và tên mới. DB đầu không đổi. ✕ trả về ảnh gốc | | |
 | C-05 | Trên Character DB: mở **Template attributes**, thêm `affection` (Int). Cho một nhân vật chọn DB đó làm **Template** | Nhân vật hiện dòng "🔒 affection" **không có nút xoá**, ô giá trị sửa được (nhãn "· template"). Biến `<Tên>.affection` có trong popup biến. Thêm attribute riêng trùng tên thì Validate báo | | |
 | C-06 | Sửa giá trị `affection` của nhân vật thành 5, rồi bấm ↺ | Nhãn đổi "· own", khuôn vẫn 0; ↺ trả về giá trị của khuôn. Ctrl+Z hoàn tác được | | |
-| C-07 | Double-click `Hogwarts_Characters` (mẫu Malfoy) | Cửa sổ **Character Editor**: mục Characters (thẻ + chi tiết, mục "Looks in dialogue databases" thấy Epilogue đổi Angry/Smug/Pout), Template, Used by (2 database) | | |
-| SV-01 | Scene mẫu (Guard hoặc Malfoy Story), Play, nói chuyện vài câu, bấm **Save** (góc trên) | Có file `…/NDDialogue/Saves/debug.json` trong `Application.persistentDataPath` | | |
+| C-07 | Double-click `Hogwarts_Characters` (mẫu Malfoy Saga) | Cửa sổ **Character Editor**: mục Characters (thẻ + chi tiết; Malfoy có thêm emotion Ball_* và Older_*), Template, Used by (MalfoySaga_Dialogue) | | |
+| SV-01 | Scene mẫu Guard, Play, nói chuyện vài câu, bấm **Save** (góc trên). Malfoy Saga: phím F5 | Có file `…/NDDialogue/Saves/debug.json` trong `Application.persistentDataPath` | | |
 | SV-02 | Chơi tiếp (đổi biến, quest), rồi **Load** | Biến, quest trở lại như lúc Save (xem bảng trạng thái bên phải) | | |
 | SV-03 | **Save** khi đang giữa một node nhiều câu (câu 2/3), thoát Play, Play lại, **Load** | Hội thoại hiện lại đúng câu 2, action của node **không** chạy lại | | |
 | SV-04 | Save khi đang ở menu lựa chọn → Load | Menu lựa chọn hiện lại | | |
@@ -165,7 +165,7 @@ Mở `GuardSample.unity`, bấm **Play**. Đi bằng **WASD/mũi tên**. Lại g
 
 | ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
 |---|---|---|---|---|
-| T-01 | Mở `MalfoyStory_Dialogue` → mục **Test Dialogue** → chọn "1. First Meet" → **▶ Start** | Khung chat: Malfoy bên trái (ảnh, tên, emoji emotion, `#id`), Harry bên phải màu xanh. Bên phải là graph, node đang nói viền xanh lá | | |
+| T-01 | Mở `MalfoySaga_Dialogue` → mục **Test Dialogue** → chọn "1. First Meet" → **▶ Start** | Khung chat: Malfoy bên trái (ảnh, tên, emoji emotion, `#id`), Harry bên phải màu xanh. Bên phải là graph, node đang nói viền xanh lá | | |
 | T-02 | Bấm **Space** / Enter, phím **1–9** cho lựa chọn | Câu nhiều dòng hiện từng dòng ("1/3, 2/3…"); lựa chọn là các nút bo tròn | | |
 | T-03 | Chọn "Shake her hand" | Dưới bong bóng có các dòng nhỏ: `▸ #15 does: Malfoy.affection += 2`, `✎ Malfoy.affection: -1 → 1` | | |
 | T-04 | Bỏ tick **Graph** | Chỉ còn khung chat | | |
@@ -174,7 +174,7 @@ Mở `GuardSample.unity`, bấm **Play**. Đi bằng **WASD/mũi tên**. Lại g
 | T-07 | Chương "6. Hallway" chơi nhiều lần với các lựa chọn khác nhau | Lời chào đổi theo annoyance / affection / pride (Angry / Embarrassed / Smug / Neutral) | | |
 | T-08 | Mẫu Guard: chơi tới câu có event `open_gate` | Dòng `⚡ open_gate` hiện trong chat, cái cổng trong scene **không** biến mất | | |
 | T-09 | **⟲ Reset world** | Chat trống, giá trị về ban đầu, các câu "đã nói" bị quên | | |
-| T-10 | Terminal: `ndbt dlg-test-run --database MalfoyStory_Dialogue --conversation "6. Hallway (any time)" --json '{"choices":[2]}'` khi Dialogue Editor đang mở database đó | Chat trong editor tự chạy (where = "live"), lệnh in transcript + giá trị biến | | |
+| T-10 | Terminal: `ndbt dlg-test-run --database MalfoySaga_Dialogue --conversation "Courtyard (any time)" --json '{"choices":[2]}'` khi Dialogue Editor đang mở database đó | Chat trong editor tự chạy (where = "live"), lệnh in transcript + giá trị biến | | |
 
 ## 11. Quest log và tracker (Stage 4)
 
@@ -187,7 +187,7 @@ Mở `GuardSample.unity`, bấm **Play**. Đi bằng **WASD/mũi tên**. Lại g
 | Q-05 | Bấm **J** | Bảng Quests: mục Active có "The Old Key"; bên phải là tên, "Main · Active", tóm tắt, các bước. Nút **Untrack** ẩn quest khỏi tracker, **Track** hiện lại | | |
 | Q-06 | Đưa chìa cho Guard | Toast "Quest completed", tracker trống, bảng J chuyển quest sang mục Completed (các bước đều ✓) | | |
 | Q-07 | Save giữa chừng (sau Q-03) → chơi tiếp → Load | Tracker và trạng thái quest trở lại như lúc Save, **không** hiện toast "Quest started" khi Load | | |
-| Q-08 | Scene khác: GameObject › ND Dialogue › Quest Tracker / Quest Log | Tạo UI gắn vào Dialogue Manager có sẵn; không có manager thì Console báo rõ | | |
+| Q-08 | Scene khác: GameObject › ND Dialogue › Quest Tracker / Quest Log | Tạo UI gắn vào Quest Manager của Dialogue Manager (chưa có thì tự tạo object "Quest Manager" và nối vào); không có Dialogue Manager thì Console báo rõ | | |
 
 ## 12. Graph: bẻ edge, hub, sáng edge, bảng Variables
 
@@ -208,7 +208,7 @@ Mở `GuardSample.unity`, bấm **Play**. Đi bằng **WASD/mũi tên**. Lại g
 
 | ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
 |---|---|---|---|---|
-| B-01 | `ND Dialogue/Samples/Malfoy Story/Build Yule Ball (quest sample)`, mở `MalfoyYuleBall.unity`, Play | Malfoy (sprite) bên phải; cứ ~8 s có bong bóng trắng trên đầu với một câu ("Hmph." …), tự tắt sau vài giây | | |
+| B-01 | Mở `MalfoySaga.unity` (xem mục 15), Play, chơi xong chương 1 rồi tới Courtyard | Malfoy ở Courtyard: cứ ~8 s có bong bóng trắng trên đầu với một câu ("Hmph." …), tự tắt sau vài giây | | |
 | B-02 | Đang trong hội thoại | Không có bark (Quiet While Talking) | | |
 | B-03 | Sau khi trả lời con hạc giấy bằng "Moaning Myrtle" | Bark chỉ còn "Not. A. Word." (ưu tiên High) | | |
 | B-04 | Scene khác: chọn một nhân vật → GameObject › ND Dialogue › **Bark Bubble (on selected)** | Có canvas bong bóng trên đầu + Dialogue Barker đã nối manager/UI | | |
@@ -220,19 +220,65 @@ Mở `GuardSample.unity`, bấm **Play**. Đi bằng **WASD/mũi tên**. Lại g
 |---|---|---|---|---|
 | S-01 | Inspector entry → **Sequence**: gõ `Oops` | Dòng đỏ báo lỗi ngay dưới; Validate cũng báo | | |
 | S-02 | Node có sequence | Chip 🎬 n trên node, tooltip liệt kê lệnh; Test Dialogue có dòng "🎬 #id sequence: …" | | |
-| S-03 | Yule Ball: chơi tới "Yule 4. The Ball" | Lúc Malfoy xuất hiện: ảnh đổi sang váy dạ hội, camera cắt cận mặt; lúc nhảy: camera lùi ra DanceFloor | | |
+| S-03 | Malfoy Saga: chơi tới "5. Yule Ball: The Ball" (Great Hall) | Lúc Malfoy xuất hiện: ảnh đổi sang váy dạ hội, camera cắt cận mặt; lúc nhảy: camera lùi ra DanceFloor | | |
 | S-04 | Sequence gọi tên không có (VD `SetActive(Nobody, true)`) | Console: "no target 'Nobody'…", hội thoại vẫn chạy | | |
 
-## 15. Mẫu Yule Ball (quest)
+## 15. Mẫu Malfoy Saga (một scene, một cốt truyện)
 
 | ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
 |---|---|---|---|---|
-| Y-01 | Play → "Yule 1" chạy luôn | Toast "Quest started: A Partner for the Yule Ball", tracker có 2 bước | | |
-| Y-02 | Chapter "Yule 2" → "I'd love to." | Bước "Answer the paper crane" ✓, hiện "Meet her at the Great Hall" | | |
-| Y-03 | "Yule 4" → "Why are you so beautiful?" → "Just one?" | "...Fine. Two." — quest Completed, J: mọi bước ✓ | | |
-| Y-04 | Reset/chơi lại, ở Yule 2 chọn "Moaning Myrtle" → "Yule 3" | Bước "Make it up to her" hiện; "I'm sorry" → bước ✓ | | |
-| Y-05 | Chapter "Side. Chocolate Frog" → "Bin it, Ron." | Quest phụ (nhóm Side) chuyển Failed trong J | | |
+| M-01 | `ND Dialogue › Samples › Malfoy Saga › Build (database + scene)` | Chỉ còn `MalfoySaga_Dialogue.asset` + `MalfoySaga.unity` (3 mẫu cũ bị xoá); Console: "[Malfoy Saga] Built …", không có cảnh báo validate | | |
+| M-02 | Mở `MalfoySaga.unity`, Play | Bản đồ 9 khu (có tên). Góc phải trên: quest **The Malfoy Saga**, bước "Diagon Alley: meet the girl at Madam Malkin's". Dòng phím ở góc trái dưới | | |
+| M-03 | Đi tới Diagon Alley (WASD), tới gần Malfoy có dấu "!" | Hiện "E — Talk to Malfoy"; E bắt đầu chương 1; camera đứng yên trong lúc nói | | |
+| M-04 | Chơi xong chương 1 | Malfoy ở Diagon Alley biến mất, xuất hiện ở Quidditch Pitch (chương 2) và Courtyard (gặp lúc nào cũng được); tracker: bước 1 ✓, hiện bước 2 | | |
+| M-05 | Chơi lần lượt tới chương 5 | Courtyard: lời mời → toast "Quest started: A Partner for the Yule Ball"; Classroom: con hạc giấy; Great Hall: vũ hội (ảnh váy, camera cắt cận, rồi lùi ra) | | |
+| M-06 | Chương 6 ở Hogsmeade với affection cao | Kết "together" → chương 7, 8 ở Malfoy Manor (ảnh Malfoy lớn tuổi) → toast "Quest completed: The Malfoy Saga" | | |
+| M-07 | Chơi lại, cố tình làm Malfoy ghét (annoyance ≥ 6) trước chương 6 | Kết "hostile": quest chính **Failed**, không có epilogue | | |
+| M-08 | Quidditch Pitch (từ chương 3): Malfoy thứ hai → "Bin it, Ron." | Quest phụ "A Frog Before the Match" (nhóm Side) chuyển Failed trong J | | |
+| M-09 | F5 giữa chừng → chơi tiếp → F9 | Chữ "Saved" / "Loaded"; chương, quest, tracker trở lại như lúc F5, không có toast "Quest started" | | |
+
+## 16. Bark: cờ Bark và các setting
+
+| ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
+|---|---|---|---|---|
+| BK-01 | Dialogue Editor, conversation "Malfoy Barks" | Thanh trên có ô **💬 Bark** đang bật; thẻ ở mục Conversations ghi "💬 bark" | | |
+| BK-02 | Test Dialogue → chọn "Malfoy Barks" → **💬 Bark** vài lần | Mỗi lần một câu (ngẫu nhiên, hợp điều kiện), không có lựa chọn; trạng thái gợi ý dùng 💬 Bark | | |
+| BK-03 | Bật Bark cho một conversation mà START nối tới câu của người chơi → Validate | Báo "barks only say NPC lines" | | |
+| BK-04 | Barker: Interval min/max, Start Delay, Chance, Max Barks, Listener + Range, Conditions | Play: chỉ bark khi Harry ở gần (≤ Range), cách nhau ngẫu nhiên min–max giây, đủ Max Barks thì thôi | | |
+| BK-05 | Play, chọn object có Barker | Inspector ghi "Can bark now" hoặc lý do (cooling down / listener too far / condition failed…); nút **Bark now**, **Reset count** | | |
+| BK-06 | When = AfterConversation / OnTriggerExit | Bark ngay sau khi hội thoại kết thúc / khi người chơi rời vùng | | |
+
+## 17. Import Twine / Arcweave (Stage 7)
+
+| ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
+|---|---|---|---|---|
+| IM-01 | `ND Dialogue › Import (Twine, Arcweave)…`, chọn file `.twee` (hoặc `.html` xuất từ Twine 2), chọn database, **Import** | Conversation mới theo tên truyện; passage → câu ("Tên: câu" = người nói), link → lựa chọn, `(set:)` → action, `(if:)[[[link]]]` → điều kiện; báo cáo liệt kê nhân vật/biến mới và chỗ không dịch được | | |
+| IM-02 | Import file JSON xuất từ Arcweave | Element → câu (component = người nói), connection có nhãn → lựa chọn, branch → điều kiện, jumper → nối tới element | | |
+| IM-03 | Test Dialogue chạy conversation vừa import | Chạy đúng như truyện gốc | | |
+| IM-04 | Terminal: `ndbt dlg-import --database <db> --path <file>` | Như IM-01, in báo cáo | | |
+
+## 18. Tools: tìm/thay, thống kê, xuất (Stage 8)
+
+| ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
+|---|---|---|---|---|
+| TL-01 | Dialogue Editor → mục **Tools** → gõ vào Find | Danh sách chỗ khớp (conversation #id dòng); bấm một dòng → graph mở đúng câu đó, đã chọn sẵn | | |
+| TL-02 | Replace with + **Replace all** | Hỏi xác nhận; đổi mọi chỗ (cả text đã nối bảng, ở locale đang xem); **một** Ctrl+Z hoàn tác hết | | |
+| TL-03 | Phần Statistics | Bảng theo conversation và theo nhân vật (lines / choices / words); dòng thiếu bản dịch ở locale đang xem, bấm để tới câu | | |
+| TL-04 | **Export CSV…** / **Export screenplay…** | File CSV mở được bằng Excel/Sheets (UTF-8); screenplay dạng `MALFOY (Angry): …`, `→ lựa chọn` | | |
+
+## 19. Chữ chạy (markup), UI TextMeshPro và voice
+
+Cần TMP Essential Resources: `Window › TextMeshPro › Import TMP Essential Resources`.
+
+| ID | Bước làm | Kết quả mong đợi | KQ | Ghi chú |
+|---|---|---|---|---|
+| TX-01 | Viết vào một câu: `Hi<pause 0.5> <speed 10>slow</speed> <wave>wave</wave> <shake>shake</shake> <err id="a">bad</err><fix id="a" text="good"> <event name="blush">` | Inspector không báo lỗi markup (lỗi như `<pause>` thiếu số hiện màu đỏ dưới ô chữ); Validate cũng báo lỗi đó | | |
+| TX-02 | Test Dialogue, bật **Typing**, ▶ Start câu trên | Chữ chạy: dừng ở pause, chậm ở speed, "bad" gạch đỏ rồi đổi thành "good" xanh; Space lần 1 hiện hết câu, lần 2 sang câu sau. Dòng `⚡ blush — in the line, at … s` | | |
+| TX-03 | `GameObject › ND Dialogue › Dialogue Manager + UI (TextMeshPro)`, gán database, Play | Giống TX-02 nhưng trong game, có wave/shake thật; `<event>` tới DialogueEvents (listener trong scene phản ứng) | | |
+| TX-04 | Gán Voice (AudioClip) cho một câu (foldout 🔊 Voice dưới câu) | Test Dialogue: dòng `🔊 voice: tên (x s)`; trong game: clip phát, chữ chạy đúng bằng độ dài clip | | |
+| TX-05 | TMP UI: bật **Continue After Voice** | Hết voice + Continue Delay thì tự sang câu; câu có lựa chọn vẫn chờ người chơi | | |
+| TX-06 | Build lại Malfoy Saga khi đã import TMP Essentials | Scene dùng UI TextMeshPro; các câu "Your FRIEND?", "EEEEK", "treacle tart" có shake / err-fix | | |
 
 ## Chưa nằm trong checklist này
-- Importer (Twine / Arcweave): chưa làm. Trigger kiểu OnTriggerEnter (vùng chạm) có trong component nhưng mẫu chưa dùng.
+- Trigger kiểu OnTriggerEnter (vùng chạm) có trong component nhưng mẫu chưa dùng.
 - `DialogueActorAgent` (thuộc tính lấy từ blackboard runtime của agent BT): đã có test tự động. Mẫu chưa có agent BT nên chưa kiểm được bằng tay.

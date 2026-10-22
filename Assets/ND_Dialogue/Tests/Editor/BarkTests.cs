@@ -143,5 +143,75 @@ namespace ND.Dialogue.Tests
             Assert.AreEqual("So boring.", text.text, "the next line of the entry");
             Assert.IsTrue(manager.Context.TryGetVariable("yawns", out var yawns) && yawns.intValue == 1);
         }
+
+        private DialogueBarker Barker(out DialogueManager manager)
+        {
+            var go = new GameObject("Guard");
+            m_Track.Add(go);
+            go.SetActive(false);
+            manager = go.AddComponent<DialogueManager>();
+            var so = new SerializedObject(manager);
+            so.FindProperty("m_Database").objectReferenceValue = m_Db;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            Assert.IsTrue(manager.Initialize());
+            var barker = go.AddComponent<DialogueBarker>();
+            barker.Manager = manager;
+            barker.Conversation = "Guard Barks";
+            barker.Cooldown = 0f;
+            return barker;
+        }
+
+        [Test]
+        public void TheBarkersRules_SayWhyNot_CountConditionsRangeAndChance()
+        {
+            var barker = Barker(out var manager);
+            barker.MaxBarks = 2;
+            Assert.IsTrue(barker.Bark());
+            Assert.IsTrue(barker.Bark());
+            Assert.IsFalse(barker.CanBark(out string reason));
+            StringAssert.Contains("said its 2", reason);
+            barker.ResetBarks();
+            Assert.IsTrue(barker.CanBark(out _), "reset: may bark again");
+
+            barker.Conditions.Add(new VariableCondition { variable = "alarm", value = "true" });
+            Assert.IsFalse(barker.CanBark(out reason));
+            StringAssert.Contains("condition failed: alarm == true", reason);
+            manager.Context.SetVariable("alarm", VariableValue.Bool(true));
+            Assert.IsTrue(barker.CanBark(out _));
+
+            var player = new GameObject("Player");
+            m_Track.Add(player);
+            player.transform.position = new Vector3(20f, 0f, 0f);
+            barker.Listener = player.transform;
+            barker.Range = 5f;
+            Assert.IsFalse(barker.CanBark(out reason));
+            StringAssert.Contains("listener too far", reason);
+            player.transform.position = new Vector3(3f, 0f, 0f);
+            Assert.IsTrue(barker.CanBark(out _));
+
+            barker.Chance = 0f;
+            Assert.IsFalse(barker.Bark(), "chance 0: never");
+            Assert.AreEqual(0, barker.Count);
+        }
+
+        [Test]
+        public void RandomOrder_DoesNotRepeatTheLastLine_WhenAnotherIsValid()
+        {
+            var barker = Barker(out _);
+            barker.Order = BarkOrder.Random;
+            barker.AvoidRepeat = true;
+            var said = new List<string>();
+            barker.Barked += lines => said.Add(lines[0].Text);
+            for (int i = 0; i < 12; i++) Assert.IsTrue(barker.Bark());
+            for (int i = 1; i < said.Count; i++) Assert.AreNotEqual(said[i - 1], said[i], $"bark {i} repeated '{said[i]}'");
+        }
+
+        [Test]
+        public void ABarkConversation_IsMarked_AndValidateFlagsPlayerLinesFromStart()
+        {
+            CollectionAssert.IsEmpty(m_Db.Validate(), "not marked: a normal conversation may start with a choice");
+            m_Barks.isBark = true;
+            Assert.That(m_Db.Validate(), Has.Some.Contains("Bark conversation 'Guard Barks': START links to").And.Contains("a player line"));
+        }
     }
 }

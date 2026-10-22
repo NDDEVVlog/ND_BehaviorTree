@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using ND.Quests;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -16,12 +17,38 @@ namespace ND.Dialogue.Editor
     {
         public const float Gap = 4f;
 
-        /// <summary>The database a property belongs to (the database itself, or an IDialogueDatabaseOwner like a trigger).</summary>
-        public static DialogueDatabase DatabaseOf(SerializedProperty property)
+        /// <summary>The database a property belongs to (see <see cref="DatabaseOf(Object)"/>).</summary>
+        public static DialogueDatabase DatabaseOf(SerializedProperty property) => DatabaseOf(property.serializedObject.targetObject);
+
+        private static Dictionary<QuestDatabase, DialogueDatabase> s_QuestDatabaseUsers;
+
+        /// <summary>
+        /// The dialogue database whose names an object's fields pick from: the database itself, an
+        /// IDialogueDatabaseOwner (a trigger…), or for a Quest Database the first dialogue database that references it.
+        /// </summary>
+        public static DialogueDatabase DatabaseOf(Object target)
         {
-            var target = property.serializedObject.targetObject;
-            return target as DialogueDatabase ?? (target as IDialogueDatabaseOwner)?.Database;
+            if (target is DialogueDatabase database) return database;
+            if (target is IDialogueDatabaseOwner owner) return owner.Database;
+            if (!(target is QuestDatabase quests)) return null;
+            if (s_QuestDatabaseUsers == null)
+            {
+                s_QuestDatabaseUsers = new Dictionary<QuestDatabase, DialogueDatabase>();
+                EditorApplication.projectChanged -= ForgetQuestDatabaseUsers;
+                EditorApplication.projectChanged += ForgetQuestDatabaseUsers;
+            }
+            if (s_QuestDatabaseUsers.TryGetValue(quests, out var user) && user != null && user.questDatabases.Contains(quests)) return user;
+            user = null;
+            foreach (var guid in AssetDatabase.FindAssets("t:" + nameof(DialogueDatabase)))
+            {
+                var candidate = AssetDatabase.LoadAssetAtPath<DialogueDatabase>(AssetDatabase.GUIDToAssetPath(guid));
+                if (candidate != null && candidate.questDatabases.Contains(quests)) { user = candidate; break; }
+            }
+            s_QuestDatabaseUsers[quests] = user;
+            return user;
         }
+
+        private static void ForgetQuestDatabaseUsers() => s_QuestDatabaseUsers?.Clear();
 
         /// <summary>
         /// Edits a value written as text (VariableCondition/SetVariableAction.value) with the control of

@@ -1,3 +1,4 @@
+using ND.Quests;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -58,7 +59,11 @@ namespace ND.Dialogue.Editor.Tests
             m_Track.Clear();
         }
 
-        private List<string> Bubbles() => m_Panel.Log.Query<Label>("bubble").ToList().Select(l => l.text).ToList();
+        private List<string> Bubbles()
+        {
+            m_Panel.CompleteTyping(); // the last line may still be typing out
+            return m_Panel.Log.Query<Label>("bubble").ToList().Select(l => l.text).ToList();
+        }
         private List<string> Effects() => m_Panel.Log.Query<Label>(className: "dlg-effect").ToList().Select(l => l.text).ToList();
         private List<string> Replies() => m_Panel.Replies.Query<Button>().ToList().Select(b => b.text).ToList();
 
@@ -88,6 +93,30 @@ namespace ND.Dialogue.Editor.Tests
             Assert.That(effects, Has.Some.Contains("⚡ blush"));
             Assert.That(effects, Has.Some.Contains($"#{m_Yes.id} does:"));
             Assert.AreEqual(0, raised, "events stay in the chat: scene listeners do not react to a test");
+        }
+
+        [Test]
+        public void MarkupLines_TypeOutLikeTheGame_AndListTheirEventsAndVoice()
+        {
+            var voice = AudioClip.Create("draco_potter", 44100 * 2, 1, 44100, false);
+            m_Track.Add(voice);
+            m_Greet.text.Text = "Potter.<pause 0.5> <err id=\"a\">Hi</err><fix id=\"a\" text=\"Hello\"><event name=\"blush\">";
+            m_Greet.voice = voice;
+
+            m_Panel.TypingEnabled = true;
+            Assert.IsTrue(m_Panel.Start());
+            Assert.IsTrue(m_Panel.IsTyping, "the line types out");
+            var bubble = m_Panel.Log.Query<Label>("bubble").Last();
+            StringAssert.DoesNotContain("Hello", bubble.text, "not typed that far yet");
+
+            m_Panel.CompleteTyping();
+            Assert.IsFalse(m_Panel.IsTyping);
+            Assert.AreEqual(LineTimeline.Final(m_Greet.text.Text), bubble.text, "the same rich text as the game shows");
+            StringAssert.DoesNotContain("<pause", bubble.text);
+            Assert.That(Effects(), Has.Some.Contains("🔊 voice: draco_potter (2.0 s)"));
+            var lineEvent = Effects().SingleOrDefault(e => e.StartsWith("⚡ blush") && e.Contains("in the line"));
+            Assert.IsNotNull(lineEvent, string.Join("\n", Effects()));
+            StringAssert.Contains("at 2.00 s", lineEvent, "the event is at the end of a line fitted to its 2 s voice");
         }
 
         [Test]
@@ -152,6 +181,20 @@ namespace ND.Dialogue.Editor.Tests
             Assert.That(Effects(), Has.Some.Contains("affection:  0 → 2"), "the value started from 0 again");
         }
 
+        [Test]
+        public void StartingAnotherConversation_IsNotReportedAsAJump()
+        {
+            var other = m_Db.AddConversation("Library");
+            var line = other.AddEntry(m_Npc.id);
+            line.text.Text = "Shh.";
+            other.Link(other.StartEntry, line);
+            var session = new DialogueTestSession(m_Db, "en");
+            session.Start(m_Conv);
+            session.Stop();
+            var shown = session.Start(other);
+            Assert.IsFalse(shown.Any(i => i.Kind == DialogueTestSession.ItemKind.Route), DialogueTestSession.Format(shown));
+        }
+
         private Toggle ToolbarToggle(string label) => m_Panel.Query<Toggle>().ToList().Single(t => t.label == label);
 
         [Test]
@@ -204,6 +247,24 @@ namespace ND.Dialogue.Editor.Tests
             Assert.AreEqual(other.id, m_Panel.Graph.Conversation.id, "the graph follows the pick");
             m_Panel.Start();
             Assert.AreEqual("Shh.", Bubbles().Last());
+        }
+
+        [Test]
+        public void TheBarkButton_SaysOneLineLikeABarker_WithoutAConversation()
+        {
+            var barks = m_Db.AddConversation("Draco Barks");
+            barks.isBark = true;
+            var hmph = barks.AddEntry(m_Npc.id);
+            hmph.text.Text = "Hmph.";
+            hmph.actions.Add(new SetVariableAction { variable = "affection", mode = SetVariableAction.Mode.Add, value = "1" });
+            barks.Link(barks.StartEntry, hmph);
+            m_Panel.Bind(m_Db, "en", null, barks.id);
+            Assert.IsTrue(m_Panel.PickConversation("Draco Barks"));
+
+            Assert.IsTrue(m_Panel.Bark());
+            Assert.AreEqual("Hmph.", Bubbles().Last());
+            Assert.That(Effects(), Has.Some.Contains("affection:  0 → 1"), "its actions ran");
+            Assert.IsFalse(m_Panel.Runner.IsRunning, "no conversation was started");
         }
     }
 }

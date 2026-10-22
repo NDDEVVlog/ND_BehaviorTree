@@ -1,34 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9011890178976787967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
-  m_Name: world.time_of_day
-  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.FloatKey
-  keyName: world.time_of_day
-  value: 8
---- !u!114 &-3187323370580904238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56ccbfd705f632749b34b7302ec90a9a, type: 3}
-  m_Name: world.gate_position
-  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Vector3Key
-  keyName: world.gate_position
-  value: {x: 0, y: 0, z: 5}
---- !u!114 &-3070629223034240348
+--- !u!114 &-7877477664759349090
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -38,9 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
-  m_Name: quest.key
+  m_Name: player.gold
   m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.IntKey
-  keyName: quest.key
+  keyName: player.gold
+  value: 10
+--- !u!114 &-3534839299423572406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: player.has_old_key
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: player.has_old_key
   value: 0
 --- !u!114 &11400000
 MonoBehaviour:
@@ -55,14 +41,28 @@ MonoBehaviour:
   m_Name: World_Blackboard
   m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Blackboard
   keys:
-  - {fileID: 2453787721931121415}
-  - {fileID: 8924006649956723896}
-  - {fileID: -9011890178976787967}
-  - {fileID: -3070629223034240348}
-  - {fileID: -3187323370580904238}
-  - {fileID: 8694721642607470}
+  - {fileID: -3534839299423572406}
+  - {fileID: -7877477664759349090}
+  - {fileID: 6530983886917391165}
+  - {fileID: 2760025235703354583}
+  - {fileID: 8471213400828057275}
+  - {fileID: 4437165797365763922}
   parent: {fileID: 0}
---- !u!114 &8694721642607470
+--- !u!114 &2760025235703354583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
+  m_Name: quest.key
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.IntKey
+  keyName: quest.key
+  value: 0
+--- !u!114 &4437165797365763922
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.IntKey
   keyName: Merchant.mood
   value: 0
---- !u!114 &2453787721931121415
+--- !u!114 &6530983886917391165
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,12 +85,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
-  m_Name: player.has_old_key
-  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
-  keyName: player.has_old_key
-  value: 0
---- !u!114 &8924006649956723896
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: world.time_of_day
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.FloatKey
+  keyName: world.time_of_day
+  value: 8
+--- !u!114 &8471213400828057275
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,8 +99,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48f2bbf9411a7b14d9e8e4e8f389dbd1, type: 3}
-  m_Name: player.gold
-  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.IntKey
-  keyName: player.gold
-  value: 10
+  m_Script: {fileID: 11500000, guid: 56ccbfd705f632749b34b7302ec90a9a, type: 3}
+  m_Name: world.gate_position
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Vector3Key
+  keyName: world.gate_position
+  value: {x: 0, y: 0, z: 5}

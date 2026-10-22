@@ -1,3 +1,4 @@
+using ND.Quests;
 using System.Collections.Generic;
 using ND.Localization;
 using ND_BehaviorTree;

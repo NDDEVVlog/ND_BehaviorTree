@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ND.Quests;
 
 namespace ND.Dialogue
 {
@@ -25,7 +26,7 @@ namespace ND.Dialogue
         public const int CurrentVersion = 1;
 
         [Serializable] public struct Variable { public string name; public VariableType type; public string value; }
-        [Serializable] public struct Quest { public string name; public QuestState state; }
+        [Serializable] public struct Quest { public string name; public QuestState state; public int progress; }
         [Serializable] public struct Seen { public int conversation; public int entry; }
 
         public int version = CurrentVersion;

@@ -44,12 +44,14 @@ namespace ND.Dialogue
             {
                 float bestDistance = float.MaxValue;
                 Vector3 position = transform.position;
-                foreach (var trigger in DialogueTrigger.Enabled)
+                var triggers = DialogueTrigger.Enabled;
+                for (int i = 0; i < triggers.Count; i++) // indexed: foreach over the interface would box an enumerator every frame
                 {
+                    var trigger = triggers[i];
                     if (trigger == null || trigger.When != DialogueTriggerEvent.OnUse || trigger.gameObject == gameObject) continue;
                     float distance = Vector3.Distance(position, trigger.transform.position);
                     if (distance > trigger.UseRange || distance >= bestDistance) continue;
-                    if (!trigger.CanFire(out _)) continue;
+                    if (!trigger.CanFire()) continue;
                     best = trigger;
                     bestDistance = distance;
                 }
@@ -73,10 +75,11 @@ namespace ND.Dialogue
             if (target != Target)
             {
                 Target = target;
+                // The prompt text only when the target changes (called every frame: no string, no text rebuild otherwise).
+                if (target != null) UIText.Set(m_PromptText, $"{m_UseKey} — {target.PromptLabel}");
                 TargetChanged?.Invoke(target);
             }
             if (m_PromptRoot != null && m_PromptRoot.activeSelf != (target != null)) m_PromptRoot.SetActive(target != null);
-            if (target != null) UIText.Set(m_PromptText, $"{m_UseKey} — {target.PromptLabel}");
         }
     }
 }

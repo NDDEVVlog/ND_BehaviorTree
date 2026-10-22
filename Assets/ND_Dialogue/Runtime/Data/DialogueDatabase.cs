@@ -2,52 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ND.Localization;
+using ND.Quests;
 using UnityEngine;
 
 namespace ND.Dialogue
 {
-    public enum QuestState { Inactive, Active, Completed, Failed, Abandoned }
-
     [Serializable]
     public class VariableDefinition
     {
         public string name;
         public VariableValue initialValue = VariableValue.Bool(false);
         [TextArea] public string description;
-    }
-
-    [Serializable]
-    public class QuestDefinition
-    {
-        public string name;
-        [Tooltip("Name shown to players in the quest log and tracker. Empty = the quest id.")]
-        public LocalizableString title = new LocalizableString();
-        public QuestState initialState = QuestState.Inactive;
-        [Tooltip("Note for designers (not shown in game).")]
-        [TextArea] public string description;
-
-        [Tooltip("Shown in the quest log under the title.")]
-        public LocalizableString summary = new LocalizableString();
-        [Tooltip("Quest log group, e.g. Main or Side.")]
-        public string group = "Main";
-        [Tooltip("Show it in the on-screen tracker as soon as it becomes Active.")]
-        public bool trackWhenActive = true;
-        [Tooltip("The steps listed under the quest (each shows and ticks itself by conditions).")]
-        public List<QuestStep> steps = new List<QuestStep>();
-    }
-
-    /// <summary>
-    /// One line of a quest's journal ("Find the old key"): shown while <see cref="visibleWhen"/> holds and ticked once
-    /// <see cref="doneWhen"/> holds. Both read the world (variables, quests), so steps need no state of their own.
-    /// </summary>
-    [Serializable]
-    public class QuestStep
-    {
-        public LocalizableString text = new LocalizableString();
-        [Tooltip("All must hold for the step to be listed. Empty = always listed.")]
-        [SerializeReference] public List<DialogueCondition> visibleWhen = new List<DialogueCondition>();
-        [Tooltip("All must hold for the step to be ticked. Empty = ticked when the quest is Completed.")]
-        [SerializeReference] public List<DialogueCondition> doneWhen = new List<DialogueCondition>();
     }
 
     /// <summary>A gameplay event dialogue can fire (RaiseEventAction) and scenes can react to (DialogueEventListener).</summary>
@@ -87,7 +52,7 @@ namespace ND.Dialogue
 
         public abstract IDialogueSchema Schema { get; }
         /// <summary>The context a runner should use at runtime for <paramref name="database"/> (its actors' attributes included).</summary>
-        public abstract IDialogueContext CreateContext(DialogueDatabase database);
+        public abstract IDialogueContext CreateContext(DialogueDatabase database, QuestRuntime quests = null);
 
         private sealed class EmptySchema : IDialogueSchema
         {
@@ -121,7 +86,8 @@ namespace ND.Dialogue
         public IDialogueSchema Schema => schemaSource != null ? new SourceSchema(schemaSource.Schema, this) : this;
 
         /// <summary>The runtime context for this database: the source's, else a new <see cref="DialogueWorld"/>.</summary>
-        public IDialogueContext CreateContext() => schemaSource != null ? schemaSource.CreateContext(this) : new DialogueWorld(this);
+        /// <param name="quests">The quests to use (a scene's QuestManager); null = the context keeps its own.</param>
+        public IDialogueContext CreateContext(QuestRuntime quests = null) => schemaSource != null ? schemaSource.CreateContext(this, quests) : new DialogueWorld(this, quests);
 
         [Tooltip("Defaults for runners created without options.")]
         public DialogueRunnerOptions runnerOptions = new DialogueRunnerOptions();
@@ -133,6 +99,9 @@ namespace ND.Dialogue
         [Tooltip("How shared characters look in this database (other portraits per emotion, another display name).")]
         public List<ActorLook> looks = new List<ActorLook>();
         public List<VariableDefinition> variables = new List<VariableDefinition>();
+        [Tooltip("Quest Databases whose quests this database uses (conditions, actions, the quest log).")]
+        public List<QuestDatabase> questDatabases = new List<QuestDatabase>();
+        [Tooltip("Quests kept in this database only (older content; new quests belong in a Quest Database).")]
         public List<QuestDefinition> quests = new List<QuestDefinition>();
         public List<EventDefinition> events = new List<EventDefinition>();
         public List<Conversation> conversations = new List<Conversation>();
@@ -234,9 +203,23 @@ namespace ND.Dialogue
             return null;
         }
 
+        /// <summary>This database's own quests, then those of its Quest Databases (a name defined twice: the first wins; Validate reports it).</summary>
+        public IEnumerable<QuestDefinition> AllQuests
+        {
+            get
+            {
+                foreach (var q in quests) if (q != null) yield return q;
+                foreach (var database in questDatabases)
+                {
+                    if (database == null) continue;
+                    foreach (var q in database.quests) if (q != null) yield return q;
+                }
+            }
+        }
+
         public QuestDefinition FindQuest(string questName)
         {
-            foreach (var q in quests) if (q != null && q.name == questName) return q;
+            foreach (var q in AllQuests) if (q.name == questName) return q;
             return null;
         }
 
@@ -305,7 +288,7 @@ namespace ND.Dialogue
 
         IEnumerable<string> IDialogueSchema.QuestNames
         {
-            get { foreach (var q in quests) if (q != null && !string.IsNullOrEmpty(q.name)) yield return q.name; }
+            get { foreach (var q in AllQuests) if (!string.IsNullOrEmpty(q.name)) yield return q.name; }
         }
 
         IEnumerable<string> IDialogueSchema.EventNames
@@ -463,8 +446,13 @@ namespace ND.Dialogue
                         issues.Add($"Look of '{actor.name}': emotion '{emotion.id}' does not exist on the character (looks only change existing emotions).");
             }
             CheckNames(variables, v => v.name, "variable", issues);
-            CheckNames(quests, q => q.name, "quest", issues);
-            foreach (var q in quests)
+            CheckNames(AllQuests.ToList(), q => q.name, "quest", issues);
+            for (int i = 0; i < questDatabases.Count; i++)
+            {
+                if (questDatabases[i] == null) { issues.Add($"Quest Databases: empty slot {i}."); continue; }
+                issues.AddRange(questDatabases[i].Validate());
+            }
+            foreach (var q in AllQuests)
             {
                 if (q == null || string.IsNullOrEmpty(q.name)) continue;
                 if (schemaSource != null && !schema.HasQuest(q.name))
@@ -474,8 +462,11 @@ namespace ND.Dialogue
                     var step = q.steps[i];
                     if (step == null) { issues.Add($"Quest '{q.name}': empty step slot {i + 1}."); continue; }
                     string where = $"Quest '{q.name}' step {i + 1}";
-                    foreach (var c in step.visibleWhen) if (c == null) issues.Add($"{where}: empty condition slot."); else c.Validate(schema, where, issues);
-                    foreach (var c in step.doneWhen) if (c == null) issues.Add($"{where}: empty condition slot."); else c.Validate(schema, where, issues);
+                    foreach (var c in step.visibleWhen.Concat(step.doneWhen))
+                    {
+                        if (c == null) issues.Add($"{where}: empty condition slot.");
+                        else if (c is DialogueCondition dialogueCondition) dialogueCondition.Validate(schema, where, issues);
+                    }
                 }
             }
             CheckNames(events, e => e.name, "event", issues);
@@ -486,6 +477,14 @@ namespace ND.Dialogue
                 if (c == null) { issues.Add("Null conversation in list."); continue; }
                 if (!conversationIds.Add(c.id)) issues.Add($"Duplicate conversation id {c.id} ('{c.title}').");
                 if (c.StartEntry == null) issues.Add($"Conversation '{c.title}' has no START entry (id {Conversation.StartEntryId}).");
+                if (c.isBark && c.StartEntry != null)
+                    foreach (var link in c.StartEntry.links)
+                    {
+                        var first = link.conversationId == c.id ? c.FindEntry(link.entryId) : null;
+                        var speaker = first != null ? FindActor(first.actorId) : null;
+                        if (first != null && !first.isPassthrough && speaker != null && speaker.isPlayer)
+                            issues.Add($"Bark conversation '{c.title}': START links to #{first.id}, a player line — barks only say NPC lines (it is never said).");
+                    }
 
                 var entryIds = new HashSet<int>();
                 foreach (var e in c.entries)
@@ -503,6 +502,8 @@ namespace ND.Dialogue
                         DialogueSequence.Parse(e.sequence, sequenceErrors);
                         foreach (var error in sequenceErrors) issues.Add($"{where}: sequence {error}");
                     }
+                    for (int line = 0; line < e.LineCount; line++) CheckMarkup(e.LineText(line)?.Text, e.LineCount > 1 ? $"{where} line {line + 1}" : where, issues);
+                    CheckMarkup(e.menuText?.Text, $"{where} menu text", issues);
                     foreach (var link in e.links)
                     {
                         var target = FindConversation(link.conversationId);
@@ -528,6 +529,15 @@ namespace ND.Dialogue
                 }
             }
             return issues;
+        }
+
+        /// <summary>Reports the line markup errors of a plain text (pause without seconds, unclosed style, fix without err…).</summary>
+        private static void CheckMarkup(string text, string where, List<string> issues)
+        {
+            if (string.IsNullOrEmpty(text) || text.IndexOf('<') < 0) return;
+            var errors = new List<string>();
+            LineMarkup.Parse(text, errors);
+            foreach (var error in errors) issues.Add($"{where}: markup {error}");
         }
 
         private static void CheckNames<T>(List<T> items, Func<T, string> nameOf, string kind, List<string> issues) where T : class

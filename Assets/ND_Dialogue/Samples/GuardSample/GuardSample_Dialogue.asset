@@ -19,11 +19,55 @@ MonoBehaviour:
     alwaysShowChoiceMenu: 1
     maxSilentSteps: 100
   actors:
-  - rid: 3058894625090830677
-  - rid: 3058894625090830678
-  - rid: 3058894625090830679
+  - rid: 3058894632198340676
+  - rid: 3058894632198340677
+  - rid: 3058894632198340678
+  characterDatabases: []
+  looks: []
   variables: []
-  quests: []
+  questDatabases: []
+  quests:
+  - name: key
+    title:
+      m_EntryId: 0
+      m_Table: {fileID: 0}
+      m_Text: The Old Key
+    initialState: 0
+    description: Journal of the world's quest.key (the state lives in World_Blackboard).
+    summary:
+      m_EntryId: 0
+      m_Table: {fileID: 0}
+      m_Text: The gate guard won't let anyone through. He lost an old key somewhere
+        in the market.
+    group: Main
+    trackWhenActive: 1
+    goal: 0
+    progression:
+      rid: -2
+    completeAtGoal: 1
+    steps:
+    - text:
+        m_EntryId: 0
+        m_Table: {fileID: 0}
+        m_Text: Ask the gate guard how to get through
+      visibleWhen: []
+      doneWhen:
+      - rid: 3058894632198340679
+    - text:
+        m_EntryId: 0
+        m_Table: {fileID: 0}
+        m_Text: Find the old key (the merchant might have one)
+      visibleWhen:
+      - rid: 3058894632198340680
+      doneWhen:
+      - rid: 3058894632198340681
+    - text:
+        m_EntryId: 0
+        m_Table: {fileID: 0}
+        m_Text: Bring the key back to the gate guard
+      visibleWhen:
+      - rid: 3058894632198340682
+      doneWhen: []
   events:
   - name: open_gate
     argumentHint: 
@@ -37,37 +81,39 @@ MonoBehaviour:
     description: Quest giver. Localized lines (en/vi), quest state, character attributes,
       link priority, an event.
     m_Entries:
-    - rid: 3058894625090830735
-    - rid: 3058894625090830736
-    - rid: 3058894625090830737
-    - rid: 3058894625090830738
-    - rid: 3058894625090830739
-    - rid: 3058894625090830740
-    - rid: 3058894625090830741
-    - rid: 3058894625090830742
-    - rid: 3058894625090830743
-    - rid: 3058894625090830744
+    - rid: 3058894632198340683
+    - rid: 3058894632198340684
+    - rid: 3058894632198340685
+    - rid: 3058894632198340686
+    - rid: 3058894632198340687
+    - rid: 3058894632198340688
+    - rid: 3058894632198340689
+    - rid: 3058894632198340690
+    - rid: 3058894632198340691
+    - rid: 3058894632198340692
     m_LegacyEntries: []
-    m_NextEntryId: 11
+    m_NextEntryId: 10
   - id: 2
     title: Merchant
     description: "Plain text (connect it to the table later with Settings \u2192
       Localize all). Gold check, a purchase, the merchant's attribute."
     m_Entries:
-    - rid: 3058894625090830745
-    - rid: 3058894625090830746
-    - rid: 3058894625090830747
-    - rid: 3058894625090830748
-    - rid: 3058894625090830749
-    - rid: 3058894625090830750
+    - rid: 3058894632198340693
+    - rid: 3058894632198340694
+    - rid: 3058894632198340695
+    - rid: 3058894632198340696
+    - rid: 3058894632198340697
+    - rid: 3058894632198340698
     m_LegacyEntries: []
     m_NextEntryId: 6
-  m_NextActorId: 6
+  m_NextActorId: 4
   m_NextConversationId: 3
   references:
     version: 2
     RefIds:
-    - rid: 3058894625090830677
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 3058894632198340676
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
@@ -79,7 +125,7 @@ MonoBehaviour:
         isPlayer: 1
         emotions:
         - id: Neutral
-          portrait: {fileID: 21300000, guid: 77172998e563d3c4ab499324af6f78ad, type: 3}
+          portrait: {fileID: 0}
           tint: {r: 1, g: 1, b: 1, a: 1}
           localizedPortrait:
             m_EntryId: 0
@@ -88,8 +134,10 @@ MonoBehaviour:
             m_EntryId: 0
             m_Table: {fileID: 0}
         defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
         attributes: []
-    - rid: 3058894625090830678
+    - rid: 3058894632198340677
       type: {class: BlackboardActor, ns: ND.Dialogue.NDBT, asm: ND.Dialogue.NDBT}
       data:
         id: 2
@@ -128,9 +176,11 @@ MonoBehaviour:
             m_EntryId: 0
             m_Table: {fileID: 0}
         defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
         attributes: []
         blackboard: {fileID: 11400000, guid: 3cdc7c8268558ec4d977a4fa04088bb8, type: 2}
-    - rid: 3058894625090830679
+    - rid: 3058894632198340678
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
@@ -151,6 +201,8 @@ MonoBehaviour:
             m_EntryId: 0
             m_Table: {fileID: 0}
         defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
         attributes:
         - name: mood
           initialValue:
@@ -163,155 +215,33 @@ MonoBehaviour:
             colorValue: {r: 0, g: 0, b: 0, a: 0}
             objectValue: {fileID: 0}
           description: Goes up when you buy something.
-    - rid: 3058894625090830680
+    - rid: 3058894632198340679
       type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: key
-        op: 0
+        op: 1
         state: 0
-    - rid: 3058894625090830681
-      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Guard.met
-        op: 0
-        value: false
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830682
+    - rid: 3058894632198340680
       type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: key
-        op: 0
+        op: 1
         state: 0
-    - rid: 3058894625090830683
-      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Guard.met
-        op: 0
-        value: true
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830684
-      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        quest: key
-        op: 0
-        state: 1
-    - rid: 3058894625090830685
-      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        quest: key
-        op: 0
-        state: 1
-    - rid: 3058894625090830686
+    - rid: 3058894632198340681
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: player.has_old_key
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894625090830687
-      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        quest: key
-        op: 0
-        state: 2
-    - rid: 3058894625090830688
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Guard.met
-        mode: 0
-        value: true
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830689
-      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        quest: key
-        state: 1
-    - rid: 3058894625090830690
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Guard.trust
-        mode: 1
-        value: 1
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830691
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Guard.trust
-        mode: 1
-        value: -1
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830692
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Guard.alertness
-        mode: 0
-        value: 0.9
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830693
-      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        quest: key
-        state: 2
-    - rid: 3058894625090830694
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Guard.trust
-        mode: 1
-        value: 2
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830695
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Guard.bannerColor
-        mode: 0
-        value: '#33CC55'
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830696
-      type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        eventName: open_gate
-        argument: 
-    - rid: 3058894625090830697
-      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: player.gold
-        op: 5
-        value: 5
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830698
+    - rid: 3058894632198340682
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: player.has_old_key
         op: 0
-        value: false
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830699
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: player.gold
-        mode: 1
-        value: -5
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830700
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: player.has_old_key
-        mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894625090830701
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Merchant.mood
-        mode: 1
-        value: 1
-        objectValue: {fileID: 0}
-    - rid: 3058894625090830702
-      type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        eventName: give_item
-        argument: old_key
-    - rid: 3058894625090830735
+    - rid: 3058894632198340683
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -328,6 +258,8 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 1
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links:
@@ -335,32 +267,37 @@ MonoBehaviour:
           entryId: 1
           priority: 2
           conditions:
-          - rid: 3058894625090830680
-          - rid: 3058894625090830681
+          - rid: 3058894632198340699
+          - rid: 3058894632198340700
+          bends: []
         - conversationId: 1
           entryId: 2
           priority: 2
           conditions:
-          - rid: 3058894625090830682
-          - rid: 3058894625090830683
+          - rid: 3058894632198340701
+          - rid: 3058894632198340702
+          bends: []
         - conversationId: 1
           entryId: 7
           priority: 2
           conditions:
-          - rid: 3058894625090830684
+          - rid: 3058894632198340703
+          bends: []
         - conversationId: 1
           entryId: 8
           priority: 4
           conditions:
-          - rid: 3058894625090830685
-          - rid: 3058894625090830686
+          - rid: 3058894632198340704
+          - rid: 3058894632198340705
+          bends: []
         - conversationId: 1
           entryId: 9
           priority: 2
           conditions:
-          - rid: 3058894625090830687
+          - rid: 3058894632198340706
+          bends: []
         position: {x: 0, y: 260}
-    - rid: 3058894625090830736
+    - rid: 3058894632198340684
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
@@ -377,20 +314,24 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions:
-        - rid: 3058894625090830688
+        - rid: 3058894632198340707
         links:
         - conversationId: 1
           entryId: 3
           priority: 2
           conditions: []
+          bends: []
         - conversationId: 1
           entryId: 4
           priority: 2
           conditions: []
+          bends: []
         position: {x: 300, y: 0}
-    - rid: 3058894625090830737
+    - rid: 3058894632198340685
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
@@ -407,6 +348,8 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links:
@@ -414,12 +357,14 @@ MonoBehaviour:
           entryId: 3
           priority: 2
           conditions: []
+          bends: []
         - conversationId: 1
           entryId: 4
           priority: 2
           conditions: []
+          bends: []
         position: {x: 300, y: 130}
-    - rid: 3058894625090830738
+    - rid: 3058894632198340686
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
@@ -436,6 +381,8 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links:
@@ -443,8 +390,9 @@ MonoBehaviour:
           entryId: 5
           priority: 2
           conditions: []
+          bends: []
         position: {x: 620, y: 0}
-    - rid: 3058894625090830739
+    - rid: 3058894632198340687
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
@@ -461,6 +409,8 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links:
@@ -468,8 +418,9 @@ MonoBehaviour:
           entryId: 6
           priority: 2
           conditions: []
+          bends: []
         position: {x: 620, y: 130}
-    - rid: 3058894625090830740
+    - rid: 3058894632198340688
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
@@ -486,13 +437,15 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions:
-        - rid: 3058894625090830689
-        - rid: 3058894625090830690
+        - rid: 3058894632198340708
+        - rid: 3058894632198340709
         links: []
         position: {x: 940, y: 0}
-    - rid: 3058894625090830741
+    - rid: 3058894632198340689
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 6
@@ -509,13 +462,15 @@ MonoBehaviour:
         emotion: Angry
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions:
-        - rid: 3058894625090830691
-        - rid: 3058894625090830692
+        - rid: 3058894632198340710
+        - rid: 3058894632198340711
         links: []
         position: {x: 940, y: 130}
-    - rid: 3058894625090830742
+    - rid: 3058894632198340690
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 7
@@ -532,11 +487,13 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links: []
         position: {x: 300, y: 300}
-    - rid: 3058894625090830743
+    - rid: 3058894632198340691
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 8
@@ -553,15 +510,17 @@ MonoBehaviour:
         emotion: Happy
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions:
-        - rid: 3058894625090830693
-        - rid: 3058894625090830694
-        - rid: 3058894625090830695
-        - rid: 3058894625090830696
+        - rid: 3058894632198340712
+        - rid: 3058894632198340713
+        - rid: 3058894632198340714
+        - rid: 3058894632198340715
         links: []
         position: {x: 300, y: 420}
-    - rid: 3058894625090830744
+    - rid: 3058894632198340692
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 9
@@ -578,11 +537,13 @@ MonoBehaviour:
         emotion: Happy
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links: []
         position: {x: 300, y: 560}
-    - rid: 3058894625090830745
+    - rid: 3058894632198340693
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 0
@@ -599,6 +560,8 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 1
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links:
@@ -606,8 +569,9 @@ MonoBehaviour:
           entryId: 1
           priority: 2
           conditions: []
+          bends: []
         position: {x: 0, y: 120}
-    - rid: 3058894625090830746
+    - rid: 3058894632198340694
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
@@ -624,6 +588,8 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links:
@@ -631,14 +597,16 @@ MonoBehaviour:
           entryId: 2
           priority: 2
           conditions:
-          - rid: 3058894625090830697
-          - rid: 3058894625090830698
+          - rid: 3058894632198340716
+          - rid: 3058894632198340717
+          bends: []
         - conversationId: 2
           entryId: 3
           priority: 2
           conditions: []
+          bends: []
         position: {x: 300, y: 120}
-    - rid: 3058894625090830747
+    - rid: 3058894632198340695
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 2
@@ -655,6 +623,8 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links:
@@ -662,8 +632,9 @@ MonoBehaviour:
           entryId: 4
           priority: 2
           conditions: []
+          bends: []
         position: {x: 620, y: 0}
-    - rid: 3058894625090830748
+    - rid: 3058894632198340696
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
@@ -680,6 +651,8 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links:
@@ -687,8 +660,9 @@ MonoBehaviour:
           entryId: 5
           priority: 2
           conditions: []
+          bends: []
         position: {x: 620, y: 240}
-    - rid: 3058894625090830749
+    - rid: 3058894632198340697
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 4
@@ -705,15 +679,17 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions:
-        - rid: 3058894625090830699
-        - rid: 3058894625090830700
-        - rid: 3058894625090830701
-        - rid: 3058894625090830702
+        - rid: 3058894632198340718
+        - rid: 3058894632198340719
+        - rid: 3058894632198340720
+        - rid: 3058894632198340721
         links: []
         position: {x: 940, y: 0}
-    - rid: 3058894625090830750
+    - rid: 3058894632198340698
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 5
@@ -730,7 +706,157 @@ MonoBehaviour:
         emotion: 
         moreLines: []
         isPassthrough: 0
+        sequence: 
+        isHub: 0
         conditions: []
         actions: []
         links: []
         position: {x: 940, y: 240}
+    - rid: 3058894632198340699
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        op: 0
+        state: 0
+    - rid: 3058894632198340700
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Guard.met
+        op: 0
+        value: false
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340701
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        op: 0
+        state: 0
+    - rid: 3058894632198340702
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Guard.met
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340703
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        op: 0
+        state: 1
+    - rid: 3058894632198340704
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        op: 0
+        state: 1
+    - rid: 3058894632198340705
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: player.has_old_key
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340706
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        op: 0
+        state: 2
+    - rid: 3058894632198340707
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Guard.met
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340708
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        state: 1
+    - rid: 3058894632198340709
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Guard.trust
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340710
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Guard.trust
+        mode: 1
+        value: -1
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340711
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Guard.alertness
+        mode: 0
+        value: 0.9
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340712
+      type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        state: 2
+    - rid: 3058894632198340713
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Guard.trust
+        mode: 1
+        value: 2
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340714
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Guard.bannerColor
+        mode: 0
+        value: '#33CC55'
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340715
+      type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        eventName: open_gate
+        argument: 
+    - rid: 3058894632198340716
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: player.gold
+        op: 5
+        value: 5
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340717
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: player.has_old_key
+        op: 0
+        value: false
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340718
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: player.gold
+        mode: 1
+        value: -5
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340719
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: player.has_old_key
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340720
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Merchant.mood
+        mode: 1
+        value: 1
+        objectValue: {fileID: 0}
+    - rid: 3058894632198340721
+      type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        eventName: give_item
+        argument: old_key

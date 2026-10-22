@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using ND.Quests;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,7 +13,7 @@ namespace ND.Dialogue.Editor
     /// Canvas › Dialogue UI › Panel › (Subtitle: portrait, speaker, line, continue) + (Responses: vertical list + template).
     /// Every reference of <see cref="StandardDialogueUI"/> is wired. Restyle freely afterwards.
     /// </summary>
-    public static class DialogueUIBuilder
+    public static partial class DialogueUIBuilder
     {
         private static readonly Color PanelColor = new Color(0.07f, 0.08f, 0.11f, 0.92f);
         private static readonly Color ButtonColor = new Color(0.18f, 0.22f, 0.3f, 1f);
@@ -175,7 +178,7 @@ namespace ND.Dialogue.Editor
             Selection.activeObject = log.gameObject;
         }
 
-        [MenuItem("GameObject/ND Dialogue/Bark Bubble (on selected)", false, 14)]
+        [MenuItem("GameObject/ND Dialogue/Add Barker (bark bubble) to selected", false, 14)]
         private static void CreateBarkFromMenu(MenuCommand command)
         {
             var target = command.context as GameObject ?? Selection.activeGameObject;
@@ -191,10 +194,24 @@ namespace ND.Dialogue.Editor
         }
 
         /// <summary>
-        /// A world-space speech bubble above <paramref name="character"/> (its <see cref="BarkUI"/>) and a
-        /// <see cref="DialogueBarker"/> on the character, wired to <paramref name="manager"/>. Undoable.
+        /// Adds a <see cref="DialogueBarker"/> to <paramref name="character"/>, wired to <paramref name="manager"/> and to the
+        /// character's speech bubble (a world-space <see cref="BarkUI"/>; made the first time). Run it again for another kind
+        /// of bark (idle mutter, greeting, after a talk…): every barker of the character shares the bubble. Undoable.
         /// </summary>
         public static DialogueBarker CreateBark(GameObject character, DialogueManager manager, string conversation, float height = 2.2f)
+        {
+            var ui = character.GetComponentInChildren<BarkUI>(true);
+            if (ui == null) ui = CreateBarkBubble(character, height);
+            var barker = Undo.AddComponent<DialogueBarker>(character);
+            var so = new SerializedObject(barker);
+            so.FindProperty("m_Manager").objectReferenceValue = manager;
+            so.FindProperty("m_UI").objectReferenceValue = ui;
+            if (!string.IsNullOrEmpty(conversation)) so.FindProperty("m_Conversation").stringValue = conversation;
+            so.ApplyModifiedProperties();
+            return barker;
+        }
+
+        private static BarkUI CreateBarkBubble(GameObject character, float height)
         {
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             var canvasGo = new GameObject("Bark Bubble", typeof(RectTransform), typeof(Canvas));
@@ -226,14 +243,7 @@ namespace ND.Dialogue.Editor
             uiSo.FindProperty("m_Speaker").objectReferenceValue = speaker;
             uiSo.ApplyModifiedPropertiesWithoutUndo();
             bubble.gameObject.SetActive(false);
-
-            if (!character.TryGetComponent(out DialogueBarker barker)) barker = Undo.AddComponent<DialogueBarker>(character);
-            var so = new SerializedObject(barker);
-            so.FindProperty("m_Manager").objectReferenceValue = manager;
-            so.FindProperty("m_UI").objectReferenceValue = ui;
-            if (!string.IsNullOrEmpty(conversation)) so.FindProperty("m_Conversation").stringValue = conversation;
-            so.ApplyModifiedProperties();
-            return barker;
+            return ui;
         }
 
         private static DialogueManager SceneManagerOrLog(string what)
@@ -256,7 +266,29 @@ namespace ND.Dialogue.Editor
             return canvasGo.transform;
         }
 
-        /// <summary>Top-right tracker (tracked quests and their steps) plus a toast; wired to <paramref name="manager"/>.</summary>
+        /// <summary>
+        /// The dialogue manager's Quest Manager. When it has none, one is made (with the database's Quest Databases) and
+        /// assigned, so dialogue, the quest UI and other systems share the same quests. Undoable.
+        /// </summary>
+        public static QuestManager EnsureQuestManager(DialogueManager manager)
+        {
+            if (manager.QuestManager != null) return manager.QuestManager;
+            var go = new GameObject("Quest Manager");
+            Undo.RegisterCreatedObjectUndo(go, "Create Quest Manager");
+            var quests = go.AddComponent<QuestManager>();
+            var questsSo = new SerializedObject(quests);
+            var databases = questsSo.FindProperty("m_Databases");
+            var referenced = manager.Database != null ? manager.Database.questDatabases.Where(d => d != null).ToList() : new List<QuestDatabase>();
+            databases.arraySize = referenced.Count;
+            for (int i = 0; i < referenced.Count; i++) databases.GetArrayElementAtIndex(i).objectReferenceValue = referenced[i];
+            questsSo.ApplyModifiedPropertiesWithoutUndo();
+            var so = new SerializedObject(manager);
+            so.FindProperty("m_QuestManager").objectReferenceValue = quests;
+            so.ApplyModifiedProperties();
+            return quests;
+        }
+
+        /// <summary>Top-right tracker (tracked quests and their steps) plus a toast, on the dialogue manager's Quest Manager (made if missing).</summary>
         public static QuestTrackerUI CreateQuestTracker(Transform canvas, DialogueManager manager)
         {
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
@@ -296,7 +328,7 @@ namespace ND.Dialogue.Editor
 
             var tracker = host.gameObject.AddComponent<QuestTrackerUI>();
             var so = new SerializedObject(tracker);
-            so.FindProperty("m_Manager").objectReferenceValue = manager;
+            so.FindProperty("m_Manager").objectReferenceValue = EnsureQuestManager(manager);
             so.FindProperty("m_List").objectReferenceValue = list;
             so.FindProperty("m_TitleTemplate").objectReferenceValue = title;
             so.FindProperty("m_StepTemplate").objectReferenceValue = step;
@@ -306,7 +338,7 @@ namespace ND.Dialogue.Editor
             return tracker;
         }
 
-        /// <summary>A quest journal window (hidden; J toggles it): list by state on the left, details on the right.</summary>
+        /// <summary>A quest journal window (hidden; J toggles it): list by state on the left, details on the right; on the dialogue manager's Quest Manager (made if missing).</summary>
         public static QuestLogUI CreateQuestLog(Transform canvas, DialogueManager manager)
         {
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
@@ -381,7 +413,7 @@ namespace ND.Dialogue.Editor
 
             var ui = host.gameObject.AddComponent<QuestLogUI>();
             var so = new SerializedObject(ui);
-            so.FindProperty("m_Manager").objectReferenceValue = manager;
+            so.FindProperty("m_Manager").objectReferenceValue = EnsureQuestManager(manager);
             so.FindProperty("m_Root").objectReferenceValue = window.gameObject;
             so.FindProperty("m_List").objectReferenceValue = list;
             so.FindProperty("m_HeaderTemplate").objectReferenceValue = header;

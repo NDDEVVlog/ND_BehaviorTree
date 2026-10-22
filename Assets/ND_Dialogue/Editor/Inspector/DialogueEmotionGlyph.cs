@@ -29,7 +29,11 @@ namespace ND.Dialogue.Editor
         public static string For(string emotionId)
         {
             if (string.IsNullOrEmpty(emotionId)) return Unknown;
-            return s_Glyphs.TryGetValue(emotionId.Trim(), out var glyph) ? glyph : Unknown;
+            string id = emotionId.Trim();
+            if (s_Glyphs.TryGetValue(id, out var glyph)) return glyph;
+            // A variant of a known emotion ("Older_Angry", "Ball Happy"): the last word decides.
+            int split = id.LastIndexOfAny(new[] { '_', ' ', '-' });
+            return split >= 0 && s_Glyphs.TryGetValue(id.Substring(split + 1), out glyph) ? glyph : Unknown;
         }
     }
 }

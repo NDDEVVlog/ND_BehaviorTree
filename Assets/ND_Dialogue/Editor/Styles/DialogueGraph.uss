@@ -290,3 +290,10 @@
 .dlg-values__hint { font-size: 10px; color: rgb(130, 136, 148); white-space: normal; margin-top: 4px; }
 .dlg-inspector__error { color: rgb(255, 120, 110); white-space: normal; font-size: 11px; }
 .dlg-chip--sequence { background-color: rgb(40, 70, 90); color: rgb(170, 220, 255); }
+
+/* Tools tab */
+.dlg-tools__hit { -unity-text-align: middle-left; white-space: normal; margin: 1px 0 1px 0; background-color: rgb(42, 44, 50); border-width: 0; }
+.dlg-tools__hit:hover { background-color: rgb(58, 62, 72); }
+.dlg-tools__table { margin: 4px 0 6px 0; }
+.dlg-tools__row--header { -unity-font-style: bold; border-bottom-width: 1px; border-color: rgb(70, 72, 80); }
+.dlg-tools__row { border-bottom-width: 1px; border-color: rgb(46, 47, 52); }

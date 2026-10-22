@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using ND.Quests;
 using UnityEngine;
 
 namespace ND.Dialogue
@@ -33,8 +34,19 @@ namespace ND.Dialogue
             }
             if (skippedObjects.Count > 0)
                 Debug.LogWarning($"{LogTag} Object variables are not saved (asset references): {string.Join(", ", skippedObjects)}.");
-            foreach (var name in schema.QuestNames.Distinct())
-                if (context.TryGetQuestState(name, out var state)) data.quests.Add(new DialogueSaveData.Quest { name = name, state = state });
+            var quests = (context as IDialogueQuestHost)?.Quests;
+            if (quests != null)
+            {
+                // The quest runtime: every quest it knows (also from Quest Databases), with progress and tracking.
+                var saved = quests.Capture();
+                foreach (var q in saved.quests) data.quests.Add(new DialogueSaveData.Quest { name = q.name, state = q.state, progress = q.progress });
+                data.trackedQuests.AddRange(saved.tracked);
+            }
+            else
+            {
+                foreach (var name in schema.QuestNames.Distinct())
+                    if (context.TryGetQuestState(name, out var state)) data.quests.Add(new DialogueSaveData.Quest { name = name, state = state });
+            }
             if (memory != null)
                 foreach (var (c, e) in memory.Seen) data.seen.Add(new DialogueSaveData.Seen { conversation = c, entry = e });
             if (runner != null) data.position = runner.CapturePosition();
@@ -68,10 +80,26 @@ namespace ND.Dialogue
                 if (v.type != VariableType.String && !VariableValue.TryParse(v.type, v.value, out value)) { Skip($"variable '{v.name}': cannot read '{v.value}' as {v.type}"); continue; }
                 if (!context.SetVariable(v.name, value)) skipped++; // the context logged why
             }
-            foreach (var q in data.quests)
+            var quests = (context as IDialogueQuestHost)?.Quests;
+            if (quests != null)
             {
-                if (!schema.HasQuest(q.name)) { Skip($"quest '{q.name}' is no longer declared"); continue; }
-                if (!context.SetQuestState(q.name, q.state)) skipped++;
+                // Through the runtime: progress and tracking too, and no "quest started" while loading.
+                var saved = new QuestSaveData { tracked = new List<string>(data.trackedQuests) };
+                foreach (var q in data.quests)
+                {
+                    if (!quests.Has(q.name)) { Skip($"quest '{q.name}' is no longer declared"); continue; }
+                    saved.quests.Add(new QuestSaveData.Quest { name = q.name, state = q.state, progress = q.progress });
+                }
+                saved.tracked.RemoveAll(n => !quests.Has(n));
+                quests.Apply(saved);
+            }
+            else
+            {
+                foreach (var q in data.quests)
+                {
+                    if (!schema.HasQuest(q.name)) { Skip($"quest '{q.name}' is no longer declared"); continue; }
+                    if (!context.SetQuestState(q.name, q.state)) skipped++;
+                }
             }
             if (memory != null)
             {

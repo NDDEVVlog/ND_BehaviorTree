@@ -2,9 +2,11 @@
     "name": "ND.Dialogue.Tests",
     "rootNamespace": "ND.Dialogue.Tests",
     "references": [
+        "ND.Quests",
         "ND.Dialogue",
         "ND.Localization",
         "UnityEngine.UI",
+        "Unity.TextMeshPro",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

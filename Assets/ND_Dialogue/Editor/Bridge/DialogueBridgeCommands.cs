@@ -1,3 +1,4 @@
+using ND.Quests;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -57,6 +58,7 @@ namespace ND.Dialogue.Editor.Bridge
             ["action_add"] = new Command { Write = true, Summary = "Add an action to a line. Args: database, conversation, entry, and variable + value + add? | quest + state | event + argument?", Run = ActionAdd },
             ["actor_add"] = new Command { Write = true, Summary = "Add a character. Args: database, name, player?, displayName?", Run = ActorAdd },
             ["event_add"] = new Command { Write = true, Summary = "Declare an event. Args: database, name, argumentHint?", Run = EventAdd },
+            ["import"] = new Command { Write = true, Summary = "Import a Twine story (.twee/.tw, or a published .html) or an Arcweave JSON export as a new conversation. Args: database, path (file), format? (Twee|TwineHtml|ArcweaveJson; default by extension), npc? (default speaker), player?", Run = ImportStory },
             ["save"] = new Command { Write = true, Summary = "Write the database (and its text table) to disk. Args: database", Run = SaveDb },
             ["menu_run"] = new Command { Write = true, Summary = "Run an editor menu item under 'ND Dialogue/' or 'Window/ND Dialogue/'. Args: path", Run = MenuRun },
         };
@@ -296,6 +298,27 @@ namespace ND.Dialogue.Editor.Bridge
         {
             int index = Int(args, "choice") - 1;
             return TestStep(Database(args), args, p => p.Choose(index), s => s.Choose(index));
+        }
+
+        private static object ImportStory(Dictionary<string, object> args)
+        {
+            var db = Database(args);
+            string path = Str(args, "path");
+            if (!System.IO.File.Exists(path)) throw new BridgeException($"No file '{path}'.");
+            var format = args.ContainsKey("format") ? ParseEnum<Import.DialogueImportWindow.Format>(Str(args, "format")) : Import.DialogueImportWindow.FormatOf(path);
+            var options = new Import.DialogueImportOptions();
+            if (args.ContainsKey("npc")) options.NpcActor = Str(args, "npc");
+            if (args.ContainsKey("player")) options.PlayerActor = Str(args, "player");
+            var report = Import.DialogueImportWindow.Import(db, System.IO.File.ReadAllText(path), format, options);
+            return new Dictionary<string, object>
+            {
+                ["conversation"] = report.Conversation?.title,
+                ["entries"] = report.Entries,
+                ["choices"] = report.Choices,
+                ["newCharacters"] = report.CreatedActors,
+                ["newVariables"] = report.CreatedVariables,
+                ["warnings"] = report.Warnings,
+            };
         }
 
         private static object TestSet(Dictionary<string, object> args)

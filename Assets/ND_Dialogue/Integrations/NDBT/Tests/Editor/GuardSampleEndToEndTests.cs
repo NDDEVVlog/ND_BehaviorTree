@@ -1,3 +1,4 @@
+using ND.Quests;
 using System.Linq;
 using ND.Dialogue.Editor.Plugins;
 using ND.Dialogue.NDBT.Editor.Samples;

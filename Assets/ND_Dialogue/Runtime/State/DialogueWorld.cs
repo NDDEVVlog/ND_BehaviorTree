@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ND.Quests;
 using UnityEngine;
 
 namespace ND.Dialogue
@@ -26,28 +27,43 @@ namespace ND.Dialogue
     }
 
     /// <summary>
-    /// Default <see cref="IDialogueContext"/>: the variables and quests declared in a <see cref="DialogueDatabase"/>,
-    /// starting at their initial values. Every change raises an event, so UI, quests and AI can react (and a
-    /// behavior-tree blackboard can mirror it through an adapter). Names not declared in the database are rejected.
+    /// A context whose quests live in a <see cref="QuestRuntime"/> (progress, tracking, the quest log). Dialogue's quest
+    /// actions and conditions go through it; a scene's QuestManager can provide the runtime so every system shares it.
     /// </summary>
-    public class DialogueWorld : IDialogueContext, IObservableDialogueContext
+    public interface IDialogueQuestHost
+    {
+        QuestRuntime Quests { get; }
+    }
+
+
+    /// <summary>
+    /// Default <see cref="IDialogueContext"/>: the variables declared in a <see cref="DialogueDatabase"/> (and its
+    /// characters' attributes), starting at their initial values, and its quests in a <see cref="QuestRuntime"/> — its
+    /// own, or a scene's QuestManager's so every system shares them. Every change raises an event, so UI, quests and
+    /// AI can react. Names not declared are rejected.
+    /// </summary>
+    public class DialogueWorld : IDialogueContext, IObservableDialogueContext, IDialogueQuestHost, IDisposable
     {
         private const string LogTag = "[DialogueWorld]";
 
         private readonly Dictionary<string, VariableValue> m_Variables = new Dictionary<string, VariableValue>();
-        private readonly Dictionary<string, QuestState> m_Quests = new Dictionary<string, QuestState>();
+        private readonly QuestRuntime m_Quests;
 
         /// <summary>(name, old value, new value)</summary>
         public event Action<string, VariableValue, VariableValue> VariableChanged;
-        /// <summary>(quest name, old state, new state)</summary>
+        /// <summary>(quest name, old state, new state) — also for changes made outside dialogue (gameplay, a quest manager).</summary>
         public event Action<string, QuestState, QuestState> QuestStateChanged;
         /// <summary>(event name, argument)</summary>
         public event Action<string, string> EventRaised;
         /// <summary>(name, is quest) Any variable or quest changed.</summary>
         public event Action<string, bool> StateChanged;
 
-        public DialogueWorld(DialogueDatabase database)
+        /// <param name="quests">The quests to use (a scene's QuestManager); null = a runtime of its own. The database's quests are added to it.</param>
+        public DialogueWorld(DialogueDatabase database, QuestRuntime quests = null)
         {
+            m_Quests = quests ?? new QuestRuntime();
+            m_Quests.StateChanged += OnQuestStateChanged;
+            if (m_Quests.ConditionWorld == null) m_Quests.ConditionWorld = this; // quest steps read these variables
             if (database == null)
             {
                 Debug.LogError($"{LogTag} Created without a database: no variables or quests exist.");
@@ -55,8 +71,7 @@ namespace ND.Dialogue
             }
             foreach (var v in database.variables)
                 if (v != null && !string.IsNullOrEmpty(v.name)) m_Variables[v.name] = v.initialValue;
-            foreach (var q in database.quests)
-                if (q != null && !string.IsNullOrEmpty(q.name)) m_Quests[q.name] = q.initialState;
+            m_Quests.Register(database.AllQuests, database.name);
             // Character attributes are variables named "Actor.attribute" (they win over a same-named world variable).
             foreach (var actor in database.AllActors)
             {
@@ -66,8 +81,16 @@ namespace ND.Dialogue
             }
         }
 
+        public QuestRuntime Quests => m_Quests;
         public IEnumerable<string> VariableNames => m_Variables.Keys;
-        public IEnumerable<string> QuestNames => m_Quests.Keys;
+        public IEnumerable<string> QuestNames => m_Quests.Ids;
+
+        /// <summary>Stops listening to the quest runtime (call it when a shared runtime outlives this world).</summary>
+        public void Dispose()
+        {
+            m_Quests.StateChanged -= OnQuestStateChanged;
+            if (m_Quests.ConditionWorld == this) m_Quests.ConditionWorld = null;
+        }
 
         public bool TryGetVariable(string variableName, out VariableValue value)
         {
@@ -94,6 +117,7 @@ namespace ND.Dialogue
             m_Variables[variableName] = converted;
             VariableChanged?.Invoke(variableName, old, converted);
             StateChanged?.Invoke(variableName, false);
+            m_Quests.MarkDirty(); // quest steps may read it
             return true;
         }
 
@@ -106,26 +130,14 @@ namespace ND.Dialogue
             return false;
         }
 
-        public bool TryGetQuestState(string questName, out QuestState state)
-        {
-            if (questName != null && m_Quests.TryGetValue(questName, out state)) return true;
-            Debug.LogError($"{LogTag} Unknown quest '{questName}'.");
-            state = default;
-            return false;
-        }
+        public bool TryGetQuestState(string questName, out QuestState state) => m_Quests.TryGetState(questName, out state);
 
-        public bool SetQuestState(string questName, QuestState state)
+        public bool SetQuestState(string questName, QuestState state) => m_Quests.SetState(questName, state);
+
+        private void OnQuestStateChanged(QuestInfo quest, QuestState from, QuestState to)
         {
-            if (questName == null || !m_Quests.TryGetValue(questName, out var old))
-            {
-                Debug.LogError($"{LogTag} {nameof(SetQuestState)} rejected: unknown quest '{questName}'.");
-                return false;
-            }
-            if (old == state) return true;
-            m_Quests[questName] = state;
-            QuestStateChanged?.Invoke(questName, old, state);
-            StateChanged?.Invoke(questName, true);
-            return true;
+            QuestStateChanged?.Invoke(quest.Name, from, to);
+            StateChanged?.Invoke(quest.Name, true);
         }
 
         public void RaiseEvent(string eventName, string argument)
@@ -145,18 +157,16 @@ namespace ND.Dialogue
         public class Snapshot
         {
             [Serializable] public struct Variable { public string name; public VariableValue value; }
-            [Serializable] public struct Quest { public string name; public QuestState state; }
 
             public List<Variable> variables = new List<Variable>();
-            public List<Quest> quests = new List<Quest>();
+            public QuestSaveData quests = new QuestSaveData();
         }
 
         /// <summary>Current values, for saving (e.g. JsonUtility.ToJson).</summary>
         public Snapshot Capture()
         {
-            var snapshot = new Snapshot();
+            var snapshot = new Snapshot { quests = m_Quests.Capture() };
             foreach (var kv in m_Variables) snapshot.variables.Add(new Snapshot.Variable { name = kv.Key, value = kv.Value });
-            foreach (var kv in m_Quests) snapshot.quests.Add(new Snapshot.Quest { name = kv.Key, state = kv.Value });
             return snapshot;
         }
 
@@ -176,11 +186,7 @@ namespace ND.Dialogue
                 if (!m_Variables.ContainsKey(v.name ?? string.Empty)) { Debug.LogWarning($"{LogTag} {nameof(Restore)}: saved variable '{v.name}' is no longer declared; skipped."); continue; }
                 SetVariable(v.name, v.value);
             }
-            foreach (var q in snapshot.quests)
-            {
-                if (!m_Quests.ContainsKey(q.name ?? string.Empty)) { Debug.LogWarning($"{LogTag} {nameof(Restore)}: saved quest '{q.name}' is no longer declared; skipped."); continue; }
-                SetQuestState(q.name, q.state);
-            }
+            if (snapshot.quests != null) m_Quests.Apply(snapshot.quests);
         }
 
         #endregion

@@ -21,6 +21,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -47,6 +48,7 @@ MonoBehaviour:
     height: 100
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   child: {fileID: -6393699178450140944}
@@ -72,6 +74,7 @@ MonoBehaviour:
     height: 0
   typeName: Villager Day
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -99,6 +102,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -128,6 +132,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -154,6 +159,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -181,6 +187,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -208,6 +215,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -237,6 +245,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -263,6 +272,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   caseValue: Tired
@@ -289,6 +299,8 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends:
+  - {x: 11.352516, y: 364.21808}
   decorators: []
   services: []
   children:
@@ -316,6 +328,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -343,6 +356,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -369,6 +383,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -402,6 +417,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -429,6 +445,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 2
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -510,6 +527,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   caseValue: Happy
@@ -536,6 +554,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -565,6 +584,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -593,6 +613,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -618,6 +639,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -643,6 +665,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   caseValue: 
@@ -669,6 +692,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -695,6 +719,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -721,6 +746,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -747,6 +773,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -776,6 +803,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -802,6 +830,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -828,6 +857,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 2
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -853,6 +883,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:
@@ -880,6 +911,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -909,6 +941,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -938,6 +971,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -966,6 +1000,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   selfKey: {fileID: 0}
@@ -994,6 +1029,7 @@ MonoBehaviour:
     height: 0
   typeName: 
   weight: 1
+  parentEdgeBends: []
   decorators: []
   services: []
   children:

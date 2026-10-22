@@ -200,6 +200,7 @@ namespace ND.GraphUI
                 m_BendHandles.Add(handle);
                 Add(handle);
             }
+            ApplyBendHandleColour();
         }
 
         private void OnBendPointerDown(PointerDownEvent evt, VisualElement handle, int index)
@@ -273,7 +274,15 @@ namespace ND.GraphUI
             m_HighlightColor = color;
             m_Emphasized = emphasized;
             m_Flowing = flowing;
+            if (changed) ApplyBendHandleColour();
             if (changed || flowing) MarkDirtyRepaint();
+        }
+
+        /// <summary>The dots take the edge's colour. Set here, never while drawing: styles cannot change during generateVisualContent.</summary>
+        private void ApplyBendHandleColour()
+        {
+            Color colour = m_HighlightColor ?? Theme.edgeColor;
+            foreach (var handle in m_BendHandles) handle.style.backgroundColor = colour;
         }
 
         public void SetInputPort(GraphPortView inputPort)
@@ -501,7 +510,6 @@ namespace ND.GraphUI
                 var hs = m_BendHandles[i].style;
                 hs.left = m_Bends[i].x - BendHandleSize / 2f;
                 hs.top = m_Bends[i].y - BendHandleSize / 2f;
-                hs.backgroundColor = color;
             }
 
             m_EdgeLabel.style.left = mid.x - (m_EdgeLabel.layout.width / 2f);

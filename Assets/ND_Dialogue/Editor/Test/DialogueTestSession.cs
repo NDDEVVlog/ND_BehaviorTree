@@ -1,8 +1,11 @@
+using ND.Quests;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using UnityEditor;
+using UnityEngine;
 
 namespace ND.Dialogue.Editor
 {
@@ -16,7 +19,7 @@ namespace ND.Dialogue.Editor
     /// </summary>
     public sealed class DialogueTestSession
     {
-        public enum ItemKind { Line, Reply, Action, Route, Variable, Quest, Event, Start, End }
+        public enum ItemKind { Line, Reply, Action, Route, Variable, Quest, Event, Start, End, Voice }
 
         /// <summary>One thing that happened, in order.</summary>
         public sealed class Item
@@ -28,6 +31,11 @@ namespace ND.Dialogue.Editor
             public ActorEmotion Emotion;
             public int LineIndex;
             public int LineCount = 1;
+            /// <summary>A line's voice clip (Line and Voice items), or null.</summary>
+            public AudioClip Voice;
+
+            /// <summary>The line as the game shows it once typed: markup turned into rich text (see <see cref="LineTimeline"/>).</summary>
+            public string Shown => LineTimeline.Final(Text);
 
             public override string ToString()
             {
@@ -103,6 +111,28 @@ namespace ND.Dialogue.Editor
                 // Shown as the player's reply unless the runner speaks chosen lines itself.
                 if (!spoken) Add(ItemKind.Reply, choice.Text, choice.Entry, Database.FindActor(choice.Entry.actorId));
                 Runner.Choose(index);
+            });
+        }
+
+        private int m_BarkSequence;
+
+        /// <summary>
+        /// Says one bark of <paramref name="conversation"/> the way a Dialogue Barker would (a valid START line, its
+        /// actions run), without a conversation. Returns the items, or null with <see cref="Error"/> set.
+        /// </summary>
+        public List<Item> Bark(Conversation conversation, BarkOrder order = BarkOrder.Random)
+        {
+            Error = null;
+            if (Database == null) return Fail("No database.");
+            if (conversation == null) return Fail("No such conversation.");
+            if (!EnsureRunner()) return null;
+            if (Runner.IsRunning) return Fail("A conversation is playing: stop it first (barks wait while talking).");
+            return Step(() =>
+            {
+                Add(ItemKind.Start, $"💬 bark: {conversation.title}");
+                var lines = Runner.Bark(conversation.id, order, ref m_BarkSequence);
+                if (lines.Count == 0) Add(ItemKind.End, "— no line is valid now: the barker says nothing —");
+                foreach (var line in lines) AddLine(line);
             });
         }
 
@@ -207,20 +237,35 @@ namespace ND.Dialogue.Editor
                 return false;
             }
             m_Context = new TestContext(inner);
-            Runner = new DialogueRunner(Database, m_Context) { TextResolver = ReadText };
+            Runner = new DialogueRunner(Database, m_Context) { TextResolver = ReadText, VoiceResolver = ReadVoice };
             // Recorded as they happen, so the transcript keeps the real order (route, actions, then the line).
             Runner.EntryEntered += OnEntryEntered;
-            Runner.LineStarted += line => m_Transcript.Add(new Item
-            {
-                Kind = ItemKind.Line, Text = line.Text, Entry = line.Entry, Speaker = line.Speaker, Emotion = line.Emotion,
-                LineIndex = line.LineIndex, LineCount = line.LineCount
-            });
+            Runner.LineStarted += AddLine;
             Runner.ConversationEnded += _ => m_Ended = true;
             return true;
         }
 
         private string ReadText(ND.Localization.LocalizableString text) =>
             DialogueTextEditing.Read(text, Locale) ?? (text != null && text.IsLocalized ? $"<no {Locale} text>" : string.Empty);
+
+        private AudioClip ReadVoice(ND.Localization.LocalizedAudioClip clip) =>
+            clip.Table != null && clip.Table.TryGetValue(clip.EntryId, Locale, out UnityEngine.Object value) ? value as AudioClip : null;
+
+        /// <summary>A line, then its voice and the &lt;event&gt;s its typing raises (the same timeline as the game's typewriter).</summary>
+        private void AddLine(DialogueLine line)
+        {
+            m_Transcript.Add(new Item
+            {
+                Kind = ItemKind.Line, Text = line.Text, Entry = line.Entry, Speaker = line.Speaker, Emotion = line.Emotion,
+                LineIndex = line.LineIndex, LineCount = line.LineCount, Voice = line.Voice
+            });
+            if (line.Voice != null)
+                Add(ItemKind.Voice, $"🔊 voice: {line.Voice.name} ({line.Voice.length.ToString("0.0", CultureInfo.InvariantCulture)} s)", line.Entry).Voice = line.Voice;
+            if (string.IsNullOrEmpty(line.Text) || line.Text.IndexOf('<') < 0) return;
+            var timeline = LineTimeline.Build(line.Text, LineTimeline.DefaultCharactersPerSecond, line.Voice != null ? line.Voice.length : 0f);
+            foreach (var e in timeline.Events)
+                Add(ItemKind.Event, $"⚡ {e.Name}{(string.IsNullOrEmpty(e.Argument) ? string.Empty : $"({e.Argument})")}  — in the line, at {e.Time.ToString("0.00", CultureInfo.InvariantCulture)} s", line.Entry);
+        }
 
         /// <summary>Runs one runner call, then lists, in order: lines shown, entries passed and their actions, changes, events, the end.</summary>
         private List<Item> Step(Action action)
@@ -229,7 +274,8 @@ namespace ND.Dialogue.Editor
             var before = Snapshot();
             m_Context.Events.Clear();
             m_Ended = false;
-            m_LastConversationId = Runner.CurrentConversation?.id ?? -1;
+            // A new Start is not a jump from the conversation played before it.
+            m_LastConversationId = Runner.IsRunning ? Runner.CurrentConversation?.id ?? -1 : -1;
             action();
 
             var after = Snapshot();
@@ -289,7 +335,7 @@ namespace ND.Dialogue.Editor
         }
 
         /// <summary>The database's world, with events kept here instead of reaching the scene.</summary>
-        private sealed class TestContext : IDialogueContext
+        private sealed class TestContext : IDialogueContext, IDialogueQuestHost
         {
             public readonly IDialogueContext Inner;
             public readonly List<(string name, string argument)> Events = new List<(string, string)>();
@@ -301,6 +347,7 @@ namespace ND.Dialogue.Editor
             public bool TryGetQuestState(string questName, out QuestState state) => Inner.TryGetQuestState(questName, out state);
             public bool SetQuestState(string questName, QuestState state) => Inner.SetQuestState(questName, state);
             public void RaiseEvent(string eventName, string argument) => Events.Add((eventName, argument));
+            public QuestRuntime Quests => (Inner as IDialogueQuestHost)?.Quests;
         }
     }
 }

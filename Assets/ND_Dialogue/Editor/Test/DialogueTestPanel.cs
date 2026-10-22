@@ -20,6 +20,7 @@ namespace ND.Dialogue.Editor
         private const string GraphPref = "ND.Dialogue.Test.ShowGraph";
         private const string ValuesPref = "ND.Dialogue.Test.ShowValues";
         private const string AllValuesPref = "ND.Dialogue.Test.AllValues";
+        private const string TypingPref = "ND.Dialogue.Test.Typing";
 
         private DialogueDatabase m_Database;
         private string m_Locale;
@@ -31,6 +32,13 @@ namespace ND.Dialogue.Editor
         private readonly Toggle m_GraphToggle;
         private readonly Toggle m_ValuesToggle;
         private readonly Toggle m_AllValuesToggle;
+        private readonly Toggle m_TypingToggle;
+        // The bubble being typed (the same LineTimeline as the game's TextMeshPro typewriter), or null.
+        private Label m_TypingBubble;
+        private LineTimeline m_TypingTimeline;
+        private readonly LineFrame m_TypingFrame = new LineFrame();
+        private double m_TypingStart;
+        private IVisualElementScheduledItem m_TypingTick;
         private readonly VisualElement m_Values;
         private readonly ScrollView m_ValueRows;
         private readonly Label m_Status;
@@ -67,6 +75,7 @@ namespace ND.Dialogue.Editor
             m_EntryField.AddToClassList("dlg-test__entry");
             bar.Add(m_EntryField);
             bar.Add(new Button(() => Start()) { text = "▶ Start", tooltip = "Start (again) at the entry above. Variables and seen lines are kept: use Reset world to start fresh." });
+            bar.Add(new Button(() => Bark()) { text = "💬 Bark", tooltip = "Say one bark of the conversation, as a Dialogue Barker would: a valid START line (random), its actions run, no choices." });
             bar.Add(new Button(Stop) { text = "■ Stop" });
             bar.Add(new Button(ResetWorld) { text = "⟲ Reset world", tooltip = "Back to the initial values, nothing seen, empty chat" });
             bar.Add(new VisualElement { style = { flexGrow = 1 } });
@@ -90,6 +99,14 @@ namespace ND.Dialogue.Editor
                 RefreshValues();
             });
             bar.Add(m_ValuesToggle);
+            m_TypingToggle = new Toggle("Typing") { value = EditorPrefs.GetBool(TypingPref, true), tooltip = "Type lines out as the game does (markup pauses, speed, err/fix, voice length). Space completes the line first." };
+            m_TypingToggle.AddToClassList("dlg-test__graph-toggle");
+            m_TypingToggle.RegisterValueChangedCallback(evt =>
+            {
+                EditorPrefs.SetBool(TypingPref, evt.newValue);
+                if (!evt.newValue) CompleteTyping();
+            });
+            bar.Add(m_TypingToggle);
             Add(bar);
 
             var chat = new VisualElement();
@@ -186,15 +203,78 @@ namespace ND.Dialogue.Editor
             return Show(items);
         }
 
+        /// <summary>One bark of the chosen conversation (see <see cref="DialogueTestSession.Bark"/>).</summary>
+        public bool Bark()
+        {
+            if (m_Session == null) { SetStatus("Pick a database."); return false; }
+            var conversation = m_Database.FindConversation(m_ConversationField.value);
+            return Show(m_Session.Bark(conversation));
+        }
+
         public void Stop() => Show(m_Session?.Stop());
 
-        public bool Continue() => m_Session != null && m_Session.Runner?.State == DialogueRunnerState.ShowingLine && Show(m_Session.Continue());
+        /// <summary>Moves on (a line still typing is completed first, then the conversation goes on).</summary>
+        public bool Continue()
+        {
+            CompleteTyping();
+            return m_Session != null && m_Session.Runner?.State == DialogueRunnerState.ShowingLine && Show(m_Session.Continue());
+        }
+
+        /// <summary>Lines type out as in the game (the Typing toggle; this setter does not save the preference).</summary>
+        public bool TypingEnabled
+        {
+            get => m_TypingToggle.value;
+            set
+            {
+                m_TypingToggle.SetValueWithoutNotify(value);
+                if (!value) CompleteTyping();
+            }
+        }
+
+        /// <summary>True while a bubble is typing out.</summary>
+        public bool IsTyping => m_TypingBubble != null;
+
+        /// <summary>Shows the rest of the typing bubble at once.</summary>
+        public void CompleteTyping()
+        {
+            if (m_TypingBubble == null) return;
+            m_TypingBubble.text = m_TypingTimeline.Compose(float.PositiveInfinity).Text;
+            StopTyping();
+        }
+
+        private void StopTyping()
+        {
+            m_TypingTick?.Pause();
+            m_TypingTick = null;
+            m_TypingBubble = null;
+            m_TypingTimeline = null;
+        }
+
+        private void StartTyping(Label bubble, DialogueTestSession.Item item)
+        {
+            CompleteTyping();
+            var timeline = LineTimeline.Build(item.Text, LineTimeline.DefaultCharactersPerSecond, item.Voice != null ? item.Voice.length : 0f);
+            if (timeline.Duration <= 0f) return;
+            m_TypingBubble = bubble;
+            m_TypingTimeline = timeline;
+            m_TypingStart = EditorApplication.timeSinceStartup;
+            bubble.text = timeline.Compose(0f).Text;
+            m_TypingFrame.Reset();
+            m_TypingTick = bubble.schedule.Execute(() =>
+            {
+                if (m_TypingBubble != bubble) return;
+                var frame = m_TypingTimeline.Compose((float)(EditorApplication.timeSinceStartup - m_TypingStart), m_TypingFrame);
+                if (frame.Changed) bubble.text = frame.Text; // a string only when a character appears
+                if (frame.Done) StopTyping();
+            }).Every(16);
+        }
 
         public bool Choose(int index) => m_Session != null && m_Session.Runner?.State == DialogueRunnerState.WaitingForChoice && Show(m_Session.Choose(index));
 
         /// <summary>New world (initial values), nothing seen, empty chat.</summary>
         public void ResetWorld()
         {
+            StopTyping();
             m_Session?.ResetWorld();
             m_Session = m_Database != null ? new DialogueTestSession(m_Database, m_Locale) : null;
             m_Log.Clear();
@@ -304,13 +384,14 @@ namespace ND.Dialogue.Editor
             }
             body.Add(meta);
 
-            var bubble = new Label(item.Text) { name = "bubble" };
+            var bubble = new Label(item.Shown) { name = "bubble", enableRichText = true };
             bubble.AddToClassList("dlg-bubble");
             bubble.AddToClassList(player ? "dlg-bubble--player" : "dlg-bubble--npc");
             if (!player && emotion != null && emotion.tint != Color.white) bubble.style.borderLeftColor = emotion.tint;
             body.Add(bubble);
             row.Add(body);
             m_Log.Add(row);
+            if (item.Kind == DialogueTestSession.ItemKind.Line && m_TypingToggle.value) StartTyping(bubble, item);
         }
 
         private void AddLabel(string text, string baseClass, string kindClass)
@@ -332,7 +413,7 @@ namespace ND.Dialogue.Editor
             {
                 case DialogueRunnerState.ShowingLine:
                 {
-                    var next = new Button(() => Continue()) { text = runner.CurrentLine.HasMoreLines ? "Next line ▸  (Space)" : "Continue ▸  (Space)" };
+                    var next = new Button(() => { if (IsTyping) CompleteTyping(); else Continue(); }) { text = runner.CurrentLine.HasMoreLines ? "Next line ▸  (Space)" : "Continue ▸  (Space)" };
                     next.AddToClassList("dlg-reply");
                     next.AddToClassList("dlg-reply--continue");
                     m_Replies.Add(next);
@@ -342,7 +423,7 @@ namespace ND.Dialogue.Editor
                     foreach (var choice in runner.CurrentChoices)
                     {
                         int index = choice.Index;
-                        var reply = new Button(() => Choose(index)) { text = $"{index + 1}.  {choice.Text}", tooltip = $"#{choice.Entry.id}" };
+                        var reply = new Button(() => Choose(index)) { text = $"{index + 1}.  {LineTimeline.Final(choice.Text)}", tooltip = $"#{choice.Entry.id}" };
                         reply.AddToClassList("dlg-reply");
                         m_Replies.Add(reply);
                     }
@@ -362,7 +443,8 @@ namespace ND.Dialogue.Editor
             if (evt.target is TextField || evt.target is IntegerField) return;
             if (evt.keyCode == KeyCode.Space || evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.KeypadEnter)
             {
-                if (Continue()) evt.StopPropagation();
+                if (IsTyping) { CompleteTyping(); evt.StopPropagation(); }
+                else if (Continue()) evt.StopPropagation();
             }
             else if (evt.keyCode >= KeyCode.Alpha1 && evt.keyCode <= KeyCode.Alpha9)
             {
@@ -439,7 +521,8 @@ namespace ND.Dialogue.Editor
             if (m_Session?.Runner != null && m_Session.Runner.IsRunning) Show(m_Session.Stop());
             UpdateGraph();
             RefreshValues();
-            SetStatus($"Press ▶ Start to play '{m_ConversationField.value}'.");
+            bool bark = m_Database?.FindConversation(m_ConversationField.value)?.isBark ?? false;
+            SetStatus(bark ? $"'{m_ConversationField.value}' is a bark conversation: press 💬 Bark (▶ Start plays it as a conversation)." : $"Press ▶ Start to play '{m_ConversationField.value}'.");
         }
 
         #region Variables

@@ -114,6 +114,17 @@ namespace ND.Dialogue.Editor
                 ShowTab(DialogueDatabasePanel.ConversationsTab);
                 LoadConversation();
             };
+            m_Panel.EntryRequested += (conversationId, entryId) =>
+            {
+                m_ConversationId = conversationId;
+                ShowTab(DialogueDatabasePanel.ConversationsTab);
+                LoadConversation();
+                var view = m_Canvas.GetNodeView(entryId.ToString());
+                if (view == null) return;
+                m_Canvas.ClearSelection();
+                m_Canvas.AddToSelection((ND.GraphUI.GraphNodeView)view);
+                m_Canvas.schedule.Execute(() => m_Canvas.FrameRect(new Rect(view.ViewPosition, view.layout.size), m_Canvas.Zoom)).StartingIn(60);
+            };
             m_Panel.DatabaseChanged += OnPanelChanged;
             m_Panel.TabRequested += ShowTab;
 
@@ -278,6 +289,14 @@ namespace ND.Dialogue.Editor
                 });
                 bar.Add(rename);
                 bar.Add(new Label($"{current.entries.Count - 1} lines") { name = "line-count" });
+                var bark = new Toggle("💬 Bark") { value = current.isBark, name = "bark-toggle",
+                    tooltip = "On: a bark conversation — a Dialogue Barker says ONE of its START lines in a bubble while the game goes on (no choices, nothing waits). Off: a normal conversation, played in the dialogue UI." };
+                bark.RegisterValueChangedCallback(evt =>
+                {
+                    m_Panel.SetBark(m_Database.FindConversation(m_ConversationId), evt.newValue);
+                    RebuildNav();
+                });
+                bar.Add(bark);
                 bar.Add(new VisualElement { style = { flexGrow = 1 } });
                 bar.Add(new Button(() => m_Panel.DeleteConversation(m_Database.FindConversation(m_ConversationId))) { text = "Delete", tooltip = "Delete this conversation" });
             }

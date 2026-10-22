@@ -13,7 +13,7 @@ namespace ND.Dialogue.Editor
     /// actions and outgoing links. Plain fields are written with Undo; conditions/actions are [SerializeReference]
     /// lists edited through bound PropertyFields (variable/quest names get schema pickers).
     /// </summary>
-    public class DialogueEntryInspector : VisualElement
+    public partial class DialogueEntryInspector : VisualElement
     {
         private DialogueDatabase m_Database;
         private Conversation m_Conversation;
@@ -99,12 +99,19 @@ namespace ND.Dialogue.Editor
             Add(header);
             if (!string.IsNullOrEmpty(m_Entry.EditorNote)) Add(new HelpBox(m_Entry.EditorNote, HelpBoxMessageType.Info));
 
+            if (isStart && m_Conversation.isBark)
+            {
+                BuildBarkLines();
+                BuildPluginSections();
+                return;
+            }
             if (isStart)
             {
                 Add(new HelpBox("Where the conversation begins. Link it to the first line(s); conditions on those lines pick which one plays.", HelpBoxMessageType.None));
             }
             else
             {
+                if (m_Conversation.isBark) Add(new HelpBox("A bark line. When it is said (its conditions, priority) is set on START: select START to see every bark line in one table.", HelpBoxMessageType.Info));
                 BuildIdentity();
                 if (!m_Entry.isPassthrough) BuildText();
                 BuildSubclassFields(entryProp);
@@ -301,9 +308,56 @@ namespace ND.Dialogue.Editor
             block.Add(head);
 
             var text = m_Entry.LineText(index);
-            block.Add(TextArea(text, 40, value => DialogueTextEditing.WriteLine(m_Database, m_Entry, index, m_Locale, value)));
+            var area = TextArea(text, 40, value => DialogueTextEditing.WriteLine(m_Database, m_Entry, index, m_Locale, value));
+            area.tooltip = "Markup: <pause 0.5>  <speed 15>…</speed>  <wave>…</wave>  <shake>…</shake>  <err id=\"a\">…</err><fix id=\"a\" text=\"…\">  <br posX=\"40\">  <event name=\"door\" arg=\"open\">  — other tags (<b>, <color=…>) are TextMeshPro rich text.";
+            block.Add(area);
+            var markupErrors = new Label { name = "markup-errors" };
+            markupErrors.AddToClassList("dlg-inspector__error");
+            void ShowMarkupErrors(string value)
+            {
+                var list = new List<string>();
+                if (!string.IsNullOrEmpty(value) && value.IndexOf('<') >= 0) LineMarkup.Parse(value, list);
+                markupErrors.text = string.Join("\n", list);
+                markupErrors.style.display = list.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+            ShowMarkupErrors(area.value);
+            area.RegisterValueChangedCallback(evt => ShowMarkupErrors(evt.newValue));
+            block.Add(markupErrors);
             block.Add(LocalizeRow(text, () => DialogueTextEditing.LocalizeLine(m_Database, m_Conversation, m_Entry, index, m_Locale), () => m_Entry.LineText(index)));
+            block.Add(VoiceFoldout(index));
             return block;
+        }
+
+        /// <summary>The line's voice clip, and its per-language clip (an Asset Table entry, which wins when set).</summary>
+        private VisualElement VoiceFoldout(int index)
+        {
+            var page = index == 0 ? null : m_Entry.moreLines[index - 1];
+            var clip = index == 0 ? m_Entry.voice : page?.voice;
+            var localized = index == 0 ? m_Entry.localizedVoice : page?.localizedVoice;
+            bool hasLocalized = localized != null && !localized.IsEmpty;
+            var foldout = new Foldout { text = clip != null || hasLocalized ? $"🔊 Voice: {(hasLocalized ? "per language" : clip.name)}" : "🔊 Voice", value = false };
+            foldout.AddToClassList("dlg-line__voice");
+            var field = new ObjectField("Clip") { objectType = typeof(AudioClip), allowSceneObjects = false, value = clip,
+                tooltip = "Played with the line by the TextMeshPro dialogue UI; the typing can last as long as the clip." };
+            field.RegisterValueChangedCallback(evt => Edit("Change Line Voice", () =>
+            {
+                var target = index == 0 ? null : m_Entry.moreLines[index - 1];
+                if (index == 0) m_Entry.voice = evt.newValue as AudioClip;
+                else if (target != null) target.voice = evt.newValue as AudioClip;
+            }));
+            foldout.Add(field);
+            var entryProp = FindEntryProperty();
+            var localizedProp = index == 0
+                ? entryProp?.FindPropertyRelative(nameof(DialogueEntry.localizedVoice))
+                : entryProp?.FindPropertyRelative($"{nameof(DialogueEntry.moreLines)}.Array.data[{index - 1}].{nameof(DialoguePage.localizedVoice)}");
+            if (localizedProp != null)
+            {
+                var localizedField = new PropertyField(localizedProp, "Per language");
+                localizedField.Bind(m_SerializedDatabase);
+                localizedField.RegisterValueChangeCallback(_ => EntryChanged?.Invoke(m_Entry));
+                foldout.Add(localizedField);
+            }
+            return foldout;
         }
 
         private void MoveLine(int page, int delta)
