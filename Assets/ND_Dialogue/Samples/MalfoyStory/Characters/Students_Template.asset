@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9ef0ad0361f4641a8e1893a07f9e5a, type: 3}
+  m_Name: Students_Template
+  m_EditorClassIdentifier: ND.Dialogue::ND.Dialogue.CharacterDatabase
+  characters: []
+  templateAttributes:
+  - name: affection
+    initialValue:
+      type: 1
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 'How much this student likes Harry. Malfoy''s: 4+ at the interview
+      gives the ''together'' ending.'
+  - name: annoyance
+    initialValue:
+      type: 1
+      boolValue: 0
+      intValue: 0
+      floatValue: 0
+      stringValue: 
+      vectorValue: {x: 0, y: 0, z: 0, w: 0}
+      colorValue: {r: 0, g: 0, b: 0, a: 0}
+      objectValue: {fileID: 0}
+    description: 'How fed up this student is with Harry (hate). Malfoy''s: 6+ at
+      the interview gives the ''hostile'' ending; it changes how she greets him in
+      the hallway.'
+  references:
+    version: 2
+    RefIds: []

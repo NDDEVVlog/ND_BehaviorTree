@@ -1,0 +1,324 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9ef0ad0361f4641a8e1893a07f9e5a, type: 3}
+  m_Name: Hogwarts_Characters
+  m_EditorClassIdentifier: ND.Dialogue::ND.Dialogue.CharacterDatabase
+  characters:
+  - rid: 3058894627830235235
+  - rid: 3058894627830235236
+  - rid: 3058894627830235237
+  - rid: 3058894627830235238
+  - rid: 3058894627830235239
+  - rid: 3058894627830235240
+  - rid: 3058894627830235241
+  templateAttributes: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 3058894627830235235
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 282886598
+        name: Harry
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Harry
+        isPlayer: 1
+        emotions:
+        - id: Neutral
+          portrait: {fileID: 21300000, guid: dd79658dba5c64b4d9f421491bda1657, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Happy
+          portrait: {fileID: 21300000, guid: e960adb984fa0bb49ae7a5823539d501, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Surprised
+          portrait: {fileID: 21300000, guid: 36ca693eb5eb16a429a60ee59c7fc709, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Angry
+          portrait: {fileID: 21300000, guid: cbc8627f40d790b47b340b8aa6675beb, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Embarrassed
+          portrait: {fileID: 21300000, guid: e960adb984fa0bb49ae7a5823539d501, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Neutral
+        template: {fileID: 11400000, guid: a8a37d86cf33d524981a600d9936d5ed, type: 2}
+        templateValues: []
+        attributes: []
+    - rid: 3058894627830235236
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 362182703
+        name: Malfoy
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Malfoy
+        isPlayer: 0
+        emotions:
+        - id: Neutral
+          portrait: {fileID: 21300000, guid: 68b15dc0cda977244a0cb1a910243466, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Angry
+          portrait: {fileID: 21300000, guid: cb97f74d7920dd64c9cdacace5a7b363, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Embarrassed
+          portrait: {fileID: 21300000, guid: 84ec571fefdae074a89ec7a8752c9633, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Happy
+          portrait: {fileID: 21300000, guid: 297446c78c3975d43a5db0a88c2c5c1f, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Smug
+          portrait: {fileID: 21300000, guid: d0cdec62fb7ada742869bcd8f0052c0b, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Sad
+          portrait: {fileID: 21300000, guid: c2f68b83b5b9af043b4981ffecef362b, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Surprised
+          portrait: {fileID: 21300000, guid: 16787fe6f3dcc6649be19ea1dc329bca, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Pout
+          portrait: {fileID: 21300000, guid: 0497d9d57a7fb7f468b1830f47b18922, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        - id: Scared
+          portrait: {fileID: 21300000, guid: 3eec7c4c934406742b4a74b557953f16, type: 3}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Neutral
+        template: {fileID: 11400000, guid: a8a37d86cf33d524981a600d9936d5ed, type: 2}
+        templateValues:
+        - name: affection
+          initialValue:
+            type: 1
+            boolValue: 0
+            intValue: -1
+            floatValue: 0
+            stringValue: 
+            vectorValue: {x: 0, y: 0, z: 0, w: 0}
+            colorValue: {r: 0, g: 0, b: 0, a: 0}
+            objectValue: {fileID: 0}
+          description: 
+        attributes:
+        - name: pride
+          initialValue:
+            type: 1
+            boolValue: 0
+            intValue: 10
+            floatValue: 0
+            stringValue: 
+            vectorValue: {x: 0, y: 0, z: 0, w: 0}
+            colorValue: {r: 0, g: 0, b: 0, a: 0}
+            objectValue: {fileID: 0}
+          description: Her own attribute, next to the template's.
+    - rid: 3058894627830235237
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 301471443
+        name: McGonagall
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Professor McGonagall
+        isPlayer: 0
+        emotions:
+        - id: Neutral
+          portrait: {fileID: 0}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
+        attributes: []
+    - rid: 3058894627830235238
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 533170347
+        name: Voldemort
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Voldemort
+        isPlayer: 0
+        emotions:
+        - id: Neutral
+          portrait: {fileID: 0}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
+        attributes: []
+    - rid: 3058894627830235239
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 283678530
+        name: Wormtail
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Wormtail
+        isPlayer: 0
+        emotions:
+        - id: Neutral
+          portrait: {fileID: 0}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
+        attributes: []
+    - rid: 3058894627830235240
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 514538025
+        name: Rita
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Rita Skeeter
+        isPlayer: 0
+        emotions:
+        - id: Neutral
+          portrait: {fileID: 0}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
+        attributes: []
+    - rid: 3058894627830235241
+      type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 365809420
+        name: Dumbledore
+        displayName:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Dumbledore
+        isPlayer: 0
+        emotions:
+        - id: Neutral
+          portrait: {fileID: 0}
+          tint: {r: 1, g: 1, b: 1, a: 1}
+          localizedPortrait:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+          localizedTint:
+            m_EntryId: 0
+            m_Table: {fileID: 0}
+        defaultEmotion: Neutral
+        template: {fileID: 0}
+        templateValues: []
+        attributes: []
