@@ -28,8 +28,8 @@ namespace ND.Dialogue.Editor.Samples
         public const string TemplatePath = Folder + "/Characters/Students_Template.asset";
         public const string ScenePath = Folder + "/MalfoyStory.unity";
         public const string EpilogueScenePath = Folder + "/MalfoyEpilogue.unity";
-        private const string PortraitFolder = Folder + "/Portraits";
-        private const string Affection = "Malfoy.affection";
+        internal const string PortraitFolder = Folder + "/Portraits";
+        internal const string Affection = "Malfoy.affection";
 
         private static readonly string[] MalfoyEmotions = { "Neutral", "Angry", "Embarrassed", "Happy", "Smug", "Sad", "Surprised", "Pout", "Scared" };
         private static readonly string[] HarryEmotions = { "Neutral", "Happy", "Surprised", "Angry" };
@@ -397,9 +397,10 @@ namespace ND.Dialogue.Editor.Samples
             var ignore = b.Choice(3, 3, "(Walk past without a word.)", menu: "Walk past without a word");
             ignore.actions.Add(AddTo(Annoyance, 1));
             ignore.actions.Add(AddTo(Affection, -1));
-            foreach (var greeting in new[] { hostile, shy, smug, cold })
-                foreach (var reply in new[] { compliment, tease, invite, ignore })
-                    b.Link(greeting, reply);
+            // Every greeting leads to the same four replies: one hub instead of 4 × 4 crossing links.
+            var replies = b.Hub(2, 1.5f, "replies");
+            foreach (var greeting in new[] { hostile, shy, smug, cold }) b.Link(greeting, replies);
+            foreach (var reply in new[] { compliment, tease, invite, ignore }) b.Link(replies, reply);
 
             // Reactions: each reply goes through a router that reads her mood.
             var afterCompliment = b.Route(4, 0, "React to the compliment");
@@ -488,13 +489,13 @@ namespace ND.Dialogue.Editor.Samples
 
         // ------------------------------------------------------------------ helpers
 
-        private const string Annoyance = "Malfoy.annoyance";
-        private const string Pride = "Malfoy.pride";
+        internal const string Annoyance = "Malfoy.annoyance";
+        internal const string Pride = "Malfoy.pride";
 
-        private static SetVariableAction AddTo(string variable, int amount) =>
+        internal static SetVariableAction AddTo(string variable, int amount) =>
             new SetVariableAction { variable = variable, mode = SetVariableAction.Mode.Add, value = amount.ToString() };
 
-        private static VariableCondition When(string variable, CompareOp op, int value) =>
+        internal static VariableCondition When(string variable, CompareOp op, int value) =>
             new VariableCondition { variable = variable, op = op, value = value.ToString() };
 
         private static SetVariableAction AddAffection(int amount) =>
@@ -510,11 +511,11 @@ namespace ND.Dialogue.Editor.Samples
             }
         }
 
-        private static Sprite Portrait(string actor, string emotion) =>
+        internal static Sprite Portrait(string actor, string emotion) =>
             AssetDatabase.LoadAssetAtPath<Sprite>($"{PortraitFolder}/{actor}_{emotion}.png");
 
         /// <summary>Portraits are plain PNGs: make them single sprites (once).</summary>
-        private static void ImportPortraits()
+        internal static void ImportPortraits()
         {
             foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", new[] { PortraitFolder }))
             {
@@ -529,7 +530,7 @@ namespace ND.Dialogue.Editor.Samples
         }
 
         /// <summary>Writes one chapter on a grid (column → x, row → y).</summary>
-        private sealed class Writer
+        internal sealed class Writer
         {
             private readonly Conversation m_Conversation;
             private readonly Dictionary<string, Actor> m_Cast;
@@ -571,6 +572,16 @@ namespace ND.Dialogue.Editor.Samples
                 var entry = m_Conversation.AddEntry(m_Cast["Harry"].id, title);
                 entry.position = At(column, row);
                 entry.isPassthrough = true;
+                return entry;
+            }
+
+            /// <summary>A hub: links into it count as links to each of its targets (merges many → many).</summary>
+            public DialogueEntry Hub(float column, float row, string title)
+            {
+                var entry = m_Conversation.AddEntry(m_Cast["Harry"].id, title);
+                entry.position = new Vector2(column * 300f + 60f, row * 190f + 40f);
+                entry.isPassthrough = true;
+                entry.isHub = true;
                 return entry;
             }
 
