@@ -106,6 +106,60 @@ namespace ND.Localization.Editor
                     if (GUILayout.Button("Import CSV…")) LocalizationCsvMenu.ImportInteractive(strings);
                     if (GUILayout.Button("Export CSV…")) LocalizationCsvMenu.ExportInteractive(strings);
                 }
+                DrawGoogleSheets(strings);
+            }
+        }
+
+        private bool m_SheetBusy;
+
+        /// <summary>Link to a Google Sheet; Pull (download → import) and Push (via the sheet's Apps Script).</summary>
+        private void DrawGoogleSheets(StringTable table)
+        {
+            var link = serializedObject.FindProperty(nameof(StringTable.googleSheet));
+            link.isExpanded = EditorGUILayout.Foldout(link.isExpanded, "Google Sheets", true);
+            if (!link.isExpanded) return;
+
+            EditorGUI.indentLevel++;
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(link.FindPropertyRelative(nameof(GoogleSheetLink.sheetUrl)), new GUIContent("Sheet URL"));
+            EditorGUILayout.PropertyField(link.FindPropertyRelative(nameof(GoogleSheetLink.pushUrl)), new GUIContent("Push URL (Apps Script)"));
+            EditorGUILayout.PropertyField(link.FindPropertyRelative(nameof(GoogleSheetLink.pushSecret)), new GUIContent("Push Secret"));
+            serializedObject.ApplyModifiedProperties();
+            EditorGUI.indentLevel--;
+
+            using (new EditorGUILayout.HorizontalScope())
+            using (new EditorGUI.DisabledScope(m_SheetBusy))
+            {
+                using (new EditorGUI.DisabledScope(!table.googleSheet.HasSheet))
+                {
+                    if (GUILayout.Button(new GUIContent(m_SheetBusy ? "Working…" : "↓ Pull", "Download the sheet and import it (same columns as the CSV export). Undoable.")))
+                    {
+                        int choice = EditorUtility.DisplayDialogComplex("Pull from Google Sheets",
+                            $"Import the sheet into '{table.DisplayName}'.\n\nWhat should an empty cell do?", "Clear translation", "Cancel", "Keep existing");
+                        if (choice != 1)
+                        {
+                            m_SheetBusy = true;
+                            GoogleSheetsSync.Pull(table, clearEmptyCells: choice == 0, _ => { m_SheetBusy = false; Repaint(); });
+                        }
+                    }
+                    if (GUILayout.Button(new GUIContent("Open sheet", "Open the sheet in the browser")))
+                        Application.OpenURL(table.googleSheet.sheetUrl);
+                }
+                using (new EditorGUI.DisabledScope(!table.googleSheet.CanPush))
+                {
+                    if (GUILayout.Button(new GUIContent("↑ Push", "Overwrite the sheet tab with this table (all project locales).")) &&
+                        EditorUtility.DisplayDialog("Push to Google Sheets", $"Overwrite the sheet tab with '{table.DisplayName}' ({table.Count} keys)?", "Push", "Cancel"))
+                    {
+                        m_SheetBusy = true;
+                        GoogleSheetsSync.Push(table, _ => { m_SheetBusy = false; Repaint(); });
+                    }
+                }
+                if (GUILayout.Button(new GUIContent("Copy push script", "Apps Script for the sheet: Extensions → Apps Script, paste, Deploy → Web app (Execute as Me, access Anyone), copy its URL into Push URL.")))
+                {
+                    EditorGUIUtility.systemCopyBuffer = GoogleSheetsSync.AppsScript;
+                    Debug.Log("[Localization] Push script copied. In the sheet: Extensions → Apps Script → paste → Deploy → New deployment → Web app " +
+                              "(Execute as: Me, Who has access: Anyone) → copy the web app URL into 'Push URL'.");
+                }
             }
         }
 
