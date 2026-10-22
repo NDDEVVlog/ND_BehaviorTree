@@ -429,43 +429,6 @@ namespace ND.Dialogue.Editor
         }
     }
 
-    /// <summary>A quest: <c>● [id] starts [state ▾]</c>, then its player-facing title and a note.</summary>
-    [CustomPropertyDrawer(typeof(QuestDefinition))]
-    public class QuestDefinitionDrawer : PropertyDrawer
-    {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            var title = property.FindPropertyRelative(nameof(QuestDefinition.title));
-            float spacing = EditorGUIUtility.standardVerticalSpacing;
-            return EditorGUIUtility.singleLineHeight * 2 + EditorGUI.GetPropertyHeight(title, true) + spacing * 3;
-        }
-
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            float line = EditorGUIUtility.singleLineHeight, spacing = EditorGUIUtility.standardVerticalSpacing;
-            EditorGUI.BeginProperty(position, label, property);
-            int indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-            var cols = DialogueRowGUI.Columns(new Rect(position.x, position.y, position.width, line), 10f, 0.55f, 40f, 0.45f);
-            EditorGUI.DrawRect(new Rect(cols[0].x + 1f, cols[0].y + 5f, 8f, 8f), DialogueVariableStyle.QuestColor);
-            var name = property.FindPropertyRelative(nameof(QuestDefinition.name));
-            name.stringValue = DialogueRowGUI.HintField(cols[1], name.stringValue, "quest id");
-            EditorGUI.LabelField(cols[2], "starts", EditorStyles.miniLabel);
-            EditorGUI.PropertyField(cols[3], property.FindPropertyRelative(nameof(QuestDefinition.initialState)), GUIContent.none);
-
-            var title = property.FindPropertyRelative(nameof(QuestDefinition.title));
-            float th = EditorGUI.GetPropertyHeight(title, true);
-            var rest = new Rect(position.x + 14f, position.y + line + spacing, position.width - 14f, th);
-            EditorGUI.PropertyField(rest, title, new GUIContent("Title shown to players"), true);
-            rest.y += th + spacing;
-            rest.height = line;
-            var note = property.FindPropertyRelative(nameof(QuestDefinition.description));
-            note.stringValue = DialogueRowGUI.HintField(rest, note.stringValue, "note for designers");
-            EditorGUI.indentLevel = indent;
-            EditorGUI.EndProperty();
-        }
-    }
-
     /// <summary>An event: <c>⚡ [name] [argument hint] [note]</c>.</summary>
     [CustomPropertyDrawer(typeof(EventDefinition))]
     public class EventDefinitionDrawer : PropertyDrawer

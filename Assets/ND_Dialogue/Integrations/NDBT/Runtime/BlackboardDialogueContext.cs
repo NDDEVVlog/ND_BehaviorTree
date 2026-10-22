@@ -16,7 +16,7 @@ namespace ND.Dialogue.NDBT
     /// </list>
     /// Use the shared world instance (<see cref="ForWorld"/>) so dialogue and every agent see one set of values.
     /// </summary>
-    public class BlackboardDialogueContext : IDialogueContext, IDialogueSchema
+    public class BlackboardDialogueContext : IDialogueContext, IDialogueSchema, IObservableDialogueContext
     {
         private const string LogTag = "[BlackboardDialogueContext]";
         public const string DefaultQuestPrefix = "quest.";
@@ -28,6 +28,33 @@ namespace ND.Dialogue.NDBT
 
         /// <summary>(event name, argument) from <see cref="RaiseEventAction"/>.</summary>
         public event Action<string, string> EventRaised;
+
+        private Action<string, bool> m_StateChanged;
+
+        /// <summary>
+        /// (name, is quest) A world key changed — from dialogue or from any agent writing the blackboard — or a character
+        /// attribute was set by dialogue. Listens to <see cref="Blackboard.KeyChanged"/> only while someone subscribes.
+        /// </summary>
+        public event Action<string, bool> StateChanged
+        {
+            add
+            {
+                if (m_StateChanged == null && Blackboard != null) Blackboard.KeyChanged += OnKeyChanged;
+                m_StateChanged += value;
+            }
+            remove
+            {
+                m_StateChanged -= value;
+                if (m_StateChanged == null && Blackboard != null) Blackboard.KeyChanged -= OnKeyChanged;
+            }
+        }
+
+        private void OnKeyChanged(Key key)
+        {
+            if (key == null || m_StateChanged == null) return;
+            bool quest = IsQuestKeyName(key.keyName);
+            m_StateChanged(quest ? key.keyName.Substring(QuestKeyPrefix.Length) : key.keyName, quest);
+        }
 
         /// <param name="blackboard">A runtime blackboard (or an asset in editor tooling: writes would then change the asset).</param>
         public BlackboardDialogueContext(Blackboard blackboard, string questKeyPrefix = DefaultQuestPrefix, DialogueDatabase database = null)
@@ -149,6 +176,8 @@ namespace ND.Dialogue.NDBT
                 return false;
             }
             key.SetValueObject(boxed);
+            // A Blackboard Actor's attribute lives on its own board (not the world board we listen to): report it here.
+            if (Database != null && Database.TryResolveAttribute(variableName, out var owner, out _) && owner is BlackboardActor) m_StateChanged?.Invoke(variableName, false);
             return true;
         }
 

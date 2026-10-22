@@ -580,17 +580,187 @@ namespace ND.Dialogue.Editor
 
         private void BuildQuests()
         {
-            Intro("Quests have a state (Inactive, Active, Completed, Failed, Abandoned) that lines can check and change.");
+            Intro("Quests have a state (Inactive, Active, Completed, Failed, Abandoned) that lines can check and change. " +
+                  "Their journal (title, summary, steps) is what the in-game Quest Log and Tracker show.");
             var source = m_Database.schemaSource;
-            var group = Group("Quests");
-            if (source == null) group.Add(Bound(m_Serialized.FindProperty(nameof(DialogueDatabase.quests))));
+            if (source != null)
+            {
+                var world = Group("Quests in the world", $"They live in '{source.name}'.");
+                var editor = DialoguePluginRegistry.SchemaEditorFor(source);
+                if (editor?.Quests != null) world.Add(DialoguePluginRegistry.BuildSchemaEditor(editor, editor.Quests, Args()));
+                else world.Add(ReadOnlySchema(source, m_Database.Schema.QuestNames, "quests"));
+                m_Content.Add(world);
+            }
+
+            var journal = Group(source == null ? "Quests" : "Journal",
+                source == null ? "Each quest: its id and starting state, then what players read." : "What players read about each quest of the world (matched by name).");
+            if (source == null)
+            {
+                for (int i = 0; i < m_Database.quests.Count; i++) journal.Add(QuestCard(i, removable: true));
+                var add = new Button(() => Edit("Add Quest", () =>
+                {
+                    var names = m_Database.quests.Where(q => q != null).Select(q => q.name).ToArray();
+                    m_Database.AddQuest(ObjectNames.GetUniqueName(names, "new_quest"));
+                })) { text = "+ Add quest" };
+                add.AddToClassList("dlg-inspector__add");
+                journal.Add(add);
+            }
             else
             {
-                var editor = DialoguePluginRegistry.SchemaEditorFor(source);
-                if (editor?.Quests != null) group.Add(DialoguePluginRegistry.BuildSchemaEditor(editor, editor.Quests, Args()));
-                else group.Add(ReadOnlySchema(source, m_Database.Schema.QuestNames, "quests"));
+                foreach (var name in m_Database.Schema.QuestNames.Distinct().OrderBy(n => n))
+                {
+                    int index = m_Database.quests.FindIndex(q => q != null && q.name == name);
+                    if (index >= 0) { journal.Add(QuestCard(index, removable: true)); continue; }
+                    var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+                    row.Add(VariableRow(name, "no journal yet", DialogueVariableStyle.QuestColor));
+                    string questName = name;
+                    row.Add(new Button(() => Edit("Add Quest Journal", () => m_Database.quests.Add(new QuestDefinition { name = questName })))
+                        { text = "+ Journal", tooltip = "Give this quest a title, summary and steps for the quest log" });
+                    journal.Add(row);
+                }
+                foreach (var orphan in m_Database.quests.Where(q => q != null && !m_Database.Schema.HasQuest(q.name)).ToList())
+                    journal.Add(new HelpBox($"Journal '{orphan.name}' matches no quest of the world.", HelpBoxMessageType.Warning));
             }
-            m_Content.Add(group);
+            m_Content.Add(journal);
+        }
+
+        /// <summary>One quest's card: id, state, group, tracking, title, summary, note, and its steps with conditions.</summary>
+        private VisualElement QuestCard(int index, bool removable)
+        {
+            var quest = m_Database.quests[index];
+            var prop = m_Serialized.FindProperty($"{nameof(DialogueDatabase.quests)}.Array.data[{index}]");
+            var card = new VisualElement();
+            card.AddToClassList("dlg-questcard");
+            if (quest == null || prop == null) { card.Add(new Label("(empty)")); return card; }
+
+            var head = new VisualElement();
+            head.AddToClassList("dlg-questcard__head");
+            var dot = new VisualElement { style = { backgroundColor = DialogueVariableStyle.QuestColor } };
+            dot.AddToClassList("dlg-varrow__dot");
+            head.Add(dot);
+            var id = new TextField { value = quest.name, isDelayed = true, tooltip = "Quest id (conditions and actions use it)" };
+            id.AddToClassList("dlg-questcard__id");
+            id.SetEnabled(m_Database.schemaSource == null); // a world's quest is renamed in the world
+            id.RegisterValueChangedCallback(evt => RenameQuest(index, evt.newValue));
+            head.Add(id);
+            if (m_Database.schemaSource == null) head.Add(CompactField(prop.FindPropertyRelative(nameof(QuestDefinition.initialState)), "starts", 150));
+            head.Add(CompactField(prop.FindPropertyRelative(nameof(QuestDefinition.group)), "group", 140));
+            head.Add(CompactField(prop.FindPropertyRelative(nameof(QuestDefinition.trackWhenActive)), "track", 60));
+            head.Add(new VisualElement { style = { flexGrow = 1 } });
+            if (removable)
+            {
+                var remove = new Button(() =>
+                {
+                    if (EditorUtility.DisplayDialog("Remove quest", $"Remove '{quest.name}' and its journal?", "Remove", "Cancel"))
+                        Edit("Remove Quest", () => m_Database.quests.RemoveAt(index));
+                }) { text = "✕", tooltip = "Remove" };
+                remove.AddToClassList("dlg-inspector__remove");
+                head.Add(remove);
+            }
+            card.Add(head);
+
+            card.Add(Bound(prop.FindPropertyRelative(nameof(QuestDefinition.title))));
+            card.Add(Bound(prop.FindPropertyRelative(nameof(QuestDefinition.summary))));
+            card.Add(Bound(prop.FindPropertyRelative(nameof(QuestDefinition.description))));
+
+            var steps = new Label("Steps") { tooltip = "Listed under the quest in the log and tracker. Each shows and ticks itself by conditions." };
+            steps.AddToClassList("dlg-questcard__steps");
+            card.Add(steps);
+            var stepsProp = prop.FindPropertyRelative(nameof(QuestDefinition.steps));
+            for (int s = 0; s < quest.steps.Count; s++) card.Add(StepCard(index, s, stepsProp.GetArrayElementAtIndex(s)));
+            var addStep = new Button(() => Edit("Add Quest Step", () => m_Database.quests[index].steps.Add(new QuestStep()))) { text = "+ Add step" };
+            addStep.AddToClassList("dlg-inspector__add");
+            card.Add(addStep);
+            return card;
+        }
+
+        private VisualElement StepCard(int questIndex, int stepIndex, SerializedProperty stepProp)
+        {
+            var box = new VisualElement();
+            box.AddToClassList("dlg-line");
+            var head = new VisualElement();
+            head.AddToClassList("dlg-line__head");
+            var number = new Label((stepIndex + 1).ToString());
+            number.AddToClassList("dlg-line__number");
+            head.Add(number);
+            head.Add(new VisualElement { style = { flexGrow = 1 } });
+            var remove = new Button(() => Edit("Remove Quest Step", () => m_Database.quests[questIndex].steps.RemoveAt(stepIndex))) { text = "✕", tooltip = "Remove this step" };
+            remove.AddToClassList("dlg-line__button");
+            head.Add(remove);
+            box.Add(head);
+            box.Add(Bound(stepProp.FindPropertyRelative(nameof(QuestStep.text))));
+            box.Add(ConditionList(stepProp.FindPropertyRelative(nameof(QuestStep.visibleWhen)), "Shown when (empty = always)"));
+            box.Add(ConditionList(stepProp.FindPropertyRelative(nameof(QuestStep.doneWhen)), "Done when (empty = when the quest is Completed)"));
+            return box;
+        }
+
+        /// <summary>A [SerializeReference] condition list: one row per condition (its drawer), ✕, and "+ condition".</summary>
+        private VisualElement ConditionList(SerializedProperty list, string title)
+        {
+            var box = new VisualElement();
+            box.AddToClassList("dlg-condlist");
+            box.Add(new Label(title) { style = { color = new Color(0.63f, 0.66f, 0.72f), fontSize = 11, marginTop = 2 } });
+            string path = list.propertyPath;
+            for (int i = 0; i < list.arraySize; i++)
+            {
+                int index = i;
+                var row = new VisualElement();
+                row.AddToClassList("dlg-inspector__row");
+                row.Add(Bound(list.GetArrayElementAtIndex(i)));
+                var remove = new Button(() =>
+                {
+                    Undo.RecordObject(m_Database, "Remove Condition");
+                    var so = new SerializedObject(m_Database);
+                    so.FindProperty(path).DeleteArrayElementAtIndex(index);
+                    so.ApplyModifiedProperties();
+                    DatabaseChanged?.Invoke();
+                    Rebuild();
+                }) { text = "✕", tooltip = "Remove" };
+                remove.AddToClassList("dlg-inspector__remove");
+                row.Add(remove);
+                box.Add(row);
+            }
+            var add = new Button { text = "+ condition" };
+            add.AddToClassList("dlg-condlist__add");
+            add.clicked += () =>
+            {
+                var menu = new GenericMenu();
+                foreach (var type in DialogueRowGUI.ConcreteTypes(typeof(DialogueCondition)))
+                {
+                    var t = type;
+                    menu.AddItem(new GUIContent(DialogueRowGUI.TypeLabel(t)), false, () =>
+                    {
+                        DialogueRowGUI.AppendManagedReference(m_Database, path, t);
+                        DatabaseChanged?.Invoke();
+                        Rebuild();
+                    });
+                }
+                menu.ShowAsContext();
+            };
+            box.Add(add);
+            return box;
+        }
+
+        private VisualElement CompactField(SerializedProperty property, string label, float width)
+        {
+            var field = new PropertyField(property, label) { style = { width = width, marginLeft = 6 } };
+            field.AddToClassList("dlg-compact");
+            field.Bind(m_Serialized);
+            return field;
+        }
+
+        private void RenameQuest(int index, string newName)
+        {
+            newName = newName?.Trim();
+            var quest = m_Database.quests[index];
+            if (string.IsNullOrEmpty(newName) || newName == quest.name) return;
+            if (m_Database.FindQuest(newName) != null)
+            {
+                Debug.LogWarning($"[Dialogue Editor] A quest named '{newName}' already exists.");
+                Rebuild();
+                return;
+            }
+            Edit("Rename Quest", () => quest.name = newName);
         }
 
         /// <summary>Names from a source no plugin can edit here: listed with colours, plus a way to the source asset.</summary>

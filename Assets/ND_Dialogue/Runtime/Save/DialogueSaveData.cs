@@ -36,6 +36,8 @@ namespace ND.Dialogue
         public List<Variable> variables = new List<Variable>();
         public List<Quest> quests = new List<Quest>();
         public List<Seen> seen = new List<Seen>();
+        /// <summary>Quests shown in the on-screen tracker.</summary>
+        public List<string> trackedQuests = new List<string>();
         public DialoguePosition position = new DialoguePosition();
     }
 }

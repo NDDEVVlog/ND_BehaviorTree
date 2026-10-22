@@ -133,6 +133,25 @@ namespace ND.Dialogue.NDBT.Tests
         }
 
         [Test]
+        public void TheBlackboardWorld_ReportsChanges_FromDialogueAndFromAgents_ToTheQuestLog()
+        {
+            var source = Track(ScriptableObject.CreateInstance<BlackboardSchemaSource>());
+            source.blackboard = m_WorldAsset; // the log lists the world's quests (quest.key)
+            m_Db.schemaSource = source;
+            var context = BlackboardDialogueContext.ForWorld(m_WorldAsset, database: m_Db);
+            var changes = new List<string>();
+            context.StateChanged += (name, quest) => changes.Add($"{(quest ? "quest " : string.Empty)}{name}");
+            var log = new QuestLog(m_Db, context);
+
+            context.SetQuestState("key", QuestState.Active); // dialogue
+            Assert.IsTrue(SharedBlackboards.GetRuntime(m_WorldAsset).TryGetKey("player.has_old_key", out var key));
+            key.SetValueObject(true); // an agent writing the shared blackboard
+            CollectionAssert.AreEqual(new[] { "quest key", "player.has_old_key" }, changes);
+            Assert.AreEqual(QuestState.Active, log.Find("key").State, "the log heard the world");
+            log.Dispose();
+        }
+
+        [Test]
         public void Validate_UsesTheBlackboardAsSchema()
         {
             BuildQuestConversation();

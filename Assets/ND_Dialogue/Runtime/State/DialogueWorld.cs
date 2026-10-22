@@ -16,11 +16,21 @@ namespace ND.Dialogue
     }
 
     /// <summary>
+    /// A context that tells when its state changes — from dialogue or from gameplay. Quest logs, trackers and HUDs
+    /// subscribe instead of polling.
+    /// </summary>
+    public interface IObservableDialogueContext
+    {
+        /// <summary>(variable or quest name, true when it is a quest) A value changed.</summary>
+        event Action<string, bool> StateChanged;
+    }
+
+    /// <summary>
     /// Default <see cref="IDialogueContext"/>: the variables and quests declared in a <see cref="DialogueDatabase"/>,
     /// starting at their initial values. Every change raises an event, so UI, quests and AI can react (and a
     /// behavior-tree blackboard can mirror it through an adapter). Names not declared in the database are rejected.
     /// </summary>
-    public class DialogueWorld : IDialogueContext
+    public class DialogueWorld : IDialogueContext, IObservableDialogueContext
     {
         private const string LogTag = "[DialogueWorld]";
 
@@ -33,6 +43,8 @@ namespace ND.Dialogue
         public event Action<string, QuestState, QuestState> QuestStateChanged;
         /// <summary>(event name, argument)</summary>
         public event Action<string, string> EventRaised;
+        /// <summary>(name, is quest) Any variable or quest changed.</summary>
+        public event Action<string, bool> StateChanged;
 
         public DialogueWorld(DialogueDatabase database)
         {
@@ -81,6 +93,7 @@ namespace ND.Dialogue
             if (old.Equals(converted) && old.type == converted.type) return true;
             m_Variables[variableName] = converted;
             VariableChanged?.Invoke(variableName, old, converted);
+            StateChanged?.Invoke(variableName, false);
             return true;
         }
 
@@ -111,6 +124,7 @@ namespace ND.Dialogue
             if (old == state) return true;
             m_Quests[questName] = state;
             QuestStateChanged?.Invoke(questName, old, state);
+            StateChanged?.Invoke(questName, true);
             return true;
         }
 

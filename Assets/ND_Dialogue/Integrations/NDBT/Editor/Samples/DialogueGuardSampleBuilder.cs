@@ -117,6 +117,7 @@ namespace ND.Dialogue.NDBT.Editor.Samples
 
             db.events.Add(new EventDefinition { name = "open_gate", description = "The guard lets the player through." });
             db.events.Add(new EventDefinition { name = "give_item", argumentHint = "item id", description = "The player receives an item." });
+            db.quests.Add(KeyQuestJournal()); // the quest itself is the int key "quest.key" of the world blackboard
 
             BuildGateConversation(db, text, player, guard);
             BuildMerchantConversation(db, player, merchant);
@@ -237,6 +238,36 @@ namespace ND.Dialogue.NDBT.Editor.Samples
             c.Link(look, bye);
         }
 
+        /// <summary>The quest log's view of "key": a title, a summary and three steps driven by the world's values.</summary>
+        private static QuestDefinition KeyQuestJournal()
+        {
+            var started = new QuestStateCondition { quest = "key", op = CompareOp.NotEqual, state = QuestState.Inactive };
+            var journal = new QuestDefinition
+            {
+                name = "key",
+                group = "Main",
+                description = "Journal of the world's quest.key (the state lives in World_Blackboard).",
+            };
+            journal.title.Text = "The Old Key";
+            journal.summary.Text = "The gate guard won't let anyone through. He lost an old key somewhere in the market.";
+            journal.steps.Add(Step("Ask the gate guard how to get through", null,
+                new QuestStateCondition { quest = "key", op = CompareOp.NotEqual, state = QuestState.Inactive }));
+            journal.steps.Add(Step("Find the old key (the merchant might have one)", started,
+                new VariableCondition { variable = "player.has_old_key", value = "true" }));
+            journal.steps.Add(Step("Bring the key back to the gate guard",
+                new VariableCondition { variable = "player.has_old_key", value = "true" }, null)); // ticked when the quest completes
+            return journal;
+        }
+
+        private static QuestStep Step(string text, DialogueCondition visibleWhen, DialogueCondition doneWhen)
+        {
+            var step = new QuestStep();
+            step.text.Text = text;
+            if (visibleWhen != null) step.visibleWhen.Add(visibleWhen);
+            if (doneWhen != null) step.doneWhen.Add(doneWhen);
+            return step;
+        }
+
         /// <summary>Links <paramref name="from"/> → <paramref name="to"/> and moves <paramref name="to"/>'s conditions onto the link (a per-branch rule, drawn on the edge).</summary>
         private static DialogueLink Branch(Conversation c, DialogueEntry from, DialogueEntry to, LinkPriority priority = LinkPriority.Normal)
         {
@@ -278,6 +309,11 @@ namespace ND.Dialogue.NDBT.Editor.Samples
             var dialogue = manager.gameObject;
             var view = dialogue.AddComponent<DialogueDebugView>();
             SetField(view, "m_Manager", manager);
+
+            // Quest HUD: the tracker (top right, with "Quest started" toasts) and the journal window (J).
+            var questCanvas = ND.Dialogue.Editor.DialogueUIBuilder.CanvasOf(manager);
+            ND.Dialogue.Editor.DialogueUIBuilder.CreateQuestTracker(questCanvas, manager);
+            ND.Dialogue.Editor.DialogueUIBuilder.CreateQuestLog(questCanvas, manager);
 
             // A small yard: walk with WASD, press E near someone to talk.
             var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
