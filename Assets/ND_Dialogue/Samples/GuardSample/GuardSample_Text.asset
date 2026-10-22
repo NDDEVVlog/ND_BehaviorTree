@@ -91,3 +91,7 @@ MonoBehaviour:
       value: "Ch\xE0o m\u1EEBng tr\u1EDF l\u1EA1i, b\u1EA1n t\xF4i. (tin t\u01B0\u1EDFng
         [var=Guard.trust])"
   m_NextId: 10
+  googleSheet:
+    sheetUrl: 
+    pushUrl: 
+    pushSecret: 

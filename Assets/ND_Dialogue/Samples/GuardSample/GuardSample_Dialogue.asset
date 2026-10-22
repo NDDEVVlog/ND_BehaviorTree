@@ -19,9 +19,9 @@ MonoBehaviour:
     alwaysShowChoiceMenu: 1
     maxSilentSteps: 100
   actors:
-  - rid: 3058894610877645040
-  - rid: 3058894610877645041
-  - rid: 3058894610877645042
+  - rid: 3058894625090830677
+  - rid: 3058894625090830678
+  - rid: 3058894625090830679
   variables: []
   quests: []
   events:
@@ -36,379 +36,38 @@ MonoBehaviour:
     title: Gate Guard
     description: Quest giver. Localized lines (en/vi), quest state, character attributes,
       link priority, an event.
-    entries:
-    - id: 0
-      title: START
-      actorId: 0
-      text:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 1
-      conditions: []
-      actions: []
-      links:
-      - conversationId: 1
-        entryId: 1
-        priority: 2
-        conditions: []
-      - conversationId: 1
-        entryId: 2
-        priority: 2
-        conditions: []
-      - conversationId: 1
-        entryId: 7
-        priority: 2
-        conditions: []
-      - conversationId: 1
-        entryId: 8
-        priority: 4
-        conditions: []
-      - conversationId: 1
-        entryId: 9
-        priority: 2
-        conditions: []
-      position: {x: 0, y: 260}
-    - id: 1
-      title: 
-      actorId: 2
-      text:
-        m_EntryId: 1
-        m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
-        m_Text: Halt! Nobody passes this gate.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions:
-      - rid: 3058894610877645043
-      - rid: 3058894610877645044
-      actions:
-      - rid: 3058894610877645045
-      links:
-      - conversationId: 1
-        entryId: 3
-        priority: 2
-        conditions: []
-      - conversationId: 1
-        entryId: 4
-        priority: 2
-        conditions: []
-      position: {x: 300, y: 0}
-    - id: 2
-      title: 
-      actorId: 2
-      text:
-        m_EntryId: 2
-        m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
-        m_Text: You again. Looking for work or not?
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions:
-      - rid: 3058894610877645046
-      - rid: 3058894610877645047
-      actions: []
-      links:
-      - conversationId: 1
-        entryId: 3
-        priority: 2
-        conditions: []
-      - conversationId: 1
-        entryId: 4
-        priority: 2
-        conditions: []
-      position: {x: 300, y: 130}
-    - id: 3
-      title: 
-      actorId: 1
-      text:
-        m_EntryId: 3
-        m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
-        m_Text: I'm looking for work.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions: []
-      actions: []
-      links:
-      - conversationId: 1
-        entryId: 5
-        priority: 2
-        conditions: []
-      position: {x: 620, y: 0}
-    - id: 4
-      title: 
-      actorId: 1
-      text:
-        m_EntryId: 4
-        m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
-        m_Text: Out of my way!
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions: []
-      actions: []
-      links:
-      - conversationId: 1
-        entryId: 6
-        priority: 2
-        conditions: []
-      position: {x: 620, y: 130}
-    - id: 5
-      title: 
-      actorId: 2
-      text:
-        m_EntryId: 5
-        m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
-        m_Text: Find my old key in the market and I'll let you through.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions: []
-      actions:
-      - rid: 3058894610877645048
-      - rid: 3058894610877645049
-      links: []
-      position: {x: 940, y: 0}
-    - id: 6
-      title: 
-      actorId: 2
-      text:
-        m_EntryId: 6
-        m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
-        m_Text: Watch your tone, stranger.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: Angry
-      isPassthrough: 0
-      conditions: []
-      actions:
-      - rid: 3058894610877645050
-      - rid: 3058894610877645051
-      links: []
-      position: {x: 940, y: 130}
-    - id: 7
-      title: 
-      actorId: 2
-      text:
-        m_EntryId: 7
-        m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
-        m_Text: Still no key? Try the merchant.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions:
-      - rid: 3058894610877645052
-      actions: []
-      links: []
-      position: {x: 300, y: 300}
-    - id: 8
-      title: 
-      actorId: 2
-      text:
-        m_EntryId: 8
-        m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
-        m_Text: My key! Thank you. The gate is yours.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: Happy
-      isPassthrough: 0
-      conditions:
-      - rid: 3058894610877645053
-      - rid: 3058894610877645054
-      actions:
-      - rid: 3058894610877645055
-      - rid: 3058894610877645056
-      - rid: 3058894610877645057
-      - rid: 3058894610877645058
-      links: []
-      position: {x: 300, y: 420}
-    - id: 9
-      title: 
-      actorId: 2
-      text:
-        m_EntryId: 9
-        m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
-        m_Text: Welcome back, friend. (trust [var=Guard.trust])
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: Happy
-      isPassthrough: 0
-      conditions:
-      - rid: 3058894610877645059
-      actions: []
-      links: []
-      position: {x: 300, y: 560}
-    m_NextEntryId: 13
+    m_Entries:
+    - rid: 3058894625090830735
+    - rid: 3058894625090830736
+    - rid: 3058894625090830737
+    - rid: 3058894625090830738
+    - rid: 3058894625090830739
+    - rid: 3058894625090830740
+    - rid: 3058894625090830741
+    - rid: 3058894625090830742
+    - rid: 3058894625090830743
+    - rid: 3058894625090830744
+    m_LegacyEntries: []
+    m_NextEntryId: 11
   - id: 2
     title: Merchant
     description: "Plain text (connect it to the table later with Settings \u2192
       Localize all). Gold check, a purchase, the merchant's attribute."
-    entries:
-    - id: 0
-      title: START
-      actorId: 0
-      text:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 1
-      conditions: []
-      actions: []
-      links:
-      - conversationId: 2
-        entryId: 1
-        priority: 2
-        conditions: []
-      position: {x: 0, y: 120}
-    - id: 1
-      title: 
-      actorId: 3
-      text:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: Fresh goods! You have [var=player.gold] gold.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions: []
-      actions: []
-      links:
-      - conversationId: 2
-        entryId: 2
-        priority: 2
-        conditions: []
-      - conversationId: 2
-        entryId: 3
-        priority: 2
-        conditions: []
-      position: {x: 300, y: 120}
-    - id: 2
-      title: 
-      actorId: 1
-      text:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: I'll take that rusty old key.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: Buy the old key (5 gold)
-      emotion: 
-      isPassthrough: 0
-      conditions:
-      - rid: 3058894610877645060
-      - rid: 3058894610877645061
-      actions: []
-      links:
-      - conversationId: 2
-        entryId: 4
-        priority: 2
-        conditions: []
-      position: {x: 620, y: 0}
-    - id: 3
-      title: 
-      actorId: 1
-      text:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: Just looking.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions: []
-      actions: []
-      links:
-      - conversationId: 2
-        entryId: 5
-        priority: 2
-        conditions: []
-      position: {x: 620, y: 240}
-    - id: 4
-      title: 
-      actorId: 3
-      text:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: Here you go. Careful, it's rusty. (mood [var=Merchant.mood])
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions: []
-      actions:
-      - rid: 3058894610877645062
-      - rid: 3058894610877645063
-      - rid: 3058894610877645064
-      - rid: 3058894610877645065
-      links: []
-      position: {x: 940, y: 0}
-    - id: 5
-      title: 
-      actorId: 3
-      text:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: Suit yourself.
-      menuText:
-        m_EntryId: 0
-        m_Table: {fileID: 0}
-        m_Text: 
-      emotion: 
-      isPassthrough: 0
-      conditions: []
-      actions: []
-      links: []
-      position: {x: 940, y: 240}
+    m_Entries:
+    - rid: 3058894625090830745
+    - rid: 3058894625090830746
+    - rid: 3058894625090830747
+    - rid: 3058894625090830748
+    - rid: 3058894625090830749
+    - rid: 3058894625090830750
+    m_LegacyEntries: []
     m_NextEntryId: 6
-  m_NextActorId: 4
+  m_NextActorId: 6
   m_NextConversationId: 3
   references:
     version: 2
     RefIds:
-    - rid: 3058894610877645040
+    - rid: 3058894625090830677
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 1
@@ -420,7 +79,7 @@ MonoBehaviour:
         isPlayer: 1
         emotions:
         - id: Neutral
-          portrait: {fileID: 0}
+          portrait: {fileID: 21300000, guid: 77172998e563d3c4ab499324af6f78ad, type: 3}
           tint: {r: 1, g: 1, b: 1, a: 1}
           localizedPortrait:
             m_EntryId: 0
@@ -430,7 +89,7 @@ MonoBehaviour:
             m_Table: {fileID: 0}
         defaultEmotion: Neutral
         attributes: []
-    - rid: 3058894610877645041
+    - rid: 3058894625090830678
       type: {class: BlackboardActor, ns: ND.Dialogue.NDBT, asm: ND.Dialogue.NDBT}
       data:
         id: 2
@@ -471,7 +130,7 @@ MonoBehaviour:
         defaultEmotion: Neutral
         attributes: []
         blackboard: {fileID: 11400000, guid: 3cdc7c8268558ec4d977a4fa04088bb8, type: 2}
-    - rid: 3058894610877645042
+    - rid: 3058894625090830679
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         id: 3
@@ -504,151 +163,574 @@ MonoBehaviour:
             colorValue: {r: 0, g: 0, b: 0, a: 0}
             objectValue: {fileID: 0}
           description: Goes up when you buy something.
-    - rid: 3058894610877645043
+    - rid: 3058894625090830680
       type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: key
         op: 0
         state: 0
-    - rid: 3058894610877645044
+    - rid: 3058894625090830681
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Guard.met
         op: 0
         value: false
         objectValue: {fileID: 0}
-    - rid: 3058894610877645045
-      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: Guard.met
-        mode: 0
-        value: true
-        objectValue: {fileID: 0}
-    - rid: 3058894610877645046
+    - rid: 3058894625090830682
       type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: key
         op: 0
         state: 0
-    - rid: 3058894610877645047
+    - rid: 3058894625090830683
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Guard.met
         op: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894610877645048
+    - rid: 3058894625090830684
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        op: 0
+        state: 1
+    - rid: 3058894625090830685
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        op: 0
+        state: 1
+    - rid: 3058894625090830686
+      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: player.has_old_key
+        op: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894625090830687
+      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        quest: key
+        op: 0
+        state: 2
+    - rid: 3058894625090830688
+      type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        variable: Guard.met
+        mode: 0
+        value: true
+        objectValue: {fileID: 0}
+    - rid: 3058894625090830689
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: key
         state: 1
-    - rid: 3058894610877645049
+    - rid: 3058894625090830690
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Guard.trust
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894610877645050
+    - rid: 3058894625090830691
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Guard.trust
         mode: 1
         value: -1
         objectValue: {fileID: 0}
-    - rid: 3058894610877645051
+    - rid: 3058894625090830692
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Guard.alertness
         mode: 0
         value: 0.9
         objectValue: {fileID: 0}
-    - rid: 3058894610877645052
-      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        quest: key
-        op: 0
-        state: 1
-    - rid: 3058894610877645053
-      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        quest: key
-        op: 0
-        state: 1
-    - rid: 3058894610877645054
-      type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        variable: player.has_old_key
-        op: 0
-        value: true
-        objectValue: {fileID: 0}
-    - rid: 3058894610877645055
+    - rid: 3058894625090830693
       type: {class: SetQuestStateAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         quest: key
         state: 2
-    - rid: 3058894610877645056
+    - rid: 3058894625090830694
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Guard.trust
         mode: 1
         value: 2
         objectValue: {fileID: 0}
-    - rid: 3058894610877645057
+    - rid: 3058894625090830695
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Guard.bannerColor
         mode: 0
         value: '#33CC55'
         objectValue: {fileID: 0}
-    - rid: 3058894610877645058
+    - rid: 3058894625090830696
       type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         eventName: open_gate
         argument: 
-    - rid: 3058894610877645059
-      type: {class: QuestStateCondition, ns: ND.Dialogue, asm: ND.Dialogue}
-      data:
-        quest: key
-        op: 0
-        state: 2
-    - rid: 3058894610877645060
+    - rid: 3058894625090830697
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: player.gold
         op: 5
         value: 5
         objectValue: {fileID: 0}
-    - rid: 3058894610877645061
+    - rid: 3058894625090830698
       type: {class: VariableCondition, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: player.has_old_key
         op: 0
         value: false
         objectValue: {fileID: 0}
-    - rid: 3058894610877645062
+    - rid: 3058894625090830699
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: player.gold
         mode: 1
         value: -5
         objectValue: {fileID: 0}
-    - rid: 3058894610877645063
+    - rid: 3058894625090830700
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: player.has_old_key
         mode: 0
         value: true
         objectValue: {fileID: 0}
-    - rid: 3058894610877645064
+    - rid: 3058894625090830701
       type: {class: SetVariableAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         variable: Merchant.mood
         mode: 1
         value: 1
         objectValue: {fileID: 0}
-    - rid: 3058894610877645065
+    - rid: 3058894625090830702
       type: {class: RaiseEventAction, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
         eventName: give_item
         argument: old_key
+    - rid: 3058894625090830735
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 1
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 1
+          priority: 2
+          conditions:
+          - rid: 3058894625090830680
+          - rid: 3058894625090830681
+        - conversationId: 1
+          entryId: 2
+          priority: 2
+          conditions:
+          - rid: 3058894625090830682
+          - rid: 3058894625090830683
+        - conversationId: 1
+          entryId: 7
+          priority: 2
+          conditions:
+          - rid: 3058894625090830684
+        - conversationId: 1
+          entryId: 8
+          priority: 4
+          conditions:
+          - rid: 3058894625090830685
+          - rid: 3058894625090830686
+        - conversationId: 1
+          entryId: 9
+          priority: 2
+          conditions:
+          - rid: 3058894625090830687
+        position: {x: 0, y: 260}
+    - rid: 3058894625090830736
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 2
+        text:
+          m_EntryId: 1
+          m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
+          m_Text: Halt! Nobody passes this gate.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions:
+        - rid: 3058894625090830688
+        links:
+        - conversationId: 1
+          entryId: 3
+          priority: 2
+          conditions: []
+        - conversationId: 1
+          entryId: 4
+          priority: 2
+          conditions: []
+        position: {x: 300, y: 0}
+    - rid: 3058894625090830737
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 2
+        text:
+          m_EntryId: 2
+          m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
+          m_Text: You again. Looking for work or not?
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 3
+          priority: 2
+          conditions: []
+        - conversationId: 1
+          entryId: 4
+          priority: 2
+          conditions: []
+        position: {x: 300, y: 130}
+    - rid: 3058894625090830738
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 1
+        text:
+          m_EntryId: 3
+          m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
+          m_Text: I'm looking for work.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 5
+          priority: 2
+          conditions: []
+        position: {x: 620, y: 0}
+    - rid: 3058894625090830739
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 1
+        text:
+          m_EntryId: 4
+          m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
+          m_Text: Out of my way!
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 1
+          entryId: 6
+          priority: 2
+          conditions: []
+        position: {x: 620, y: 130}
+    - rid: 3058894625090830740
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 2
+        text:
+          m_EntryId: 5
+          m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
+          m_Text: Find my old key in the market and I'll let you through.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions:
+        - rid: 3058894625090830689
+        - rid: 3058894625090830690
+        links: []
+        position: {x: 940, y: 0}
+    - rid: 3058894625090830741
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 6
+        title: 
+        actorId: 2
+        text:
+          m_EntryId: 6
+          m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
+          m_Text: Watch your tone, stranger.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Angry
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions:
+        - rid: 3058894625090830691
+        - rid: 3058894625090830692
+        links: []
+        position: {x: 940, y: 130}
+    - rid: 3058894625090830742
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 7
+        title: 
+        actorId: 2
+        text:
+          m_EntryId: 7
+          m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
+          m_Text: Still no key? Try the merchant.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 300}
+    - rid: 3058894625090830743
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 8
+        title: 
+        actorId: 2
+        text:
+          m_EntryId: 8
+          m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
+          m_Text: My key! Thank you. The gate is yours.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions:
+        - rid: 3058894625090830693
+        - rid: 3058894625090830694
+        - rid: 3058894625090830695
+        - rid: 3058894625090830696
+        links: []
+        position: {x: 300, y: 420}
+    - rid: 3058894625090830744
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 9
+        title: 
+        actorId: 2
+        text:
+          m_EntryId: 9
+          m_Table: {fileID: 11400000, guid: 3437088a64de1324cb37df6a0db84d6b, type: 2}
+          m_Text: Welcome back, friend. (trust [var=Guard.trust])
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: Happy
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 300, y: 560}
+    - rid: 3058894625090830745
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 0
+        title: START
+        actorId: 0
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 1
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 1
+          priority: 2
+          conditions: []
+        position: {x: 0, y: 120}
+    - rid: 3058894625090830746
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 1
+        title: 
+        actorId: 3
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Fresh goods! You have [var=player.gold] gold.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 2
+          priority: 2
+          conditions:
+          - rid: 3058894625090830697
+          - rid: 3058894625090830698
+        - conversationId: 2
+          entryId: 3
+          priority: 2
+          conditions: []
+        position: {x: 300, y: 120}
+    - rid: 3058894625090830747
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 2
+        title: 
+        actorId: 1
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: I'll take that rusty old key.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Buy the old key (5 gold)
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 4
+          priority: 2
+          conditions: []
+        position: {x: 620, y: 0}
+    - rid: 3058894625090830748
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 3
+        title: 
+        actorId: 1
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Just looking.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions: []
+        links:
+        - conversationId: 2
+          entryId: 5
+          priority: 2
+          conditions: []
+        position: {x: 620, y: 240}
+    - rid: 3058894625090830749
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 4
+        title: 
+        actorId: 3
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Here you go. Careful, it's rusty. (mood [var=Merchant.mood])
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions:
+        - rid: 3058894625090830699
+        - rid: 3058894625090830700
+        - rid: 3058894625090830701
+        - rid: 3058894625090830702
+        links: []
+        position: {x: 940, y: 0}
+    - rid: 3058894625090830750
+      type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
+      data:
+        id: 5
+        title: 
+        actorId: 3
+        text:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: Suit yourself.
+        menuText:
+          m_EntryId: 0
+          m_Table: {fileID: 0}
+          m_Text: 
+        emotion: 
+        moreLines: []
+        isPassthrough: 0
+        conditions: []
+        actions: []
+        links: []
+        position: {x: 940, y: 240}

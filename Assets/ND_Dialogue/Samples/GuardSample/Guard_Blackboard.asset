@@ -1,82 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8640560126298748243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d37e0154c00c6247a89d91dc9eb407a, type: 3}
-  m_Name: bannerColor
-  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.ColorKey
-  keyName: bannerColor
-  value: {r: 0.2, g: 0.4, b: 0.9, a: 1}
---- !u!114 &-2526100015595267327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
-  m_Name: alertness
-  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.FloatKey
-  keyName: alertness
-  value: 0.2
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08fb034fe2c07504ea5249566ce4797d, type: 3}
-  m_Name: Guard_Blackboard
-  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Blackboard
-  keys:
-  - {fileID: 4172048750582248874}
-  - {fileID: 3644108328321224880}
-  - {fileID: -2526100015595267327}
-  - {fileID: 3299016355614257892}
-  - {fileID: -8640560126298748243}
-  - {fileID: 3866021610893365012}
-  parent: {fileID: 11400000, guid: ddb2c201c7b693940b8baf58e28c6092, type: 2}
---- !u!114 &3299016355614257892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56ccbfd705f632749b34b7302ec90a9a, type: 3}
-  m_Name: homePosition
-  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Vector3Key
-  keyName: homePosition
-  value: {x: 0, y: 0, z: 4}
---- !u!114 &3644108328321224880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
-  m_Name: met
-  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
-  keyName: met
-  value: 0
---- !u!114 &3866021610893365012
+--- !u!114 &-7691935805324616393
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,7 +14,83 @@ MonoBehaviour:
   m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.TransformKey
   keyName: target
   value: {fileID: 0}
---- !u!114 &4172048750582248874
+--- !u!114 &-4003817269696487832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa20955a3b62a941bba017329e7b1a1, type: 3}
+  m_Name: alertness
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.FloatKey
+  keyName: alertness
+  value: 0.2
+--- !u!114 &-2677556838918949840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8858dfcb37df246abe11441c959765, type: 3}
+  m_Name: met
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.BoolKey
+  keyName: met
+  value: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08fb034fe2c07504ea5249566ce4797d, type: 3}
+  m_Name: Guard_Blackboard
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Blackboard
+  keys:
+  - {fileID: 8010393246223730859}
+  - {fileID: -2677556838918949840}
+  - {fileID: -4003817269696487832}
+  - {fileID: 705545656189884748}
+  - {fileID: 4262944110944870987}
+  - {fileID: -7691935805324616393}
+  parent: {fileID: 11400000, guid: ddb2c201c7b693940b8baf58e28c6092, type: 2}
+--- !u!114 &705545656189884748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ccbfd705f632749b34b7302ec90a9a, type: 3}
+  m_Name: homePosition
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.Vector3Key
+  keyName: homePosition
+  value: {x: 0, y: 0, z: 4}
+--- !u!114 &4262944110944870987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d37e0154c00c6247a89d91dc9eb407a, type: 3}
+  m_Name: bannerColor
+  m_EditorClassIdentifier: ND_BehaviorTree.Runtime::ND_BehaviorTree.ColorKey
+  keyName: bannerColor
+  value: {r: 0.2, g: 0.4, b: 0.9, a: 1}
+--- !u!114 &8010393246223730859
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
