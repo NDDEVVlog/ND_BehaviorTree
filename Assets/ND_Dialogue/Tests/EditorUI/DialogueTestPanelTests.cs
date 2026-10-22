@@ -151,5 +151,59 @@ namespace ND.Dialogue.Editor.Tests
             m_Panel.StartAt(m_Conv.id, m_Yes.id);
             Assert.That(Effects(), Has.Some.Contains("affection:  0 → 2"), "the value started from 0 again");
         }
+
+        private Toggle ToolbarToggle(string label) => m_Panel.Query<Toggle>().ToList().Single(t => t.label == label);
+
+        [Test]
+        public void TheVariablesPanel_ShowsWhatTheConversationUses_AndAWhatIfChangesWhereItGoes()
+        {
+            m_Thanks.conditions.Add(new VariableCondition { variable = "affection", op = CompareOp.GreaterOrEqual, value = "5" });
+            var any = new AnyCondition();
+            any.conditions.Add(new QuestStateCondition { quest = "date", state = QuestState.Active });
+            m_No.conditions.Add(any); // nested in "any of": still found
+            m_Db.AddQuest("date");
+            var values = ToolbarToggle("Variables");
+            values.value = true;
+            m_Panel.ResetWorld();
+
+            var rows = m_Panel.ValueRows.Children().Select(r => r.name).ToList();
+            CollectionAssert.AreEqual(new[] { "affection", "quest date" }, rows, "variables first, then quests");
+            var affection = m_Panel.ValueRows.Q("affection");
+            CollectionAssert.AreEquivalent(new[] { "if", "set" }, affection.Query<Label>(className: "dlg-values__tag").ToList().Select(l => l.text));
+
+            // As played: affection 0 + 2 < 5, so after "Thanks for waiting." the conversation ends.
+            m_Panel.Start(); m_Panel.Continue(); m_Panel.Continue(); m_Panel.Choose(0);
+            Assert.IsFalse(Bubbles().Contains("Hmph."));
+
+            // What if affection were 5?
+            Assert.IsTrue(m_Panel.SetValue("affection", "5"));
+            Assert.That(Effects(), Has.Some.Contains("affection:  2 → 5"), "the change is listed in the chat");
+            Assert.AreEqual("5", m_Panel.ValueRows.Q("affection").Q<TextField>().value);
+            m_Panel.Start(); m_Panel.Continue(); m_Panel.Continue(); m_Panel.Choose(0);
+            Assert.AreEqual("Hmph.", Bubbles().Last());
+
+            Assert.IsFalse(m_Panel.SetValue("affection", "lots"), "not an Int");
+            Assert.IsFalse(m_Panel.SetValue("quest date", "Dating"), "not a quest state");
+            Assert.IsTrue(m_Panel.SetValue("quest date", "Active"));
+            Assert.AreEqual(QuestState.Active, (QuestState)m_Panel.ValueRows.Q("quest date").Q<EnumField>().value);
+        }
+
+        [Test]
+        public void PickingAnotherConversation_StopsTheRun_AndShowsItsGraphAndValues()
+        {
+            var other = m_Db.AddConversation("Library");
+            var line = other.AddEntry(m_Npc.id);
+            line.text.Text = "Shh.";
+            other.Link(other.StartEntry, line);
+            m_Panel.Bind(m_Db, "en", null, m_Conv.id);
+            m_Panel.Start();
+            Assert.IsTrue(m_Panel.Runner.IsRunning);
+
+            Assert.IsTrue(m_Panel.PickConversation("Library")); // what the toolbar picker calls
+            Assert.IsFalse(m_Panel.Runner.IsRunning, "the old run stopped");
+            Assert.AreEqual(other.id, m_Panel.Graph.Conversation.id, "the graph follows the pick");
+            m_Panel.Start();
+            Assert.AreEqual("Shh.", Bubbles().Last());
+        }
     }
 }

@@ -127,6 +127,46 @@ namespace ND.Dialogue.Editor
             m_Transcript.Clear();
         }
 
+        /// <summary>Creates the test world now (it is otherwise created by the first Start), e.g. to read or edit values first.</summary>
+        public bool EnsureWorld()
+        {
+            Error = null;
+            return Database != null && EnsureRunner();
+        }
+
+        public bool TryGetVariable(string name, out VariableValue value)
+        {
+            value = default;
+            return m_Context != null && m_Context.Inner.TryGetVariable(name, out value);
+        }
+
+        public bool TryGetQuestState(string name, out QuestState state)
+        {
+            state = default;
+            return m_Context != null && m_Context.Inner.TryGetQuestState(name, out state);
+        }
+
+        /// <summary>
+        /// "What if": sets a variable (<c>trust</c>, text parsed with its type) or a quest (<c>quest key</c>, a state name)
+        /// of the test world. The change is listed like any other; the conversation sees it from its next step.
+        /// Returns the items, or null with <see cref="Error"/> set.
+        /// </summary>
+        public List<Item> SetValue(string name, string text)
+        {
+            if (!EnsureWorld()) return Error != null ? null : Fail("No database.");
+            const string questPrefix = "quest ";
+            if (name != null && name.StartsWith(questPrefix, StringComparison.Ordinal))
+            {
+                string quest = name.Substring(questPrefix.Length);
+                if (!Enum.TryParse(text, true, out QuestState state) || !Enum.IsDefined(typeof(QuestState), state)) return Fail($"'{text}' is not a quest state ({string.Join(", ", Enum.GetNames(typeof(QuestState)))}).");
+                if (!m_Context.Inner.TryGetQuestState(quest, out _)) return Fail($"Unknown quest '{quest}'.");
+                return Step(() => m_Context.Inner.SetQuestState(quest, state));
+            }
+            if (!m_Context.Inner.TryGetVariable(name, out var current)) return Fail($"Unknown variable '{name}'.");
+            if (!VariableValue.TryParse(current.type, text, out var value)) return Fail($"'{text}' is not a valid {current.type} for '{name}'.");
+            return Step(() => m_Context.Inner.SetVariable(name, value));
+        }
+
         /// <summary>The current choices as "1. text (#id)", empty when none.</summary>
         public List<string> ChoiceLabels() =>
             Runner == null || Runner.State != DialogueRunnerState.WaitingForChoice
@@ -218,6 +258,8 @@ namespace ND.Dialogue.Editor
                 Add(ItemKind.Route, $"↪ via #{entry.id}{(string.IsNullOrEmpty(entry.title) ? string.Empty : $" «{entry.title}»")}", entry);
             if (entry.actions.Count > 0)
                 Add(ItemKind.Action, $"▸ #{entry.id}{(silent ? " (routing)" : string.Empty)} does: " + string.Join(";  ", entry.actions.Select(a => a?.Describe() ?? "(empty)")), entry);
+            if (!string.IsNullOrWhiteSpace(entry.sequence))
+                Add(ItemKind.Action, $"🎬 #{entry.id} sequence: " + string.Join(";  ", DialogueSequence.Parse(entry.sequence).Select(c => c.ToString())), entry);
         }
 
         private Item Add(ItemKind kind, string text, DialogueEntry entry = null, Actor speaker = null)

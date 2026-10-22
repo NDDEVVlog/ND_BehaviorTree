@@ -18,6 +18,8 @@ namespace ND.Dialogue.Editor
     public class DialogueTestPanel : VisualElement
     {
         private const string GraphPref = "ND.Dialogue.Test.ShowGraph";
+        private const string ValuesPref = "ND.Dialogue.Test.ShowValues";
+        private const string AllValuesPref = "ND.Dialogue.Test.AllValues";
 
         private DialogueDatabase m_Database;
         private string m_Locale;
@@ -27,6 +29,10 @@ namespace ND.Dialogue.Editor
         private readonly PopupField<string> m_ConversationField;
         private readonly IntegerField m_EntryField;
         private readonly Toggle m_GraphToggle;
+        private readonly Toggle m_ValuesToggle;
+        private readonly Toggle m_AllValuesToggle;
+        private readonly VisualElement m_Values;
+        private readonly ScrollView m_ValueRows;
         private readonly Label m_Status;
         private readonly TwoPaneSplitView m_Split;
         private readonly ScrollView m_Log;
@@ -39,6 +45,8 @@ namespace ND.Dialogue.Editor
         public ScrollView Log => m_Log;
         public VisualElement Replies => m_Replies;
         public DialogueGraphCanvas Graph => m_Graph;
+        /// <summary>The variables panel's rows (one per variable / quest shown).</summary>
+        public VisualElement ValueRows => m_ValueRows.contentContainer;
 
         public DialogueTestPanel()
         {
@@ -52,6 +60,7 @@ namespace ND.Dialogue.Editor
             bar.AddToClassList("dlg-test__toolbar");
             m_ConversationField = new PopupField<string>(m_Titles, 0) { tooltip = "Conversation to play" };
             m_ConversationField.AddToClassList("dlg-test__conversation");
+            m_ConversationField.RegisterValueChangedCallback(_ => OnConversationPicked());
             bar.Add(m_ConversationField);
             bar.Add(new Label("from #") { style = { unityTextAlign = TextAnchor.MiddleLeft, marginLeft = 6 } });
             m_EntryField = new IntegerField { value = Conversation.StartEntryId, tooltip = "Entry id to start at (0 = START). Every node shows its id; right-click a node → Test from here." };
@@ -72,6 +81,15 @@ namespace ND.Dialogue.Editor
                 ApplyGraphVisibility();
             });
             bar.Add(m_GraphToggle);
+            m_ValuesToggle = new Toggle("Variables") { value = EditorPrefs.GetBool(ValuesPref, true), tooltip = "Show the variables and quests this conversation uses, and change them to see where it goes" };
+            m_ValuesToggle.AddToClassList("dlg-test__graph-toggle");
+            m_ValuesToggle.RegisterValueChangedCallback(evt =>
+            {
+                EditorPrefs.SetBool(ValuesPref, evt.newValue);
+                m_Values.style.display = evt.newValue ? DisplayStyle.Flex : DisplayStyle.None;
+                RefreshValues();
+            });
+            bar.Add(m_ValuesToggle);
             Add(bar);
 
             var chat = new VisualElement();
@@ -83,9 +101,35 @@ namespace ND.Dialogue.Editor
             m_Replies.AddToClassList("dlg-chat__replies");
             chat.Add(m_Replies);
 
+            // Variables panel: what this conversation reads / writes, editable ("what if trust were 5?").
+            m_Values = new VisualElement();
+            m_Values.AddToClassList("dlg-values");
+            var head = new VisualElement();
+            head.AddToClassList("dlg-values__head");
+            head.Add(new Label("Variables") { name = "title" });
+            head.Add(new VisualElement { style = { flexGrow = 1 } });
+            m_AllValuesToggle = new Toggle("All") { value = EditorPrefs.GetBool(AllValuesPref, false), tooltip = "Every variable and quest of the database, not only the ones this conversation uses" };
+            m_AllValuesToggle.RegisterValueChangedCallback(evt =>
+            {
+                EditorPrefs.SetBool(AllValuesPref, evt.newValue);
+                RefreshValues();
+            });
+            head.Add(m_AllValuesToggle);
+            m_Values.Add(head);
+            m_ValueRows = new ScrollView(ScrollViewMode.Vertical) { style = { flexGrow = 1 } };
+            m_Values.Add(m_ValueRows);
+            var hint = new Label("Changes apply from the next step. ▶ Start replays from the entry with these values.");
+            hint.AddToClassList("dlg-values__hint");
+            m_Values.Add(hint);
+            m_Values.style.display = m_ValuesToggle.value ? DisplayStyle.Flex : DisplayStyle.None;
+
+            var chatRow = new VisualElement { style = { flexDirection = FlexDirection.Row, flexGrow = 1 } };
+            chatRow.Add(chat);
+            chatRow.Add(m_Values);
+
             m_Graph = new DialogueGraphCanvas();
-            m_Split = new TwoPaneSplitView(0, 420, TwoPaneSplitViewOrientation.Horizontal) { style = { flexGrow = 1 } };
-            m_Split.Add(chat);
+            m_Split = new TwoPaneSplitView(0, 560, TwoPaneSplitViewOrientation.Horizontal) { style = { flexGrow = 1 } };
+            m_Split.Add(chatRow);
             m_Split.Add(m_Graph);
             Add(m_Split);
             ApplyGraphVisibility();
@@ -102,6 +146,7 @@ namespace ND.Dialogue.Editor
             m_Graph.HostWindow = host;
             m_Titles.Clear();
             if (database != null) m_Titles.AddRange(database.conversations.Where(c => c != null).Select(c => c.title));
+            m_ConversationField.choices = m_Titles;
             var preferred = database?.FindConversation(preferredConversationId);
             string current = m_ConversationField.value;
             if (changed || string.IsNullOrEmpty(current) || !m_Titles.Contains(current))
@@ -111,6 +156,7 @@ namespace ND.Dialogue.Editor
             {
                 m_Session.Locale = locale;
                 UpdateGraph();
+                RefreshValues();
             }
         }
 
@@ -158,6 +204,7 @@ namespace ND.Dialogue.Editor
                 ? "Play mode: the test world shares runtime state (e.g. shared blackboards) with the game."
                 : "Press ▶ Start (or right-click a node → Test from here).");
             UpdateGraph();
+            RefreshValues();
         }
 
         /// <summary>Renders a step's items, then the replies, the graph highlight and the status.</summary>
@@ -171,6 +218,7 @@ namespace ND.Dialogue.Editor
             foreach (var item in items) Render(item);
             UpdateReplies();
             UpdateGraph();
+            RefreshValues();
             var runner = m_Session.Runner;
             if (runner != null)
                 SetStatus(runner.IsRunning ? $"#{runner.CurrentEntry?.id} · {runner.State} · seen {runner.Memory.Count}" : $"seen {runner.Memory.Count}");
@@ -337,7 +385,7 @@ namespace ND.Dialogue.Editor
         {
             if (m_Database == null) { m_Graph.Load(null, null, m_Locale); return; }
             var runner = m_Session?.Runner;
-            var conversation = runner?.CurrentConversation ?? m_Database.FindConversation(m_ConversationField.value);
+            var conversation = SelectedConversation;
             if (conversation == null) return;
             if (m_Graph.Database != m_Database || m_Graph.Conversation == null || m_Graph.Conversation.id != conversation.id)
             {
@@ -360,6 +408,132 @@ namespace ND.Dialogue.Editor
             var size = view.layout.size;
             if (float.IsNaN(size.x) || size.x <= 0f) size = new Vector2(240f, 80f);
             m_Graph.FrameRect(new Rect(view.ViewPosition, size), m_Graph.Zoom);
+        }
+
+        #endregion
+
+        /// <summary>The conversation being played while one runs (it may have jumped elsewhere), else the one picked.</summary>
+        private Conversation SelectedConversation
+        {
+            get
+            {
+                var runner = m_Session?.Runner;
+                if (runner != null && runner.IsRunning && runner.CurrentConversation != null) return runner.CurrentConversation;
+                return m_Database?.FindConversation(m_ConversationField.value);
+            }
+        }
+
+        /// <summary>Picks <paramref name="title"/> as if chosen in the toolbar (see <see cref="OnConversationPicked"/>).</summary>
+        public bool PickConversation(string title)
+        {
+            if (!m_Titles.Contains(title)) { SetStatus($"No conversation '{title}'."); return false; }
+            m_ConversationField.SetValueWithoutNotify(title);
+            OnConversationPicked();
+            return true;
+        }
+
+        /// <summary>Another conversation was picked: stop the one running, start at its START, show its graph and values.</summary>
+        private void OnConversationPicked()
+        {
+            m_EntryField.SetValueWithoutNotify(Conversation.StartEntryId);
+            if (m_Session?.Runner != null && m_Session.Runner.IsRunning) Show(m_Session.Stop());
+            UpdateGraph();
+            RefreshValues();
+            SetStatus($"Press ▶ Start to play '{m_ConversationField.value}'.");
+        }
+
+        #region Variables
+
+        /// <summary>One row per variable / quest the conversation uses (or all of them): name, read / set by, editable value.</summary>
+        private void RefreshValues()
+        {
+            m_ValueRows.Clear();
+            if (!m_ValuesToggle.value || m_Session == null) return;
+            if (!m_Session.EnsureWorld())
+            {
+                m_ValueRows.Add(new Label(m_Session.Error ?? "No test world.") { name = "error" });
+                return;
+            }
+            var uses = DialogueValueUses.Collect(SelectedConversation);
+            if (m_AllValuesToggle.value)
+            {
+                var schema = m_Database.Schema;
+                var known = new HashSet<string>(uses.Select(u => u.Key));
+                foreach (var name in schema.VariableNames.Distinct().OrderBy(n => n))
+                    if (known.Add(name)) uses.Add(new DialogueValueUses.Use { Key = name, Name = name });
+                foreach (var name in schema.QuestNames.Distinct().OrderBy(n => n))
+                    if (known.Add("quest " + name)) uses.Add(new DialogueValueUses.Use { Key = "quest " + name, Name = name, IsQuest = true });
+            }
+            if (uses.Count == 0)
+            {
+                var empty = new Label("This conversation uses no variables or quests. Tick All to see every one.");
+                empty.AddToClassList("dlg-values__hint");
+                m_ValueRows.Add(empty);
+                return;
+            }
+            foreach (var use in uses) m_ValueRows.Add(ValueRow(use));
+        }
+
+        private VisualElement ValueRow(DialogueValueUses.Use use)
+        {
+            var row = new VisualElement { name = use.Key };
+            row.AddToClassList("dlg-values__row");
+            var head = new VisualElement();
+            head.AddToClassList("dlg-values__name-row");
+            var name = new Label(use.IsQuest ? $"◆ {use.Name}" : use.Name);
+            name.AddToClassList("dlg-values__name");
+            head.Add(name);
+            if (use.ReadBy.Count > 0) head.Add(Tag("if", "Read by " + string.Join(", ", use.ReadBy.Select(id => "#" + id))));
+            if (use.WrittenBy.Count > 0) head.Add(Tag("set", "Set by " + string.Join(", ", use.WrittenBy.Select(id => "#" + id))));
+            row.Add(head);
+
+            if (use.IsQuest)
+            {
+                if (!m_Session.TryGetQuestState(use.Name, out var state)) { row.Add(new Label("(not in the world)")); return row; }
+                var field = new EnumField(state);
+                field.RegisterValueChangedCallback(evt => SetValue(use.Key, evt.newValue.ToString()));
+                row.Add(field);
+                return row;
+            }
+            if (!m_Session.TryGetVariable(use.Name, out var value)) { row.Add(new Label("(not in the world)")); return row; }
+            if (value.type == VariableType.Bool)
+            {
+                var toggle = new Toggle { value = value.boolValue };
+                toggle.RegisterValueChangedCallback(evt => SetValue(use.Key, evt.newValue ? "true" : "false"));
+                row.Add(toggle);
+            }
+            else
+            {
+                var text = new TextField { value = value.ToString(), isDelayed = true, tooltip = $"{value.type}: Enter to apply" };
+                text.RegisterValueChangedCallback(evt => SetValue(use.Key, evt.newValue));
+                row.Add(text);
+            }
+            return row;
+        }
+
+        private static Label Tag(string text, string tooltip)
+        {
+            var tag = new Label(text) { tooltip = tooltip };
+            tag.AddToClassList("dlg-values__tag");
+            tag.AddToClassList("dlg-values__tag--" + text);
+            return tag;
+        }
+
+        /// <summary>Sets a test-world value ("what if"): the change shows in the chat; a bad value is reported and the row reverts.</summary>
+        public bool SetValue(string key, string text)
+        {
+            if (m_Session == null) return false;
+            var items = m_Session.SetValue(key, text);
+            if (items == null)
+            {
+                SetStatus(m_Session.Error);
+                RefreshValues();
+                return false;
+            }
+            foreach (var item in items) Render(item);
+            RefreshValues();
+            m_Log.schedule.Execute(() => m_Log.scrollOffset = new Vector2(0, float.MaxValue)).StartingIn(10);
+            return true;
         }
 
         #endregion
