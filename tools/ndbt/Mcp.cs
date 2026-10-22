@@ -79,6 +79,12 @@ namespace Ndbt
             string name = parameters?["name"]?.GetValue<string>() ?? throw new ArgumentException("Missing tool name.");
             var arguments = parameters["arguments"] as JsonObject ?? new JsonObject();
             var args = arguments.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value?.DeepClone());
+            if (name == "dialogue")
+            {
+                // One tool for the whole dialogue bridge: {command, args} → dlg_<command>(args).
+                name = "dlg_" + (arguments["command"]?.GetValue<string>() ?? throw new ArgumentException("Missing 'command'.")).Replace('-', '_');
+                args = (arguments["args"] as JsonObject ?? new JsonObject()).ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value?.DeepClone());
+            }
 
             string text;
             bool isError;
@@ -115,6 +121,9 @@ namespace Ndbt
         {
             Tool("status", "Bridge status: access level, Unity version, Play mode, Live Save."),
             Tool("help", "List the commands Unity exposes."),
+            Tool("dialogue", "ND Dialogue bridge (separate from the behavior-tree one): run one dialogue command. Start with command \"help\", then e.g. database_list, database_get, conversation_get, entry_add, link_add, condition_add.",
+                Req(Prop("command", "string", "Dialogue command name, e.g. \"help\", \"conversation_get\".")),
+                Prop("args", "object", "Arguments of the command, e.g. {\"database\": \"GuardSample_Dialogue\", \"conversation\": 1}.")),
             Tool("node_list", "List node types you can use (title, type, kind, menu path, children: none/one/many).",
                 Prop("category", "string", "Filter: composite, action, decorator, service, event, init, subtree."),
                 Prop("search", "string", "Filter by text in type, title or menu path.")),

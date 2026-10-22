@@ -66,6 +66,8 @@ Read:   status, help, node-list, node-info, tree-list, tree-get, tree-validate, 
         blackboard-get, find-usages, agent-list, agent-state
 Write:  tree-create, tree-duplicate, tree-apply, subtree-extract, blackboard-key, history,
         tree-save, agent-send-event
+Dialogue (ND Dialogue bridge, its own access settings): dlg-help, dlg-database-list, dlg-database-get,
+        dlg-conversation-get, dlg-validate, dlg-entry-add, dlg-entry-set, dlg-link-add, dlg-condition-add, …
 
 Examples:
   ndbt node-list --category decorator
@@ -127,11 +129,15 @@ Unity must be open with AI access unlocked (Project Settings → ND Behavior Tre
 
         public static async Task<JsonObject> CallUnity(string project, string command, IDictionary<string, object> args)
         {
-            string infoPath = Path.Combine(project, "Library", "NDBT", "bridge.json");
+            // "dlg_*" commands go to the ND Dialogue bridge (its own port, token and access level).
+            bool dialogue = command.StartsWith("dlg_", StringComparison.Ordinal);
+            string infoPath = Path.Combine(project, "Library", dialogue ? "NDDialogue" : "NDBT", "bridge.json");
             if (!File.Exists(infoPath))
-                throw new BridgeUnavailableException(
-                    $"The ND Behavior Tree bridge is not running for '{project}'. Open the project in Unity, then in " +
-                    "Project Settings → ND Behavior Tree → AI Access unlock with the owner password and choose an access level.");
+                throw new BridgeUnavailableException(dialogue
+                    ? $"The ND Dialogue bridge is not running for '{project}'. In Unity: Project Settings → ND Dialogue → Advanced → " +
+                      "Enable AI Bridge, then on the AI Bridge page unlock with the owner password and choose an access level."
+                    : $"The ND Behavior Tree bridge is not running for '{project}'. Open the project in Unity, then in " +
+                      "Project Settings → ND Behavior Tree → AI Access unlock with the owner password and choose an access level.");
 
             var info = JsonNode.Parse(File.ReadAllText(infoPath))!.AsObject();
             int port = info["port"]!.GetValue<int>();
