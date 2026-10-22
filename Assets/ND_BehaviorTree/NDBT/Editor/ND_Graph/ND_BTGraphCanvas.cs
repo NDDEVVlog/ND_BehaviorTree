@@ -160,8 +160,22 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         }
 
         /// <summary>Draws a parent → child edge (groups/notes stay behind it; with drawBehindNodes, so do nodes).</summary>
-        public virtual void AddEdgeVisuals(ND_BTPortView output, ND_BTPortView input) =>
-            ConnectViews(output, input, ND_BehaviorTreeSetting.Instance.edgeTheme.drawBehindNodes);
+        public virtual void AddEdgeVisuals(ND_BTPortView output, ND_BTPortView input)
+        {
+            var edge = ConnectViews(output, input, ND_BehaviorTreeSetting.Instance.edgeTheme.drawBehindNodes);
+            if (edge == null) return;
+            edge.SetBends(input.ParentNodeView?.NodeData?.parentEdgeBends);
+            edge.BendsChanged += OnEdgeBendsChanged;
+        }
+
+        /// <summary>A bend point was added, moved or removed: store the edge's points on its child node.</summary>
+        private void OnEdgeBendsChanged(GraphEdgeView edge)
+        {
+            var child = (edge as ND_BTEdgeView)?.InputPort?.ParentNodeView?.NodeData;
+            if (child == null) return;
+            Graph.SetEdgeBends(child, edge.Bends);
+            RequestSave();
+        }
 
         protected override ND_BTEdgeView CreateEdge(GraphPortView output) => new ND_BTEdgeView(output);
 
@@ -380,14 +394,14 @@ namespace ND_BehaviorTree.Editor.CustomGraph
         }
 
         /// <summary>
-        /// Clicks on an edge (not on a node or port): double-click inserts a reroute ("extended node");
-        /// Alt+click cuts the edge (as Alt+click on a pin in Unreal). Alt+drag elsewhere still pans.
+        /// Clicks on an edge (not on a node or port): double-click adds a bend point (drag it; double-click or
+        /// Alt+click it to remove); Alt+click cuts the edge (as Alt+click on a pin in Unreal). Alt+drag elsewhere still pans.
         /// </summary>
         protected override bool OnEdgeClicked(GraphEdgeView edge, Vector2 contentPosition, bool cut)
         {
             if (!(edge is ND_BTEdgeView btEdge)) return false;
             if (cut) DisconnectEdge(btEdge);
-            else InsertReroute(btEdge, contentPosition);
+            else btEdge.InsertBend(contentPosition);
             return true;
         }
 
@@ -1056,6 +1070,14 @@ namespace ND_BehaviorTree.Editor.CustomGraph
             evt.menu.AppendAction("Create Note   (N)", a => CreateNote(localPos));
             if (SelectedNodes.Count > 0)
                 evt.menu.AppendAction("Convert Selection to Subtree...   (Ctrl+Shift+E)", a => ConvertSelectionToSubtree());
+            if (TreeData.nodes.Any(n => n is RerouteNode))
+                evt.menu.AppendAction("Convert Reroutes to Bend Points", a =>
+                {
+                    int count = Graph.ConvertReroutesToBends(ND_BTRerouteView.HalfSize);
+                    RequestSave();
+                    Rebuild();
+                    ShowNotification($"{count} reroute(s) became bend points.");
+                });
             evt.menu.AppendSeparator();
             evt.menu.AppendAction("Focus Root (H)", a => FocusOnRoot());
             evt.menu.AppendAction("Keyboard Shortcuts...   (F1)", a => ShowShortcutHelp());

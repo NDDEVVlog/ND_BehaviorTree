@@ -59,6 +59,9 @@ namespace ND_BehaviorTree
         [Tooltip("Only used when the parent picks children by weight (Random Rate Selector, Utility Selector).")]
         public float weight = 1f;
 
+        /// <summary>Editor only: points the edge from this node's parent bends through (double-click the edge to add one).</summary>
+        [HideInInspector] public List<Vector2> parentEdgeBends = new List<Vector2>();
+
         public string id => m_guid;
         public Rect position { get => m_position; set => m_position = value; }
 

@@ -204,7 +204,7 @@ namespace ND.GraphUI
             if (evt.button != 0) return;
             bool cut = evt.altKey && evt.clickCount == 1;
             if (!cut && evt.clickCount != 2) return;
-            if (evt.target is VisualElement target && (target is GraphNodeView || target is GraphPortView
+            if (evt.target is VisualElement target && (target is GraphNodeView || target is GraphPortView || GraphEdgeView.IsBendHandle(target)
                 || target.GetFirstAncestorOfType<GraphNodeView>() != null)) return;
 
             Vector2 local = ContentContainer.WorldToLocal(evt.position);

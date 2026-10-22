@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace ND.Dialogue.Editor
 {
-    public enum NewEntryKind { NpcLine, PlayerResponse, Passthrough }
+    public enum NewEntryKind { NpcLine, PlayerResponse, Passthrough, Hub }
 
     /// <summary>
     /// The graph of one conversation. Entries are port-less nodes; links are node-anchored edges. Every data change
@@ -40,6 +40,7 @@ namespace ND.Dialogue.Editor
         {
             var sheet = DialogueEditorStyles.Graph;
             if (sheet != null) styleSheets.Add(sheet);
+            SelectionChanged += UpdateEdgeFocus;
         }
 
         #region Loading
@@ -123,7 +124,9 @@ namespace ND.Dialogue.Editor
             var edge = ConnectNodeViews(fromView, toView);
             if (edge == null) return null;
             edge.Link = link;
+            edge.SetBends(link.bends);
             edge.RefreshLabel();
+            ApplyEdgeFocus(edge);
             return edge;
         }
 
@@ -137,6 +140,7 @@ namespace ND.Dialogue.Editor
         {
             var edge = new DialogueEdgeView(from, EdgeTheme);
             edge.LabelClicked += e => OpenLinkEditor(e);
+            edge.BendsChanged += OnBendsChanged;
             return edge;
         }
 
@@ -226,13 +230,40 @@ namespace ND.Dialogue.Editor
             edge.RefreshLabel();
         }
 
-        /// <summary>Alt+click on an edge removes that link; double-click opens its editor.</summary>
+        /// <summary>Alt+click on an edge removes that link; double-click adds a bend point (its chip / "+" opens the link editor).</summary>
         protected override bool OnEdgeClicked(GraphEdgeView edge, Vector2 contentPosition, bool cut)
         {
             if (!(edge is DialogueEdgeView dialogueEdge)) return false;
             if (cut) RemoveLink(dialogueEdge);
-            else OpenLinkEditor(dialogueEdge); // double-click: edit its conditions
+            else dialogueEdge.InsertBend(contentPosition);
             return true;
+        }
+
+        /// <summary>A bend point was added, dragged or removed: store the edge's points on its link (undoable).</summary>
+        private void OnBendsChanged(GraphEdgeView edge)
+        {
+            if (!(edge is DialogueEdgeView dialogueEdge) || dialogueEdge.Link == null) return;
+            Record("Bend Dialogue Link");
+            dialogueEdge.Link.bends = new List<Vector2>(edge.Bends);
+            Changed();
+        }
+
+        /// <summary>
+        /// With entries selected, the links into and out of them light up (out: blue, in: green) and the rest fade, so
+        /// a node's branches can be followed through a busy graph.
+        /// </summary>
+        private void UpdateEdgeFocus()
+        {
+            foreach (var edge in Edges) ApplyEdgeFocus(edge);
+        }
+
+        private void ApplyEdgeFocus(DialogueEdgeView edge)
+        {
+            if (edge == null) return;
+            if (SelectedNodes.Count == 0) { edge.SetFocus(DialogueEdgeView.Focus.None); return; }
+            bool from = edge.FromNode is DialogueNodeView f && SelectedNodes.Contains(f);
+            bool to = edge.ToNode is DialogueNodeView t && SelectedNodes.Contains(t);
+            edge.SetFocus(from ? DialogueEdgeView.Focus.Outgoing : to ? DialogueEdgeView.Focus.Incoming : DialogueEdgeView.Focus.Faded);
         }
 
         public override void CommitNodeMove(IReadOnlyList<GraphNodeView> movedViews)
@@ -248,7 +279,7 @@ namespace ND.Dialogue.Editor
         {
             bool wantPlayer = kind == NewEntryKind.PlayerResponse;
             var actor = Database.AllActors.FirstOrDefault(a => a != null && a.isPlayer == wantPlayer)
-                        ?? (kind == NewEntryKind.Passthrough ? Database.AllActors.FirstOrDefault(a => a != null) : null);
+                        ?? (kind == NewEntryKind.Passthrough || kind == NewEntryKind.Hub ? Database.AllActors.FirstOrDefault(a => a != null) : null);
             if (actor == null)
                 ShowNotification(wantPlayer ? "Add an actor with 'Is Player' to the database first." : "Add a non-player actor to the database first.");
             return actor;
@@ -265,7 +296,8 @@ namespace ND.Dialogue.Editor
             var entry = Conversation.AddEntry(entryType ?? typeof(DialogueEntry), actor.id);
             if (entry == null) return null; // not a usable entry type (logged)
             entry.position = position;
-            entry.isPassthrough = kind == NewEntryKind.Passthrough;
+            entry.isPassthrough = kind == NewEntryKind.Passthrough || kind == NewEntryKind.Hub;
+            entry.isHub = kind == NewEntryKind.Hub;
             if (linkFrom != null) Conversation.Link(linkFrom, entry);
             Plugins.DialoguePluginRegistry.RaiseEntryCreated(ArgsFor(entry, position), entry); // same undo step
             Changed();
@@ -295,6 +327,70 @@ namespace ND.Dialogue.Editor
             if (parent == null) return CreateEntry(kind, MouseContentPosition);
             var below = parent.links.Count(l => l.conversationId == Conversation.id);
             return CreateEntry(kind, parent.position + ChildOffset + new Vector2(0f, 120f * below), parent);
+        }
+
+        /// <summary>
+        /// Entries (in this conversation) that every one of <paramref name="sources"/> links to with a plain link — no
+        /// link conditions, all at the same priority — in the first source's order. A hub can replace those links.
+        /// </summary>
+        public List<int> SharedLinkTargets(List<DialogueEntry> sources)
+        {
+            var result = new List<int>();
+            if (Conversation == null || sources == null || sources.Count < 2 || sources.Any(s => s == null)) return result;
+            LinkPriority? priority = null;
+            foreach (var link in sources[0].links)
+            {
+                if (!IsPlainLocal(link) || result.Contains(link.entryId)) continue;
+                if (priority.HasValue && link.priority != priority.Value) continue;
+                if (!sources.All(s => s.links.Any(l => IsPlainLocal(l) && l.entryId == link.entryId && l.priority == link.priority))) continue;
+                priority = link.priority;
+                result.Add(link.entryId);
+            }
+            return result;
+        }
+
+        private bool IsPlainLocal(DialogueLink link) => link.conversationId == Conversation.id && (link.conditions == null || link.conditions.Count == 0);
+
+        /// <summary>
+        /// Replaces the links the selected entries share (<see cref="SharedLinkTargets"/>) with one hub: each entry links
+        /// to the hub (same priority, in the place of its first shared link) and the hub links to the shared targets.
+        /// N × M edges become N + M; what plays does not change. One undo step.
+        /// </summary>
+        public DialogueEntry MergeSharedLinksIntoHub()
+        {
+            var sources = SelectedNodes.Select(v => v.Entry).ToList();
+            var targets = SharedLinkTargets(sources);
+            if (targets.Count < 2)
+            {
+                ShowNotification("Select 2+ entries that all link to the same 2+ entries (links without conditions, same priority).");
+                return null;
+            }
+            var actor = DefaultActorFor(NewEntryKind.Hub);
+            if (actor == null) return null;
+            var priority = sources[0].links.First(l => IsPlainLocal(l) && l.entryId == targets[0]).priority;
+            var targetEntries = targets.Select(id => Conversation.FindEntry(id)).Where(e => e != null).ToList();
+
+            Record("Merge Links into a Hub");
+            var hub = Conversation.AddEntry(actor.id);
+            hub.isPassthrough = true;
+            hub.isHub = true;
+            float left = sources.Max(s => s.position.x), right = targetEntries.Min(t => t.position.x);
+            hub.position = new Vector2(right > left ? (left + right) * 0.5f + 60f : left + 200f,
+                sources.Concat(targetEntries).Average(e => e.position.y) + 30f);
+            foreach (var target in targetEntries) Conversation.Link(hub, target);
+            foreach (var source in sources)
+            {
+                int index = source.links.FindIndex(l => IsPlainLocal(l) && l.priority == priority && targets.Contains(l.entryId));
+                source.links.RemoveAll(l => IsPlainLocal(l) && l.priority == priority && targets.Contains(l.entryId));
+                source.links.Insert(Mathf.Clamp(index, 0, source.links.Count), new DialogueLink { conversationId = Conversation.id, entryId = hub.id, priority = priority });
+            }
+            Changed();
+            base.ClearSelection();
+            Reload();
+            var view = GetNodeView(hub.id.ToString());
+            if (view != null) AddToSelection((GraphNodeView)view);
+            ShowNotification($"{sources.Count} × {targets.Count} links → hub #{hub.id} ({sources.Count + targets.Count} links).");
+            return hub;
         }
 
         /// <summary>Deletes the selected entries (never START) and every link to them, in all conversations.</summary>
@@ -349,6 +445,7 @@ namespace ND.Dialogue.Editor
                 evt.menu.AppendAction("New NPC Line", _ => CreateEntry(NewEntryKind.NpcLine, local));
                 evt.menu.AppendAction("New Player Response", _ => CreateEntry(NewEntryKind.PlayerResponse, local));
                 evt.menu.AppendAction("New Passthrough (routing)", _ => CreateEntry(NewEntryKind.Passthrough, local));
+                evt.menu.AppendAction("New Hub (merge links)", _ => CreateEntry(NewEntryKind.Hub, local));
                 foreach (var type in EntryTypes())
                 {
                     var t = type;
@@ -371,6 +468,8 @@ namespace ND.Dialogue.Editor
             evt.menu.AppendAction("Add Child/NPC Line   (Space)", _ => CreateChildOfSelection(NewEntryKind.NpcLine));
             evt.menu.AppendAction("Add Child/Player Response   (R)", _ => CreateChildOfSelection(NewEntryKind.PlayerResponse));
             evt.menu.AppendAction("Add Child/Passthrough", _ => CreateChildOfSelection(NewEntryKind.Passthrough));
+            evt.menu.AppendAction("Add Child/Hub", _ => CreateChildOfSelection(NewEntryKind.Hub));
+            evt.menu.AppendAction("Merge Shared Links into a Hub", _ => MergeSharedLinksIntoHub(), _ => SharedLinkTargets(SelectedNodes.Select(v => v.Entry).ToList()).Count >= 2 ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
             int testId = entry.id;
             evt.menu.AppendAction("Test from here   (Test Dialogue)", _ => TestRequested?.Invoke(Conversation.id, testId), _ => TestRequested != null ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
             evt.menu.AppendAction($"Copy entry id   (#{testId})", _ => EditorGUIUtility.systemCopyBuffer = testId.ToString());
@@ -411,7 +510,7 @@ namespace ND.Dialogue.Editor
             if (entry.id == Conversation.StartEntryId) return "START";
             if (!string.IsNullOrEmpty(entry.title)) return entry.title;
             string text = DialogueTextEditing.Read(entry.text, PreviewLocale);
-            if (string.IsNullOrEmpty(text)) return entry.isPassthrough ? "(routing)" : "(no text)";
+            if (string.IsNullOrEmpty(text)) return entry.IsHub ? "(hub)" : entry.isPassthrough ? "(routing)" : "(no text)";
             return text.Length > 40 ? text.Substring(0, 39).Replace('/', '∕') + "…" : text.Replace('/', '∕');
         }
 

@@ -325,5 +325,92 @@ namespace ND.Dialogue.Editor.Tests
             baseCanvas.ClearSelection();
             Assert.AreEqual(2, raised);
         }
+
+        private DialogueEdgeView EdgeOf(DialogueEntry from, DialogueEntry to) =>
+            m_Canvas.Edges.Single(e => e.FromNode == View(from) && e.ToNode == View(to));
+
+        [Test]
+        public void SelectingAnEntry_LightsItsLinks_AndFadesTheRest()
+        {
+            var a = m_Conv.AddEntry(m_Guard.id);
+            var b = m_Conv.AddEntry(m_Player.id);
+            var c = m_Conv.AddEntry(m_Guard.id);
+            m_Conv.Link(m_Conv.StartEntry, a);
+            m_Conv.Link(a, b);
+            m_Conv.Link(b, c);
+            m_Canvas.Reload();
+            Assert.IsTrue(m_Canvas.Edges.All(e => e.CurrentFocus == DialogueEdgeView.Focus.None), "nothing selected: normal");
+
+            m_Canvas.AddToSelection((GraphNodeView)View(b));
+            Assert.AreEqual(DialogueEdgeView.Focus.Incoming, EdgeOf(a, b).CurrentFocus);
+            Assert.AreEqual(DialogueEdgeView.Focus.Outgoing, EdgeOf(b, c).CurrentFocus);
+            Assert.AreEqual(DialogueEdgeView.Focus.Faded, EdgeOf(m_Conv.StartEntry, a).CurrentFocus);
+
+            m_Canvas.ClearSelection();
+            Assert.AreEqual(DialogueEdgeView.Focus.None, EdgeOf(a, b).CurrentFocus);
+        }
+
+        [Test]
+        public void BendPoints_AreKeptOnTheLink_AndEditsAreUndoable()
+        {
+            var a = m_Conv.AddEntry(m_Guard.id);
+            var link = m_Conv.Link(m_Conv.StartEntry, a);
+            link.bends.Add(new Vector2(50, 200));
+            link.bends.Add(new Vector2(150, 220));
+            m_Canvas.Reload();
+            var edge = EdgeOf(m_Conv.StartEntry, a);
+            CollectionAssert.AreEqual(link.bends, edge.Bends, "drawn from the data");
+
+            edge.RemoveBend(0); // what double-click / Alt+click on a dot does
+            var stored = m_Db.FindConversation(m_Conv.id).StartEntry.links.Single().bends;
+            CollectionAssert.AreEqual(new[] { new Vector2(150, 220) }, stored);
+            Undo.PerformUndo();
+            Assert.AreEqual(2, m_Db.FindConversation(m_Conv.id).StartEntry.links.Single().bends.Count, "undo brings the point back");
+        }
+
+        [Test]
+        public void MergeSharedLinks_PutsAHubBetween_AndThePlayerStillGetsTheSameChoices()
+        {
+            var hi = m_Conv.AddEntry(m_Guard.id);
+            hi.text.Text = "Hi.";
+            var halt = m_Conv.AddEntry(m_Guard.id);
+            halt.text.Text = "Halt!";
+            halt.conditions.Add(new VariableCondition { variable = "angry", value = "true" });
+            var yes = m_Conv.AddEntry(m_Player.id);
+            yes.text.Text = "Yes";
+            var no = m_Conv.AddEntry(m_Player.id);
+            no.text.Text = "No";
+            var bribe = m_Conv.AddEntry(m_Player.id);
+            bribe.text.Text = "Bribe";
+            m_Db.AddVariable("angry", VariableValue.Bool(false));
+            m_Conv.Link(m_Conv.StartEntry, halt, LinkPriority.High);
+            m_Conv.Link(m_Conv.StartEntry, hi);
+            foreach (var from in new[] { hi, halt })
+            {
+                m_Conv.Link(from, yes);
+                m_Conv.Link(from, no);
+            }
+            m_Conv.Link(halt, bribe).conditions.Add(new VariableCondition { variable = "angry", value = "true" }); // not shared: stays
+            m_Canvas.Reload();
+
+            m_Canvas.AddToSelection((GraphNodeView)View(hi));
+            m_Canvas.AddToSelection((GraphNodeView)View(halt));
+            CollectionAssert.AreEqual(new[] { yes.id, no.id }, m_Canvas.SharedLinkTargets(new List<DialogueEntry> { hi, halt }));
+            var hub = m_Canvas.MergeSharedLinksIntoHub();
+
+            Assert.IsNotNull(hub);
+            Assert.IsTrue(hub.IsHub);
+            var conv = m_Db.FindConversation(m_Conv.id);
+            CollectionAssert.AreEqual(new[] { hub.id }, conv.FindEntry(hi.id).links.Select(l => l.entryId));
+            CollectionAssert.AreEqual(new[] { hub.id, bribe.id }, conv.FindEntry(halt.id).links.Select(l => l.entryId), "the conditional link stays, after the hub");
+            CollectionAssert.AreEqual(new[] { yes.id, no.id }, conv.FindEntry(hub.id).links.Select(l => l.entryId));
+            CollectionAssert.IsEmpty(m_Db.Validate());
+
+            var runner = new DialogueRunner(m_Db, new DialogueWorld(m_Db));
+            runner.Start(m_Conv.id);
+            Assert.AreEqual("Hi.", runner.CurrentLine.Text);
+            runner.Continue();
+            CollectionAssert.AreEqual(new[] { "Yes", "No" }, runner.CurrentChoices.Select(c => c.Text), "the hub is not a line: its targets are the choices");
+        }
     }
 }

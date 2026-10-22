@@ -146,5 +146,40 @@ namespace ND_BehaviorTree.Editor.Tests
             Assert.IsFalse(f.Graph.CanAttachDecorator(reroute, out _));
             Assert.IsFalse(f.Graph.CanAttachService(reroute, out _));
         }
+
+        [Test]
+        public void ConvertReroutesToBends_KeepsTheSlot_AndPutsOneBendPerReroute()
+        {
+            var seq = f.Create<SequenceNode>(0, 100);
+            f.Graph.Connect(f.Root, seq);
+            var a = f.Create<CountingActionNode>(0, 200);
+            var b = f.Create<CountingActionNode>(200, 200);
+            f.Graph.Connect(seq, a);
+            f.Graph.Connect(seq, b);
+            var first = f.Graph.InsertReroute(seq, a, new Vector2(500, 150));
+            f.Graph.InsertReroute(first, a, new Vector2(520, 170));
+
+            int removed = f.Graph.ConvertReroutesToBends(new Vector2(9, 9));
+
+            Assert.AreEqual(2, removed);
+            Assert.IsFalse(f.Tree.nodes.Any(n => n is RerouteNode));
+            CollectionAssert.AreEqual(new Node[] { a, b }, seq.children, "same slot, linked directly");
+            CollectionAssert.AreEqual(new[] { new Vector2(509, 159), new Vector2(529, 179) }, a.parentEdgeBends, "reroute centres, in order");
+        }
+
+        [Test]
+        public void EdgeBends_AreStoredOnTheChild_AndDroppedWhenTheEdgeIsCut()
+        {
+            var seq = f.Create<SequenceNode>(0, 100);
+            f.Graph.Connect(f.Root, seq);
+            var a = f.Create<CountingActionNode>(0, 200);
+            f.Graph.Connect(seq, a);
+
+            f.Graph.SetEdgeBends(a, new[] { new Vector2(40, 150) });
+            CollectionAssert.AreEqual(new[] { new Vector2(40, 150) }, a.parentEdgeBends);
+
+            f.Graph.Disconnect(seq, a);
+            CollectionAssert.IsEmpty(a.parentEdgeBends, "the bends belonged to the removed edge");
+        }
     }
 }

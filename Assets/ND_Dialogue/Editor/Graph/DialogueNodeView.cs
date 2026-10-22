@@ -102,13 +102,15 @@ namespace ND.Dialogue.Editor
             var actor = Database.FindActor(Entry.actorId);
             bool player = actor != null && actor.isPlayer;
             EnableInClassList("dlg-node--start", IsStart);
-            EnableInClassList("dlg-node--passthrough", !IsStart && Entry.isPassthrough);
+            EnableInClassList("dlg-node--passthrough", !IsStart && Entry.isPassthrough && !Entry.IsHub);
+            EnableInClassList("dlg-node--hub", Entry.IsHub);
             EnableInClassList("dlg-node--player", !IsStart && !Entry.isPassthrough && player);
             EnableInClassList("dlg-node--npc", !IsStart && !Entry.isPassthrough && !player);
 
             m_Emotion.style.display = DisplayStyle.None;
             m_Avatar.style.display = DisplayStyle.None;
             if (IsStart) m_Speaker.text = "▶  START";
+            else if (Entry.IsHub) m_Speaker.text = string.IsNullOrEmpty(Entry.title) ? "◆ hub" : $"◆ {Entry.title}";
             else if (Entry.isPassthrough) m_Speaker.text = string.IsNullOrEmpty(Entry.title) ? "⤳  routing" : $"⤳  {Entry.title}";
             else
             {
@@ -195,6 +197,11 @@ namespace ND.Dialogue.Editor
             var events = Entry.actions.OfType<RaiseEventAction>().ToList();
             var others = Entry.actions.Where(a => !(a is RaiseEventAction)).ToList();
             Chip("act", $"✎ {others.Count}", others.Count, others.Select(a => a?.Describe() ?? "(empty)"), "Actions");
+            if (!string.IsNullOrWhiteSpace(Entry.sequence))
+            {
+                var commands = DialogueSequence.Parse(Entry.sequence);
+                Chip("sequence", $"🎬 {commands.Count}", Mathf.Max(1, commands.Count), commands.Select(c => c.ToString()), "Sequence (plays when the entry starts)");
+            }
             foreach (var e in events) Chip("event", $"⚡ {e.eventName}", 1, new[] { e.Describe() }, "Fires a gameplay event");
             foreach (var link in Entry.links)
             {
@@ -323,8 +330,65 @@ namespace ND.Dialogue.Editor
             Text = ChipText(Link, target);
             EdgeLabel.tooltip = Link == null ? string.Empty : Describe(Link, target) + "\n\nClick to edit.";
             m_AddChip.style.display = Link != null && string.IsNullOrEmpty(Text) ? DisplayStyle.Flex : DisplayStyle.None;
+            ApplyColour();
+        }
+
+        public enum Focus { None, Outgoing, Incoming, Faded }
+
+        private Focus m_Focus;
+
+        /// <summary>How the edge is lit for the current selection.</summary>
+        public Focus CurrentFocus => m_Focus;
+
+        /// <summary>Lights the edge up when it leaves / enters a selected entry, or fades it when it does not touch the selection.</summary>
+        public void SetFocus(Focus focus)
+        {
+            if (m_Focus == focus) return;
+            m_Focus = focus;
+            ApplyColour();
+        }
+
+        private static readonly Color s_OutgoingColour = new Color(0.35f, 0.75f, 1f);
+        private static readonly Color s_IncomingColour = new Color(0.45f, 0.9f, 0.55f);
+
+        private void ApplyColour()
+        {
             var priority = Link?.priority ?? LinkPriority.Normal;
-            SetHighlight(PriorityColor(priority), priority == LinkPriority.High, false);
+            Color? colour = PriorityColor(priority);
+            bool emphasized = priority == LinkPriority.High;
+            switch (m_Focus)
+            {
+                case Focus.Outgoing: colour = s_OutgoingColour; emphasized = true; break;
+                case Focus.Incoming: colour = s_IncomingColour; emphasized = true; break;
+                case Focus.Faded:
+                {
+                    var c = colour ?? Theme.edgeColor;
+                    colour = new Color(c.r, c.g, c.b, 0.18f);
+                    emphasized = false;
+                    break;
+                }
+            }
+            SetHighlight(colour, emphasized, false);
+            float opacity = m_Focus == Focus.Faded ? 0.3f : 1f;
+            EdgeLabel.style.opacity = opacity;
+            m_AddChip.style.opacity = opacity;
+            // Lit edges draw above the faded ones.
+            if (m_Focus == Focus.Outgoing || m_Focus == Focus.Incoming) BringToFrontOfEdges();
+        }
+
+        /// <summary>Moves this edge after the other edges (still behind the nodes).</summary>
+        private void BringToFrontOfEdges()
+        {
+            var container = parent;
+            if (container == null) return;
+            int index = container.IndexOf(this);
+            int last = index;
+            for (int i = index + 1; i < container.childCount; i++)
+            {
+                if (container[i] is GraphNodeView) break;
+                if (container[i] is GraphEdgeView) last = i;
+            }
+            if (last != index) PlaceInFront(container[last]);
         }
 
         protected override void OnPathDrawn(Vector2 start, Vector2 end)

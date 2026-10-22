@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -39,6 +41,28 @@ namespace ND.GraphUI
         private Color? m_HighlightColor;
         private bool m_Emphasized;
         private bool m_Flowing;
+
+        // Bend points (canvas-content space): the path runs through them in order.
+        private readonly List<Vector2> m_Bends = new List<Vector2>();
+        private readonly List<VisualElement> m_BendHandles = new List<VisualElement>();
+        private int m_DraggedBend = -1;
+
+        public const string BendHandleClass = "nd-edge-bend";
+        private const float BendHandleSize = 10f;
+        private const float CornerRadius = 14f;
+        private const float PortStub = 16f;
+
+        /// <summary>Points the edge bends through (canvas-content space), in order from output to input.</summary>
+        public IReadOnlyList<Vector2> Bends => m_Bends;
+
+        /// <summary>
+        /// The user added (double-click on the edge, via the canvas), moved (drag a dot) or removed (double-click or
+        /// Alt+click a dot) a bend point. The owner saves <see cref="Bends"/>.
+        /// </summary>
+        public event Action<GraphEdgeView> BendsChanged;
+
+        /// <summary>Whether <paramref name="element"/> is one of the draggable bend dots.</summary>
+        public static bool IsBendHandle(VisualElement element) => element != null && element.ClassListContains(BendHandleClass);
 
         /// <summary>Node-anchored edge leaving <paramref name="fromNode"/>; give it a target with <see cref="SetTargetNode"/>.</summary>
         public GraphEdgeView(GraphNodeView fromNode, EdgeTheme theme) : this((GraphPortView)null, theme)
@@ -113,6 +137,132 @@ namespace ND.GraphUI
         /// <summary>The middle label element, for adding menus or classes.</summary>
         protected Label EdgeLabel => m_EdgeLabel;
 
+        #region Bend points
+
+        /// <summary>Replaces the bend points (e.g. from saved data). Raises nothing.</summary>
+        public void SetBends(IEnumerable<Vector2> points)
+        {
+            m_Bends.Clear();
+            if (points != null) m_Bends.AddRange(points);
+            RebuildBendHandles();
+            MarkDirtyRepaint();
+        }
+
+        /// <summary>Adds a bend point at <paramref name="contentPoint"/>, in the segment of the path nearest to it. Raises <see cref="BendsChanged"/>.</summary>
+        public void InsertBend(Vector2 contentPoint)
+        {
+            if (!IsComplete || !TryGetEnds(out var start, out var end)) return;
+            var path = PathPoints(start, end);
+            int nearest = 0;
+            float best = float.MaxValue;
+            for (int i = 0; i + 1 < path.Count; i++)
+            {
+                float d = DistanceToSegment(contentPoint, path[i], path[i + 1]);
+                if (d < best) { best = d; nearest = i; }
+            }
+            // Path = start, [port stub], bends…, [port stub], end: segment i ends just before bend (i - leading points + 1).
+            int leading = IsNodeAnchored ? 1 : 2;
+            int index = Mathf.Clamp(nearest + 1 - (leading - 1), 0, m_Bends.Count);
+            m_Bends.Insert(index, contentPoint);
+            RebuildBendHandles();
+            MarkDirtyRepaint();
+            BendsChanged?.Invoke(this);
+        }
+
+        public void RemoveBend(int index)
+        {
+            if (index < 0 || index >= m_Bends.Count) return;
+            m_Bends.RemoveAt(index);
+            RebuildBendHandles();
+            MarkDirtyRepaint();
+            BendsChanged?.Invoke(this);
+        }
+
+        private void RebuildBendHandles()
+        {
+            foreach (var handle in m_BendHandles) handle.RemoveFromHierarchy();
+            m_BendHandles.Clear();
+            for (int i = 0; i < m_Bends.Count; i++)
+            {
+                int index = i;
+                var handle = new VisualElement { tooltip = "Drag to bend the edge · double-click or Alt+click to remove" };
+                handle.AddToClassList(BendHandleClass);
+                var s = handle.style;
+                s.position = Position.Absolute;
+                s.width = s.height = BendHandleSize;
+                s.borderTopLeftRadius = s.borderTopRightRadius = s.borderBottomLeftRadius = s.borderBottomRightRadius = BendHandleSize / 2f;
+                s.borderTopWidth = s.borderBottomWidth = s.borderLeftWidth = s.borderRightWidth = 1.5f;
+                s.borderTopColor = s.borderBottomColor = s.borderLeftColor = s.borderRightColor = new Color(0.1f, 0.1f, 0.12f, 0.9f);
+                handle.RegisterCallback<PointerDownEvent>(evt => OnBendPointerDown(evt, handle, index));
+                handle.RegisterCallback<PointerMoveEvent>(evt => OnBendPointerMove(evt, handle));
+                handle.RegisterCallback<PointerUpEvent>(evt => OnBendPointerUp(evt, handle));
+                handle.RegisterCallback<PointerCaptureOutEvent>(_ => m_DraggedBend = -1);
+                m_BendHandles.Add(handle);
+                Add(handle);
+            }
+        }
+
+        private void OnBendPointerDown(PointerDownEvent evt, VisualElement handle, int index)
+        {
+            if (evt.button != 0) return;
+            evt.StopPropagation();
+            if (evt.altKey || evt.clickCount == 2)
+            {
+                RemoveBend(index);
+                return;
+            }
+            m_DraggedBend = index;
+            handle.CapturePointer(evt.pointerId);
+        }
+
+        private void OnBendPointerMove(PointerMoveEvent evt, VisualElement handle)
+        {
+            if (m_DraggedBend < 0 || !handle.HasPointerCapture(evt.pointerId)) return;
+            m_Bends[m_DraggedBend] = this.WorldToLocal(evt.position);
+            MarkDirtyRepaint();
+            evt.StopPropagation();
+        }
+
+        private void OnBendPointerUp(PointerUpEvent evt, VisualElement handle)
+        {
+            if (!handle.HasPointerCapture(evt.pointerId)) return;
+            handle.ReleasePointer(evt.pointerId);
+            bool moved = m_DraggedBend >= 0;
+            m_DraggedBend = -1;
+            evt.StopPropagation();
+            if (moved) BendsChanged?.Invoke(this);
+        }
+
+        private bool HasBends => m_Bends.Count > 0 && IsComplete;
+
+        /// <summary>The path's corner points: start, a short stub out of a port, the bends, a stub into the port, end.</summary>
+        private List<Vector2> PathPoints(Vector2 start, Vector2 end)
+        {
+            var points = new List<Vector2>(m_Bends.Count + 4) { start };
+            if (!IsNodeAnchored) points.Add(start + StartOutward * PortStub);
+            points.AddRange(m_Bends);
+            if (!IsNodeAnchored) points.Add(end + EndOutward * PortStub);
+            points.Add(end);
+            return points;
+        }
+
+        private static Vector2 PointOnPolyline(List<Vector2> points, float t)
+        {
+            float total = 0f;
+            for (int i = 0; i + 1 < points.Count; i++) total += Vector2.Distance(points[i], points[i + 1]);
+            if (total < 0.001f) return points[0];
+            float d = Mathf.Clamp01(t) * total;
+            for (int i = 0; i + 1 < points.Count; i++)
+            {
+                float length = Vector2.Distance(points[i], points[i + 1]);
+                if (d <= length) return Vector2.Lerp(points[i], points[i + 1], length < 0.001f ? 1f : d / length);
+                d -= length;
+            }
+            return points[points.Count - 1];
+        }
+
+        #endregion
+
         /// <summary>
         /// Overrides the theme colour (null = theme colour). <paramref name="emphasized"/> draws a thicker line;
         /// <paramref name="flowing"/> animates dots from output to input (the owner keeps calling MarkDirtyRepaint while it runs).
@@ -163,6 +313,16 @@ namespace ND.GraphUI
             Rect from = m_FromNode.layout;
             bool hasTarget = m_ToNode != null && IsValidRect(m_ToNode.layout);
             Vector2 target = hasTarget ? m_ToNode.layout.center : m_TempEndPosition;
+            if (hasTarget && m_Bends.Count > 0)
+            {
+                // Leave towards the first bend, arrive from the last one.
+                Vector2 outDir = m_Bends[0] - from.center;
+                Vector2 inDir = target - m_Bends[m_Bends.Count - 1];
+                if (outDir.sqrMagnitude < 0.01f || inDir.sqrMagnitude < 0.01f) return false;
+                start = ExitPoint(from, from.center, outDir.normalized);
+                end = ExitPoint(m_ToNode.layout, target, -inDir.normalized);
+                return true;
+            }
 
             Vector2 dir = target - from.center;
             if (dir.sqrMagnitude < 0.01f) return false; // overlapping centres: nothing sensible to draw
@@ -220,6 +380,7 @@ namespace ND.GraphUI
         /// <summary>Point at <paramref name="t"/> (0 = output, 1 = input) along the drawn path.</summary>
         protected Vector2 PointAt(float t, Vector2 start, Vector2 end)
         {
+            if (HasBends) return PointOnPolyline(PathPoints(start, end), t);
             switch (Curve)
             {
                 case EdgeCurve.Straight:
@@ -289,7 +450,8 @@ namespace ND.GraphUI
 
             painter.BeginPath();
             painter.MoveTo(start);
-            switch (Curve)
+            if (HasBends) DrawThroughBends(painter, PathPoints(start, end));
+            else switch (Curve)
             {
                 case EdgeCurve.Straight:
                     painter.LineTo(end);
@@ -334,9 +496,30 @@ namespace ND.GraphUI
                 }
             }
 
+            for (int i = 0; i < m_BendHandles.Count && i < m_Bends.Count; i++)
+            {
+                var hs = m_BendHandles[i].style;
+                hs.left = m_Bends[i].x - BendHandleSize / 2f;
+                hs.top = m_Bends[i].y - BendHandleSize / 2f;
+                hs.backgroundColor = color;
+            }
+
             m_EdgeLabel.style.left = mid.x - (m_EdgeLabel.layout.width / 2f);
             m_EdgeLabel.style.top = mid.y - (m_EdgeLabel.layout.height / 2f) - (string.IsNullOrEmpty(Text) ? 0 : 12f);
             OnPathDrawn(start, end);
+        }
+
+        /// <summary>Straight runs between the points, with rounded corners at each inner point (the path is already at points[0]).</summary>
+        private static void DrawThroughBends(Painter2D painter, List<Vector2> points)
+        {
+            for (int i = 1; i + 1 < points.Count; i++)
+            {
+                float room = Mathf.Min(Vector2.Distance(points[i - 1], points[i]), Vector2.Distance(points[i], points[i + 1])) * 0.5f;
+                float radius = Mathf.Min(CornerRadius, room);
+                if (radius < 0.5f) painter.LineTo(points[i]);
+                else painter.ArcTo(points[i], points[i + 1], radius);
+            }
+            painter.LineTo(points[points.Count - 1]);
         }
 
         /// <summary>Called after each repaint of the path: place extra labels with <see cref="PointAt"/>.</summary>

@@ -180,9 +180,57 @@ namespace ND_BehaviorTree.Editor.Graph
             using (new GraphUndoScope(Tree, "Disconnect Nodes"))
             {
                 parent.RemoveChild(child);
+                child.parentEdgeBends?.Clear(); // they belonged to that edge
                 EditorUtility.SetDirty(parent);
+                EditorUtility.SetDirty(child);
             }
             return true;
+        }
+
+        /// <summary>
+        /// Replaces every <see cref="RerouteNode"/> with a bend point on the edge it was on: the node behind a chain of
+        /// reroutes gets one bend per reroute (at its centre) and the parent is linked to it directly, in the same slot.
+        /// One history step. Returns how many reroutes were removed.
+        /// </summary>
+        public int ConvertReroutesToBends(Vector2 rerouteHalfSize)
+        {
+            var reroutes = Tree.nodes.OfType<RerouteNode>().ToList();
+            if (reroutes.Count == 0) return 0;
+            var rerouteSet = new HashSet<Node>(reroutes);
+            using (new GraphUndoScope(Tree, "Convert Reroutes to Bend Points"))
+            {
+                // Chain heads: reroutes whose parent is a real node.
+                foreach (var head in reroutes.Where(r => !(GetParent(r) is RerouteNode)))
+                {
+                    var bends = new List<Vector2>();
+                    Node node = head;
+                    for (int guard = 0; guard < 64 && node is RerouteNode reroute; guard++)
+                    {
+                        bends.Add(reroute.position.position + rerouteHalfSize);
+                        node = reroute.child;
+                    }
+                    if (node == null || rerouteSet.Contains(node)) continue; // dangling or looping chain: deleted below
+                    node.parentEdgeBends = bends;
+                    EditorUtility.SetDirty(node);
+                }
+                DeleteNodes(reroutes); // re-links each parent to the node behind its chain, same slot
+            }
+            return reroutes.Count;
+        }
+
+        /// <summary>Stores the bend points of the edge parent → <paramref name="child"/> (one history step).</summary>
+        public void SetEdgeBends(Node child, IReadOnlyList<Vector2> bends)
+        {
+            if (child == null)
+            {
+                Debug.LogWarning($"{LogTag} {nameof(SetEdgeBends)} rejected: no child node.");
+                return;
+            }
+            using (new GraphUndoScope(Tree, "Bend Edge"))
+            {
+                child.parentEdgeBends = bends != null ? new List<Vector2>(bends) : new List<Vector2>();
+                EditorUtility.SetDirty(child);
+            }
         }
 
         /// <summary>
