@@ -8,6 +8,7 @@
         "ND.Dialogue.NDBT.Editor",
         "ND.Localization",
         "ND_BehaviorTree.Runtime",
+        "ND.GraphUI",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

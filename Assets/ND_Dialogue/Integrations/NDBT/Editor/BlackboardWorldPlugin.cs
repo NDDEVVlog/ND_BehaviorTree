@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using ND.Dialogue.Editor.Plugins;
 using ND_BehaviorTree;
+using ND_BehaviorTree.Editor.Graph;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -25,6 +26,33 @@ namespace ND.Dialogue.NDBT.Editor
         {
             context.AddDatabaseTab(TabTitle, BuildTab);
             context.AddValidationRule("blackboard-source", Check);
+            context.AddVariableColors(KeyColor);
+            // The test chat's "Reset world" starts from the blackboard assets again (drop the shared runtime copies).
+            ND.Dialogue.Editor.DialogueTestSession.WorldResetting -= SharedBlackboards.Clear;
+            ND.Dialogue.Editor.DialogueTestSession.WorldResetting += SharedBlackboards.Clear;
+            context.AddSchemaEditor<BlackboardSchemaSource>(
+                args => BlackboardKeysEditor.Variables(Source(args)?.blackboard, Source(args)?.questKeyPrefix, () => Changed(args)),
+                args => BlackboardKeysEditor.Quests(Source(args)?.blackboard, Source(args)?.questKeyPrefix ?? BlackboardDialogueContext.DefaultQuestPrefix, () => Changed(args)));
+        }
+
+        private static BlackboardSchemaSource Source(DialoguePluginArgs args) => args.Database != null ? args.Database.schemaSource as BlackboardSchemaSource : null;
+
+        /// <summary>A key edit changes what pickers offer: redraw the editor (keys live in the blackboard asset, not the database).</summary>
+        private static void Changed(DialoguePluginArgs args)
+        {
+            if (args.Window != null) args.Window.NotifyDatabaseChanged();
+        }
+
+        /// <summary>The colour of the blackboard key behind a variable (world key, or a Blackboard Actor's key).</summary>
+        public static Color? KeyColor(DialogueDatabase database, string variable)
+        {
+            if (database == null || string.IsNullOrEmpty(variable)) return null;
+            if (database.TryResolveAttribute(variable, out var actor, out var attribute) && actor is BlackboardActor ba && ba.blackboard != null
+                && ba.blackboard.TryGetKey(attribute.name, out var actorKey))
+                return KeySlotScanner.KeyColor(actorKey.GetType());
+            if (database.schemaSource is BlackboardSchemaSource source && source.blackboard != null && source.blackboard.TryGetKey(variable, out var key))
+                return KeySlotScanner.KeyColor(key.GetType());
+            return null;
         }
 
         private static IEnumerable<string> Check(DialogueDatabase database)
@@ -37,7 +65,7 @@ namespace ND.Dialogue.NDBT.Editor
                     yield break;
                 }
                 // With a blackboard world, a plain character's attributes are world keys named "Actor.attribute".
-                foreach (var actor in database.actors)
+                foreach (var actor in database.AllActors)
                 {
                     if (actor == null || actor is BlackboardActor) continue;
                     foreach (var attribute in actor.AttributeDefinitions)
@@ -49,7 +77,7 @@ namespace ND.Dialogue.NDBT.Editor
                     }
                 }
             }
-            foreach (var actor in database.actors)
+            foreach (var actor in database.AllActors)
                 if (actor is BlackboardActor ba && ba.blackboard == null)
                     yield return $"Character '{actor.name}' is a Blackboard Actor without a blackboard: it has no attributes.";
         }
@@ -60,42 +88,32 @@ namespace ND.Dialogue.NDBT.Editor
             var database = args.Database;
             var current = database.schemaSource as BlackboardSchemaSource;
 
-            root.Add(new HelpBox("Variables are blackboard keys (bool / int / float / string / Vector2 / Vector3 / Color / object, parents included). " +
-                                 "A quest is an int key named 'quest.<name>'. Agents whose blackboard has this one as parent share the values at runtime.",
-                HelpBoxMessageType.None));
+            root.Add(new Label("The world state lives in a behavior-tree blackboard: its keys are the dialogue's variables (with the same colours), " +
+                               $"int keys named '{current?.questKeyPrefix ?? BlackboardDialogueContext.DefaultQuestPrefix}<name>' are quests. " +
+                               "Agents whose blackboard has it as parent share the values at runtime.")
+                { style = { whiteSpace = WhiteSpace.Normal, color = new Color(0.63f, 0.65f, 0.7f), marginBottom = 6 } });
 
-            var picker = new ObjectField("World blackboard") { objectType = typeof(Blackboard), allowSceneObjects = false, value = current != null ? current.blackboard : null };
-            root.Add(picker);
-            var apply = new Button(() => Use(args, picker.value as Blackboard)) { text = current != null ? "Change world blackboard" : "Use as world state" };
-            root.Add(apply);
+            var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+            var picker = new ObjectField("World blackboard") { objectType = typeof(Blackboard), allowSceneObjects = false, value = current != null ? current.blackboard : null, style = { flexGrow = 1 } };
+            row.Add(picker);
+            row.Add(new Button(() => Use(args, picker.value as Blackboard)) { text = current != null ? "Change" : "Use as world state" });
+            if (current != null) row.Add(new Button(() => args.Edit("Stop Using Blackboard", () => database.schemaSource = null)) { text = "Stop using", tooltip = "Back to the database's own variables and quests" });
+            root.Add(row);
 
             if (database.schemaSource != null && current == null)
                 root.Add(new HelpBox($"The database already uses another schema source ('{database.schemaSource.name}'); this replaces it.", HelpBoxMessageType.Warning));
 
-            if (current != null)
+            if (current != null && current.blackboard != null)
             {
-                root.Add(new Button(() => args.Edit("Stop Using Blackboard", () => database.schemaSource = null)) { text = "Stop using the blackboard" });
-                if (current.blackboard != null) root.Add(KeyList(current));
+                root.Add(Heading("Variables"));
+                root.Add(BlackboardKeysEditor.Variables(current.blackboard, current.questKeyPrefix, () => Changed(args)));
+                root.Add(Heading("Quests"));
+                root.Add(BlackboardKeysEditor.Quests(current.blackboard, current.questKeyPrefix, () => Changed(args)));
             }
             return root;
         }
 
-        private static VisualElement KeyList(BlackboardSchemaSource source)
-        {
-            var box = new VisualElement { style = { marginTop = 8 } };
-            var schema = (BlackboardDialogueContext)source.Schema;
-            box.Add(new Label("Variables") { style = { unityFontStyleAndWeight = FontStyle.Bold } });
-            foreach (var name in schema.VariableNames.OrderBy(n => n))
-            {
-                schema.TryGetVariableType(name, out var type);
-                box.Add(new Label($"•  {name}   ({type})"));
-            }
-            box.Add(new Label("Quests") { style = { unityFontStyleAndWeight = FontStyle.Bold, marginTop = 4 } });
-            var quests = schema.QuestNames.OrderBy(n => n).ToList();
-            if (quests.Count == 0) box.Add(new Label($"(none — add int keys named '{source.questKeyPrefix}<name>')"));
-            foreach (var name in quests) box.Add(new Label($"•  {name}"));
-            return box;
-        }
+        private static Label Heading(string text) => new Label(text) { style = { unityFontStyleAndWeight = FontStyle.Bold, fontSize = 13, marginTop = 10, marginBottom = 4 } };
 
         /// <summary>Points the database at <paramref name="blackboard"/>, creating the source asset next to the database if needed.</summary>
         public static void Use(DialoguePluginArgs args, Blackboard blackboard)
@@ -111,7 +129,8 @@ namespace ND.Dialogue.NDBT.Editor
             {
                 source = ScriptableObject.CreateInstance<BlackboardSchemaSource>();
                 source.blackboard = blackboard;
-                string folder = Path.GetDirectoryName(AssetDatabase.GetAssetPath(database))?.Replace('\\', '/');
+                string assetPath = AssetDatabase.GetAssetPath(database);
+                string folder = string.IsNullOrEmpty(assetPath) ? null : Path.GetDirectoryName(assetPath)?.Replace('\\', '/');
                 if (!string.IsNullOrEmpty(folder))
                     AssetDatabase.CreateAsset(source, AssetDatabase.GenerateUniqueAssetPath($"{folder}/{database.name}_World.asset"));
                 args.Edit("Use Blackboard As World", () => database.schemaSource = source);

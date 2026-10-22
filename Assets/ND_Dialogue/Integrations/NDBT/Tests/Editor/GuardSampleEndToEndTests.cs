@@ -24,6 +24,12 @@ namespace ND.Dialogue.NDBT.Tests
         [SetUp]
         public void SetUp()
         {
+            for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+            {
+                var open = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
+                if (string.IsNullOrEmpty(open.path))
+                    Assert.Ignore("An untitled (never saved) scene is open: Unity cannot add the sample scene next to it. Save it or open a saved scene, then rerun.");
+            }
             SharedBlackboards.Clear();
             LocalizationService.Shutdown();
             m_Db = DialogueGuardSampleBuilder.Build(Folder, NewSceneMode.Additive, out m_Scene);

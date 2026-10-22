@@ -31,6 +31,8 @@ namespace ND.Dialogue.Editor
 
         /// <summary>The selection changed (inspector shows the single selected entry).</summary>
         public event Action SelectionChanged;
+        /// <summary>(conversation id, entry id) "Test from here" was picked on a node.</summary>
+        public event Action<int, int> TestRequested;
         /// <summary>The database (or its text table) was changed from the canvas.</summary>
         public event Action DataChanged;
 
@@ -101,6 +103,16 @@ namespace ND.Dialogue.Editor
             foreach (var edge in Edges.Where(e => e.FromNode == view).ToList()) RemoveEdgeView(edge);
             foreach (var link in fresh.links)
                 if (link.conversationId == Conversation.id) DrawLink(fresh, link);
+            // Edges into this entry show its entry conditions too.
+            foreach (var edge in Edges.Where(e => e.ToNode == view)) edge.RefreshLabel();
+        }
+
+        /// <summary>Redraws every entry and edge from data, keeping selection and focus (after edits made elsewhere).</summary>
+        public void RefreshAll()
+        {
+            if (Database == null || Conversation == null) return;
+            Conversation = Database.FindConversation(Conversation.id) ?? Conversation;
+            foreach (var entry in Conversation.entries.Where(e => e != null).ToList()) RefreshNode(entry);
         }
 
         private DialogueEdgeView DrawLink(DialogueEntry from, DialogueLink link)
@@ -137,6 +149,7 @@ namespace ND.Dialogue.Editor
             return LinkEditorPopup.Open(screen, Database, Conversation, from.Entry, edge.Link, title, () =>
             {
                 EditorUtility.SetDirty(Database);
+                RefreshNode(to.Entry);   // its entry conditions may have changed (chips, incoming edges)
                 RefreshNode(from.Entry); // redraws this node's edges with their new labels
                 DataChanged?.Invoke();
             });
@@ -234,22 +247,23 @@ namespace ND.Dialogue.Editor
         public Actor DefaultActorFor(NewEntryKind kind)
         {
             bool wantPlayer = kind == NewEntryKind.PlayerResponse;
-            var actor = Database.actors.FirstOrDefault(a => a != null && a.isPlayer == wantPlayer)
-                        ?? (kind == NewEntryKind.Passthrough ? Database.actors.FirstOrDefault(a => a != null) : null);
+            var actor = Database.AllActors.FirstOrDefault(a => a != null && a.isPlayer == wantPlayer)
+                        ?? (kind == NewEntryKind.Passthrough ? Database.AllActors.FirstOrDefault(a => a != null) : null);
             if (actor == null)
                 ShowNotification(wantPlayer ? "Add an actor with 'Is Player' to the database first." : "Add a non-player actor to the database first.");
             return actor;
         }
 
         /// <summary>Creates an entry at <paramref name="position"/>, optionally linked from <paramref name="linkFrom"/> (one undo step).</summary>
-        public DialogueEntry CreateEntry(NewEntryKind kind, Vector2 position, DialogueEntry linkFrom = null)
+        public DialogueEntry CreateEntry(NewEntryKind kind, Vector2 position, DialogueEntry linkFrom = null, Type entryType = null)
         {
             if (Conversation == null) return null;
             var actor = DefaultActorFor(kind);
             if (actor == null) return null;
 
             Record("Create Dialogue Entry");
-            var entry = Conversation.AddEntry(actor.id);
+            var entry = Conversation.AddEntry(entryType ?? typeof(DialogueEntry), actor.id);
+            if (entry == null) return null; // not a usable entry type (logged)
             entry.position = position;
             entry.isPassthrough = kind == NewEntryKind.Passthrough;
             if (linkFrom != null) Conversation.Link(linkFrom, entry);
@@ -267,6 +281,12 @@ namespace ND.Dialogue.Editor
             AddToSelection((GraphNodeView)view); // the GraphNodeView overload raises SelectionChanged
             return entry;
         }
+
+        /// <summary>Concrete <see cref="DialogueEntry"/> subclasses with a parameterless constructor (for the "New …" menus).</summary>
+        public static List<Type> EntryTypes() =>
+            TypeCache.GetTypesDerivedFrom<DialogueEntry>()
+                .Where(t => !t.IsAbstract && !t.IsGenericType && t.IsSerializable && t.GetConstructor(Type.EmptyTypes) != null)
+                .OrderBy(t => t.Name).ToList();
 
         /// <summary>Creates a linked child of the single selected entry, to its right.</summary>
         public DialogueEntry CreateChildOfSelection(NewEntryKind kind)
@@ -329,6 +349,13 @@ namespace ND.Dialogue.Editor
                 evt.menu.AppendAction("New NPC Line", _ => CreateEntry(NewEntryKind.NpcLine, local));
                 evt.menu.AppendAction("New Player Response", _ => CreateEntry(NewEntryKind.PlayerResponse, local));
                 evt.menu.AppendAction("New Passthrough (routing)", _ => CreateEntry(NewEntryKind.Passthrough, local));
+                foreach (var type in EntryTypes())
+                {
+                    var t = type;
+                    string label = UnityEditor.ObjectNames.NicifyVariableName(t.Name);
+                    evt.menu.AppendAction($"New {label}/NPC Line", _ => CreateEntry(NewEntryKind.NpcLine, local, null, t));
+                    evt.menu.AppendAction($"New {label}/Player Response", _ => CreateEntry(NewEntryKind.PlayerResponse, local, null, t));
+                }
                 evt.menu.AppendSeparator();
                 evt.menu.AppendAction("Frame All   (F)", _ => FrameDefault());
                 Plugins.DialoguePluginRegistry.AppendTo(evt.menu, Plugins.DialoguePluginRegistry.CanvasMenuItems, () => ArgsFor(null, local));
@@ -344,6 +371,9 @@ namespace ND.Dialogue.Editor
             evt.menu.AppendAction("Add Child/NPC Line   (Space)", _ => CreateChildOfSelection(NewEntryKind.NpcLine));
             evt.menu.AppendAction("Add Child/Player Response   (R)", _ => CreateChildOfSelection(NewEntryKind.PlayerResponse));
             evt.menu.AppendAction("Add Child/Passthrough", _ => CreateChildOfSelection(NewEntryKind.Passthrough));
+            int testId = entry.id;
+            evt.menu.AppendAction("Test from here   (Test Dialogue)", _ => TestRequested?.Invoke(Conversation.id, testId), _ => TestRequested != null ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+            evt.menu.AppendAction($"Copy entry id   (#{testId})", _ => EditorGUIUtility.systemCopyBuffer = testId.ToString());
 
             foreach (var target in Nodes.OrderBy(v => v.Entry.id))
             {

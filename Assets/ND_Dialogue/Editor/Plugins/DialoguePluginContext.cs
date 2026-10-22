@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace ND.Dialogue.Editor.Plugins
@@ -17,6 +18,8 @@ namespace ND.Dialogue.Editor.Plugins
         internal readonly List<DialoguePluginPanel> InspectorSections = new List<DialoguePluginPanel>();
         internal readonly List<DialoguePluginRule> Rules = new List<DialoguePluginRule>();
         internal readonly List<Action<DialoguePluginArgs, DialogueEntry>> EntryCreated = new List<Action<DialoguePluginArgs, DialogueEntry>>();
+        internal readonly List<Func<DialogueDatabase, string, Color?>> VariableColors = new List<Func<DialogueDatabase, string, Color?>>();
+        internal readonly List<DialogueSchemaEditor> SchemaEditors = new List<DialogueSchemaEditor>();
 
         public DialoguePlugin Plugin { get; }
 
@@ -52,6 +55,24 @@ namespace ND.Dialogue.Editor.Plugins
             Rules.Add(new DialoguePluginRule(Plugin, name, rule));
         }
 
+        /// <summary>
+        /// Colours a variable in pickers and rows (e.g. by the type colour of the key behind it). Return null to let
+        /// the next provider (or the built-in colour of the variable's type) decide.
+        /// </summary>
+        public void AddVariableColors(Func<DialogueDatabase, string, Color?> provider)
+        {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            VariableColors.Add(provider);
+        }
+
+        /// <summary>
+        /// Lets the Variables / Quests tabs edit the world of a <see cref="DialogueSchemaSource"/> of type
+        /// <typeparamref name="TSource"/> in place (instead of "edit them in the source asset"). Either builder may be null.
+        /// </summary>
+        public void AddSchemaEditor<TSource>(Func<DialoguePluginArgs, VisualElement> variables, Func<DialoguePluginArgs, VisualElement> quests)
+            where TSource : DialogueSchemaSource =>
+            SchemaEditors.Add(new DialogueSchemaEditor(Plugin, typeof(TSource), variables, quests));
+
         /// <summary>Runs after the user creates an entry in the editor, inside the same undo step (set defaults, add actions…).</summary>
         public void OnEntryCreated(Action<DialoguePluginArgs, DialogueEntry> handler)
         {
@@ -84,6 +105,19 @@ namespace ND.Dialogue.Editor.Plugins
         {
             if (string.IsNullOrWhiteSpace(title) || build == null) throw new ArgumentException($"[{plugin.DisplayName}] A panel needs a title and a builder.");
             Plugin = plugin; Title = title; Build = build;
+        }
+    }
+
+    public sealed class DialogueSchemaEditor
+    {
+        public readonly DialoguePlugin Plugin;
+        public readonly Type SourceType;
+        public readonly Func<DialoguePluginArgs, VisualElement> Variables;
+        public readonly Func<DialoguePluginArgs, VisualElement> Quests;
+
+        internal DialogueSchemaEditor(DialoguePlugin plugin, Type sourceType, Func<DialoguePluginArgs, VisualElement> variables, Func<DialoguePluginArgs, VisualElement> quests)
+        {
+            Plugin = plugin; SourceType = sourceType; Variables = variables; Quests = quests;
         }
     }
 

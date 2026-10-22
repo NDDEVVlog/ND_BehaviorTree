@@ -93,9 +93,11 @@ namespace ND.Dialogue.Editor
             var entryProp = FindEntryProperty();
 
             bool isStart = m_Entry.id == Conversation.StartEntryId;
-            var header = new Label(isStart ? "START" : $"Entry #{m_Entry.id}");
+            string kind = m_Entry.GetType() == typeof(DialogueEntry) ? string.Empty : $"  ·  {ObjectNames.NicifyVariableName(m_Entry.GetType().Name)}";
+            var header = new Label(isStart ? "START" : $"Entry #{m_Entry.id}{kind}");
             header.AddToClassList("dlg-inspector__header");
             Add(header);
+            if (!string.IsNullOrEmpty(m_Entry.EditorNote)) Add(new HelpBox(m_Entry.EditorNote, HelpBoxMessageType.Info));
 
             if (isStart)
             {
@@ -105,8 +107,9 @@ namespace ND.Dialogue.Editor
             {
                 BuildIdentity();
                 if (!m_Entry.isPassthrough) BuildText();
-                BuildList("Entry conditions (every way in; branch rules go on links)", entryProp?.FindPropertyRelative(nameof(DialogueEntry.conditions)), typeof(DialogueCondition), m_Entry.conditions);
-                BuildList("Actions (run on enter)", entryProp?.FindPropertyRelative(nameof(DialogueEntry.actions)), typeof(DialogueAction), m_Entry.actions);
+                BuildSubclassFields(entryProp);
+                BuildList("Plays only if…", "Entry conditions: every way into this line needs them (all must hold). A condition for one branch only goes on that link (click its edge).", entryProp?.FindPropertyRelative(nameof(DialogueEntry.conditions)), typeof(DialogueCondition), m_Entry.conditions);
+                BuildList("When it plays, do…", "Actions run when the line starts.", entryProp?.FindPropertyRelative(nameof(DialogueEntry.actions)), typeof(DialogueAction), m_Entry.actions);
             }
             BuildLinks();
             BuildPluginSections();
@@ -128,7 +131,7 @@ namespace ND.Dialogue.Editor
             int c = m_Database.conversations.IndexOf(m_Conversation);
             int e = m_Conversation.entries.IndexOf(m_Entry);
             if (c < 0 || e < 0) return null;
-            return m_SerializedDatabase.FindProperty($"{nameof(DialogueDatabase.conversations)}.Array.data[{c}].{nameof(Conversation.entries)}.Array.data[{e}]");
+            return m_SerializedDatabase.FindProperty($"{nameof(DialogueDatabase.conversations)}.Array.data[{c}].{Conversation.EntriesField}.Array.data[{e}]");
         }
 
         #region Identity
@@ -139,7 +142,7 @@ namespace ND.Dialogue.Editor
             title.RegisterValueChangedCallback(evt => Edit("Rename Dialogue Entry", () => m_Entry.title = evt.newValue));
             Add(title);
 
-            var actors = m_Database.actors.Where(a => a != null).ToList();
+            var actors = m_Database.AllActors.Where(a => a != null).ToList();
             if (actors.Count == 0)
             {
                 Add(new HelpBox("The database has no actors. Add them in the database inspector.", HelpBoxMessageType.Warning));
@@ -156,21 +159,11 @@ namespace ND.Dialogue.Editor
                     Rebuild(); // emotions and menu text depend on the speaker
                 });
                 Add(speaker);
-
-                var current = m_Database.FindActor(m_Entry.actorId);
-                if (current != null && current.emotions.Count > 0)
-                {
-                    const string DefaultLabel = "(actor default)";
-                    var emotions = new List<string> { DefaultLabel };
-                    emotions.AddRange(current.emotions.Where(e => e != null).Select(e => e.id));
-                    if (!string.IsNullOrEmpty(m_Entry.emotion) && !emotions.Contains(m_Entry.emotion)) emotions.Add(m_Entry.emotion); // keep an unknown value visible
-                    var emotion = new PopupField<string>("Emotion", emotions, string.IsNullOrEmpty(m_Entry.emotion) ? DefaultLabel : m_Entry.emotion);
-                    emotion.RegisterValueChangedCallback(evt => Edit("Change Emotion", () => m_Entry.emotion = evt.newValue == DefaultLabel ? string.Empty : evt.newValue));
-                    Add(emotion);
-                }
+                // Emotions are chosen per line (Lines section).
             }
 
-            var routing = new Toggle("Passthrough") { value = m_Entry.isPassthrough, tooltip = "Shows no line: only runs its actions and routes by its links' conditions." };
+            var routing = new Toggle("Passthrough (no line, only routes)") { value = m_Entry.isPassthrough,
+                tooltip = "Shows nothing. When the conversation reaches it, it runs its actions, then immediately follows its links (by their conditions). Use it as a hub / branching point." };
             routing.RegisterValueChangedCallback(evt =>
             {
                 Edit("Toggle Passthrough", () => m_Entry.isPassthrough = evt.newValue);
@@ -209,66 +202,182 @@ namespace ND.Dialogue.Editor
 
         #region Text
 
+        /// <summary>Lines (each with its emotion), then the choice label for player responses.</summary>
         private void BuildText()
         {
-            AddTextBlock("Text", menu: false);
+            int count = m_Entry.LineCount;
+            AddSection(count > 1 ? $"Lines  ({count})  [{m_Locale}]" : $"Line  [{m_Locale}]",
+                "What the speaker says here, one line after another: Continue (button, Space, Enter) shows the next one. Each line can have its own emotion.");
+            for (int i = 0; i < count; i++) Add(LineBlock(i, count));
+
+            var add = new Button(() =>
+            {
+                Edit("Add Dialogue Line", () => m_Entry.moreLines.Add(new DialoguePage()));
+                Rebuild();
+            }) { text = "+ Add line", tooltip = "The same speaker says one more line here (no need for another node)." };
+            add.AddToClassList("dlg-inspector__add");
+            Add(add);
+
             var actor = m_Database.FindActor(m_Entry.actorId);
-            if (actor != null && actor.isPlayer) AddTextBlock("Choice label (empty = Text)", menu: true);
+            if (actor != null && actor.isPlayer)
+            {
+                AddSection("Choice label", "Shown in the choice menu. Empty = the first line.");
+                Add(TextArea(m_Entry.menuText, 22, value => DialogueTextEditing.Write(m_Database, m_Conversation, m_Entry, true, m_Locale, value)));
+                Add(LocalizeRow(m_Entry.menuText, () => DialogueTextEditing.Localize(m_Database, m_Conversation, m_Entry, true, m_Locale), () => m_Entry.menuText));
+            }
         }
 
-        /// <summary>Text box + its mode: plain (same in every language) or connected to the table (per language).</summary>
-        private void AddTextBlock(string title, bool menu)
+        /// <summary>One line: number · emotion · (move/remove) / text / localize row.</summary>
+        private VisualElement LineBlock(int index, int count)
         {
-            var text = menu ? m_Entry.menuText : m_Entry.text;
-            AddSection(text.IsLocalized ? $"{title}  [{m_Locale}]" : $"{title}  (plain)");
-            Add(TextBox(menu));
+            var block = new VisualElement();
+            block.AddToClassList("dlg-line");
+            var head = new VisualElement();
+            head.AddToClassList("dlg-line__head");
+            var number = new Label((index + 1).ToString());
+            number.AddToClassList("dlg-line__number");
+            head.Add(number);
+            head.Add(EmotionField(index));
+            head.Add(new VisualElement { style = { flexGrow = 1 } });
+            if (index > 0)
+            {
+                int page = index - 1;
+                var up = new Button(() => MoveLine(page, -1)) { text = "▲", tooltip = "Move up" };
+                up.SetEnabled(index > 1);
+                var down = new Button(() => MoveLine(page, +1)) { text = "▼", tooltip = "Move down" };
+                down.SetEnabled(index < count - 1);
+                var remove = new Button(() =>
+                {
+                    Edit("Remove Dialogue Line", () => m_Entry.moreLines.RemoveAt(page));
+                    Rebuild();
+                }) { text = "✕", tooltip = "Remove this line" };
+                foreach (var b in new[] { up, down, remove }) b.AddToClassList("dlg-line__button");
+                head.Add(up);
+                head.Add(down);
+                head.Add(remove);
+            }
+            block.Add(head);
 
-            var row = new VisualElement { style = { flexDirection = FlexDirection.Row } };
-            if (text.IsLocalized)
-            {
-                text.Table.TryGetKey(text.EntryId, out string key);
-                row.Add(new Label($"table '{text.Table.DisplayName}' · key '{key}'") { style = { flexGrow = 1, color = new Color(0.6f, 0.65f, 0.7f) } });
-                row.Add(new Button(() =>
-                {
-                    string current = DialogueTextEditing.Read(text, m_Locale) ?? string.Empty;
-                    Edit("Unlink Dialogue Text", () => (menu ? m_Entry.menuText : m_Entry.text).Unlink(current));
-                    Rebuild();
-                }) { text = "Unlink", tooltip = "Back to plain text (keeps this language's text; the table entry stays)." });
-            }
-            else if (!string.IsNullOrEmpty(text.Text))
-            {
-                var localize = new Button(() =>
-                {
-                    if (DialogueTextEditing.Localize(m_Database, m_Conversation, m_Entry, menu, m_Locale)) Notify();
-                    Rebuild();
-                }) { text = $"Localize → table ({m_Locale})", tooltip = "Move this text into the database's Text Table so it can be translated." };
-                localize.SetEnabled(m_Database.textTable != null);
-                if (m_Database.textTable == null) localize.tooltip = "Assign a Text Table in the Settings tab first.";
-                row.Add(localize);
-            }
-            Add(row);
+            var text = m_Entry.LineText(index);
+            block.Add(TextArea(text, 40, value => DialogueTextEditing.WriteLine(m_Database, m_Entry, index, m_Locale, value)));
+            block.Add(LocalizeRow(text, () => DialogueTextEditing.LocalizeLine(m_Database, m_Conversation, m_Entry, index, m_Locale), () => m_Entry.LineText(index)));
+            return block;
         }
 
-        private TextField TextBox(bool menu)
+        private void MoveLine(int page, int delta)
         {
-            var reference = menu ? m_Entry.menuText : m_Entry.text;
-            var field = new TextField { multiline = true, isDelayed = true, value = DialogueTextEditing.Read(reference, m_Locale) ?? string.Empty };
-            field.style.minHeight = menu ? 22 : 54;
+            int other = page + delta;
+            Edit("Reorder Dialogue Lines", () =>
+            {
+                if (other < 0 || other >= m_Entry.moreLines.Count) return;
+                (m_Entry.moreLines[page], m_Entry.moreLines[other]) = (m_Entry.moreLines[other], m_Entry.moreLines[page]);
+            });
+            Rebuild();
+        }
+
+        /// <summary>Emotion popup of a line, each option with its emoji. Line 1 defaults to the actor's emotion; the others to line 1's.</summary>
+        private VisualElement EmotionField(int index)
+        {
+            var actor = m_Database.FindActor(m_Entry.actorId);
+            string defaultLabel = index == 0 ? "(actor default)" : "(same as line 1)";
+            string current = (index == 0 ? m_Entry.emotion : m_Entry.moreLines[index - 1]?.emotion) ?? string.Empty;
+            var ids = new List<string> { string.Empty };
+            if (actor != null) ids.AddRange(actor.emotions.Where(e => e != null && !string.IsNullOrEmpty(e.id)).Select(e => e.id).Distinct());
+            if (!ids.Contains(current)) ids.Add(current); // keep an unknown value visible
+            string Label(string id) => string.IsNullOrEmpty(id) ? defaultLabel : $"{DialogueEmotionGlyph.For(id)}  {id}";
+            var labels = ids.Select(Label).ToList();
+            var field = new PopupField<string>(labels, Label(current)) { tooltip = "Emotion (portrait and tint) of the speaker for this line" };
+            field.AddToClassList("dlg-line__emotion");
+            field.RegisterValueChangedCallback(evt =>
+            {
+                string picked = ids[labels.IndexOf(evt.newValue)];
+                Edit("Change Emotion", () =>
+                {
+                    if (index == 0) m_Entry.emotion = picked;
+                    else if (m_Entry.moreLines[index - 1] != null) m_Entry.moreLines[index - 1].emotion = picked;
+                });
+            });
+            return field;
+        }
+
+        private TextField TextArea(ND.Localization.LocalizableString text, float minHeight, Func<string, bool> write)
+        {
+            var field = new TextField { multiline = true, isDelayed = true, value = DialogueTextEditing.Read(text, m_Locale) ?? string.Empty };
+            field.style.minHeight = minHeight;
             field.style.whiteSpace = WhiteSpace.Normal;
             field.RegisterValueChangedCallback(evt =>
             {
-                if (Resolve() && DialogueTextEditing.Write(m_Database, m_Conversation, m_Entry, menu, m_Locale, evt.newValue)) Notify();
+                if (Resolve() && write(evt.newValue)) Notify();
             });
             return field;
+        }
+
+        /// <summary>Plain text: "Localize". Connected: its table/key and "Unlink".</summary>
+        private VisualElement LocalizeRow(ND.Localization.LocalizableString text, Func<bool> localize, Func<ND.Localization.LocalizableString> fresh)
+        {
+            var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+            if (text == null) return row;
+            if (text.IsLocalized)
+            {
+                text.Table.TryGetKey(text.EntryId, out string key);
+                row.Add(new Label($"table '{text.Table.DisplayName}' · key '{key}'") { style = { flexGrow = 1, color = new Color(0.6f, 0.65f, 0.7f), fontSize = 10 } });
+                row.Add(new Button(() =>
+                {
+                    string current = DialogueTextEditing.Read(text, m_Locale) ?? string.Empty;
+                    Edit("Unlink Dialogue Text", () => fresh()?.Unlink(current));
+                    Rebuild();
+                }) { text = "Unlink", tooltip = "Back to plain text (keeps this language's text; the table entry stays)." });
+            }
+            else
+            {
+                row.Add(new Label("plain text (same in every language)") { style = { flexGrow = 1, color = new Color(0.55f, 0.58f, 0.64f), fontSize = 10 } });
+                if (!string.IsNullOrEmpty(text.Text))
+                {
+                    var button = new Button(() =>
+                    {
+                        if (Resolve() && localize()) Notify();
+                        Rebuild();
+                    }) { text = $"Localize ({m_Locale})", tooltip = "Move this text into the database's Text Table so it can be translated." };
+                    button.SetEnabled(m_Database.textTable != null);
+                    if (m_Database.textTable == null) button.tooltip = "Assign a Text Table in the Settings tab first.";
+                    row.Add(button);
+                }
+            }
+            return row;
+        }
+
+        #endregion
+
+        #region Subclass fields
+
+        /// <summary>Fields a <see cref="DialogueEntry"/> subclass adds (e.g. ShopEntry.items), drawn as bound fields.</summary>
+        private void BuildSubclassFields(SerializedProperty entryProp)
+        {
+            if (entryProp == null || m_Entry.GetType() == typeof(DialogueEntry)) return;
+            var baseFields = new HashSet<string>(typeof(DialogueEntry).GetFields(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic).Select(f => f.Name));
+            var fields = new List<VisualElement>();
+            var child = entryProp.Copy();
+            var end = entryProp.GetEndProperty();
+            for (bool enter = true; child.NextVisible(enter) && !SerializedProperty.EqualContents(child, end); enter = false)
+            {
+                if (baseFields.Contains(child.name)) continue;
+                var field = new PropertyField(child.Copy());
+                field.Bind(m_SerializedDatabase);
+                field.RegisterValueChangeCallback(_ => EntryChanged?.Invoke(m_Entry));
+                fields.Add(field);
+            }
+            if (fields.Count == 0) return;
+            AddSection($"{ObjectNames.NicifyVariableName(m_Entry.GetType().Name)} settings");
+            foreach (var field in fields) Add(field);
         }
 
         #endregion
 
         #region Conditions / actions
 
-        private void BuildList(string title, SerializedProperty listProp, Type baseType, System.Collections.IList list)
+        private void BuildList(string title, string hint, SerializedProperty listProp, Type baseType, System.Collections.IList list)
         {
-            AddSection(title);
+            AddSection(title, hint);
             if (listProp == null) return;
             for (int i = 0; i < listProp.arraySize; i++)
             {
@@ -276,8 +385,7 @@ namespace ND.Dialogue.Editor
                 var element = listProp.GetArrayElementAtIndex(i);
                 var row = new VisualElement();
                 row.AddToClassList("dlg-inspector__row");
-                var label = list[i] != null ? ObjectNames.NicifyVariableName(list[i].GetType().Name) : "(empty)";
-                var field = new PropertyField(element, label);
+                var field = new PropertyField(element, string.Empty);
                 field.Bind(m_SerializedDatabase);
                 field.RegisterValueChangeCallback(_ => EntryChanged?.Invoke(m_Entry));
                 row.Add(field);
@@ -291,14 +399,16 @@ namespace ND.Dialogue.Editor
                 Add(row);
             }
 
-            var add = new Button { text = $"+ Add {(baseType == typeof(DialogueCondition) ? "condition" : "action")}" };
+            bool conditions = baseType == typeof(DialogueCondition);
+            var add = new Button { text = conditions ? "+ Add condition" : "+ Add action" };
+            add.AddToClassList("dlg-inspector__add");
             add.clicked += () =>
             {
                 var menu = new GenericMenu();
-                foreach (var type in TypeCache.GetTypesDerivedFrom(baseType).Where(t => !t.IsAbstract && !t.IsGenericType).OrderBy(t => t.Name))
+                foreach (var type in DialogueRowGUI.ConcreteTypes(baseType))
                 {
                     var t = type;
-                    menu.AddItem(new GUIContent(ObjectNames.NicifyVariableName(t.Name)), false, () =>
+                    menu.AddItem(new GUIContent(DialogueRowGUI.TypeLabel(t)), false, () =>
                     {
                         Edit($"Add {t.Name}", () => list.Add(Activator.CreateInstance(t)));
                         Rebuild();
@@ -315,26 +425,40 @@ namespace ND.Dialogue.Editor
 
         private void BuildLinks()
         {
-            AddSection("Links (tried by priority, highest first)");
+            AddSection("Next  (links)", m_Entry.links.Count > 1 ? LinkPriorityGUI.Explanation : "Where the conversation goes after this line.");
             if (m_Entry.links.Count == 0)
             {
                 Add(new Label("No links: the conversation ends after this entry.") { style = { color = new Color(0.6f, 0.6f, 0.65f) } });
                 return;
             }
+            if (m_Entry.links.Count > 1)
+            {
+                var help = new Foldout { text = "What does priority do?", value = false };
+                help.AddToClassList("dlg-inspector__help");
+                help.Add(new Label(LinkPriorityGUI.Explanation) { style = { whiteSpace = WhiteSpace.Normal, color = new Color(0.7f, 0.74f, 0.8f) } });
+                Add(help);
+            }
+            var labels = LinkPriorityGUI.Labels.ToList();
             for (int i = 0; i < m_Entry.links.Count; i++)
             {
                 int index = i; // by index: the link object may be replaced by SerializedObject edits
                 var link = m_Entry.links[i];
+                var card = new VisualElement();
+                card.AddToClassList("dlg-link");
                 var row = new VisualElement();
                 row.AddToClassList("dlg-inspector__row");
-                var priority = new EnumField(LinkTargetLabel(link), link.priority);
+                var target = new Label(LinkTargetLabel(link));
+                target.AddToClassList("dlg-link__target");
+                row.Add(target);
+                var priority = new PopupField<string>(labels, LinkPriorityGUI.Label(link.priority)) { tooltip = LinkPriorityGUI.Explanation };
+                priority.AddToClassList("dlg-link__priority");
                 priority.RegisterValueChangedCallback(evt =>
                 {
-                    Edit("Change Link Priority", () => m_Entry.links[index].priority = (LinkPriority)evt.newValue);
+                    Edit("Change Link Priority", () => m_Entry.links[index].priority = (LinkPriority)labels.IndexOf(evt.newValue));
                     LinksChanged?.Invoke();
                 });
                 row.Add(priority);
-                var edit = new Button() { text = "Edit", tooltip = "Edit this link's conditions" };
+                var edit = new Button() { text = "Conditions…", tooltip = "Edit this branch's conditions (and the target line's)" };
                 edit.clicked += () =>
                 {
                     if (!Resolve() || index >= m_Entry.links.Count) return;
@@ -354,11 +478,19 @@ namespace ND.Dialogue.Editor
                 }) { text = "✕", tooltip = "Remove link" };
                 remove.AddToClassList("dlg-inspector__remove");
                 row.Add(remove);
-                Add(row);
+                card.Add(row);
 
-                string conditions = DialogueEdgeView.Describe(new DialogueLink { conditions = link.conditions });
-                if (!string.IsNullOrEmpty(conditions))
-                    Add(new Label(conditions) { style = { marginLeft = 16, fontSize = 10, color = new Color(0.65f, 0.7f, 0.78f), whiteSpace = WhiteSpace.Normal } });
+                var targetEntry = m_Database.FindConversation(link.conversationId)?.FindEntry(link.entryId);
+                string chip = DialogueEdgeView.ChipText(link, targetEntry?.conditions);
+                if (!string.IsNullOrEmpty(chip))
+                {
+                    var conditions = new Label(chip) { tooltip = DialogueEdgeView.Describe(link, targetEntry?.conditions) };
+                    conditions.AddToClassList("dlg-chip");
+                    conditions.AddToClassList("dlg-chip--cond");
+                    conditions.AddToClassList("dlg-link__chip");
+                    card.Add(conditions);
+                }
+                Add(card);
             }
         }
 
@@ -375,9 +507,9 @@ namespace ND.Dialogue.Editor
 
         #endregion
 
-        private void AddSection(string text)
+        private void AddSection(string text, string hint = null)
         {
-            var label = new Label(text);
+            var label = new Label(text) { tooltip = hint ?? string.Empty };
             label.AddToClassList("dlg-inspector__section");
             Add(label);
         }

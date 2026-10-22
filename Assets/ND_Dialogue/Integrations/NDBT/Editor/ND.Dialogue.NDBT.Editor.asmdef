@@ -6,7 +6,9 @@
         "ND.Dialogue.Editor",
         "ND.Dialogue.NDBT",
         "ND.Localization",
-        "ND_BehaviorTree.Runtime"
+        "ND_BehaviorTree.Runtime",
+        "ND_BehaviorTreeEditor",
+        "ND.GraphUI"
     ],
     "includePlatforms": [
         "Editor"

@@ -15,6 +15,9 @@ namespace ND.Dialogue.Editor
         protected abstract IEnumerable<string> NamesFrom(IDialogueSchema schema);
         protected abstract string Kind { get; }
 
+        /// <summary>Set for names that use the searchable picker (variables, quests, events); null keeps a plain popup.</summary>
+        protected virtual DialogueNameButton.Kind? ButtonKind => null;
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             if (property.propertyType != SerializedPropertyType.String)
@@ -29,6 +32,19 @@ namespace ND.Dialogue.Editor
             if (names.Count == 0)
             {
                 EditorGUI.PropertyField(position, property, new GUIContent(label.text, $"No {Kind.ToLowerInvariant()}s are declared: type the name."));
+                return;
+            }
+
+            if (ButtonKind.HasValue)
+            {
+                // Variables / quests / events: the searchable, colour-coded picker.
+                EditorGUI.BeginProperty(position, label, property);
+                var field = EditorGUI.PrefixLabel(position, label);
+                int indent = EditorGUI.indentLevel;
+                EditorGUI.indentLevel = 0;
+                DialogueNameButton.Draw(field, property, database, ButtonKind.Value);
+                EditorGUI.indentLevel = indent;
+                EditorGUI.EndProperty();
                 return;
             }
 
@@ -54,6 +70,7 @@ namespace ND.Dialogue.Editor
     {
         protected override IEnumerable<string> NamesFrom(IDialogueSchema schema) => schema.VariableNames;
         protected override string Kind => "Variable";
+        protected override DialogueNameButton.Kind? ButtonKind => DialogueNameButton.Kind.Variable;
     }
 
     [CustomPropertyDrawer(typeof(DialogueQuestAttribute))]
@@ -61,6 +78,7 @@ namespace ND.Dialogue.Editor
     {
         protected override IEnumerable<string> NamesFrom(IDialogueSchema schema) => schema.QuestNames;
         protected override string Kind => "Quest";
+        protected override DialogueNameButton.Kind? ButtonKind => DialogueNameButton.Kind.Quest;
     }
 
     [CustomPropertyDrawer(typeof(DialogueActorAttribute))]
@@ -77,7 +95,7 @@ namespace ND.Dialogue.Editor
         }
 
         protected override IEnumerable<string> NamesFrom(IDialogueSchema schema) =>
-            m_Database != null ? m_Database.actors.Where(a => a != null && !string.IsNullOrEmpty(a.name)).Select(a => a.name) : Enumerable.Empty<string>();
+            m_Database != null ? m_Database.AllActors.Where(a => a != null && !string.IsNullOrEmpty(a.name)).Select(a => a.name) : Enumerable.Empty<string>();
 
         protected override string Kind => "Actor";
     }
@@ -105,5 +123,6 @@ namespace ND.Dialogue.Editor
     {
         protected override IEnumerable<string> NamesFrom(IDialogueSchema schema) => schema.EventNames;
         protected override string Kind => "Event";
+        protected override DialogueNameButton.Kind? ButtonKind => DialogueNameButton.Kind.Event;
     }
 }

@@ -49,6 +49,25 @@
     background-color: rgba(255, 255, 255, 0.10); color: rgb(205, 210, 220);
 }
 
+/* Further lines of the same speaker, and the entry kind (subclass) */
+.dlg-node__lines { margin-top: 3px; padding-left: 6px; border-left-width: 2px; border-left-color: rgba(255, 255, 255, 0.12); }
+.dlg-node__line { white-space: normal; font-size: 11px; color: rgb(185, 189, 198); margin-top: 2px; }
+.dlg-node__kind {
+    margin-left: 6px; padding: 0 6px 0 6px; border-radius: 8px; font-size: 10px;
+    background-color: rgb(40, 70, 70); color: rgb(150, 230, 220);
+}
+
+/* Inspector: one block per line */
+.dlg-line { margin: 2px 0 6px 0; padding: 4px; border-radius: 4px; background-color: rgba(255, 255, 255, 0.04); }
+.dlg-line__head { flex-direction: row; align-items: center; margin-bottom: 2px; }
+.dlg-line__number {
+    width: 18px; height: 18px; border-radius: 9px; margin-right: 6px;
+    -unity-text-align: middle-center; font-size: 10px; -unity-font-style: bold;
+    background-color: rgb(58, 98, 158); color: rgb(255, 255, 255);
+}
+.dlg-line__emotion { width: 160px; margin: 0; }
+.dlg-line__button { width: 22px; margin: 0 0 0 2px; padding: 0; }
+
 /* Chips under the text */
 .dlg-node__chips { flex-direction: row; flex-wrap: wrap; margin-top: 6px; }
 .dlg-chip {
@@ -72,12 +91,104 @@
 .dlg-inspector__row > .unity-property-field, .dlg-inspector__row > .unity-base-field { flex-grow: 1; }
 .dlg-inspector__remove { width: 22px; }
 
-/* Database sidebar */
-.dlg-panel { padding: 4px; min-width: 240px; }
-.dlg-panel__tabs { flex-direction: row; flex-wrap: wrap; margin-bottom: 4px; }
-.dlg-panel__tab { margin: 1px; padding: 2px 6px 2px 6px; }
-.dlg-panel__tab--active { background-color: rgb(58, 98, 158); color: rgb(255, 255, 255); }
+.dlg-inspector__add { margin-top: 2px; }
+.dlg-inspector__help { margin: 0 0 4px 4px; }
+.dlg-inspector-pane { background-color: rgb(40, 41, 45); }
+
+/* Links in the inspector: one card per link */
+.dlg-link { margin: 2px 0 4px 0; padding: 3px 4px 3px 4px; border-radius: 4px; background-color: rgba(255, 255, 255, 0.04); }
+.dlg-link .dlg-inspector__row { align-items: center; }
+.dlg-link__target { flex-grow: 1; flex-shrink: 1; overflow: hidden; -unity-text-align: middle-left; }
+.dlg-link__priority { width: 150px; flex-grow: 0; }
+.dlg-link__chip { align-self: flex-start; margin: 2px 0 0 14px; }
+
+/* Edges: "+" on condition-less edges */
+.dlg-edge__add {
+    width: 16px; height: 16px; border-radius: 8px;
+    -unity-text-align: middle-center; font-size: 12px; -unity-font-style: bold;
+    color: rgba(255, 214, 120, 0.55); background-color: rgba(40, 32, 12, 0.55);
+    border-width: 1px; border-color: rgba(170, 125, 40, 0.45);
+}
+.dlg-edge__add:hover { color: rgb(255, 214, 120); background-color: rgb(70, 55, 20); border-color: rgb(210, 160, 60); }
+
+/* Top bar: sections, fold, conversation row */
+.dlg-nav { background-color: rgb(36, 37, 41); border-bottom-width: 1px; border-color: rgb(25, 25, 28); padding: 3px 6px 3px 6px; }
+.dlg-nav__tabs { flex-direction: row; align-items: center; flex-wrap: wrap; }
+.dlg-nav__tab {
+    margin: 0 2px 0 0; padding: 4px 12px 4px 12px; border-width: 0; border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0); color: rgb(190, 195, 205);
+}
+.dlg-nav__tab:hover { background-color: rgba(255, 255, 255, 0.07); }
+.dlg-nav__tab--active { background-color: rgb(58, 98, 158); color: rgb(255, 255, 255); -unity-font-style: bold; }
+.dlg-nav__fold { width: 24px; border-width: 0; background-color: rgba(0, 0, 0, 0); color: rgb(160, 165, 175); }
+.dlg-nav__sub { flex-direction: row; align-items: center; margin-top: 4px; padding-top: 4px; border-top-width: 1px; border-color: rgba(255, 255, 255, 0.06); }
+.dlg-nav__conversation { width: 200px; }
+.dlg-nav__rename { width: 180px; }
+.dlg-nav__sub #line-count { color: rgb(140, 145, 155); margin-left: 6px; }
+
+/* Section pages */
+.dlg-panel { padding: 8px 12px 8px 12px; }
 .dlg-panel__content { padding: 2px; }
+.dlg-panel__intro { white-space: normal; color: rgb(160, 166, 178); margin: 0 0 8px 2px; }
+.dlg-group {
+    margin: 0 0 10px 0; padding: 6px 8px 8px 8px; border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.035); border-left-width: 3px; border-left-color: rgb(92, 160, 255);
+}
+.dlg-group__title { -unity-font-style: bold; font-size: 13px; color: rgb(225, 230, 240); margin-bottom: 2px; }
+.dlg-group__hint { white-space: normal; font-size: 11px; color: rgb(140, 146, 158); margin-bottom: 6px; }
+
+.dlg-varrow { flex-direction: row; align-items: center; padding: 2px 4px 2px 4px; }
+.dlg-varrow:hover { background-color: rgba(255, 255, 255, 0.05); }
+.dlg-varrow__dot { width: 9px; height: 9px; border-radius: 5px; margin-right: 8px; }
+.dlg-varrow__type { font-size: 11px; }
+
+.dlg-attrgroup { margin: 2px 0 6px 0; }
+.dlg-attrgroup__head { flex-direction: row; align-items: center; }
+
+/* Cards (conversations) */
+.dlg-cards { flex-direction: row; flex-wrap: wrap; }
+.dlg-card {
+    width: 190px; min-height: 56px; margin: 0 8px 8px 0; padding: 8px 10px 8px 10px;
+    border-radius: 6px; border-width: 2px; border-color: rgb(30, 31, 35); background-color: rgb(46, 48, 54);
+}
+.dlg-card:hover { border-color: rgb(90, 95, 110); }
+.dlg-card--selected { border-color: rgb(77, 163, 255); }
+.dlg-card--add { justify-content: center; align-items: center; border-color: rgb(70, 74, 84); background-color: rgba(255, 255, 255, 0.02); color: rgb(170, 175, 185); }
+.dlg-card__title { -unity-font-style: bold; white-space: normal; }
+.dlg-card__sub { font-size: 11px; color: rgb(140, 146, 158); margin-top: 4px; }
+
+/* Character cards: a horizontal strip, like a character-select screen */
+.dlg-charstrip { flex-shrink: 0; margin-bottom: 10px; }
+.dlg-charstrip .unity-scroll-view__content-container { flex-direction: row; }
+.dlg-charcard {
+    width: 104px; height: 140px; margin: 0 8px 4px 0; padding: 6px;
+    align-items: center; border-radius: 8px; border-width: 2px;
+    border-color: rgb(30, 31, 35); background-color: rgb(46, 48, 54);
+}
+.dlg-charcard:hover { border-color: rgb(110, 116, 132); }
+.dlg-charcard--selected { border-color: rgb(255, 196, 70); background-color: rgb(62, 56, 40); }
+.dlg-charcard--add { justify-content: center; border-color: rgb(70, 74, 84); background-color: rgba(255, 255, 255, 0.02); }
+.dlg-charcard--add > Label { font-size: 34px; color: rgb(150, 155, 165); }
+.dlg-charcard__face {
+    width: 76px; height: 76px; border-radius: 6px; margin-bottom: 6px;
+    justify-content: center; align-items: center;
+    -unity-background-scale-mode: scale-to-fit;
+}
+.dlg-charcard__face > Label { font-size: 30px; -unity-font-style: bold; color: rgb(255, 255, 255); }
+.dlg-charcard__name { -unity-font-style: bold; -unity-text-align: middle-center; white-space: normal; }
+.dlg-charcard__sub { font-size: 10px; color: rgb(150, 156, 168); -unity-text-align: middle-center; }
+
+.dlg-detail__header { flex-direction: row; align-items: center; margin-bottom: 8px; }
+.dlg-detail__header #detail-title { font-size: 16px; -unity-font-style: bold; margin-right: 8px; }
+.dlg-pill { font-size: 10px; padding: 1px 8px 1px 8px; margin-right: 4px; border-radius: 8px; background-color: rgba(255, 255, 255, 0.10); color: rgb(205, 210, 220); }
+.dlg-pill--player { background-color: rgb(110, 80, 25); color: rgb(255, 214, 120); }
+.dlg-pill--shared { background-color: rgb(30, 70, 70); color: rgb(150, 230, 220); }
+
+/* Shared characters: a teal edge on their card */
+.dlg-charcard--shared { border-bottom-color: rgb(60, 170, 160); border-bottom-width: 4px; }
+
+/* "Look in this database": one row per emotion */
+.dlg-lookrow { flex-direction: row; align-items: center; margin: 1px 0 1px 0; }
 
 /* Speaker portrait: sits on the node's top edge, like a head over a card. */
 .dlg-node__portrait {
@@ -88,3 +199,69 @@
     height: 64px;
     -unity-background-scale-mode: scale-to-fit;
 }
+
+/* Entry id on nodes */
+.dlg-node__id { font-size: 10px; color: rgb(125, 130, 142); margin-left: 6px; }
+.dlg-node--start .dlg-node__id { display: none; }
+
+/* Test chat: highlight on the graph */
+.dlg-node.dlg-node--visited { border-color: rgb(70, 120, 95); }
+.dlg-node.dlg-node--current { border-color: rgb(40, 220, 130); border-width: 3px; }
+
+/* Test chat: toolbar */
+.dlg-test { background-color: rgb(30, 31, 34); }
+.dlg-test__toolbar { flex-direction: row; align-items: center; padding: 4px 8px 4px 8px; border-bottom-width: 1px; border-color: rgb(20, 20, 22); background-color: rgb(40, 41, 45); }
+.dlg-test__conversation { width: 200px; }
+.dlg-test__entry { width: 56px; }
+.dlg-test__status { color: rgb(150, 156, 168); margin-right: 8px; }
+.dlg-test__graph-toggle { margin-left: 4px; }
+.dlg-test__graph-toggle > Label { min-width: 40px; }
+
+/* Test chat: messages */
+.dlg-chat { flex-grow: 1; background-color: rgb(24, 25, 28); }
+.dlg-chat__log { flex-grow: 1; padding: 10px 14px 10px 14px; }
+.dlg-msg { flex-direction: row; align-items: flex-end; margin-top: 2px; max-width: 88%; }
+.dlg-msg--first { margin-top: 12px; }
+.dlg-msg--npc { align-self: flex-start; }
+.dlg-msg--player { align-self: flex-end; flex-direction: row-reverse; }
+.dlg-msg__avatar {
+    width: 34px; height: 34px; border-radius: 17px; margin-right: 8px; flex-shrink: 0;
+    justify-content: center; align-items: center;
+    -unity-background-scale-mode: scale-and-crop;
+}
+.dlg-msg__avatar > Label { color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 14px; }
+.dlg-msg__body { flex-shrink: 1; }
+.dlg-msg--player .dlg-msg__body { align-items: flex-end; }
+.dlg-msg__meta { flex-direction: row; align-items: center; margin: 0 6px 2px 6px; }
+.dlg-msg__meta #speaker { font-size: 11px; color: rgb(176, 179, 184); margin-right: 6px; }
+.dlg-msg__meta #emotion { font-size: 10px; color: rgb(150, 154, 162); margin-right: 6px; }
+.dlg-msg__id { font-size: 10px; color: rgb(105, 110, 120); }
+.dlg-msg__id:hover { color: rgb(100, 170, 255); }
+.dlg-bubble {
+    padding: 8px 12px 8px 12px; border-radius: 18px; font-size: 13px; white-space: normal;
+    border-left-width: 3px; border-left-color: rgba(0, 0, 0, 0);
+}
+.dlg-bubble--npc { background-color: rgb(58, 59, 62); color: rgb(228, 230, 235); }
+.dlg-bubble--player { background-color: rgb(0, 120, 255); color: rgb(255, 255, 255); }
+
+/* Test chat: what happened after a bubble */
+.dlg-effect { font-size: 10px; color: rgb(140, 146, 158); margin: 1px 0 1px 46px; white-space: normal; }
+.dlg-effect--action { color: rgb(190, 172, 255); }
+.dlg-effect--variable { color: rgb(140, 200, 255); }
+.dlg-effect--quest { color: rgb(255, 200, 110); }
+.dlg-effect--event { color: rgb(120, 230, 215); }
+.dlg-effect--route { color: rgb(150, 154, 162); -unity-font-style: italic; }
+.dlg-chat__system { align-self: center; font-size: 11px; color: rgb(140, 146, 158); margin: 10px 0 4px 0; }
+.dlg-chat__system--start { -unity-font-style: bold; color: rgb(180, 186, 198); }
+
+/* Test chat: reply buttons */
+.dlg-chat__replies {
+    flex-direction: row; flex-wrap: wrap; justify-content: flex-end; padding: 8px;
+    border-top-width: 1px; border-color: rgb(45, 46, 50); min-height: 44px;
+}
+.dlg-reply {
+    margin: 3px; padding: 6px 14px 6px 14px; border-radius: 16px; border-width: 1px;
+    border-color: rgb(0, 120, 255); background-color: rgba(0, 120, 255, 0.12); color: rgb(130, 185, 255);
+}
+.dlg-reply:hover { background-color: rgba(0, 120, 255, 0.28); }
+.dlg-reply--continue { background-color: rgb(0, 120, 255); color: rgb(255, 255, 255); }

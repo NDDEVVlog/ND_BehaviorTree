@@ -10,36 +10,46 @@ using UnityEngine.UIElements;
 namespace ND.Dialogue.Editor
 {
     /// <summary>
-    /// ND Dialogue editor — everything is set up here: the database sidebar (conversations, characters, variables,
-    /// quests, events, settings, plugin tabs), the conversation graph, and the entry inspector.
-    /// Double-click a Dialogue Database asset to open it.
+    /// ND Dialogue editor — everything is set up here. A top bar picks the section; the section gets the whole
+    /// viewport: Conversations is the graph (with the entry inspector on the right, which can be hidden), the others
+    /// (Characters, Variables, Quests, Events, Localization, Settings, plugin sections) are full-width pages.
+    /// The bar folds to one line. Double-click a Dialogue Database asset to open it.
     /// </summary>
     public class DialogueEditorWindow : EditorWindow
     {
         [SerializeField] private DialogueDatabase m_Database;
         [SerializeField] private int m_ConversationId;
         [SerializeField] private string m_Locale;
-        [SerializeField] private bool m_SidebarVisible = true;
+        [SerializeField] private string m_Tab = DialogueDatabasePanel.ConversationsTab;
+        [SerializeField] private bool m_NavFolded;
+        [SerializeField] private bool m_InspectorVisible = true;
 
         private DialogueGraphCanvas m_Canvas;
         private DialogueEntryInspector m_Inspector;
-        private DialogueDatabasePanel m_Sidebar;
-        private VisualElement m_SidebarPane;
-        private TwoPaneSplitView m_Outer;
+        private DialogueDatabasePanel m_Panel;
+        private DialogueTestPanel m_Test;
+        private VisualElement m_Nav;
+        private VisualElement m_NavTabs;
+        private VisualElement m_ConversationBar;
+        private TwoPaneSplitView m_Workspace;
         private ObjectField m_DatabaseField;
         private ToolbarMenu m_PluginMenu;
+        private ToolbarToggle m_InspectorToggle;
         private Label m_Status;
 
         public DialogueDatabase Database => m_Database;
         public DialogueGraphCanvas Canvas => m_Canvas;
+        public DialogueDatabasePanel Panel => m_Panel;
+        public DialogueTestPanel TestPanel => m_Test;
         public string Locale => m_Locale;
+        public string CurrentTab => m_Tab;
 
         [MenuItem("Window/ND Dialogue/Dialogue Editor")]
         public static DialogueEditorWindow ShowWindow()
         {
             var window = GetWindow<DialogueEditorWindow>();
             window.titleContent = new GUIContent("Dialogue Editor");
-            window.minSize = new Vector2(900, 420);
+            window.minSize = new Vector2(720, 420);
             return window;
         }
 
@@ -62,12 +72,14 @@ namespace ND.Dialogue.Editor
         {
             Undo.undoRedoPerformed += OnUndoRedo;
             DialoguePluginRegistry.Changed += OnPluginsChanged;
+            DialogueNameButton.Edited += OnFieldEdited;
         }
 
         private void OnDisable()
         {
             Undo.undoRedoPerformed -= OnUndoRedo;
             DialoguePluginRegistry.Changed -= OnPluginsChanged;
+            DialogueNameButton.Edited -= OnFieldEdited;
         }
 
         /// <summary>Args for plugin callbacks, describing the window's current state.</summary>
@@ -87,15 +99,23 @@ namespace ND.Dialogue.Editor
         {
             if (string.IsNullOrEmpty(m_Locale)) m_Locale = LocaleCodes.Project.FirstOrDefault() ?? "en";
             var root = rootVisualElement;
+            var sheet = DialogueEditorStyles.Graph;
+            if (sheet != null) root.styleSheets.Add(sheet);
             root.Add(BuildToolbar());
 
-            m_Sidebar = new DialogueDatabasePanel { PluginArgs = () => PluginArgs() };
-            m_Sidebar.ConversationSelected += id =>
+            m_Nav = new VisualElement();
+            m_Nav.AddToClassList("dlg-nav");
+            root.Add(m_Nav);
+
+            m_Panel = new DialogueDatabasePanel { PluginArgs = () => PluginArgs() };
+            m_Panel.ConversationSelected += id =>
             {
                 m_ConversationId = id;
+                ShowTab(DialogueDatabasePanel.ConversationsTab);
                 LoadConversation();
             };
-            m_Sidebar.DatabaseChanged += OnSidebarChanged;
+            m_Panel.DatabaseChanged += OnPanelChanged;
+            m_Panel.TabRequested += ShowTab;
 
             m_Canvas = new DialogueGraphCanvas { HostWindow = this, PluginArgs = (entry, position) => PluginArgs(entry, position) };
             m_Canvas.SelectionChanged += OnSelectionChanged;
@@ -105,36 +125,31 @@ namespace ND.Dialogue.Editor
             m_Inspector.EntryChanged += entry => m_Canvas.RefreshNode(entry);
             m_Inspector.LinksChanged += () => m_Canvas.Reload();
             var inspectorScroll = new ScrollView(ScrollViewMode.Vertical);
+            inspectorScroll.AddToClassList("dlg-inspector-pane");
             inspectorScroll.Add(m_Inspector);
 
-            var right = new TwoPaneSplitView(1, 340, TwoPaneSplitViewOrientation.Horizontal);
-            right.Add(m_Canvas);
-            right.Add(inspectorScroll);
+            m_Workspace = new TwoPaneSplitView(1, 360, TwoPaneSplitViewOrientation.Horizontal) { style = { flexGrow = 1 } };
+            m_Workspace.Add(m_Canvas);
+            m_Workspace.Add(inspectorScroll);
+            root.Add(m_Workspace);
+            root.Add(m_Panel);
 
-            var outer = m_Outer = new TwoPaneSplitView(0, 290, TwoPaneSplitViewOrientation.Horizontal) { style = { flexGrow = 1 } };
-            m_SidebarPane = new VisualElement { style = { flexGrow = 1 } };
-            m_SidebarPane.Add(m_Sidebar);
-            outer.Add(m_SidebarPane);
-            outer.Add(right);
-            root.Add(outer);
-            ApplySidebarVisibility(outer);
+            m_Test = new DialogueTestPanel();
+            root.Add(m_Test);
+            m_Canvas.TestRequested += (conversationId, entryId) =>
+            {
+                ShowTab(DialogueDatabasePanel.TestTab);
+                m_Test.StartAt(conversationId, entryId);
+            };
 
             Refresh();
         }
 
-        #region Toolbar
+        #region Toolbar and top bar
 
         private VisualElement BuildToolbar()
         {
             var bar = new Toolbar();
-            var sidebarToggle = new ToolbarToggle { text = "Database", value = m_SidebarVisible, tooltip = "Show the database sidebar (characters, variables, events, settings…)" };
-            sidebarToggle.RegisterValueChangedCallback(evt =>
-            {
-                m_SidebarVisible = evt.newValue;
-                ApplySidebarVisibility(m_Outer);
-            });
-            bar.Add(sidebarToggle);
-
             m_DatabaseField = new ObjectField { objectType = typeof(DialogueDatabase), allowSceneObjects = false, value = m_Database, style = { width = 220 } };
             m_DatabaseField.RegisterValueChangedCallback(evt => SetDatabase(evt.newValue as DialogueDatabase));
             bar.Add(m_DatabaseField);
@@ -150,7 +165,9 @@ namespace ND.Dialogue.Editor
             {
                 m_Locale = evt.newValue;
                 m_Canvas.SetPreviewLocale(m_Locale);
+                m_Test?.SetLocale(m_Locale);
                 OnSelectionChanged();
+                if (m_Tab != DialogueDatabasePanel.ConversationsTab) m_Panel.Rebuild();
             });
             bar.Add(localeField);
 
@@ -160,6 +177,13 @@ namespace ND.Dialogue.Editor
 
             bar.Add(new ToolbarButton(Validate) { text = "Validate" });
             bar.Add(new ToolbarButton(Save) { text = "Save" });
+            m_InspectorToggle = new ToolbarToggle { text = "Inspector", value = m_InspectorVisible, tooltip = "Show the entry inspector next to the graph" };
+            m_InspectorToggle.RegisterValueChangedCallback(evt =>
+            {
+                m_InspectorVisible = evt.newValue;
+                ApplyLayout();
+            });
+            bar.Add(m_InspectorToggle);
             m_Status = new Label { style = { unityTextAlign = TextAnchor.MiddleLeft, marginLeft = 6, color = new Color(1f, 0.75f, 0.4f) } };
             bar.Add(m_Status);
             return bar;
@@ -179,11 +203,116 @@ namespace ND.Dialogue.Editor
             }
         }
 
-        private void ApplySidebarVisibility(TwoPaneSplitView outer)
+        /// <summary>
+        /// The section tabs (folded: only the current one, click to unfold), and — for Conversations — a row to pick,
+        /// add, rename or delete the conversation shown on the graph.
+        /// </summary>
+        private void RebuildNav()
         {
-            if (outer == null) return;
-            if (m_SidebarVisible) outer.UnCollapse();
-            else outer.CollapseChild(0);
+            if (m_Nav == null) return;
+            m_Nav.Clear();
+            m_Nav.EnableInClassList("dlg-nav--folded", m_NavFolded);
+
+            m_NavTabs = new VisualElement();
+            m_NavTabs.AddToClassList("dlg-nav__tabs");
+            if (m_NavFolded)
+            {
+                var current = new Button(() => SetNavFolded(false)) { text = $"▸  {m_Tab}", tooltip = "Show all sections" };
+                current.AddToClassList("dlg-nav__tab");
+                current.AddToClassList("dlg-nav__tab--active");
+                m_NavTabs.Add(current);
+            }
+            else
+            {
+                foreach (var title in m_Panel.TabTitles)
+                {
+                    var t = title;
+                    var tab = new Button(() => ShowTab(t)) { text = t };
+                    tab.AddToClassList("dlg-nav__tab");
+                    tab.EnableInClassList("dlg-nav__tab--active", t == m_Tab);
+                    m_NavTabs.Add(tab);
+                }
+            }
+            m_NavTabs.Add(new VisualElement { style = { flexGrow = 1 } });
+            var fold = new Button(() => SetNavFolded(!m_NavFolded)) { text = m_NavFolded ? "▾" : "▴", tooltip = m_NavFolded ? "Unfold the bar" : "Fold the bar to one line" };
+            fold.AddToClassList("dlg-nav__fold");
+            m_NavTabs.Add(fold);
+            m_Nav.Add(m_NavTabs);
+
+            m_ConversationBar = null;
+            if (!m_NavFolded && m_Tab == DialogueDatabasePanel.ConversationsTab && m_Database != null)
+                m_Nav.Add(m_ConversationBar = BuildConversationBar());
+        }
+
+        private VisualElement BuildConversationBar()
+        {
+            var bar = new VisualElement();
+            bar.AddToClassList("dlg-nav__sub");
+            var conversations = m_Database.conversations.Where(c => c != null).ToList();
+            var current = m_Database.FindConversation(m_ConversationId);
+
+            if (conversations.Count > 0)
+            {
+                var titles = conversations.Select(c => c.title).ToList();
+                var picker = new PopupField<string>(titles, current != null ? current.title : titles[0]) { tooltip = "Conversation shown on the graph" };
+                picker.AddToClassList("dlg-nav__conversation");
+                picker.RegisterValueChangedCallback(evt =>
+                {
+                    var picked = m_Database.FindConversation(evt.newValue);
+                    if (picked == null) return;
+                    m_ConversationId = picked.id;
+                    LoadConversation();
+                    RebuildNav();
+                });
+                bar.Add(picker);
+            }
+            bar.Add(new Button(() => m_Panel.AddConversation()) { text = "+ New", tooltip = "Add a conversation" });
+            if (current != null)
+            {
+                var rename = new TextField { value = current.title, isDelayed = true, tooltip = "Rename (Enter to apply)" };
+                rename.AddToClassList("dlg-nav__rename");
+                rename.RegisterValueChangedCallback(evt =>
+                {
+                    m_Panel.RenameConversation(m_Database.FindConversation(m_ConversationId), evt.newValue);
+                    RebuildNav();
+                });
+                bar.Add(rename);
+                bar.Add(new Label($"{current.entries.Count - 1} lines") { name = "line-count" });
+                bar.Add(new VisualElement { style = { flexGrow = 1 } });
+                bar.Add(new Button(() => m_Panel.DeleteConversation(m_Database.FindConversation(m_ConversationId))) { text = "Delete", tooltip = "Delete this conversation" });
+            }
+            return bar;
+        }
+
+        private void SetNavFolded(bool folded)
+        {
+            m_NavFolded = folded;
+            RebuildNav();
+        }
+
+        /// <summary>Shows a section: the graph for Conversations, else that section's page over the whole viewport.</summary>
+        public void ShowTab(string title)
+        {
+            m_Tab = string.IsNullOrEmpty(title) ? DialogueDatabasePanel.ConversationsTab : title;
+            if (m_Panel == null) return; // before CreateGUI
+            if (m_Tab == DialogueDatabasePanel.TestTab) m_Test.Bind(m_Database, m_Locale, this, m_ConversationId);
+            else if (m_Tab != DialogueDatabasePanel.ConversationsTab) m_Panel.ShowTab(m_Tab);
+            ApplyLayout();
+            RebuildNav();
+        }
+
+        private void ApplyLayout()
+        {
+            if (m_Workspace == null) return;
+            bool graph = m_Tab == DialogueDatabasePanel.ConversationsTab;
+            bool test = m_Tab == DialogueDatabasePanel.TestTab;
+            m_Workspace.style.display = graph ? DisplayStyle.Flex : DisplayStyle.None;
+            m_Test.style.display = test ? DisplayStyle.Flex : DisplayStyle.None;
+            m_Panel.style.display = graph || test ? DisplayStyle.None : DisplayStyle.Flex;
+            if (m_InspectorVisible) m_Workspace.UnCollapse();
+            else m_Workspace.CollapseChild(1);
+            m_InspectorToggle?.SetValueWithoutNotify(m_InspectorVisible);
+            m_InspectorToggle?.SetEnabled(graph);
         }
 
         #endregion
@@ -201,8 +330,10 @@ namespace ND.Dialogue.Editor
             m_DatabaseField?.SetValueWithoutNotify(m_Database);
             if (m_Database != null && m_Database.FindConversation(m_ConversationId) == null)
                 m_ConversationId = m_Database.conversations.FirstOrDefault(c => c != null)?.id ?? 0;
-            m_Sidebar.Bind(m_Database, m_ConversationId);
+            m_Panel.Bind(m_Database, m_ConversationId);
+            if (!m_Panel.TabTitles.Contains(m_Tab)) m_Tab = DialogueDatabasePanel.ConversationsTab;
             LoadConversation();
+            ShowTab(m_Tab);
             titleContent = new GUIContent(m_Database != null ? $"Dialogue: {m_Database.name}" : "Dialogue Editor");
         }
 
@@ -213,19 +344,36 @@ namespace ND.Dialogue.Editor
             if (conversation != null) m_Canvas.schedule.Execute(() => m_Canvas.FrameDefault()).StartingIn(50); // after layout
         }
 
-        /// <summary>Redraws graph, inspector and sidebar after a change made outside them (plugins, tools).</summary>
+        /// <summary>Redraws graph, inspector and sections after a change made outside them (plugins, tools, the bridge).</summary>
         public void NotifyDatabaseChanged()
         {
             if (m_Canvas == null) return;
-            m_Canvas.Reload();
-            m_Sidebar.Rebuild();
+            if (m_Database != null && m_Database.FindConversation(m_ConversationId) == null)
+                m_ConversationId = m_Database.conversations.FirstOrDefault(c => c != null)?.id ?? 0;
+            if (m_Canvas.Conversation == null || m_Canvas.Conversation.id != m_ConversationId) LoadConversation();
+            else m_Canvas.Reload();
+            if (m_Tab != DialogueDatabasePanel.ConversationsTab) m_Panel.Rebuild();
+            RebuildNav();
             SetStatus(string.Empty);
         }
 
-        private void OnSidebarChanged()
+        private void OnPanelChanged()
         {
-            // Characters/emotions/events changed: node labels and the inspector's pickers depend on them.
-            m_Canvas.Reload();
+            // Characters/emotions/events/conversations changed: node labels, the inspector's pickers and the bar depend on them.
+            if (m_Database != null && m_Database.FindConversation(m_ConversationId) == null)
+            {
+                m_ConversationId = m_Database.conversations.FirstOrDefault(c => c != null)?.id ?? 0;
+                LoadConversation();
+            }
+            else m_Canvas.Reload();
+            RebuildNav();
+        }
+
+        /// <summary>A picker or deferred menu wrote a field (variable name, OR-group row…): redraw what shows it.</summary>
+        private void OnFieldEdited(Object target)
+        {
+            if (m_Canvas == null || target != m_Database) return;
+            m_Canvas.RefreshAll();
         }
 
         private void OnSelectionChanged()
@@ -247,7 +395,9 @@ namespace ND.Dialogue.Editor
         private void OnPluginsChanged()
         {
             RebuildPluginMenu();
-            m_Sidebar?.Rebuild();
+            if (m_Panel == null) return;
+            if (!m_Panel.TabTitles.Contains(m_Tab)) m_Tab = DialogueDatabasePanel.ConversationsTab;
+            ShowTab(m_Tab);
             OnSelectionChanged();
         }
 

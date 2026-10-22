@@ -36,6 +36,9 @@ namespace ND.Dialogue.Editor
         private readonly Label m_Emotion;
         private readonly Label m_Text;
         private readonly VisualElement m_Chips;
+        private readonly VisualElement m_MoreLines;
+        private readonly Label m_Kind;
+        private readonly Label m_IdLabel;
         private readonly VisualElement m_Portrait;
 
         /// <summary>The portrait shown above the node (null when the speaker's emotion has none).</summary>
@@ -64,6 +67,14 @@ namespace ND.Dialogue.Editor
             m_Header.Add(m_Avatar);
             m_Header.Add(m_Speaker);
             m_Header.Add(m_Emotion);
+            m_Kind = new Label { name = "kind", pickingMode = PickingMode.Ignore };
+            m_Kind.AddToClassList("dlg-node__kind");
+            m_Header.Add(m_Kind);
+            m_Header.Add(new VisualElement { pickingMode = PickingMode.Ignore, style = { flexGrow = 1 } });
+            m_IdLabel = new Label { name = "entry-id", tooltip = "Entry id: right-click → Copy entry id, or Test from here" };
+            m_IdLabel.AddToClassList("dlg-node__id");
+            m_IdLabel.selection.isSelectable = true;
+            m_Header.Add(m_IdLabel);
 
             m_Text = new Label { name = "text", pickingMode = PickingMode.Ignore };
             m_Text.AddToClassList("dlg-node__text");
@@ -71,6 +82,9 @@ namespace ND.Dialogue.Editor
             m_Chips.AddToClassList("dlg-node__chips");
             Add(m_Header);
             Add(m_Text);
+            m_MoreLines = new VisualElement { name = "more-lines", pickingMode = PickingMode.Ignore };
+            m_MoreLines.AddToClassList("dlg-node__lines");
+            Add(m_MoreLines);
             Add(m_Chips);
 
             // Sits on top of the node's upper edge (the node does not clip its children).
@@ -98,11 +112,11 @@ namespace ND.Dialogue.Editor
             else if (Entry.isPassthrough) m_Speaker.text = string.IsNullOrEmpty(Entry.title) ? "⤳  routing" : $"⤳  {Entry.title}";
             else
             {
-                m_Speaker.text = actor != null ? actor.ResolveDisplayName() : $"<unknown actor {Entry.actorId}>";
+                m_Speaker.text = actor != null ? Database.DisplayNameOf(actor) : $"<unknown actor {Entry.actorId}>";
                 m_Speaker.tooltip = actor != null ? $"{actor.name}{(actor.isPlayer ? " (player)" : string.Empty)}" : string.Empty;
                 if (!string.IsNullOrEmpty(Entry.emotion))
                 {
-                    m_Emotion.text = Entry.emotion;
+                    m_Emotion.text = $"{DialogueEmotionGlyph.For(Entry.emotion)} {Entry.emotion}";
                     m_Emotion.style.display = DisplayStyle.Flex;
                 }
             }
@@ -120,6 +134,7 @@ namespace ND.Dialogue.Editor
                 m_Text.style.display = DisplayStyle.Flex;
             }
 
+            RefreshMoreLines(previewLocale);
             RefreshChips();
             RefreshPortrait(actor, previewLocale);
             if (PortraitSprite == null && actor != null && !IsStart && !Entry.isPassthrough)
@@ -129,8 +144,37 @@ namespace ND.Dialogue.Editor
                 m_Avatar.style.backgroundColor = ActorColor(actor.name);
                 m_Avatar.style.display = DisplayStyle.Flex;
             }
+            bool subclass = Entry.GetType() != typeof(DialogueEntry);
+            m_Kind.text = subclass ? UnityEditor.ObjectNames.NicifyVariableName(Entry.GetType().Name) : string.Empty;
+            m_Kind.style.display = subclass ? DisplayStyle.Flex : DisplayStyle.None;
+            m_IdLabel.text = IsStart ? string.Empty : $"#{Entry.id}";
             tooltip = Entry.title;
         }
+
+        /// <summary>The entry's further lines, one row each with the emotion's emoji (the first line is the main text).</summary>
+        private void RefreshMoreLines(string previewLocale)
+        {
+            m_MoreLines.Clear();
+            int count = IsStart ? 0 : Entry.LineCount;
+            for (int i = 1; i < count; i++)
+            {
+                string line = DialogueTextEditing.Read(Entry.LineText(i), previewLocale);
+                string emotion = Entry.LineEmotion(i);
+                var row = new Label($"{DialogueEmotionGlyph.For(emotion)}  {(line == null ? "<no text>" : Truncate(line, LinePreviewLength))}")
+                {
+                    pickingMode = PickingMode.Ignore,
+                    tooltip = string.IsNullOrEmpty(emotion) ? string.Empty : emotion
+                };
+                row.AddToClassList("dlg-node__line");
+                row.EnableInClassList("dlg-node__text--missing", line == null);
+                m_MoreLines.Add(row);
+            }
+            m_MoreLines.style.display = m_MoreLines.childCount > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            if (count > 1 && !string.IsNullOrEmpty(m_Text.text) && m_Text.style.display != DisplayStyle.None)
+                m_Text.text = $"{DialogueEmotionGlyph.For(Entry.LineEmotion(0))}  {m_Text.text}";
+        }
+
+        private const int LinePreviewLength = 70;
 
         /// <summary>A stable, readable colour per character name.</summary>
         public static Color ActorColor(string actorName)
@@ -172,7 +216,7 @@ namespace ND.Dialogue.Editor
 
         private void RefreshPortrait(Actor actor, string previewLocale)
         {
-            var emotion = IsStart || Entry.isPassthrough ? null : EmotionOf(actor, Entry.emotion);
+            var emotion = IsStart || Entry.isPassthrough ? null : EmotionOf(Database, actor, Entry.emotion);
             PortraitSprite = emotion != null ? EditorPortrait(emotion, previewLocale) : null;
             if (PortraitSprite == null)
             {
@@ -186,11 +230,13 @@ namespace ND.Dialogue.Editor
             m_Portrait.tooltip = $"{actor.name} · {emotion.id}";
         }
 
-        /// <summary>The line's emotion, else the actor's default — without the runtime's error log for a missing one.</summary>
-        private static ActorEmotion EmotionOf(Actor actor, string emotionId)
+        /// <summary>The line's emotion as it looks in <paramref name="database"/> (its look first), else the actor's — without the runtime's error log for a missing one.</summary>
+        public static ActorEmotion EmotionOf(DialogueDatabase database, Actor actor, string emotionId)
         {
             if (actor == null) return null;
             string wanted = string.IsNullOrEmpty(emotionId) ? actor.defaultEmotion : emotionId;
+            var overridden = database != null ? database.FindLook(actor.id)?.FindEmotion(wanted) : null;
+            if (overridden != null) return overridden;
             foreach (var e in actor.emotions)
                 if (e != null && e.id == wanted) return e;
             return null;
@@ -208,26 +254,32 @@ namespace ND.Dialogue.Editor
             return emotion.portrait;
         }
 
-        private static string Truncate(string text)
+        private static string Truncate(string text, int length = PreviewLength)
         {
             text = text.Replace('\n', ' ');
-            return text.Length <= PreviewLength ? text : text.Substring(0, PreviewLength - 1) + "…";
+            return text.Length <= length ? text : text.Substring(0, length - 1) + "…";
         }
     }
 
-    /// <summary>A link inside the conversation; shows its priority when it is not Normal.</summary>
     /// <summary>
-    /// A link inside the conversation. Its label shows the priority (when not Normal) and the link's conditions;
-    /// clicking the label (or double-clicking the edge) opens the link editor.
+    /// A link inside the conversation. The line colour shows its priority; one amber chip sums up every condition the
+    /// branch needs (its own and the target line's entry conditions), with the details as tooltip. A condition-less
+    /// edge shows a faint "+" instead. Clicking the chip / "+" (or double-clicking the edge) opens the link editor.
     /// </summary>
     public class DialogueEdgeView : GraphEdgeView
     {
         private const int MaxConditionLines = 3;
+        private const int ChipTextLimit = 24;
+
+        private readonly Label m_AddChip;
 
         public DialogueLink Link { get; set; }
 
-        /// <summary>Raised when the label is clicked (the canvas opens the link editor).</summary>
+        /// <summary>Raised when the chip or the "+" is clicked (the canvas opens the link editor).</summary>
         public event System.Action<DialogueEdgeView> LabelClicked;
+
+        /// <summary>The faint "+" shown on edges without conditions (for tests and styling).</summary>
+        public Label AddChip => m_AddChip;
 
         public DialogueEdgeView(GraphNodeView from, EdgeTheme theme) : base(from, theme)
         {
@@ -242,8 +294,19 @@ namespace ND.Dialogue.Editor
             s.borderTopLeftRadius = s.borderTopRightRadius = s.borderBottomLeftRadius = s.borderBottomRightRadius = 8;
             s.borderTopWidth = s.borderBottomWidth = s.borderLeftWidth = s.borderRightWidth = 1;
             s.borderTopColor = s.borderBottomColor = s.borderLeftColor = s.borderRightColor = new Color(0.85f, 0.6f, 0.15f, 0.8f);
-            EdgeLabel.tooltip = "Click to edit this link's conditions and priority.";
-            EdgeLabel.RegisterCallback<PointerDownEvent>(evt =>
+            EdgeLabel.tooltip = "Click to edit this branch's conditions and priority.";
+            RegisterClick(EdgeLabel);
+
+            m_AddChip = new Label("+") { pickingMode = PickingMode.Position, tooltip = "Add a condition to this branch" };
+            m_AddChip.AddToClassList("dlg-edge__add");
+            m_AddChip.style.position = Position.Absolute;
+            Add(m_AddChip);
+            RegisterClick(m_AddChip);
+        }
+
+        private void RegisterClick(VisualElement element)
+        {
+            element.RegisterCallback<PointerDownEvent>(evt =>
             {
                 if (evt.button != 0 || evt.altKey) return;
                 LabelClicked?.Invoke(this);
@@ -251,32 +314,46 @@ namespace ND.Dialogue.Editor
             });
         }
 
-        private const int ChipTextLimit = 24;
+        private IReadOnlyList<DialogueCondition> TargetConditions => (ToNode as DialogueNodeView)?.Entry?.conditions;
 
-        /// <summary>
-        /// The edge shows its link at a glance: priority as line colour/weight (High = thick orange, Low = dim), and
-        /// conditions as one small chip — the condition itself when there is one short one, else "◆ n". The full
-        /// description is the chip's tooltip.
-        /// </summary>
+        /// <summary>Re-reads the link (and the target line's entry conditions): chip text, tooltip, priority colour.</summary>
         public void RefreshLabel()
         {
-            Text = ChipText(Link);
-            EdgeLabel.tooltip = Link == null ? string.Empty : Describe(Link) + "\n\nClick to edit.";
+            var target = TargetConditions;
+            Text = ChipText(Link, target);
+            EdgeLabel.tooltip = Link == null ? string.Empty : Describe(Link, target) + "\n\nClick to edit.";
+            m_AddChip.style.display = Link != null && string.IsNullOrEmpty(Text) ? DisplayStyle.Flex : DisplayStyle.None;
             var priority = Link?.priority ?? LinkPriority.Normal;
             SetHighlight(PriorityColor(priority), priority == LinkPriority.High, false);
         }
 
-        /// <summary>Chip text: empty without conditions; the condition when there is one short one; else "◆ count".</summary>
-        public static string ChipText(DialogueLink link)
+        protected override void OnPathDrawn(Vector2 start, Vector2 end)
         {
-            var conditions = link?.conditions;
-            if (conditions == null || conditions.Count == 0) return string.Empty;
-            if (conditions.Count == 1 && conditions[0] != null)
+            if (m_AddChip.style.display == DisplayStyle.None) return;
+            Vector2 mid = PointAt(0.5f, start, end);
+            m_AddChip.style.left = mid.x - m_AddChip.layout.width / 2f;
+            m_AddChip.style.top = mid.y - m_AddChip.layout.height / 2f;
+        }
+
+        /// <summary>Chip text of a link alone (see <see cref="ChipText(DialogueLink, IReadOnlyList{DialogueCondition})"/>).</summary>
+        public static string ChipText(DialogueLink link) => ChipText(link, null);
+
+        /// <summary>
+        /// Chip text: empty without conditions; the condition when there is exactly one short one (link or target
+        /// line); else "◆ count" of all of them.
+        /// </summary>
+        public static string ChipText(DialogueLink link, IReadOnlyList<DialogueCondition> targetConditions)
+        {
+            var all = new List<DialogueCondition>();
+            if (link?.conditions != null) all.AddRange(link.conditions);
+            if (targetConditions != null) all.AddRange(targetConditions);
+            if (all.Count == 0) return string.Empty;
+            if (all.Count == 1 && all[0] != null)
             {
-                string single = conditions[0].Describe();
+                string single = all[0].Describe();
                 if (single.Length <= ChipTextLimit) return "◆ " + single;
             }
-            return $"◆ {conditions.Count}";
+            return $"◆ {all.Count}";
         }
 
         public static Color? PriorityColor(LinkPriority priority)
@@ -292,28 +369,39 @@ namespace ND.Dialogue.Editor
         }
 
         /// <summary>"▲ High" plus one "◆ condition" line per condition (at most 3, then "… +n more"); empty for a plain link.</summary>
-        public static string Describe(DialogueLink link)
+        public static string Describe(DialogueLink link) => Describe(link, null);
+
+        /// <summary>Like <see cref="Describe(DialogueLink)"/>, then the target line's entry conditions under their own heading.</summary>
+        public static string Describe(DialogueLink link, IReadOnlyList<DialogueCondition> targetConditions)
         {
             if (link == null) return string.Empty;
             var sb = new StringBuilder();
             if (link.priority != LinkPriority.Normal) sb.Append(link.priority == LinkPriority.High || link.priority == LinkPriority.AboveNormal ? "▲ " : "▼ ").Append(link.priority);
-            var conditions = link.conditions;
-            if (conditions != null)
+            AppendConditions(sb, link.conditions);
+            if (targetConditions != null && targetConditions.Count > 0)
             {
-                int shown = 0;
-                foreach (var condition in conditions)
-                {
-                    if (shown == MaxConditionLines)
-                    {
-                        sb.Append('\n').Append($"… +{conditions.Count - shown} more");
-                        break;
-                    }
-                    if (sb.Length > 0) sb.Append('\n');
-                    sb.Append("◆ ").Append(condition != null ? condition.Describe() : "(empty)");
-                    shown++;
-                }
+                if (sb.Length > 0) sb.Append('\n');
+                sb.Append("Target line (every way in):");
+                AppendConditions(sb, targetConditions);
             }
             return sb.ToString();
+        }
+
+        private static void AppendConditions(StringBuilder sb, IReadOnlyList<DialogueCondition> conditions)
+        {
+            if (conditions == null) return;
+            int shown = 0;
+            foreach (var condition in conditions)
+            {
+                if (shown == MaxConditionLines)
+                {
+                    sb.Append('\n').Append($"… +{conditions.Count - shown} more");
+                    break;
+                }
+                if (sb.Length > 0) sb.Append('\n');
+                sb.Append("◆ ").Append(condition != null ? condition.Describe() : "(empty)");
+                shown++;
+            }
         }
     }
 }

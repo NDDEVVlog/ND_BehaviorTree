@@ -56,6 +56,38 @@ namespace ND.Dialogue.Editor.Plugins
         public static IEnumerable<DialoguePluginPanel> DatabaseTabs => Active.SelectMany(c => c.Tabs);
         public static IEnumerable<DialoguePluginPanel> InspectorSections => Active.SelectMany(c => c.InspectorSections);
         public static IEnumerable<DialoguePluginRule> ValidationRules => Active.SelectMany(c => c.Rules);
+        public static IEnumerable<DialogueSchemaEditor> SchemaEditors => Active.SelectMany(c => c.SchemaEditors);
+
+        /// <summary>The schema editor for <paramref name="source"/>'s type (most derived registration wins), or null.</summary>
+        public static DialogueSchemaEditor SchemaEditorFor(DialogueSchemaSource source)
+        {
+            if (source == null) return null;
+            for (var type = source.GetType(); type != null && type != typeof(ScriptableObject); type = type.BaseType)
+            {
+                var found = SchemaEditors.FirstOrDefault(e => e.SourceType == type);
+                if (found != null) return found;
+            }
+            return null;
+        }
+
+        /// <summary>The first colour a plugin gives <paramref name="variable"/>, or null.</summary>
+        public static Color? VariableColor(DialogueDatabase database, string variable)
+        {
+            foreach (var context in Active)
+                foreach (var provider in context.VariableColors)
+                {
+                    try
+                    {
+                        var color = provider(database, variable);
+                        if (color.HasValue) return color;
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"[Dialogue Plugins] '{context.Plugin.DisplayName}' variable colour for '{variable}' threw: {e}");
+                    }
+                }
+            return null;
+        }
 
         /// <summary>Registers a plugin (again: an installed plugin is replaced). False (logged) if its Register threw.</summary>
         public static bool Install(DialoguePlugin plugin)
@@ -113,6 +145,20 @@ namespace ND.Dialogue.Editor.Plugins
             {
                 var i = item;
                 menu.AppendAction(i.Path, _ => Run(i, args()), _ => IsEnabled(i, args()) ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+            }
+        }
+
+        /// <summary>Builds a schema editor's part (variables or quests); a throwing builder yields an error box.</summary>
+        public static VisualElement BuildSchemaEditor(DialogueSchemaEditor editor, Func<DialoguePluginArgs, VisualElement> part, DialoguePluginArgs args)
+        {
+            try
+            {
+                return part(args) ?? new VisualElement();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Dialogue Plugins] '{editor.Plugin.DisplayName}' schema editor threw: {e}");
+                return new HelpBox($"'{editor.Plugin.DisplayName}' failed to build this editor (see Console).", HelpBoxMessageType.Error);
             }
         }
 
