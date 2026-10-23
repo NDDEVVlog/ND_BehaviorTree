@@ -510,6 +510,11 @@ namespace ND.Dialogue
                         if (target == null) issues.Add($"{where}: link to unknown conversation {link.conversationId}.");
                         else if (target.FindEntry(link.entryId) == null) issues.Add($"{where}: link to missing entry {link.entryId} in '{target.title}'.");
                         string linkWhere = $"{where} link → {link.entryId}";
+                        if (!string.IsNullOrEmpty(link.weightVariable))
+                        {
+                            if (!schema.TryGetVariableType(link.weightVariable, out var weightType)) issues.Add($"{linkWhere}: weight variable '{link.weightVariable}' is unknown.");
+                            else if (weightType != VariableType.Int && weightType != VariableType.Float) issues.Add($"{linkWhere}: weight variable '{link.weightVariable}' is {weightType}, not a number.");
+                        }
                         foreach (var condition in link.conditions ?? new List<DialogueCondition>())
                         {
                             if (condition == null) issues.Add($"{linkWhere}: empty condition slot.");

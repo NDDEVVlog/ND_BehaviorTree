@@ -203,6 +203,8 @@ namespace ND.Dialogue.Editor
                 Chip("sequence", $"🎬 {commands.Count}", Mathf.Max(1, commands.Count), commands.Select(c => c.ToString()), "Sequence (plays when the entry starts)");
             }
             foreach (var e in events) Chip("event", $"⚡ {e.eventName}", 1, new[] { e.Describe() }, "Fires a gameplay event");
+            string route = Entry.links.Count > 1 ? RouteModeGUI.Badge(Entry.routeMode) : null;
+            if (route != null) Chip("route", route, 1, new[] { RouteModeGUI.Label(Entry.routeMode) }, "Picks one of its valid NPC lines");
             foreach (var link in Entry.links)
             {
                 if (link.conversationId == Conversation.id) continue;

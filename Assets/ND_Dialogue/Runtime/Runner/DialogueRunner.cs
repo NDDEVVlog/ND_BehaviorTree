@@ -45,6 +45,29 @@ namespace ND.Dialogue
 
         /// <summary>More lines of the same entry follow this one.</summary>
         public bool HasMoreLines => LineIndex + 1 < LineCount;
+
+        /// <summary>The line's middleware voice (an FMOD event…), or null.</summary>
+        public DialogueVoiceCue VoiceCue => Entry != null && LineIndex < Entry.LineCount ? Entry.LineVoiceCue(LineIndex) : null;
+
+        /// <summary>The line has a voice of any kind (clip or middleware cue).</summary>
+        public bool HasVoice => Voice != null || VoiceCue != null;
+    }
+
+    /// <summary>What an entry with a <see cref="RouteMode"/> picked: the <paramref name="Index"/>-th of <paramref name="Count"/> valid NPC lines.</summary>
+    public readonly struct RouteChoice
+    {
+        public readonly Conversation Conversation;
+        public readonly DialogueEntry From;
+        public readonly RouteMode Mode;
+        public readonly Conversation PickedConversation;
+        public readonly DialogueEntry Picked;
+        public readonly int Index;
+        public readonly int Count;
+
+        public RouteChoice(Conversation conversation, DialogueEntry from, RouteMode mode, Conversation pickedConversation, DialogueEntry picked, int index, int count)
+        {
+            Conversation = conversation; From = from; Mode = mode; PickedConversation = pickedConversation; Picked = picked; Index = index; Count = count;
+        }
     }
 
     /// <summary>A player response offered in the choice menu.</summary>
@@ -109,6 +132,11 @@ namespace ND.Dialogue
         public event Action<Conversation> ConversationEnded;
         /// <summary>(conversation, entry) An entry was entered, before its actions run — also silent ones (START, passthrough, chosen lines).</summary>
         public event Action<Conversation, DialogueEntry> EntryEntered;
+        /// <summary>An entry picked one of several valid NPC lines by its <see cref="DialogueEntry.routeMode"/> (Random, Cycle…).</summary>
+        public event Action<RouteChoice> RouteChosen;
+
+        /// <summary>Random numbers for Random / Weighted Random / Shuffle routes (set a seeded one for repeatable tests).</summary>
+        public System.Random Rng { get; set; } = new System.Random();
 
         /// <summary>
         /// Optional: how texts are read (default: <c>GetText()</c>, i.e. the running localization). Tools that run
@@ -313,7 +341,7 @@ namespace ND.Dialogue
                 return lines;
             }
             var candidates = new List<(Conversation conversation, DialogueEntry entry)>();
-            foreach (var (c, e) in ValidLinksOfHighestPriority(conversation, start))
+            foreach (var (c, e, _) in ValidLinksOfHighestPriority(conversation, start))
                 if (!IsPlayerResponse(e) && e.LineCount > 0) candidates.Add((c, e));
             if (candidates.Count == 0) return lines; // nothing to say right now: conditions decide, not an error
 
@@ -418,9 +446,10 @@ namespace ND.Dialogue
                 return;
             }
 
-            foreach (var (c, e) in valid)
+            var npc = valid.FindAll(v => !IsPlayerResponse(v.entry));
+            if (npc.Count > 0)
             {
-                if (IsPlayerResponse(e)) continue;
+                var (c, e) = PickRoute(conversation, from, npc);
                 Enter(c, e, silentSteps);
                 return;
             }
@@ -432,7 +461,7 @@ namespace ND.Dialogue
             }
 
             m_Choices.Clear();
-            foreach (var (c, e) in valid)
+            foreach (var (c, e, _) in valid)
             {
                 var label = e.menuText != null && e.menuText.HasContent ? e.menuText : e.text;
                 m_Choices.Add(new DialogueChoice(m_Choices.Count, c, e, ResolveText(label, c, e)));
@@ -441,6 +470,93 @@ namespace ND.Dialogue
             m_Entry = from;
             State = DialogueRunnerState.WaitingForChoice;
             ChoicesPresented?.Invoke(m_Choices);
+        }
+
+        /// <summary>
+        /// One of the valid NPC lines of <paramref name="from"/>'s highest priority group, by its <see cref="DialogueEntry.routeMode"/>
+        /// (raises <see cref="RouteChosen"/> when there was a choice).
+        /// </summary>
+        private (Conversation conversation, DialogueEntry entry) PickRoute(Conversation conversation, DialogueEntry from,
+            List<(Conversation conversation, DialogueEntry entry, DialogueLink link)> candidates)
+        {
+            int index = 0;
+            if (candidates.Count > 1)
+            {
+                switch (from.routeMode)
+                {
+                    case RouteMode.Random: index = Rng.Next(candidates.Count); break;
+                    case RouteMode.WeightedRandom: index = PickWeighted(conversation, from, candidates); break;
+                    case RouteMode.Cycle: index = Memory.NextCycle(conversation.id, from.id) % candidates.Count; break;
+                    case RouteMode.Shuffle: index = PickFromBag(conversation, from, candidates); break;
+                    case RouteMode.Utility: index = PickHighest(candidates); break;
+                }
+                RouteChosen?.Invoke(new RouteChoice(conversation, from, from.routeMode, candidates[index].conversation, candidates[index].entry, index, candidates.Count));
+            }
+            return (candidates[index].conversation, candidates[index].entry);
+        }
+
+        /// <summary>The link's weight: Weight, times its Weight Variable when one is set (a number variable or attribute).</summary>
+        public float WeightOf(DialogueLink link)
+        {
+            if (string.IsNullOrEmpty(link.weightVariable)) return link.weight;
+            if (!m_Eval.TryGetVariable(link.weightVariable, out var value)) return 0f; // the context logged the unknown name
+            if (!value.IsNumber)
+            {
+                Debug.LogError($"{LogTag} Link weight variable '{link.weightVariable}' is {value.type}, not a number; weight 0.");
+                return 0f;
+            }
+            return link.weight * (float)value.AsNumber;
+        }
+
+        private int PickWeighted(Conversation conversation, DialogueEntry from, List<(Conversation conversation, DialogueEntry entry, DialogueLink link)> candidates)
+        {
+            float total = 0f;
+            var weights = new float[candidates.Count];
+            for (int i = 0; i < candidates.Count; i++) total += weights[i] = Mathf.Max(0f, WeightOf(candidates[i].link));
+            if (total <= 0f)
+            {
+                Debug.LogWarning($"{LogTag} '{conversation.title}' entry {from.id}: Weighted Random with every weight 0 among {candidates.Count} lines; the first is said.");
+                return 0;
+            }
+            double roll = Rng.NextDouble() * total;
+            for (int i = 0; i < weights.Length; i++)
+            {
+                if (roll < weights[i]) return i;
+                roll -= weights[i];
+            }
+            return Array.FindLastIndex(weights, w => w > 0f); // rounding at the very end of the range
+        }
+
+        private int PickHighest(List<(Conversation conversation, DialogueEntry entry, DialogueLink link)> candidates)
+        {
+            int best = 0;
+            float bestWeight = WeightOf(candidates[0].link);
+            for (int i = 1; i < candidates.Count; i++)
+            {
+                float w = WeightOf(candidates[i].link);
+                if (w > bestWeight) { best = i; bestWeight = w; } // ties: the first (by link order)
+            }
+            return best;
+        }
+
+        /// <summary>Takes the next target from the entry's shuffled bag, refilling it (shuffled) once every valid target was said.</summary>
+        private int PickFromBag(Conversation conversation, DialogueEntry from, List<(Conversation conversation, DialogueEntry entry, DialogueLink link)> candidates)
+        {
+            var keys = candidates.ConvertAll(c => DialogueMemory.TargetKey(c.conversation.id, c.entry.id));
+            var bag = Memory.ShuffleBag(conversation.id, from.id);
+            bag.RemoveAll(k => !keys.Contains(k)); // targets no longer valid wait for the next round
+            if (bag.Count == 0)
+            {
+                bag.AddRange(keys);
+                for (int i = bag.Count - 1; i > 0; i--)
+                {
+                    int j = Rng.Next(i + 1);
+                    (bag[i], bag[j]) = (bag[j], bag[i]);
+                }
+            }
+            long picked = bag[0];
+            bag.RemoveAt(0);
+            return keys.IndexOf(picked);
         }
 
         private bool IsPlayerResponse(DialogueEntry entry)
@@ -456,9 +572,9 @@ namespace ND.Dialogue
         /// The links of the highest priority with at least one valid target. A link into a hub (if its conditions and
         /// the hub's hold) stands for the hub's own valid targets, which join that group in place of the hub.
         /// </summary>
-        private List<(Conversation conversation, DialogueEntry entry)> ValidLinksOfHighestPriority(Conversation conversation, DialogueEntry from, int hubDepth = 0)
+        private List<(Conversation conversation, DialogueEntry entry, DialogueLink link)> ValidLinksOfHighestPriority(Conversation conversation, DialogueEntry from, int hubDepth = 0)
         {
-            var result = new List<(Conversation, DialogueEntry)>();
+            var result = new List<(Conversation conversation, DialogueEntry entry, DialogueLink link)>();
             for (var priority = LinkPriority.High; priority >= LinkPriority.Low; priority--)
             {
                 foreach (var link in from.links)
@@ -474,7 +590,7 @@ namespace ND.Dialogue
                     if (!AllHold(link.conditions) || !AllHold(target.conditions)) continue;
                     if (!target.IsHub)
                     {
-                        result.Add((targetConversation, target));
+                        result.Add((targetConversation, target, link));
                         continue;
                     }
                     if (hubDepth >= MaxHubDepth)
@@ -483,7 +599,7 @@ namespace ND.Dialogue
                         continue;
                     }
                     foreach (var reached in ValidLinksOfHighestPriority(targetConversation, target, hubDepth + 1))
-                        if (!result.Contains(reached)) result.Add(reached);
+                        if (!result.Exists(r => r.conversation == reached.conversation && r.entry == reached.entry)) result.Add(reached);
                 }
                 if (result.Count > 0) break;
             }

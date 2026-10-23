@@ -2,6 +2,7 @@
     "name": "ND.Dialogue",
     "rootNamespace": "ND.Dialogue",
     "references": [
+        "ND.Core",
         "ND.Quests",
         "ND.Localization",
         "UnityEngine.UI",

@@ -117,11 +117,17 @@ namespace ND.Dialogue.Editor
                 BuildSubclassFields(entryProp);
                 BuildList("Plays only if…", "Entry conditions: every way into this line needs them (all must hold). A condition for one branch only goes on that link (click its edge).", entryProp?.FindPropertyRelative(nameof(DialogueEntry.conditions)), typeof(DialogueCondition), m_Entry.conditions);
                 BuildList("When it plays, do…", "Actions run when the line starts.", entryProp?.FindPropertyRelative(nameof(DialogueEntry.actions)), typeof(DialogueAction), m_Entry.actions);
-                if (!m_Entry.IsHub) BuildSequence();
+                if (ShowSequence && !m_Entry.IsHub) BuildSequence();
             }
             BuildLinks();
             BuildPluginSections();
         }
+
+        /// <summary>
+        /// Sequence editing is hidden for now (2026-10-23, to be reworked). Data and runtime are untouched: sequences already
+        /// on entries still play and still show in the test chat. Set to true to edit them again.
+        /// </summary>
+        private const bool ShowSequence = false;
 
         /// <summary>The entry's sequence (camera, animation, sound…) with its parse errors under it.</summary>
         private void BuildSequence()
@@ -334,8 +340,10 @@ namespace ND.Dialogue.Editor
             var page = index == 0 ? null : m_Entry.moreLines[index - 1];
             var clip = index == 0 ? m_Entry.voice : page?.voice;
             var localized = index == 0 ? m_Entry.localizedVoice : page?.localizedVoice;
+            var cue = m_Entry.LineVoiceCue(index);
             bool hasLocalized = localized != null && !localized.IsEmpty;
-            var foldout = new Foldout { text = clip != null || hasLocalized ? $"🔊 Voice: {(hasLocalized ? "per language" : clip.name)}" : "🔊 Voice", value = false };
+            string summary = cue != null ? cue.Describe() : hasLocalized ? "per language" : clip != null ? clip.name : null;
+            var foldout = new Foldout { text = summary != null ? $"🔊 Voice: {summary}" : "🔊 Voice", value = false };
             foldout.AddToClassList("dlg-line__voice");
             var field = new ObjectField("Clip") { objectType = typeof(AudioClip), allowSceneObjects = false, value = clip,
                 tooltip = "Played with the line by the TextMeshPro dialogue UI; the typing can last as long as the clip." };
@@ -357,7 +365,64 @@ namespace ND.Dialogue.Editor
                 localizedField.RegisterValueChangeCallback(_ => EntryChanged?.Invoke(m_Entry));
                 foldout.Add(localizedField);
             }
+            var cueProp = index == 0
+                ? entryProp?.FindPropertyRelative(nameof(DialogueEntry.voiceCue))
+                : entryProp?.FindPropertyRelative($"{nameof(DialogueEntry.moreLines)}.Array.data[{index - 1}].{nameof(DialoguePage.voiceCue)}");
+            if (cueProp != null) AddVoiceCueField(foldout, cueProp, cue);
             return foldout;
+        }
+
+        /// <summary>
+        /// The line's middleware voice (FMOD event…): a picker of every <see cref="DialogueVoiceCue"/> type compiled in
+        /// (none while no integration is on, so nothing shows), then its fields (e.g. FMOD's own event browser).
+        /// </summary>
+        private void AddVoiceCueField(VisualElement parent, SerializedProperty cueProp, DialogueVoiceCue cue)
+        {
+            var types = TypeCache.GetTypesDerivedFrom<DialogueVoiceCue>().Where(t => !t.IsAbstract && t.GetConstructor(Type.EmptyTypes) != null).ToList();
+            if (types.Count == 0 && cue == null) return;
+            var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+            row.Add(new Label("Middleware") { style = { minWidth = 120 } });
+            var choose = new Button { text = cue != null ? ObjectNames.NicifyVariableName(cue.GetType().Name) + " ▾" : "None ▾",
+                tooltip = "Voice from an audio middleware (e.g. an FMOD event). It wins over the clip when the dialogue UI has a matching voice player." };
+            choose.clicked += () =>
+            {
+                var menu = new GenericMenu();
+                menu.AddItem(new GUIContent("None"), cue == null, () => SetVoiceCue(cueProp, null));
+                foreach (var type in types)
+                    menu.AddItem(new GUIContent(ObjectNames.NicifyVariableName(type.Name)), cue != null && cue.GetType() == type,
+                        () => SetVoiceCue(cueProp, (DialogueVoiceCue)Activator.CreateInstance(type)));
+                menu.ShowAsContext();
+            };
+            row.Add(choose);
+            parent.Add(row);
+            if (cue == null) return;
+            // IMGUI on purpose: a UI Toolkit PropertyField draws a [SerializeReference] as nested foldouts and skips the
+            // middleware's own IMGUI drawers (FMOD's event picker). Each child is drawn by its drawer, sized by IMGUI.
+            string path = cueProp.propertyPath;
+            var fields = new IMGUIContainer(() =>
+            {
+                if (m_SerializedDatabase == null || m_SerializedDatabase.targetObject == null) return;
+                m_SerializedDatabase.Update();
+                var cueNow = m_SerializedDatabase.FindProperty(path);
+                if (cueNow == null || cueNow.managedReferenceValue == null) return;
+                var child = cueNow.Copy();
+                var end = cueNow.GetEndProperty();
+                for (bool enter = true; child.NextVisible(enter) && !SerializedProperty.EqualContents(child, end); enter = false)
+                    EditorGUILayout.PropertyField(child, true);
+                if (m_SerializedDatabase.ApplyModifiedProperties()) EntryChanged?.Invoke(m_Entry);
+            });
+            fields.AddToClassList("dlg-line__voice-cue");
+            parent.Add(fields);
+        }
+
+        private void SetVoiceCue(SerializedProperty cueProp, DialogueVoiceCue cue)
+        {
+            if (!Resolve()) return;
+            cueProp.serializedObject.Update();
+            cueProp.managedReferenceValue = cue;
+            cueProp.serializedObject.ApplyModifiedProperties(); // one undo step, through the database's SerializedObject
+            Notify();
+            Rebuild();
         }
 
         private void MoveLine(int page, int delta)
@@ -533,7 +598,19 @@ namespace ND.Dialogue.Editor
                 help.AddToClassList("dlg-inspector__help");
                 help.Add(new Label(LinkPriorityGUI.Explanation) { style = { whiteSpace = WhiteSpace.Normal, color = new Color(0.7f, 0.74f, 0.8f) } });
                 Add(help);
+                var modes = RouteModeGUI.Labels.ToList();
+                var pick = new PopupField<string>("Pick", modes, RouteModeGUI.Label(m_Entry.routeMode)) { tooltip = RouteModeGUI.Explanation };
+                pick.AddToClassList("dlg-link__route");
+                pick.RegisterValueChangedCallback(evt =>
+                {
+                    Edit("Change Route Mode", () => m_Entry.routeMode = (RouteMode)modes.IndexOf(evt.newValue));
+                    LinksChanged?.Invoke();
+                    Rebuild(); // weights show only for weighted modes
+                });
+                Add(pick);
             }
+            bool weighted = m_Entry.links.Count > 1 && (m_Entry.routeMode == RouteMode.WeightedRandom || m_Entry.routeMode == RouteMode.Utility);
+            var linksProp = weighted ? FindEntryProperty()?.FindPropertyRelative(nameof(DialogueEntry.links)) : null;
             var labels = LinkPriorityGUI.Labels.ToList();
             for (int i = 0; i < m_Entry.links.Count; i++)
             {
@@ -575,6 +652,20 @@ namespace ND.Dialogue.Editor
                 remove.AddToClassList("dlg-inspector__remove");
                 row.Add(remove);
                 card.Add(row);
+                if (linksProp != null && index < linksProp.arraySize)
+                {
+                    var linkProp = linksProp.GetArrayElementAtIndex(index);
+                    var weightRow = new VisualElement { style = { flexDirection = FlexDirection.Row } };
+                    var weight = new PropertyField(linkProp.FindPropertyRelative(nameof(DialogueLink.weight)), "Weight") { style = { flexGrow = 1 } };
+                    var weightVariable = new PropertyField(linkProp.FindPropertyRelative(nameof(DialogueLink.weightVariable)), "× variable") { style = { flexGrow = 1 } };
+                    foreach (var field in new[] { weight, weightVariable })
+                    {
+                        field.Bind(m_SerializedDatabase);
+                        field.RegisterValueChangeCallback(_ => LinksChanged?.Invoke());
+                        weightRow.Add(field);
+                    }
+                    card.Add(weightRow);
+                }
 
                 var targetEntry = m_Database.FindConversation(link.conversationId)?.FindEntry(link.entryId);
                 string chip = DialogueEdgeView.ChipText(link, targetEntry?.conditions);

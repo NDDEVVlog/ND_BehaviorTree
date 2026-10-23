@@ -1,0 +1,19 @@
+{
+    "name": "ND.Dialogue.FMOD",
+    "rootNamespace": "ND.Dialogue.Fmod",
+    "references": [
+        "ND.Dialogue",
+        "FMODUnity"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "ND_DIALOGUE_FMOD"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

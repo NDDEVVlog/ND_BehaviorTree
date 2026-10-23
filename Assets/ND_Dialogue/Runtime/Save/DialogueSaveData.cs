@@ -28,6 +28,8 @@ namespace ND.Dialogue
         [Serializable] public struct Variable { public string name; public VariableType type; public string value; }
         [Serializable] public struct Quest { public string name; public QuestState state; public int progress; }
         [Serializable] public struct Seen { public int conversation; public int entry; }
+        /// <summary>Route state of an entry that picks by Cycle (visits) or Shuffle (targets left, as (conversation, entry) keys).</summary>
+        [Serializable] public struct Route { public int conversation; public int entry; public int cycle; public List<long> bag; }
 
         public int version = CurrentVersion;
         /// <summary>Name of the database the save was made with (a check, not a lookup).</summary>
@@ -37,6 +39,7 @@ namespace ND.Dialogue
         public List<Variable> variables = new List<Variable>();
         public List<Quest> quests = new List<Quest>();
         public List<Seen> seen = new List<Seen>();
+        public List<Route> routes = new List<Route>();
         /// <summary>Quests shown in the on-screen tracker.</summary>
         public List<string> trackedQuests = new List<string>();
         public DialoguePosition position = new DialoguePosition();

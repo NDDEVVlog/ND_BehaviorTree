@@ -2,6 +2,7 @@
     "name": "ND.Quests",
     "rootNamespace": "ND.Quests",
     "references": [
+        "ND.Core",
         "ND.Localization",
         "UnityEngine.UI"
     ],

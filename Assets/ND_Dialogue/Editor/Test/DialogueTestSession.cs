@@ -241,6 +241,8 @@ namespace ND.Dialogue.Editor
             // Recorded as they happen, so the transcript keeps the real order (route, actions, then the line).
             Runner.EntryEntered += OnEntryEntered;
             Runner.LineStarted += AddLine;
+            Runner.RouteChosen += choice => Add(ItemKind.Route,
+                $"{RouteModeGUI.Badge(choice.Mode)}  #{choice.From.id} picked #{choice.Picked.id}  ({choice.Index + 1} of {choice.Count} valid)", choice.From);
             Runner.ConversationEnded += _ => m_Ended = true;
             return true;
         }
@@ -259,7 +261,9 @@ namespace ND.Dialogue.Editor
                 Kind = ItemKind.Line, Text = line.Text, Entry = line.Entry, Speaker = line.Speaker, Emotion = line.Emotion,
                 LineIndex = line.LineIndex, LineCount = line.LineCount, Voice = line.Voice
             });
-            if (line.Voice != null)
+            if (line.VoiceCue != null)
+                Add(ItemKind.Voice, $"🔊 voice: {line.VoiceCue.Describe()}", line.Entry); // a middleware event: length known only when it plays
+            else if (line.Voice != null)
                 Add(ItemKind.Voice, $"🔊 voice: {line.Voice.name} ({line.Voice.length.ToString("0.0", CultureInfo.InvariantCulture)} s)", line.Entry).Voice = line.Voice;
             if (string.IsNullOrEmpty(line.Text) || line.Text.IndexOf('<') < 0) return;
             var timeline = LineTimeline.Build(line.Text, LineTimeline.DefaultCharactersPerSecond, line.Voice != null ? line.Voice.length : 0f);

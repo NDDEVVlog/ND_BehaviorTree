@@ -33,9 +33,9 @@ namespace ND.Dialogue
         [SerializeField] private bool m_KeyboardInput = true;
 
         [Header("Voice")]
-        [Tooltip("Plays each line's voice clip (empty = voice is not played).")]
-        [SerializeField] private AudioSource m_VoiceSource;
-        [Tooltip("Typing lasts as long as the voice clip.")]
+        [Tooltip("Play each line's voice: the first player that can play a line (its clip, its FMOD event…) plays it. Empty = no voice.")]
+        [SerializeField] private List<DialogueVoicePlayer> m_VoicePlayers = new List<DialogueVoicePlayer>();
+        [Tooltip("Typing lasts as long as the voice (when its length is known).")]
         [SerializeField] private bool m_TypeWithVoice = true;
         [Tooltip("Move on by itself when the voice ends (choices still wait for the player).")]
         [SerializeField] private bool m_ContinueAfterVoice;
@@ -45,6 +45,8 @@ namespace ND.Dialogue
         private readonly List<Button> m_ResponseButtons = new List<Button>();
         private float m_ResponseDeadline = float.PositiveInfinity;
         private float m_AutoContinueAt = float.PositiveInfinity;
+        private DialogueVoicePlayer m_ActiveVoice;
+        private bool m_WaitingForVoiceEnd;
 
         public TypewriterText Line => m_Line;
         public bool IsTyping => m_Line != null && m_Line.IsPlaying;
@@ -68,7 +70,7 @@ namespace ND.Dialogue
         {
             ClearResponses();
             if (m_Line != null) m_Line.Clear();
-            if (m_VoiceSource != null) m_VoiceSource.Stop();
+            StopVoice();
             m_AutoContinueAt = float.PositiveInfinity;
             SetVisible(false);
         }
@@ -92,27 +94,42 @@ namespace ND.Dialogue
                 m_Portrait.gameObject.SetActive(sprite != null);
             }
 
-            float voiceSeconds = 0f;
-            if (m_VoiceSource != null)
-            {
-                m_VoiceSource.Stop();
-                if (line.Voice != null)
-                {
-                    m_VoiceSource.clip = line.Voice;
-                    m_VoiceSource.Play();
-                    voiceSeconds = line.Voice.length;
-                }
-            }
+            float voiceSeconds = PlayVoice(line);
             if (m_Line != null) m_Line.Play(line.Text, m_TypeWithVoice ? voiceSeconds : 0f);
             else Debug.LogError($"{LogTag} '{name}': no Typewriter Text assigned: the line is not shown.", this);
-            m_AutoContinueAt = m_ContinueAfterVoice && voiceSeconds > 0f ? Time.unscaledTime + voiceSeconds + m_ContinueDelay : float.PositiveInfinity;
+            m_AutoContinueAt = float.PositiveInfinity;
+            m_WaitingForVoiceEnd = m_ContinueAfterVoice && m_ActiveVoice != null;
             if (m_ContinueButton != null) m_ContinueButton.gameObject.SetActive(true);
+        }
+
+        /// <summary>Stops the previous voice and starts this line's with the first player that can play it. Its length, or 0.</summary>
+        private float PlayVoice(DialogueLine line)
+        {
+            StopVoice();
+            if (!line.HasVoice) return 0f;
+            foreach (var player in m_VoicePlayers)
+            {
+                if (player == null || !player.CanPlay(line)) continue;
+                m_ActiveVoice = player;
+                return player.Play(line);
+            }
+            Debug.LogWarning($"{LogTag} '{name}': no voice player can play the voice of '{line.Conversation?.title}' #{line.Entry?.id} line {line.LineIndex + 1} " +
+                             $"({(line.VoiceCue != null ? line.VoiceCue.GetType().Name : "AudioClip")}). Add a matching player to Voice Players.", this);
+            return 0f;
+        }
+
+        private void StopVoice()
+        {
+            if (m_ActiveVoice != null) m_ActiveVoice.Stop();
+            m_ActiveVoice = null;
+            m_WaitingForVoiceEnd = false;
         }
 
         protected override void OnChoices(IReadOnlyList<DialogueChoice> choices)
         {
             if (m_Line != null) m_Line.Complete(); // the question stays readable above the menu
             m_AutoContinueAt = float.PositiveInfinity;
+            m_WaitingForVoiceEnd = false;
             if (m_ContinueButton != null) m_ContinueButton.gameObject.SetActive(false);
             Show(m_ResponsePanel, true);
             ClearResponses();
@@ -167,6 +184,11 @@ namespace ND.Dialogue
         private void Update()
         {
             if (AttachedRunner == null) return;
+            if (m_WaitingForVoiceEnd && !m_ActiveVoice.IsPlaying)
+            {
+                m_WaitingForVoiceEnd = false; // the voice ended (its length need not be known, e.g. an FMOD event)
+                m_AutoContinueAt = Time.unscaledTime + m_ContinueDelay;
+            }
             if (AttachedRunner.State == DialogueRunnerState.ShowingLine && !IsTyping && Time.unscaledTime >= m_AutoContinueAt)
             {
                 m_AutoContinueAt = float.PositiveInfinity;

@@ -126,16 +126,16 @@ namespace ND.Quests
             Section("Failed", listed.Where(q => q.State == QuestState.Failed || q.State == QuestState.Abandoned));
 
             var selected = listed.FirstOrDefault(q => q.Name == m_Selected);
-            QuestUIText.Set(m_Title, selected != null ? selected.Title : listed.Count == 0 ? "No quests yet" : string.Empty);
-            QuestUIText.Set(m_State, selected != null ? $"{selected.Group} · {selected.State}" : string.Empty);
-            QuestUIText.Set(m_Summary, selected?.Summary ?? string.Empty);
+            UIText.Set(m_Title, selected != null ? selected.Title : listed.Count == 0 ? "No quests yet" : string.Empty);
+            UIText.Set(m_State, selected != null ? $"{selected.Group} · {selected.State}" : string.Empty);
+            UIText.Set(m_Summary, selected?.Summary ?? string.Empty);
             var steps = new StringBuilder();
             if (selected != null)
                 foreach (var step in selected.Steps)
                     steps.AppendLine(step.Done ? $"<color=#8A8F99>✓ {step.Text}</color>" : $"• {step.Text}");
-            QuestUIText.Set(m_Steps, steps.ToString());
+            UIText.Set(m_Steps, steps.ToString());
             if (m_TrackButton != null) m_TrackButton.gameObject.SetActive(selected != null && selected.State == QuestState.Active);
-            QuestUIText.Set(m_TrackLabel, selected != null && selected.IsTracked ? "Untrack" : "Track");
+            UIText.Set(m_TrackLabel, selected != null && selected.IsTracked ? "Untrack" : "Track");
         }
 
         private void Section(string title, IEnumerable<QuestInfo> quests)
@@ -144,7 +144,7 @@ namespace ND.Quests
             if (list.Count == 0 || m_List == null || m_HeaderTemplate == null || m_QuestTemplate == null) return;
             var header = Instantiate(m_HeaderTemplate.gameObject, m_List);
             header.SetActive(true);
-            QuestUIText.Set(header.GetComponent<Graphic>(), title);
+            UIText.Set(header.GetComponent<Graphic>(), title);
             m_Rows.Add(header);
             foreach (var quest in list)
             {
@@ -153,7 +153,7 @@ namespace ND.Quests
                 string questName = quest.Name;
                 button.onClick.AddListener(() => Select(questName));
                 var label = FindLabel(button);
-                QuestUIText.Set(label, (quest.Name == m_Selected ? "▶ " : string.Empty) + quest.Title + (quest.IsTracked ? "  ◉" : string.Empty));
+                UIText.Set(label, (quest.Name == m_Selected ? "▶ " : string.Empty) + quest.Title + (quest.IsTracked ? "  ◉" : string.Empty));
                 m_Rows.Add(button.gameObject);
             }
         }

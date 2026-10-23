@@ -48,7 +48,10 @@ namespace ND.Dialogue
                     if (context.TryGetQuestState(name, out var state)) data.quests.Add(new DialogueSaveData.Quest { name = name, state = state });
             }
             if (memory != null)
+            {
                 foreach (var (c, e) in memory.Seen) data.seen.Add(new DialogueSaveData.Seen { conversation = c, entry = e });
+                foreach (var (c, e, cycle, bag) in memory.Routes) data.routes.Add(new DialogueSaveData.Route { conversation = c, entry = e, cycle = cycle, bag = bag });
+            }
             if (runner != null) data.position = runner.CapturePosition();
             return data;
         }
@@ -108,6 +111,11 @@ namespace ND.Dialogue
                 {
                     if (database.FindConversation(s.conversation)?.FindEntry(s.entry) == null) { Skip($"seen entry {s.conversation}#{s.entry} no longer exists"); continue; }
                     memory.MarkSeen(s.conversation, s.entry);
+                }
+                foreach (var r in data.routes ?? new List<DialogueSaveData.Route>()) // saves made before routes have none
+                {
+                    if (database.FindConversation(r.conversation)?.FindEntry(r.entry) == null) { Skip($"route state of {r.conversation}#{r.entry}: the entry no longer exists"); continue; }
+                    memory.RestoreRoute(r.conversation, r.entry, r.cycle, r.bag);
                 }
             }
             return skipped;

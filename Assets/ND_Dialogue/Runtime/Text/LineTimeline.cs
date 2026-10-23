@@ -240,7 +240,7 @@ namespace ND.Dialogue
             bool indented = false;
             foreach (var piece in m_Pieces)
             {
-                if (piece.HideAt <= time) continue;
+                if (!float.IsPositiveInfinity(piece.HideAt) && piece.HideAt <= time) continue; // ∞ = never hidden, even at time ∞ (Final)
                 switch (piece.Kind)
                 {
                     case PieceKind.Rich:

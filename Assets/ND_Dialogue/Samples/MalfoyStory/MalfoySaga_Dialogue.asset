@@ -167,7 +167,7 @@ MonoBehaviour:
     - rid: 3058894633377727299
     - rid: 3058894633377727300
     m_LegacyEntries: []
-    m_NextEntryId: 18
+    m_NextEntryId: 20
   - id: 2
     title: 2. Flying Lesson
     description: Harry is a natural on a broom. Malfoy is... not taking it well.
@@ -426,10 +426,12 @@ MonoBehaviour:
     m_LegacyEntries: []
     m_NextEntryId: 5
   m_NextActorId: 5
-  m_NextConversationId: 16
+  m_NextConversationId: 17
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 3058894633377727279
       type: {class: Actor, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
@@ -545,9 +547,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -558,12 +563,16 @@ MonoBehaviour:
           conditions:
           - rid: 3058894633377727450
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 1
           entryId: 12
           priority: 2
           conditions:
           - rid: 3058894633377727451
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727284
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -584,9 +593,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -596,6 +608,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727285
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -616,9 +630,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -628,6 +645,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727286
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -648,6 +667,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -659,6 +680,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -669,8 +692,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -680,11 +706,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 1
           entryId: 5
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727287
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -705,9 +735,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -717,6 +750,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 0}
     - rid: 3058894633377727288
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -737,9 +772,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -749,6 +787,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 190}
     - rid: 3058894633377727289
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -769,6 +809,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -779,8 +821,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -790,6 +835,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1500, y: 190}
     - rid: 3058894633377727290
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -810,6 +857,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -820,6 +869,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -830,6 +881,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -839,8 +892,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -850,11 +906,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 1
           entryId: 9
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1800, y: 0}
     - rid: 3058894633377727291
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -875,9 +935,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -888,6 +951,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2100, y: 0}
     - rid: 3058894633377727292
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -908,9 +973,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -920,6 +988,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2100, y: 190}
     - rid: 3058894633377727293
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -940,6 +1010,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -950,8 +1022,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -961,6 +1036,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2400, y: 0}
     - rid: 3058894633377727294
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -981,9 +1058,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -993,6 +1073,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2700, y: 0}
     - rid: 3058894633377727295
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1013,6 +1095,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1023,8 +1107,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1034,7 +1121,9 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
-        position: {x: 300, y: 380}
+          weight: 1
+          weightVariable: 
+        position: {x: 294.98593, y: 271.6961}
     - rid: 3058894633377727296
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
       data:
@@ -1054,6 +1143,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1065,8 +1156,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1076,11 +1170,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 1
           entryId: 15
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 3000, y: 0}
     - rid: 3058894633377727297
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1101,9 +1199,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1114,6 +1215,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 3300, y: 0}
     - rid: 3058894633377727298
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1134,9 +1237,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1147,6 +1253,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 3300, y: 190}
     - rid: 3058894633377727299
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1167,6 +1275,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1177,6 +1287,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -1186,8 +1298,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1213,6 +1328,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1223,6 +1340,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -1232,8 +1351,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1259,9 +1381,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1271,6 +1396,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727302
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1291,6 +1418,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1301,8 +1430,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1312,6 +1444,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727303
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1332,9 +1466,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1344,6 +1481,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727304
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1364,6 +1503,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1374,6 +1515,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -1383,8 +1526,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1394,11 +1540,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 2
           entryId: 5
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727305
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1419,9 +1569,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1432,6 +1585,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 0}
     - rid: 3058894633377727306
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1452,9 +1607,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1464,6 +1622,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 190}
     - rid: 3058894633377727307
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1484,6 +1644,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1494,6 +1656,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -1503,8 +1667,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1514,6 +1681,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1500, y: 0}
     - rid: 3058894633377727308
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1534,9 +1703,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1546,6 +1718,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1800, y: 190}
     - rid: 3058894633377727309
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1566,9 +1740,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1578,6 +1755,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2100, y: 190}
     - rid: 3058894633377727310
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1599,9 +1778,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1611,6 +1793,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2400, y: 190}
     - rid: 3058894633377727311
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1631,9 +1815,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1643,6 +1830,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2700, y: 190}
     - rid: 3058894633377727312
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1663,6 +1852,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1674,6 +1865,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -1684,8 +1877,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1711,9 +1907,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1723,6 +1922,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727314
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1744,6 +1945,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1754,8 +1957,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1765,11 +1971,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 3
           entryId: 3
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727315
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1790,9 +2000,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1803,6 +2016,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727316
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1823,9 +2038,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1836,6 +2054,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 190}
     - rid: 3058894633377727317
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1857,6 +2077,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1868,8 +2090,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1896,6 +2121,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1906,8 +2133,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -1933,9 +2163,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1945,6 +2178,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727320
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -1966,6 +2201,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -1977,8 +2214,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -1988,6 +2228,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727321
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2008,9 +2250,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2020,6 +2265,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727322
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2040,6 +2287,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -2051,6 +2300,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -2060,8 +2311,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2071,11 +2325,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 4
           entryId: 5
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727323
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2096,9 +2354,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2109,6 +2370,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 0}
     - rid: 3058894633377727324
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2129,9 +2392,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2142,6 +2408,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 190}
     - rid: 3058894633377727325
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2162,6 +2430,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -2173,8 +2443,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2184,6 +2457,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1500, y: 0}
     - rid: 3058894633377727326
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2205,9 +2480,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2217,6 +2495,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1500, y: 190}
     - rid: 3058894633377727327
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2237,9 +2517,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2250,6 +2533,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1800, y: 0}
     - rid: 3058894633377727328
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2270,9 +2555,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2282,6 +2570,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2100, y: 0}
     - rid: 3058894633377727329
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2303,9 +2593,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2315,6 +2608,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2400, y: 0}
     - rid: 3058894633377727330
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2335,9 +2630,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2363,9 +2661,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2376,12 +2677,16 @@ MonoBehaviour:
           conditions:
           - rid: 3058894633377727468
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 5
           entryId: 6
           priority: 2
           conditions:
           - rid: 3058894633377727469
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727332
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2402,9 +2707,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2416,6 +2724,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727333
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2436,6 +2746,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -2446,8 +2758,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2457,11 +2772,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 5
           entryId: 4
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727334
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2482,9 +2801,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2495,6 +2817,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727335
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2515,9 +2839,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2529,6 +2856,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 190}
     - rid: 3058894633377727336
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2549,9 +2878,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2576,9 +2908,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2603,9 +2938,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2617,11 +2955,15 @@ MonoBehaviour:
           - rid: 3058894633377727475
           - rid: 3058894633377727476
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 6
           entryId: 2
           priority: 0
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727339
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2642,6 +2984,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -2652,8 +2996,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2663,16 +3010,22 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 6
           entryId: 4
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 6
           entryId: 5
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727340
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2693,9 +3046,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2720,9 +3076,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2734,6 +3093,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727342
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2754,9 +3115,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2769,6 +3133,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 190}
     - rid: 3058894633377727343
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2789,9 +3155,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2804,6 +3173,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 380}
     - rid: 3058894633377727344
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2824,9 +3195,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2852,6 +3226,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -2863,8 +3239,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -2890,6 +3269,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -2900,8 +3281,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2926,9 +3310,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2940,11 +3327,15 @@ MonoBehaviour:
           - rid: 3058894633377727487
           - rid: 3058894634309386240
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 7
           entryId: 8
           priority: 0
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727348
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -2965,6 +3356,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -2976,8 +3369,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -2987,6 +3383,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727349
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3007,6 +3405,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -3017,8 +3417,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3028,6 +3431,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727350
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3048,9 +3453,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3060,11 +3468,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 7
           entryId: 5
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727351
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3085,9 +3497,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3099,6 +3514,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 0}
     - rid: 3058894633377727352
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3119,9 +3536,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3132,6 +3552,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 190}
     - rid: 3058894633377727353
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3152,9 +3574,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3181,9 +3606,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3208,9 +3636,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3235,9 +3666,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3249,11 +3683,15 @@ MonoBehaviour:
           - rid: 3058894634309386246
           - rid: 3058894634309386247
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 8
           entryId: 2
           priority: 0
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727357
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3274,6 +3712,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -3284,8 +3724,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: SetActive(BallMalfoy, false); SetActive(BallGown, true); Camera(BallCloseUp)@0.3
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3295,6 +3738,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727358
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3315,9 +3760,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3342,9 +3790,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3355,6 +3806,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727360
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3375,9 +3828,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3388,6 +3844,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 190}
     - rid: 3058894633377727361
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3408,9 +3866,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3422,6 +3883,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 380}
     - rid: 3058894633377727362
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3442,9 +3905,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 1
         conditions: []
         actions: []
@@ -3454,16 +3920,22 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 8
           entryId: 4
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 8
           entryId: 5
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 510, y: 230}
     - rid: 3058894633377727363
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3484,6 +3956,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -3494,8 +3968,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3505,6 +3982,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727364
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3525,9 +4004,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3537,6 +4019,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 190}
     - rid: 3058894633377727365
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3557,6 +4041,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -3567,8 +4053,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: Camera(DanceFloor)
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3580,11 +4069,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 8
           entryId: 11
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 0}
     - rid: 3058894633377727366
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3605,9 +4098,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3618,11 +4114,15 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386254
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 8
           entryId: 13
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1500, y: 0}
     - rid: 3058894633377727367
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3643,9 +4143,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3656,6 +4159,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1500, y: 190}
     - rid: 3058894633377727368
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3676,9 +4181,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3705,9 +4213,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3734,9 +4245,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -3763,9 +4277,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3775,6 +4292,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727372
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3795,9 +4314,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3807,6 +4329,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727373
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3827,9 +4351,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3839,6 +4366,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727374
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3859,9 +4388,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3871,6 +4403,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727375
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3892,9 +4426,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3904,6 +4441,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 0}
     - rid: 3058894633377727376
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3924,9 +4463,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3936,6 +4478,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1500, y: 0}
     - rid: 3058894633377727377
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3956,6 +4500,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -3967,8 +4513,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -3978,6 +4527,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1800, y: 0}
     - rid: 3058894633377727378
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -3998,9 +4549,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4010,6 +4564,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2100, y: 0}
     - rid: 3058894633377727379
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4030,9 +4586,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4042,6 +4601,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2400, y: 0}
     - rid: 3058894633377727380
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4062,9 +4623,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4074,6 +4638,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2700, y: 0}
     - rid: 3058894633377727381
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4094,9 +4660,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4106,11 +4675,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 9
           entryId: 12
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 3000, y: 0}
     - rid: 3058894633377727382
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4132,9 +4705,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4145,17 +4721,23 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386262
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 9
           entryId: 14
           priority: 3
           conditions:
           - rid: 3058894634309386263
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 9
           entryId: 15
           priority: 0
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 3300, y: 0}
     - rid: 3058894633377727383
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4176,9 +4758,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4188,6 +4773,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 3300, y: 190}
     - rid: 3058894633377727384
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4208,9 +4795,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4221,17 +4811,23 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386264
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 9
           entryId: 14
           priority: 3
           conditions:
           - rid: 3058894634309386265
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 9
           entryId: 15
           priority: 0
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 3600, y: 190}
     - rid: 3058894633377727385
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4252,6 +4848,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -4262,6 +4860,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -4271,8 +4871,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -4283,6 +4886,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 3900, y: 0}
     - rid: 3058894633377727386
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4303,6 +4908,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -4313,8 +4920,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -4341,6 +4951,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -4352,8 +4964,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -4383,9 +4998,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4395,6 +5013,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 4200, y: 0}
     - rid: 3058894633377727389
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4415,9 +5035,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -4443,9 +5066,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4455,6 +5081,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727391
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4475,9 +5103,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4487,6 +5118,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727392
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4507,6 +5140,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -4518,8 +5153,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4529,6 +5167,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727393
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4549,9 +5189,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4561,6 +5204,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727394
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4581,9 +5226,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4593,6 +5241,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 0}
     - rid: 3058894633377727395
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4613,9 +5263,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4625,11 +5278,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 10
           entryId: 7
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1500, y: 0}
     - rid: 3058894633377727396
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4650,9 +5307,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4662,6 +5322,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1800, y: 0}
     - rid: 3058894633377727397
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4682,9 +5344,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4694,6 +5359,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1800, y: 190}
     - rid: 3058894633377727398
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4714,6 +5381,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -4724,8 +5393,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -4751,9 +5423,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4763,6 +5438,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2100, y: 190}
     - rid: 3058894633377727400
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4783,9 +5460,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4795,6 +5475,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 2400, y: 190}
     - rid: 3058894633377727401
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4815,9 +5497,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -4843,9 +5528,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4856,11 +5544,15 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386275
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 11
           entryId: 2
           priority: 0
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727403
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4881,9 +5573,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4893,6 +5588,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 190}
     - rid: 3058894633377727404
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4913,6 +5610,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -4923,6 +5622,8 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         - text:
             m_EntryId: 0
             m_Table: {fileID: 0}
@@ -4933,8 +5634,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4944,11 +5648,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 11
           entryId: 4
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727405
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -4969,9 +5677,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -4981,6 +5692,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727406
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5001,9 +5714,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5013,6 +5729,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 190}
     - rid: 3058894633377727407
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5033,9 +5751,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5062,6 +5783,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -5072,8 +5795,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5100,9 +5826,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5113,6 +5842,8 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386280
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 2
           priority: 3
@@ -5120,17 +5851,23 @@ MonoBehaviour:
           - rid: 3058894634309386281
           - rid: 3058894634309386282
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 3
           priority: 2
           conditions:
           - rid: 3058894634309386283
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 4
           priority: 0
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727410
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5151,6 +5888,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -5161,8 +5900,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5172,6 +5914,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727411
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5192,6 +5936,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -5202,8 +5948,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5213,6 +5962,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 190}
     - rid: 3058894633377727412
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5233,9 +5984,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5245,6 +5999,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 380}
     - rid: 3058894633377727413
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5265,9 +6021,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5277,6 +6036,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 570}
     - rid: 3058894633377727414
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5297,9 +6058,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5311,6 +6075,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727415
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5331,9 +6097,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5344,6 +6113,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 190}
     - rid: 3058894633377727416
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5364,9 +6135,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5376,6 +6150,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 380}
     - rid: 3058894633377727417
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5396,9 +6172,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5410,6 +6189,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 570}
     - rid: 3058894633377727418
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5430,9 +6211,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 1
         conditions: []
         actions: []
@@ -5442,21 +6226,29 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 6
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 7
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 8
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 660, y: 325}
     - rid: 3058894633377727419
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5477,9 +6269,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5490,11 +6285,15 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386289
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 11
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 0}
     - rid: 3058894633377727420
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5515,6 +6314,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -5525,8 +6326,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5551,9 +6355,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5578,9 +6385,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5591,11 +6401,15 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386290
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 15
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 190}
     - rid: 3058894633377727423
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5616,6 +6430,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -5626,8 +6442,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5652,9 +6471,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5679,9 +6501,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5692,17 +6517,23 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386291
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 17
           priority: 3
           conditions:
           - rid: 3058894634309386292
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 12
           entryId: 18
           priority: 0
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 1200, y: 380}
     - rid: 3058894633377727426
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5723,6 +6554,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -5733,8 +6566,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5760,6 +6596,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -5770,8 +6608,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5796,9 +6637,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5824,9 +6668,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5851,9 +6698,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -5864,11 +6714,15 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386295
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 13
           entryId: 7
           priority: 0
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727431
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5889,9 +6743,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5902,6 +6759,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 300, y: 0}
     - rid: 3058894633377727432
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5923,9 +6782,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5936,11 +6798,15 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 13
           entryId: 4
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 600, y: 0}
     - rid: 3058894633377727433
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5961,9 +6827,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -5974,6 +6843,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 0}
     - rid: 3058894633377727434
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -5994,9 +6865,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -6007,6 +6881,8 @@ MonoBehaviour:
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 900, y: 190}
     - rid: 3058894633377727435
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -6028,6 +6904,8 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines:
         - text:
             m_EntryId: 0
@@ -6038,8 +6916,11 @@ MonoBehaviour:
           localizedVoice:
             m_EntryId: 0
             m_Table: {fileID: 0}
+          voiceCue:
+            rid: -2
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -6065,9 +6946,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions:
@@ -6093,9 +6977,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6120,9 +7007,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6134,6 +7024,8 @@ MonoBehaviour:
           - rid: 3058894634309386302
           - rid: 3058894634309386303
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 14
           entryId: 2
           priority: 3
@@ -6141,27 +7033,37 @@ MonoBehaviour:
           - rid: 3058894634309386304
           - rid: 3058894634309386305
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 14
           entryId: 3
           priority: 3
           conditions:
           - rid: 3058894634309386306
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 14
           entryId: 4
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 14
           entryId: 5
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 14
           entryId: 6
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727439
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -6182,9 +7084,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6209,9 +7114,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6236,9 +7144,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6263,9 +7174,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6290,9 +7204,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6317,9 +7234,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6344,9 +7264,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 1
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6357,22 +7280,30 @@ MonoBehaviour:
           conditions:
           - rid: 3058894634309386307
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 15
           entryId: 2
           priority: 3
           conditions:
           - rid: 3058894634309386308
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 15
           entryId: 3
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         - conversationId: 15
           entryId: 4
           priority: 2
           conditions: []
           bends: []
+          weight: 1
+          weightVariable: 
         position: {x: 0, y: 0}
     - rid: 3058894633377727446
       type: {class: DialogueEntry, ns: ND.Dialogue, asm: ND.Dialogue}
@@ -6393,9 +7324,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6420,9 +7354,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6447,9 +7384,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []
@@ -6474,9 +7414,12 @@ MonoBehaviour:
         localizedVoice:
           m_EntryId: 0
           m_Table: {fileID: 0}
+        voiceCue:
+          rid: -2
         moreLines: []
         isPassthrough: 0
         sequence: 
+        routeMode: 0
         isHub: 0
         conditions: []
         actions: []

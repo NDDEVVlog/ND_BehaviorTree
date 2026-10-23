@@ -79,7 +79,7 @@ namespace ND.Quests
         {
             var row = Instantiate(template.gameObject, m_List);
             row.SetActive(true);
-            QuestUIText.Set(row.GetComponent<Graphic>(), text);
+            UIText.Set(row.GetComponent<Graphic>(), text);
             m_Rows.Add(row);
         }
 
@@ -106,7 +106,7 @@ namespace ND.Quests
                 if (m_ToastRoot.activeSelf) m_ToastRoot.SetActive(false);
                 return;
             }
-            QuestUIText.Set(m_ToastText, m_Toasts.Dequeue());
+            UIText.Set(m_ToastText, m_Toasts.Dequeue());
             m_ToastRoot.SetActive(true);
             m_ToastUntil = Time.unscaledTime + m_ToastSeconds;
         }

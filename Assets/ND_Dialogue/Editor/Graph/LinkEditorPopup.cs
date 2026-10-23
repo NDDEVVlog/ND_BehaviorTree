@@ -29,6 +29,42 @@ namespace ND.Dialogue.Editor
         public static string Label(LinkPriority priority) => Labels[Mathf.Clamp((int)priority, 0, Labels.Length - 1)];
     }
 
+    /// <summary>Plain-language names for <see cref="RouteMode"/> (indexed by its value), as in ND Behavior Tree's composites.</summary>
+    public static class RouteModeGUI
+    {
+        public static readonly string[] Labels =
+        {
+            "First valid (by link order)",
+            "Random",
+            "Weighted random",
+            "Cycle (each in turn)",
+            "Shuffle (no repeat until all said)",
+            "Utility (highest weight)"
+        };
+
+        public const string Explanation =
+            "When several NPC lines are allowed at the highest priority, which ONE is said. First valid: the first link. " +
+            "Random: any, equally likely. Weighted random: by each link's weight. Cycle: one after another on each visit. " +
+            "Shuffle: all of them in a random order before any repeats. Utility: the link with the highest weight (e.g. weight × a variable). " +
+            "Player responses are not picked: they still make the choice menu.";
+
+        public static string Label(RouteMode mode) => Labels[Mathf.Clamp((int)mode, 0, Labels.Length - 1)];
+
+        /// <summary>Badge text on the graph node for a non-default mode, else null.</summary>
+        public static string Badge(RouteMode mode)
+        {
+            switch (mode)
+            {
+                case RouteMode.Random: return "🎲 random";
+                case RouteMode.WeightedRandom: return "🎲 weighted";
+                case RouteMode.Cycle: return "🔁 cycle";
+                case RouteMode.Shuffle: return "🔀 shuffle";
+                case RouteMode.Utility: return "📈 utility";
+                default: return null;
+            }
+        }
+    }
+
     /// <summary>
     /// Small drop-down window to edit one link where it is drawn: its priority, its own conditions, and the target
     /// line's entry conditions (which every way into that line needs). Edits go through SerializedObject, so they are

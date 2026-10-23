@@ -321,6 +321,21 @@ namespace ND.Dialogue.Editor
                 .OrderBy(t => t.Name).ToList();
 
         /// <summary>Creates a linked child of the single selected entry, to its right.</summary>
+        /// <summary>
+        /// A router: a passthrough that picks ONE of its next NPC lines by <paramref name="mode"/> (Random, Cycle…), like a
+        /// Behavior Tree composite. Linked from the selected entry when <paramref name="asChild"/>. One undo step.
+        /// </summary>
+        public DialogueEntry CreateRouter(RouteMode mode, Vector2 position, bool asChild)
+        {
+            var entry = asChild ? CreateChildOfSelection(NewEntryKind.Passthrough) : CreateEntry(NewEntryKind.Passthrough, position);
+            if (entry == null) return null;
+            entry.routeMode = mode; // same undo group as the creation
+            entry.title = RouteModeGUI.Badge(mode);
+            GetNodeView(entry.id.ToString())?.Refresh(PreviewLocale);
+            Changed();
+            return entry;
+        }
+
         public DialogueEntry CreateChildOfSelection(NewEntryKind kind)
         {
             var parent = SingleSelectedEntry;
@@ -446,6 +461,12 @@ namespace ND.Dialogue.Editor
                 evt.menu.AppendAction("New Player Response", _ => CreateEntry(NewEntryKind.PlayerResponse, local));
                 evt.menu.AppendAction("New Passthrough (routing)", _ => CreateEntry(NewEntryKind.Passthrough, local));
                 evt.menu.AppendAction("New Hub (merge links)", _ => CreateEntry(NewEntryKind.Hub, local));
+                foreach (RouteMode mode in Enum.GetValues(typeof(RouteMode)))
+                {
+                    if (mode == RouteMode.FirstValid) continue;
+                    var m = mode;
+                    evt.menu.AppendAction($"New Router/{RouteModeGUI.Label(m)}", _ => CreateRouter(m, local, false));
+                }
                 foreach (var type in EntryTypes())
                 {
                     var t = type;
@@ -469,6 +490,12 @@ namespace ND.Dialogue.Editor
             evt.menu.AppendAction("Add Child/Player Response   (R)", _ => CreateChildOfSelection(NewEntryKind.PlayerResponse));
             evt.menu.AppendAction("Add Child/Passthrough", _ => CreateChildOfSelection(NewEntryKind.Passthrough));
             evt.menu.AppendAction("Add Child/Hub", _ => CreateChildOfSelection(NewEntryKind.Hub));
+            foreach (RouteMode mode in Enum.GetValues(typeof(RouteMode)))
+            {
+                if (mode == RouteMode.FirstValid) continue;
+                var m = mode;
+                evt.menu.AppendAction($"Add Child/Router/{RouteModeGUI.Label(m)}", _ => CreateRouter(m, local, true));
+            }
             evt.menu.AppendAction("Merge Shared Links into a Hub", _ => MergeSharedLinksIntoHub(), _ => SharedLinkTargets(SelectedNodes.Select(v => v.Entry).ToList()).Count >= 2 ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
             int testId = entry.id;
             evt.menu.AppendAction("Test from here   (Test Dialogue)", _ => TestRequested?.Invoke(Conversation.id, testId), _ => TestRequested != null ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);

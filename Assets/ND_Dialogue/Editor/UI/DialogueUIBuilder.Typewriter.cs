@@ -58,6 +58,13 @@ namespace ND.Dialogue.Editor
             var ui = host.gameObject.AddComponent<TypewriterDialogueUI>();
             var voice = host.gameObject.AddComponent<AudioSource>();
             voice.playOnAwake = false;
+            // Middleware players (e.g. FMOD, when its integration is on) first, the AudioClip player last.
+            var voicePlayers = new System.Collections.Generic.List<DialogueVoicePlayer>();
+            foreach (var type in TypeCache.GetTypesDerivedFrom<DialogueVoicePlayer>())
+                if (!type.IsAbstract && type != typeof(AudioSourceVoicePlayer) && !IsTestType(type)) voicePlayers.Add((DialogueVoicePlayer)host.gameObject.AddComponent(type));
+            var clipPlayer = host.gameObject.AddComponent<AudioSourceVoicePlayer>();
+            clipPlayer.Source = voice;
+            voicePlayers.Add(clipPlayer);
 
             var panel = Rect("Panel", host);
             panel.anchorMin = new Vector2(0.08f, 0.03f);
@@ -128,12 +135,18 @@ namespace ND.Dialogue.Editor
             so.FindProperty("m_Line").objectReferenceValue = typewriter;
             so.FindProperty("m_ContinueButton").objectReferenceValue = continueButton;
             so.FindProperty("m_ResponseTemplate").objectReferenceValue = template;
-            so.FindProperty("m_VoiceSource").objectReferenceValue = voice;
+            var players = so.FindProperty("m_VoicePlayers");
+            players.arraySize = voicePlayers.Count;
+            for (int i = 0; i < voicePlayers.Count; i++) players.GetArrayElementAtIndex(i).objectReferenceValue = voicePlayers[i];
             so.ApplyModifiedPropertiesWithoutUndo();
 
             panel.gameObject.SetActive(false);
             return ui;
         }
+
+        /// <summary>Test assemblies are loaded in the editor too: their fake players must never land in a real UI.</summary>
+        private static bool IsTestType(System.Type type) =>
+            System.Linq.Enumerable.Any(type.Assembly.GetReferencedAssemblies(), a => a.Name == "nunit.framework");
 
         private static TextMeshProUGUI TmpLabel(string name, Transform parent, TMP_FontAsset font, float size, FontStyles style, TextAlignmentOptions alignment)
         {

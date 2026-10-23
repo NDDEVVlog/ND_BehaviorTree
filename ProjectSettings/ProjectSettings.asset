@@ -767,7 +767,13 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3
+    Android: ND_DIALOGUE_NDBT
+    Server: ND_DIALOGUE_NDBT
+    Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3;ND_DIALOGUE_NDBT
+    VisionOS: ND_DIALOGUE_NDBT
+    WebGL: ND_DIALOGUE_NDBT
+    iPhone: ND_DIALOGUE_NDBT
+    tvOS: ND_DIALOGUE_NDBT
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

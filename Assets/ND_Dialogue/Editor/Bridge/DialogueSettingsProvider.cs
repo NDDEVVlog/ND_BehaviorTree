@@ -47,6 +47,8 @@ namespace ND.Dialogue.Editor.Bridge
             EditorGUILayout.HelpBox("Dialogue databases are edited in Window → ND Dialogue → Dialogue Editor. Each database keeps its own " +
                                     "text table, world source and runner options (its Settings section).", MessageType.None);
             EditorGUILayout.Space(8);
+            DrawIntegrations();
+            EditorGUILayout.Space(8);
 
             bool open = SessionState.GetBool(AdvancedFoldoutKey, false);
             open = EditorGUILayout.Foldout(open, "Advanced", true);
@@ -60,6 +62,29 @@ namespace ND.Dialogue.Editor.Bridge
             if (enabled != DialogueAiAccess.FeatureEnabled) DialogueAiAccess.SetFeatureEnabled(enabled);
             if (DialogueAiAccess.FeatureEnabled && GUILayout.Button("Open AI Bridge settings →")) SettingsService.OpenProjectSettings(BridgePath);
             EditorGUI.indentLevel--;
+        }
+
+        private static void DrawIntegrations()
+        {
+            EditorGUILayout.LabelField("Integrations", EditorStyles.boldLabel);
+            var fmod = DialogueIntegrations.Fmod;
+            bool available = fmod.IsAvailable;
+            using (new EditorGUI.DisabledScope(!available && !fmod.IsEnabled))
+            {
+                bool on = EditorGUILayout.Toggle(new GUIContent("Use FMOD for voices",
+                    $"Lines can use an FMOD event as their voice (played by an FMOD Voice Player). Adds the define {fmod.Define}; scripts recompile."),
+                    fmod.IsEnabled);
+                if (on != fmod.IsEnabled) fmod.SetEnabled(on);
+            }
+            if (!available)
+                EditorGUILayout.HelpBox("FMOD for Unity is not in this project (no 'FMODUnity' assembly). Import it from fmod.com or the Asset Store " +
+                                        "(version 2.02 or newer) to turn this on.", MessageType.None);
+            else if (fmod.IsEnabled)
+                EditorGUILayout.HelpBox("On. In a line's 🔊 Voice foldout, choose an FMOD event. The dialogue UI needs an FMOD Voice Player in its " +
+                                        "Voice Players (Dialogue Manager + UI (TextMeshPro) adds one).", MessageType.None);
+            var ndbt = DialogueIntegrations.Ndbt;
+            EditorGUILayout.LabelField(new GUIContent("ND Behavior Tree", $"Turns on by itself when the ND Behavior Tree plugin is in the project ({ndbt.Define})."),
+                new GUIContent(ndbt.IsEnabled ? "On (plugin found)" : ndbt.IsAvailable ? "Turning on… (scripts recompile)" : "Off (add the ND Behavior Tree plugin)"));
         }
 
         private static void DrawBridge()

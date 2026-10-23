@@ -10,6 +10,26 @@ namespace ND.Dialogue
     public enum LinkPriority { Low, BelowNormal, Normal, AboveNormal, High }
 
     /// <summary>
+    /// How an entry picks ONE next line when several NPC lines (or passthroughs) are valid in its highest priority group,
+    /// like the composites of ND Behavior Tree. Player responses are never picked: they still make the choice menu.
+    /// </summary>
+    public enum RouteMode
+    {
+        /// <summary>The first valid link (by link order).</summary>
+        FirstValid,
+        /// <summary>Any valid link, each as likely (Random Selector).</summary>
+        Random,
+        /// <summary>A valid link with probability proportional to its weight (Random Rate + Weight).</summary>
+        WeightedRandom,
+        /// <summary>Each valid link in turn, one per visit, then again from the first.</summary>
+        Cycle,
+        /// <summary>Every valid link once in random order before any repeats (a shuffled bag).</summary>
+        Shuffle,
+        /// <summary>The valid link with the highest weight, e.g. read from a variable (Utility Selector).</summary>
+        Utility
+    }
+
+    /// <summary>
     /// A branch from one entry to another. It is taken only when its own <see cref="conditions"/> AND the target entry's
     /// conditions hold: put per-branch rules here (shown on the edge), and rules for every way in on the entry.
     /// </summary>
@@ -24,6 +44,10 @@ namespace ND.Dialogue
         [SerializeReference] public List<DialogueCondition> conditions = new List<DialogueCondition>();
         [Tooltip("Editor only: points the edge bends through on the graph.")]
         [HideInInspector] public List<Vector2> bends = new List<Vector2>();
+        [Tooltip("Used when the entry picks by Weighted Random (relative chance; 0 or less = never) or Utility (score; the highest wins).")]
+        public float weight = 1f;
+        [Tooltip("Optional: the weight is this number variable (or attribute) times Weight, read when the entry picks.")]
+        [DialogueVariable] public string weightVariable;
     }
 
     /// <summary>One more line of the same speaker inside an entry, with its own emotion (shown after the previous one on Continue).</summary>
@@ -38,6 +62,8 @@ namespace ND.Dialogue
         public AudioClip voice;
         [Tooltip("Voice-over per language (an Asset Table entry). Empty = Voice.")]
         public LocalizedAudioClip localizedVoice = new LocalizedAudioClip();
+        [Tooltip("Voice from an audio middleware (e.g. an FMOD event), played by a matching Dialogue Voice Player.")]
+        [SerializeReference] public DialogueVoiceCue voiceCue;
     }
 
     /// <summary>
@@ -66,12 +92,16 @@ namespace ND.Dialogue
         public AudioClip voice;
         [Tooltip("Voice-over per language (an Asset Table entry). Empty = Voice.")]
         public LocalizedAudioClip localizedVoice = new LocalizedAudioClip();
+        [Tooltip("Voice of the (first) line from an audio middleware (e.g. an FMOD event), played by a matching Dialogue Voice Player.")]
+        [SerializeReference] public DialogueVoiceCue voiceCue;
         [Tooltip("More lines the same speaker says here, one after another, each with its own emotion.")]
         public List<DialoguePage> moreLines = new List<DialoguePage>();
         [Tooltip("No line is shown: the entry only runs its actions and continues.")]
         public bool isPassthrough;
         [Tooltip("Sequence played when the entry starts (camera, animation, sound…): Name(args)@seconds, separated by ; or new lines. Needs a Dialogue Sequencer in the scene. E.g. Anim(speaker, Blush); Camera(CloseUp)@0.5")]
         [TextArea(1, 6)] public string sequence;
+        [Tooltip("How ONE next line is picked when several NPC lines are valid: first, random, weighted, in turn, shuffled or by highest weight. Player responses still make the menu.")]
+        public RouteMode routeMode = RouteMode.FirstValid;
         [Tooltip("Hub (with Passthrough): merges links. It is never entered: a link into it counts as a link to each of its targets (its own links' conditions and priorities apply). Use it when many lines lead to the same replies.")]
         public bool isHub;
 
@@ -101,6 +131,9 @@ namespace ND.Dialogue
             if (localized != null && !localized.IsEmpty) return resolveLocalized != null ? resolveLocalized(localized) : localized.Resolve();
             return index == 0 ? voice : page?.voice;
         }
+
+        /// <summary>Middleware voice cue of line <paramref name="index"/> (0 = the first), or null.</summary>
+        public DialogueVoiceCue LineVoiceCue(int index) => index == 0 ? voiceCue : moreLines[index - 1]?.voiceCue;
 
         /// <summary>Emotion of line <paramref name="index"/>: its own, else the entry's.</summary>
         public string LineEmotion(int index)
