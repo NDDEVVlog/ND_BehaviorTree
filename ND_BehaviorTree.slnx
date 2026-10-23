@@ -3,11 +3,14 @@
   <Project Path="ND.Dialogue.Editor.csproj" />
   <Project Path="FMODUnityResonance.csproj" />
   <Project Path="ND_BehaviorTree.Runtime.csproj" />
+  <Project Path="UniTask.csproj" />
   <Project Path="ND_BehaviorTree.GOAP.csproj" />
+  <Project Path="UniTask.Linq.csproj" />
   <Project Path="FMODUnityEditor.csproj" />
   <Project Path="ND.Core.Editor.csproj" />
   <Project Path="ND_BehaviorTreeEditor.csproj" />
   <Project Path="FMODUnity.csproj" />
+  <Project Path="UniTask.Addressables.csproj" />
   <Project Path="ND.Dialogue.Tests.csproj" />
   <Project Path="ND_BehaviorTree.GOAP.Editor.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
@@ -20,6 +23,7 @@
   <Project Path="ND.Dialogue.NDBT.Editor.csproj" />
   <Project Path="ND.Localization.Editor.csproj" />
   <Project Path="ND.Dialogue.NDBT.csproj" />
+  <Project Path="UniTask.TextMeshPro.csproj" />
   <Project Path="ND.GraphUI.csproj" />
   <Project Path="ND.Localization.csproj" />
   <Project Path="FMODUnityHaptics.csproj" />
@@ -27,8 +31,10 @@
   <Project Path="ND.Quests.csproj" />
   <Project Path="ND.Dialogue.NDBT.Tests.csproj" />
   <Project Path="ND_BehaviorTree.StoryNodes.Editor.csproj" />
+  <Project Path="UniTask.Editor.csproj" />
   <Project Path="ND.Quests.Tests.csproj" />
   <Project Path="ND.Core.csproj" />
+  <Project Path="UniTask.DOTween.csproj" />
   <Project Path="ND.Dialogue.FMOD.csproj" />
   <Project Path="ND_BehaviorTree.GOAP.Tests.csproj" />
   <Project Path="ND_BehaviorTree.StoryNodes.Tests.csproj" />
